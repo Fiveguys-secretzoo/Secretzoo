@@ -5,6 +5,9 @@ const { Server } = require('socket.io');
 const cors = require('cors');
 const { Socket } = require('node:dgram');
 
+//TODO Node.js 에서 Spring으로 보낼 때의 인증(IP 체크!)
+
+
 async function main() {
   const express = require('express');
   const app = express();
@@ -30,7 +33,7 @@ async function main() {
   // 동물 이름을 미리 저장
   const animals = ['cat','dog','tiger','whale','sheep','fox','deer','pig'];
 
-  // 여러 score를 담을 객체
+  // 동물 마다 score 유형
   const score = {
     attackSuccess : 0,
     attackFail : 0,
@@ -45,6 +48,8 @@ async function main() {
   // 플레이어의 정보를 담을 객체 
   const Player = (id) => {
     let playerId = '';
+    let playerName = '';
+    let socketId = '';
     let hand = [];
     let penalty = [];
     let datas = {}
