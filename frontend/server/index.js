@@ -91,10 +91,9 @@ async function main() {
     console.log(room.card);
 
     while(i > 0){
-      i--;
-      console.log(room.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           card.length)
+      i--;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          card.length)
       for(let k = 0 ; k < room.playerCount ; k ++){
-        room.playerHand[k].push(room.card.pop());
+        room.player[k].hand.push(room.card.pop());
         if(room.card.length==0){
           break;
         }
@@ -108,7 +107,8 @@ async function main() {
    * @param {string} id 유저 id 
    */
   const addRoom = (roomName, playerId)=>{
-    rooms[roomName] = gameInfo;
+    rooms[roomName] = {...gameInfo};
+    rooms[roomName].roomName = roomName;
     rooms[roomName].player[0] = new Player(playerId);
 
     /*TODO - send room data to backend server!!! */
@@ -121,7 +121,7 @@ async function main() {
    * @param {string} roomName 방 이름
    * @param {string} id 유저 id 
    */
-  const addPlayer = (roomName, playerId)=>{
+  const addPlayer = (roomName, playerId) => {
     const room = rooms[roomName];
     room.playerCount ++;
     room[playerCount] = new Player(playerId);
@@ -130,28 +130,43 @@ async function main() {
 
   }
 
+  /**
+   * 유저 퇴장 
+   * @param {String} roomName 
+   * @param {String} playerId 
+   */
+  const removePlayer = (playerId) => {
+    const room = rooms[roomName];
+    room.playerCount ++;
+    room[playerCount] = new Player(playerId);
 
+    /*TODO - send room data and playerdata to backend server */
+
+  }
+
+  /* Socket 연결 후 부분 */
   io.on('connection', async (socket) => {
     console.log(socket.id)
 
     /* 방 정보 전달 */
-    socket.on('request rooms info',(callback) => {
+    socket.on('requestRoomsInfo',(callback) => {
       callback(rooms);
     });
 
-
     /* 방 생성 이벤트 */
-    socket.on('create Room', (room, callback) => {
+    socket.on('createRoom', (room, callback) => {
       if(Object.keys(rooms).includes(room)){
         callback(false);
       }else{
         addRoom(room, socket.id);
+
         // 기존방 나가기
         for(let nowRoom of socket.rooms){
           if(nowRoom !== socket.id){
             socket.leave(nowRoom);
           }
         }
+
         // 입력받은 방 들어가기
         socket.join(room);
         callback(true);
@@ -159,7 +174,7 @@ async function main() {
     });
 
     /* 방 입장 이벤트 */
-    socket.on('enter Room',(room,callback) => {
+    socket.on('enterRoom', (room, callback) => {
       // 인원수 체크
       if(rooms[room] && rooms[room].playerCount >= 6){
         callback(false);
@@ -170,31 +185,33 @@ async function main() {
             socket.leave(nowRoom);
           }
         }
+
         // 입력받은 방 들어가기
         socket.join(room);
+
         // console.log(io.of('/').adapter.rooms);
-        socket.emit('update room',rooms);
-        addPlayer(room,socket.id)
+        socket.emit('updateRoom',rooms);
+        addPlayer(room, socket.id)
         callback(true)
         console.log(rooms)
       }
     });
 
     /* 채팅 메세지 이벤트 */
-    socket.on('chat message', async (msg,user) => {
+    socket.on('chatMessage', async (msg, user) => {
       let room;
       for(let nowRoom of socket.rooms){
         if(nowRoom !== socket.id){
           room = nowRoom;
         }
       }
-      console.log(msg+","+room);
-      io.to(room).emit('chat message', user+" : "+msg + "," + room); 
+      console.log(msg + "," + room);
+      io.to(room).emit('chatMessage', user + " : " + msg + "," + room); 
     });
     
 
     /* 게임시작 카드 나눠주기 */
-    socket.on('start',() => {
+    socket.on('start', () => {
       console.log(rooms);
       let room;
         for(let nowRoom of socket.rooms){
@@ -205,12 +222,12 @@ async function main() {
         console.log('셔플시작')
         shuffleArray(rooms[room]);
         console.log('셔플끝')
-        io.to(rooms[room].player1id).emit('game start', rooms[room].player1hand)
-        io.to(rooms[room].player2id).emit('game start', rooms[room].player2hand)
-        io.to(rooms[room].player3id).emit('game start', rooms[room].player3hand)
-        io.to(rooms[room].player4id).emit('game start', rooms[room].player4hand)
-        io.to(rooms[room].player5id).emit('game start', rooms[room].player5hand)
-        io.to(rooms[room].player6id).emit('game start', rooms[room].player6hand)
+        io.to(rooms[room].player[0].playerId).emit('game start', rooms[room].player[0].hand)
+        io.to(rooms[room].player[1].playerId).emit('game start', rooms[room].player[1].hand)
+        io.to(rooms[room].player[2].playerId).emit('game start', rooms[room].player[2].hand)
+        io.to(rooms[room].player[3].playerId).emit('game start', rooms[room].player[3].hand)
+        io.to(rooms[room].player[4].playerId).emit('game start', rooms[room].player[4].hand)
+        io.to(rooms[room].player[5].playerId).emit('game start', rooms[room].player[5].hand)
       console.log(rooms);
     });
   });
