@@ -91,10 +91,10 @@ async function main() {
     console.log(room.card);
 
     while(i > 0){
-      i--;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          card.length)
+      i--;
       for(let k = 0 ; k < room.playerCount ; k ++){
         room.player[k].hand.push(room.card.pop());
-        if(room.card.length==0){
+        if(room.card.length===0){
           break;
         }
       }
@@ -221,14 +221,13 @@ async function main() {
         }
         console.log('셔플시작')
         shuffleArray(rooms[room]);
+
         console.log('셔플끝')
-        io.to(rooms[room].player[0].playerId).emit('game start', rooms[room].player[0].hand)
-        io.to(rooms[room].player[1].playerId).emit('game start', rooms[room].player[1].hand)
-        io.to(rooms[room].player[2].playerId).emit('game start', rooms[room].player[2].hand)
-        io.to(rooms[room].player[3].playerId).emit('game start', rooms[room].player[3].hand)
-        io.to(rooms[room].player[4].playerId).emit('game start', rooms[room].player[4].hand)
-        io.to(rooms[room].player[5].playerId).emit('game start', rooms[room].player[5].hand)
-      console.log(rooms);
+        
+        for(let k = 0 ; k < 6 ; k ++ ){
+          io.to(rooms[room].player[k].playerId).emit('game start', rooms[room].player[k].hand)
+        }
+        console.log(rooms);
     });
   });
 
