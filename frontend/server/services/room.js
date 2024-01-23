@@ -16,21 +16,20 @@ const roomSocketMethods = () => {
      * @param {Object} room 방 객체
      * @returns 
      */
-  const shuffleArray = (room) => {
-    let array = room.card
+  const shuffleArray = (rooms, roomName) => {
+    let array = rooms[roomName].card
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
     }
-
     let i = 20;
-    console.log(`##### room card : ${room.card}`);
+    console.log(`##### room card : ${rooms[roomName].card}`);
 
     while(i > 0){
       i--;
-      for(let k = 0 ; k < room.playerCount ; k ++){
-        room.player[k].hand.push(room.card.pop());
-        if(room.card.length===0){
+      for(let k = 0 ; k < rooms[roomName].playerCount ; k ++){
+        rooms[roomName].players[k].hand.push(rooms[roomName].card.pop());
+        if(rooms[roomName].card.length===0){ 
           break;
         }
       }
@@ -72,13 +71,15 @@ const roomSocketMethods = () => {
    * @param {String} playerId 
    */
   const removePlayer = (playerId) => {
-    const room = rooms[roomName];
-    room.playerCount ++;
-    room[playerCount] = new Player(playerId);
 
     /*TODO - send room data and playerdata to backend server */
 
   }
+
+  const handleDisconnect = (socket, io, rooms) => {
+
+  }
+
 
   /**
    * Socket IO 관련 함수들 정의
@@ -161,20 +162,23 @@ const roomSocketMethods = () => {
     socket.on('start', () => {
       console.log(`##### card room : ${rooms}`);
       let room;
-        for(let nowRoom of socket.rooms){
-          if(nowRoom !== socket.id){
-            room = nowRoom;
+      let roomsKeys = Object.keys(rooms);
+      for(let roomName of roomsKeys){
+        for(let player of rooms[roomName].players){
+          if(player.socketId === socket.id){
+            room = roomName;
+            break;
           }
         }
-        console.log('##### 셔플시작')
-        shuffleArray(rooms[room]);
-
-        console.log('##### 셔플끝')
-        
-        for(let k = 0 ; k < 6 ; k ++ ){
-          io.to(rooms[room].player[k].playerId).emit('game start', rooms[room].player[k].hand)
-        }
-        
+      }
+      console.log(`##### current Room : ${room.room}`);
+      shuffleArray(rooms, room);
+      console.log('##### Shuffle End')
+      
+      for(let k = 0 ; k < rooms[room].players.length ; k ++ ){
+        io.to(rooms[room].players[k].socketId).emit('game start', rooms[room].players[k].hand)
+      }
+      
       console.log(`#####  card ended : ${rooms}`);
     });
   }
@@ -182,8 +186,18 @@ const roomSocketMethods = () => {
   /** 방 정보 테스트 구동  */
   const testRoomsInfo = async(socket, io, rooms) => {
     socket.on('testRoomsInfo', (callback) =>{
-      console.log("####")
+      console.log("#### test Room Info")
       callback(rooms);
+    })
+  }
+
+  const disconnected = async(socket, io, rooms) => {
+    let disconnectedTimeout;
+    socket.on('disconnect', () => {
+      console.log('##### disconnect socket');
+      disconnectedTimeout = setTimeout((socket, io, rooms) =>{
+        
+      }, 5, 60, 1000);
     })
   }
 
@@ -194,6 +208,8 @@ const roomSocketMethods = () => {
     chatMessage,
     cardShare,
     testRoomsInfo,
+    disconnected,
+
   }
 }
 

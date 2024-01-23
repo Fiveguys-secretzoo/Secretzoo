@@ -22,6 +22,7 @@ async function main() {
     chatMessage,
     cardShare,
     testRoomsInfo,
+    disconnected,
   } = roomMethods;
 
   // cors 설정
@@ -41,6 +42,7 @@ async function main() {
   const rooms = {}
   /* Socket 연결 후 부분 */
   io.on('connection', async (socket) => {
+    let disconnectedTimeout;
     console.log(`##### connection added, socket.id : ${socket.id}`);
 
     sendRoomInfo(socket, io, rooms);
@@ -52,6 +54,8 @@ async function main() {
 
     // test codes
     testRoomsInfo(socket, io, rooms);
+
+    disconnected(socket, io, rooms);
   });
 
   server.listen(3000, () => {

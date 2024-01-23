@@ -66,7 +66,6 @@ const Rooms = () => {
                 {/* <p>{rooms[key].players[0].playerName}</p> */}
                 <p>{rooms[key].playerCount}/6</p>
                 <p>{rooms[key].status}</p>
-                {rooms[key].players}+1
               </div>
             ))}
           </div>

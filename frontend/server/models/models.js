@@ -18,10 +18,10 @@ const models = () => {
   }
 
   // 플레이어의 정보를 담을 객체 
-  const Player = (playerId, socketId) => {
-    let playerId = playerId;
+  const Player = (pid, sid) => {
+    let playerId = pid;
     let playerName = '';
-    let socketId = socketId;
+    let socketId = sid;
     let hand = [];
     let penalty = [];
     let datas = {}
