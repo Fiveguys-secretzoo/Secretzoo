@@ -1,17 +1,26 @@
-const express = require('express');
-const { createServer } = require('node:http');
-const { join } = require('node:path');
-const { Server } = require('socket.io');
-const cors = require('cors');
-const { Socket } = require('node:dgram');
+import { createServer } from 'node:http';
+import { join }  from 'node:path';
+import { Server } from 'socket.io';
+import cors from 'cors';
+import { Socket } from 'node:dgram';
+import express from 'express';
+
+import roomSocketMethods from './services/room.js'
 
 //TODO Node.js 에서 Spring으로 보낼 때의 인증(IP 체크!)
 
 
 async function main() {
-  const express = require('express');
   const app = express();
   
+  const roomMethods = roomSocketMethods();
+
+  const {sendRoomInfo,
+    createRoom,
+    enterRoom,
+    chatMessage,
+    cardShare} = roomMethods;
+
   // cors 설정
   app.use(cors({
     origin: 'http://localhost:3001'
@@ -27,224 +36,17 @@ async function main() {
   });
 
   const rooms = {}
-
-  /* 자료구조 game Info.players.player.score 순으로 nest */
-
-  // 동물 이름을 미리 저장
-  const animals = ['cat','dog','tiger','whale','sheep','fox','deer','pig'];
-
-  // 동물 마다 score 유형
-  const score = {
-    attackSuccess : 0,
-    attackFail : 0,
-    defenseSuccess : 0,
-    defenseFail : 0,
-    trust : 0,
-    distrust : 0,
-    lie : 0,
-    truth : 0,
-  }
-
-  // 플레이어의 정보를 담을 객체 
-  const Player = (id) => {
-    let playerId = '';
-    let playerName = '';
-    let socketId = '';
-    let hand = [];
-    let penalty = [];
-    let datas = {}
-    let scores = {
-      'round' : 0,
-      'turn' : 0,
-      'attackAttempt' : 0,
-      'attackSuccess' : 0,
-      'defenseAttempt' : 0,
-      'defenseSuccess' : 0,
-      'passCount' : 0,
-    }
-    for(let animal of animals){
-      scores.animal = {...score};
-    }
-
-    return {
-      playerId,
-      playerName,
-      socketId,
-      hand,
-      penalty,
-      datas,
-      scores,
-    };
-  }
-
-  // 게임 정보 객체
-  const roomInfo = {
-    'roomId':'',
-    'roomName':'',
-    'roomPassword':'',
-    'roomAddress':'',
-    'status':'',
-    'createdDate':'',
-    'card': Array.from({ length: 64 }, (_, i) => i + 1),
-    'playerCount': 0,
-    'players':[], // 플레이어 정보 배열 
-  }
-
-  /**
-   * 카드 셔플 후 분배
-   * @param {Object} room 방 객체
-   * @returns 
-   */
-  const shuffleArray = (room) => {
-    let array = room.card
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-
-    let i = 20;
-    console.log(`##### room card : ${room.card}`);
-
-    while(i > 0){
-      i--;
-      for(let k = 0 ; k < room.playerCount ; k ++){
-        room.player[k].hand.push(room.card.pop());
-        if(room.card.length===0){
-          break;
-        }
-      }
-    }
-  }
-
-  /**
-   * 방 생성 (방이 존재하지 않는 경우)
-   * @param {string} roomName 방 이름 
-   * @param {string} id 유저 id 
-   */
-  const addRoom = (roomName, playerId)=>{
-    rooms[roomName] = {...roomInfo};
-    rooms[roomName].roomName = roomName;
-    rooms[roomName].players.push(Player(playerId));
-
-    /*TODO - send room data to backend server!!! */
-
-    console.log(`##### create room : ${rooms[roomName].players}`);
-  }
-
-  /**
-   * 유저 추가 (방이 존재하는 경우)
-   * @param {string} roomName 방 이름
-   * @param {string} id 유저 id 
-   */
-  const addPlayer = (roomName, playerId) => {
-    const room = rooms[roomName];
-    room.playerCount ++;
-    room[playerCount] = new Player(playerId);
-
-    /*TODO - send room data and playerdata to backend server */
-
-  }
-
-  /**
-   * 유저 퇴장 
-   * @param {String} roomName 
-   * @param {String} playerId 
-   */
-  const removePlayer = (playerId) => {
-    const room = rooms[roomName];
-    room.playerCount ++;
-    room[playerCount] = new Player(playerId);
-
-    /*TODO - send room data and playerdata to backend server */
-
-  }
-
   /* Socket 연결 후 부분 */
   io.on('connection', async (socket) => {
     console.log(`##### connection added, socket.id : ${socket.id}`);
 
-    /* 방 정보 전달 */
-    socket.on('requestRoomsInfo',(callback) => {
-      callback(rooms);
-    });
+    sendRoomInfo(socket, rooms);
+    createRoom(socket, rooms);
+    enterRoom(socket, rooms);
+    chatMessage(socket, rooms);
+    cardShare(socket, rooms);
 
-    /* 방 생성 이벤트 */
-    socket.on('createRoom', (room, callback) => {
-      if(Object.keys(rooms).includes(room)){
-        callback(false);
-      }else{
-        addRoom(room, socket.id);
-
-        // 기존방 나가기
-        for(let nowRoom of socket.rooms){
-          if(nowRoom !== socket.id){
-            socket.leave(nowRoom);
-          }
-        }
-
-        // 입력받은 방 들어가기
-        socket.join(room);
-        callback(true);
-      }
-    });
-
-    /* 방 입장 이벤트 */
-    socket.on('enterRoom', (room, callback) => {
-      // 인원수 체크
-      if(rooms[room] && rooms[room].playerCount >= 6){
-        callback(false);
-      }else {
-        // 기존방 나가기
-        for(let nowRoom of socket.rooms){
-          if(nowRoom !== socket.id){
-            socket.leave(nowRoom);
-          }
-        }
-
-        // 입력받은 방 들어가기
-        socket.join(room);
-
-        // console.log(io.of('/').adapter.rooms);
-        socket.emit('updateRoom',rooms);
-        addPlayer(room, socket.id)
-        callback(true)
-        console.log(`##### join room : ${rooms}`);
-      }
-    });
-
-    /* 채팅 메세지 이벤트 */
-    socket.on('chatMessage', async (msg, user) => {
-      let room;
-      for(let nowRoom of socket.rooms){
-        if(nowRoom !== socket.id){
-          room = nowRoom;
-        }
-      }
-      console.log(`##### chat message : ${msg} + " / room : " + ${room}`);
-      io.to(room).emit('chatMessage', user + " : " + msg + "," + room); 
-    });
     
-
-    /* 게임시작 카드 나눠주기 */
-    socket.on('start', () => {
-      console.log(`##### card room : ${rooms}`);
-      let room;
-        for(let nowRoom of socket.rooms){
-          if(nowRoom !== socket.id){
-            room = nowRoom;
-          }
-        }
-        console.log('##### 셔플시작')
-        shuffleArray(rooms[room]);
-
-        console.log('##### 셔플끝')
-        
-        for(let k = 0 ; k < 6 ; k ++ ){
-          io.to(rooms[room].player[k].playerId).emit('game start', rooms[room].player[k].hand)
-        }
-        
-      console.log(`##### card ended : ${rooms}`);
-    });
   });
 
   server.listen(3000, () => {
