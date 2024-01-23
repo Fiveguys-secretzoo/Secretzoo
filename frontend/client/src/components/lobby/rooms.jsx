@@ -63,10 +63,9 @@ const Rooms = () => {
             {Object.keys(rooms).map((key) => (
               <div className="roomBox" onClick={() => {enterRoom(rooms[key].roomName)}}>
                 <p>{rooms[key].roomName}</p>
-                {/* <p>{rooms[key].players[0].playerName}</p> */}
+                <p>{rooms[key].players[0].playerName}</p>
                 <p>{rooms[key].playerCount}/6</p>
                 <p>{rooms[key].status}</p>
-                {rooms[key].players}+1
               </div>
             ))}
           </div>
