@@ -40,10 +40,10 @@ public class RankService {
 
     /**
      *  members
-     * @param members
+     * @param players
      */
-    public void saveAll(List<Player> members) {
-        for (Player member : members) {
+    public void saveAll(List<Player> players) {
+        for (Player member : players) {
 
             //각 플레이어의 공격, 방어, 패스 점수 redis에 저장
             ZSetOperations<String, String> zSetForAttack = redisTemplate.opsForZSet();
