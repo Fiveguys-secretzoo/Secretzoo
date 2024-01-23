@@ -109,7 +109,7 @@ const Play = () => {
               className="card"
               style={{ zIndex: list.length - index }}
             >
-              <img class="card-image" src={require(`../assets/img/card/0${Math.floor(item/8)}/00${item%8}.png`)}/>
+              <img className="card-image" src={require(`../assets/img/card/0${Math.floor(item/8)}/00${item%8}.png`)}/>
               {item+""}
             </div>
           ))}

@@ -171,7 +171,7 @@ const roomSocketMethods = () => {
           }
         }
       }
-      console.log(`##### current Room : ${room.room}`);
+      console.log(`##### current Room : ${rooms[room].roomName}`);
       shuffleArray(rooms, room);
       console.log('##### Shuffle End')
       
