@@ -63,8 +63,18 @@ async function main() {
       'passCount' : 0,
     }
     for(let animal of animals){
-      scores.push({animal : {...score}});
+      scores.animal = {...score};
     }
+
+    return {
+      playerId,
+      playerName,
+      socketId,
+      hand,
+      penalty,
+      datas,
+      scores,
+    };
   }
 
   // 게임 정보 객체
@@ -93,7 +103,7 @@ async function main() {
     }
 
     let i = 20;
-    console.log(room.card);
+    console.log(`##### room card : ${room.card}`);
 
     while(i > 0){
       i--;
@@ -112,13 +122,13 @@ async function main() {
    * @param {string} id 유저 id 
    */
   const addRoom = (roomName, playerId)=>{
-    rooms[roomName] = {...gameInfo};
+    rooms[roomName] = {...roomInfo};
     rooms[roomName].roomName = roomName;
-    rooms[roomName].player[0] = new Player(playerId);
+    rooms[roomName].players.push(Player(playerId));
 
     /*TODO - send room data to backend server!!! */
 
-    console.log(rooms[roomName].player[0].json());
+    console.log(`##### create room : ${rooms[roomName].players}`);
   }
 
   /**
@@ -151,7 +161,7 @@ async function main() {
 
   /* Socket 연결 후 부분 */
   io.on('connection', async (socket) => {
-    console.log(socket.id)
+    console.log(`##### connection added, socket.id : ${socket.id}`);
 
     /* 방 정보 전달 */
     socket.on('requestRoomsInfo',(callback) => {
@@ -198,7 +208,7 @@ async function main() {
         socket.emit('updateRoom',rooms);
         addPlayer(room, socket.id)
         callback(true)
-        console.log(rooms)
+        console.log(`##### join room : ${rooms}`);
       }
     });
 
@@ -210,29 +220,30 @@ async function main() {
           room = nowRoom;
         }
       }
-      console.log(msg + "," + room);
+      console.log(`##### chat message : ${msg} + " / room : " + ${room}`);
       io.to(room).emit('chatMessage', user + " : " + msg + "," + room); 
     });
     
 
     /* 게임시작 카드 나눠주기 */
     socket.on('start', () => {
-      console.log(rooms);
+      console.log(`##### card room : ${rooms}`);
       let room;
         for(let nowRoom of socket.rooms){
           if(nowRoom !== socket.id){
             room = nowRoom;
           }
         }
-        console.log('셔플시작')
+        console.log('##### 셔플시작')
         shuffleArray(rooms[room]);
 
-        console.log('셔플끝')
+        console.log('##### 셔플끝')
         
         for(let k = 0 ; k < 6 ; k ++ ){
           io.to(rooms[room].player[k].playerId).emit('game start', rooms[room].player[k].hand)
         }
-        console.log(rooms);
+        
+      console.log(`##### card ended : ${rooms}`);
     });
   });
 

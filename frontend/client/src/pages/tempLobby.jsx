@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { SocketContext } from './tempLobby';
+import { SocketContext } from './tempMainPage';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -53,7 +53,7 @@ const Lobby = () => {
             })}
         </div>
         <div>
-          <input value={room} onChange={(value) => setRoom(e.target.value)} />
+          <input value={room} onChange={(e) => setRoom(e.target.value)} />
           <button onClick={createRoom}>방 만들기</button>
         </div>
       </div>
