@@ -8,6 +8,6 @@ import lombok.ToString;
 
 @AllArgsConstructor
 @Getter @ToString
-public class Cat extends Animal{
+public class Cat extends AnimalDto {
 
 }

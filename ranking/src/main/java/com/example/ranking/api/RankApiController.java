@@ -1,6 +1,6 @@
 package com.example.ranking.api;
 
-import com.example.ranking.domain.Player;
+import com.example.ranking.domain.entity.Player;
 import com.example.ranking.domain.Score;
 import com.example.ranking.domain.dto.GameResult;
 import com.example.ranking.repository.PlayerRepository;

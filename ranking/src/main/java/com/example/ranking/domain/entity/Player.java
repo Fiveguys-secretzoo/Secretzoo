@@ -1,20 +1,35 @@
-package com.example.ranking.domain;
+package com.example.ranking.domain.entity;
 
+import com.example.ranking.domain.Score;
+import com.example.ranking.domain.entity.base.BaseTimeEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
-@Data
+@Getter @Setter @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Player {
-    @Id
+public class Player extends BaseTimeEntity {
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long playerSequence;
+
+    private Long totalRound;
+    private Long totalTurn;
+
+    //player_id도 고유한 값이므로 unique = true 설정을 통해 중복 값을 방지해준다.
+    @Column(name = "player_id",  unique = true)
     private String playerId;
+
     private String playerName;
     private String playerPassword;
-
     private Score rankingScore;
 
 

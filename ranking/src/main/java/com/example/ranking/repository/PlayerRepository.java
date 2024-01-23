@@ -1,6 +1,6 @@
 package com.example.ranking.repository;
 
-import com.example.ranking.domain.Player;
+import com.example.ranking.domain.entity.Player;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 

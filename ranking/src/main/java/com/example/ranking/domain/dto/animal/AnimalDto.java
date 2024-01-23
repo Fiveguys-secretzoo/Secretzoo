@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Data
-public class Animal {
+public class AnimalDto {
 
     Long attackSuccess = 0L;
     Long attackFail = 0L;
