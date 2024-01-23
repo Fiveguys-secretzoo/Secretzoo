@@ -42,10 +42,10 @@ const roomSocketMethods = () => {
    * @param {string} roomName 방 이름 
    * @param {string} id 유저 id 
    */
-  const addRoom = (rooms, roomName, playerId)=>{
+  const addRoom = (rooms, roomName, playerId, socketId)=>{
     rooms[roomName] = {...roomInfo};
     rooms[roomName].roomName = roomName;
-    rooms[roomName].players.push({...Player(playerId)});
+    rooms[roomName].players.push(Player(playerId, socketId));
 
     /*TODO - send room data to backend server!!! */
 
@@ -57,10 +57,10 @@ const roomSocketMethods = () => {
    * @param {string} roomName 방 이름
    * @param {string} id 유저 id 
    */
-  const addPlayer = (rooms, roomName, playerId) => {
+  const addPlayer = (rooms, roomName, playerId, socketId) => {
     const room = rooms[roomName];
     room.playerCount ++;
-    room.players.push({...Player(playerId)});
+    room.players.push({...Player(playerId, socketId)});
 
     /*TODO - send room data and playerdata to backend server */
 
@@ -94,11 +94,11 @@ const roomSocketMethods = () => {
 
   /* 방 생성 이벤트 */
   const createRoom = async(socket, io, rooms) => {
-    socket.on('createRoom', (room, callback) => {
+    socket.on('createRoom', (room, id, callback) => {
       if(Object.keys(rooms).includes(room)){
         callback(false);
       }else{
-        addRoom(rooms, room, socket.id);
+        addRoom(rooms, room, id, socket.id);
         console.log(`##### player [${socket.id}], make room ${room}`)
 
         // 기존방 나가기
@@ -117,7 +117,7 @@ const roomSocketMethods = () => {
 
   /* 방 입장 이벤트 */
   const enterRoom = async (socket, io, rooms) => {
-    socket.on('enterRoom', (room, callback) => {
+    socket.on('enterRoom', (room, id, callback) => {
         // 인원수 체크
       if(rooms[room] && rooms[room].playerCount >= 6){
         callback(false);
@@ -134,7 +134,7 @@ const roomSocketMethods = () => {
 
         // console.log(io.of('/').adapter.rooms);
         socket.emit('updateRoom',rooms);
-        addPlayer(rooms, room, socket.id)
+        addPlayer(rooms, room, id, socket.id)
         callback(true)
         console.log(`##### player ${socket.id} join room : ${rooms}`);
       }

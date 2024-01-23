@@ -18,10 +18,10 @@ const models = () => {
   }
 
   // 플레이어의 정보를 담을 객체 
-  const Player = (id) => {
-    let playerId = '';
+  const Player = (playerId, socketId) => {
+    let playerId = playerId;
     let playerName = '';
-    let socketId = id;
+    let socketId = socketId;
     let hand = [];
     let penalty = [];
     let datas = {}
@@ -58,7 +58,7 @@ const models = () => {
     'status':'',
     'createdDate':'',
     'card': Array.from({ length: 64 }, (_, i) => i + 1),
-    'playerCount': 0,
+    'playerCount': 1,
     'players':[], // 플레이어 정보 배열 
   }
 
