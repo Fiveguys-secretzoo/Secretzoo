@@ -7,6 +7,7 @@ const Lobby = () => {
   const navigate = useNavigate();
 
   const [rooms, setRooms] = useState({});
+
   const [room, setRoom] = useState();
   const socket = useContext(SocketContext);
 
@@ -18,17 +19,23 @@ const Lobby = () => {
         alert('이미 방이 존재합니다!')
       }
     });
-    setRoom('');
   }
 
   const enterRoom = (roomName) => {
+    console.log("##### Pressed Enter Room ");
     socket.emit('enterRoom', roomName, (tf) => {
       if (tf) {
         navigate('/game');
       } else {
         alert("Too many players in the room");
+        console.log(tf);
+        console.log(roomName);
       }
     });
+  }
+
+  const onType = (e) => {
+    setRoom(e.target.value);
   }
 
   useEffect(() => {
@@ -47,18 +54,20 @@ const Lobby = () => {
           <h3> 방 목록 </h3>
         </div>
         <div>
-          {rooms !== undefined
-            && Object.keys(rooms).length > 0
-            && Object.keys(rooms).map((roomName) => {
-              return(
-              <li key={roomName} onClick={() => enterRoom(roomName)}>
-                <strong>방제</strong> : {roomName} ({rooms[roomName].playerCount+1} 명 접속중)
-              </li>
-              )
+          <ul>
+            {rooms !== undefined
+              && Object.keys(rooms).length > 0
+              && Object.keys(rooms).map((roomName) => {
+                return(
+                <li key={roomName}>
+                  <strong>방제</strong> : {roomName} ({rooms[roomName].playerCount+1} 명 접속중) <button onClick={() => enterRoom(roomName)}>방 입장</button>
+                </li>
+                )
             })}
+            </ul>
         </div>
         <div>
-          <input value={room} onChange={(e) => setRoom(e.target.value)} />
+          <input value={room} onChange={onType} />
           <button onClick={createRoom}>방 만들기</button>
         </div>
       </div>

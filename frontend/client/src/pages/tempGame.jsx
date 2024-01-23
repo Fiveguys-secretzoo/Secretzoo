@@ -17,6 +17,10 @@ const Game = () => {
       setTestRooms(rooms);
       console.log(rooms)
     });
+
+    return (()=>{
+      
+    })
   }, []);
 
   return (
