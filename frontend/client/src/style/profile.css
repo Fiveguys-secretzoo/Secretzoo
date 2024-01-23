@@ -1,0 +1,30 @@
+.profile {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid red;
+  padding: 30px;
+}
+.profileCard{
+    display: flex;
+    justify-content: center;
+    
+}
+.exp div:first-child{
+    display: flex;
+    justify-content: space-around;
+}
+.expBar span:nth-child(1){
+    position: relative;
+    background-color: grey;
+    display: block;
+    width: 300px;
+    height: 10px;
+}
+.expBar span:nth-child(2){
+    background-color: blue;
+    display: block;
+    position: relative;
+    top: -10px;
+    width: 200px;
+    height: 10px;
+}
