@@ -4,9 +4,11 @@ package com.example.ranking.service;
 import com.example.ranking.domain.Score;
 import com.example.ranking.domain.dto.GameResult;
 import com.example.ranking.domain.entity.Player;
+import com.example.ranking.domain.entity.PlayerAnimal;
 import com.example.ranking.repository.PlayerAnimalRepository;
 import com.example.ranking.repository.PlayerRepository;
 import jakarta.persistence.EntityManager;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.ZSetOperations;
@@ -28,13 +30,17 @@ public class RewardsService {
     @Transactional
     public void saveRewards(GameResult gameResult) {
 
-        Player findPlayer = playerRepository.findByPlayerId(gameResult.getPlayerId());
+        Player findByPlayerId = playerRepository.findByPlayerId(gameResult.getPlayerId());
+//        Player findByPlayerSequence = playerRepository.findByPlayerSequence(gameResult.getPlayerSequence());
 
         //turn 과 round 누적 업데이트
-        findPlayer.setTotalRound(findPlayer.getTotalRound() + gameResult.getRound());
-        findPlayer.setTotalTurn(findPlayer.getTotalTurn() + gameResult.getTurn());
+        findByPlayerId.setTotalRound(findByPlayerId.getTotalRound() + gameResult.getRound());
+        findByPlayerId.setTotalTurn(findByPlayerId.getTotalTurn() + gameResult.getTurn());
 
-        playerAnimalRepository.findBy
+        List<PlayerAnimal> playerAnimals = playerAnimalRepository.findByPlayerSequence(gameResult.getPlayerSequence());
+        for (PlayerAnimal playerAnimal : playerAnimals) {
+            System.out.println("playerAnimal = " + playerAnimal);
+        }
 
 
     }

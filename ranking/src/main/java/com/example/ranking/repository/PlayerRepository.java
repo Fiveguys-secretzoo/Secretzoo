@@ -8,6 +8,7 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
 
     Player findByPlayerId(String playerId);
 
+    Player findByPlayerSequence(Long playerSequence);
     List<Player> findTop10ByOrderByRankingScoreAttackScoreDesc();
     List<Player> findTop10ByOrderByRankingScoreDefenseScoreDesc();
     List<Player> findTop10ByOrderByRankingScorePassScoreDesc();
