@@ -1,0 +1,10 @@
+.container{
+  display: flex;
+  padding: 30px;
+}
+.left{
+  flex-basis: 20%;
+}
+.right{
+  flex-basis: 80%;
+}
