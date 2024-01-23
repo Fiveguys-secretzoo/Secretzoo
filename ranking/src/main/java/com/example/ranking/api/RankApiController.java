@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@RequestMapping("rank")
+@RequestMapping("/rank")
 @RequiredArgsConstructor
 @CrossOrigin("*")
 public class RankApiController {
@@ -42,15 +42,11 @@ public class RankApiController {
     @GetMapping("/init")
     public ResponseEntity<?> init() {
         // 더미 데이터 초기화 (실제 운영에서는 필요 없음)
-        List<Player> dummyData = new ArrayList<>();
-        List<Player> members = playerRepository.findAll();
+        List<Player> players = playerRepository.findAll();
 
-        for (Player member : members) {
-            System.out.println("member = " + member);
-        }
         log.info("dummy create");
-        rankService.saveAll(members);
-        return new ResponseEntity<List<Player>>(members, HttpStatus.OK);
+        rankService.saveAll(players);
+        return new ResponseEntity<List<Player>>(players, HttpStatus.OK);
     }
 
     /**
