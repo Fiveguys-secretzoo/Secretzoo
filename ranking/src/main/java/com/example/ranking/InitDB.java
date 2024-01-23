@@ -1,8 +1,10 @@
 package com.example.ranking;
 
 
-import com.example.ranking.domain.Player;
+import com.example.ranking.domain.entity.Animal;
+import com.example.ranking.domain.entity.Player;
 import com.example.ranking.domain.Score;
+import com.example.ranking.domain.entity.PlayerAnimal;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +38,7 @@ public class InitDB {
     @Transactional
     @RequiredArgsConstructor
     static class InitService {
+
         private final EntityManager em;
         public void dbInit1() {
             //유저 생성
@@ -52,6 +55,7 @@ public class InitDB {
             Player player55 = Player.createPlayer("player55", "오너", "1234");
             Player player66 = Player.createPlayer("player66", "기인", "1234");
 
+            em.flush();
 
             //점수 생성
             player1.setRankingScore(new Score(120.0, 20.0, 60.0));
@@ -80,6 +84,44 @@ public class InitDB {
             em.persist(player44);
             em.persist(player55);
             em.persist(player66);
+
+
+            //동물 생성
+            Animal tiger = new Animal("TIGER01", "Tiger", "호랑이");
+            Animal cat = new Animal("CAT02", "Cat", "고양이");
+            Animal dog = new Animal("DOG03", "Dog", "강아지 ");
+            Animal deer = new Animal("DEER04", "Deer", "고라니");
+            Animal pig = new Animal("PIG05", "Pig", "돼지");
+            Animal fox = new Animal("FOX06", "Fox", "여우");
+            Animal sheep = new Animal("SHEEP07", "Sheep", "양");
+            Animal whale = new Animal("WHALE08", "Whale", "혹등고래");
+
+            em.persist(tiger);
+            em.persist(cat);
+            em.persist(dog);
+            em.persist(deer);
+            em.persist(pig);
+            em.persist(fox);
+            em.persist(sheep);
+            em.persist(whale);
+
+
+            //동물 업적 데이터
+            PlayerAnimal pa1 = new PlayerAnimal( player1, tiger, 10L, 10L, 5L, 0L, 1L, 100L, 12L, 99L);
+            PlayerAnimal pa2 = new PlayerAnimal( player1, cat, 101L, 10L, 5L, 0L, 1L, 100L, 12L, 99L);
+            PlayerAnimal pa3 = new PlayerAnimal( player1, dog, 120L, 10L, 5L, 0L, 1L, 100L, 12L, 99L);
+            PlayerAnimal pa4 = new PlayerAnimal( player1, whale, 11L, 10L, 5L, 0L, 1L, 100L, 12L, 99L);
+            PlayerAnimal pa5 = new PlayerAnimal( player2, whale, 15L, 10L, 5L, 0L, 1L, 100L, 12L, 99L);
+            PlayerAnimal pa6 = new PlayerAnimal( player3, sheep, 20L, 10L, 5L, 0L, 1L, 100L, 12L, 99L);
+
+            em.persist(pa1);
+            em.persist(pa2);
+            em.persist(pa3);
+            em.persist(pa4);
+            em.persist(pa5);
+            em.persist(pa6);
+
+
         }
 
         public void dbInit2() {

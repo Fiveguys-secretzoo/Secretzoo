@@ -1,7 +1,7 @@
 package com.example.ranking.service;
 
 
-import com.example.ranking.domain.Player;
+import com.example.ranking.domain.entity.Player;
 import com.example.ranking.domain.Score;
 import com.example.ranking.repository.PlayerRepository;
 import jakarta.persistence.EntityManager;
