@@ -38,8 +38,8 @@ public class PlayerAnimal {
     private Long defenseFail = 0L;
     private Long trust = 0L;
     private Long distrust = 0L;
-    private Long lie = 0L;
     private Long truth = 0L;
+    private Long lie = 0L;
 
     public PlayerAnimal(com.example.ranking.domain.entity.Player playerSequence, Animal animalId, Long attackSuccess, Long attackFail,
         Long defenseSuccess, Long defenseFail, Long trust, Long distrust, Long lie, Long truth) {
