@@ -21,7 +21,7 @@ const models = () => {
   const Player = (id) => {
     let playerId = '';
     let playerName = '';
-    let socketId = '';
+    let socketId = id;
     let hand = [];
     let penalty = [];
     let datas = {}
@@ -35,7 +35,7 @@ const models = () => {
       'passCount' : 0,
     }
     for(let animal of animals){
-      scores.animal = {...score};
+      scores[animal] = {...score};
     }
 
     return {

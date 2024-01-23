@@ -6,8 +6,8 @@ import { useNavigate } from 'react-router-dom';
 const Lobby = () => {
   const navigate = useNavigate();
 
-  const [rooms, setRooms] = useState();
-  const [room, setRoom] = useState('');
+  const [rooms, setRooms] = useState({});
+  const [room, setRoom] = useState();
   const socket = useContext(SocketContext);
 
   const createRoom = () => {
@@ -32,8 +32,11 @@ const Lobby = () => {
   }
 
   useEffect(() => {
-    socket.emit('requestRoomInfo', (roomsInfo) => {
-      setRooms(roomsInfo)
+    socket.emit('requestRoomsInfo', (roomsInfo) => {
+      console.log(`##### get rooms Info `);
+      console.log(roomsInfo);
+      setRooms(roomsInfo);
+      console.log(rooms);
     });
   }, []);
 
@@ -47,9 +50,11 @@ const Lobby = () => {
           {rooms !== undefined
             && Object.keys(rooms).length > 0
             && Object.keys(rooms).map((roomName) => {
+              return(
               <li key={roomName} onClick={() => enterRoom(roomName)}>
-                <strong>방제</strong> : {roomName} ({rooms[roomName].playerCount} 명 접속중)
+                <strong>방제</strong> : {roomName} ({rooms[roomName].playerCount+1} 명 접속중)
               </li>
+              )
             })}
         </div>
         <div>

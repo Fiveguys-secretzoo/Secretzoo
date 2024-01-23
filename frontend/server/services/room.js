@@ -2,10 +2,12 @@
 import { Server } from 'socket.io';
 import models from '../models/models.js';
 
+const model = models();
+
 const {animals, 
   score,
   Player,
-  roomInfo} = models
+  roomInfo} = model
 
 const roomSocketMethods = () => {
 
@@ -40,10 +42,10 @@ const roomSocketMethods = () => {
    * @param {string} roomName 방 이름 
    * @param {string} id 유저 id 
    */
-  const addRoom = (roomName, playerId)=>{
+  const addRoom = (rooms, roomName, playerId)=>{
     rooms[roomName] = {...roomInfo};
     rooms[roomName].roomName = roomName;
-    rooms[roomName].players.push(Player(playerId));
+    rooms[roomName].players.push({...Player(playerId)});
 
     /*TODO - send room data to backend server!!! */
 
@@ -55,10 +57,10 @@ const roomSocketMethods = () => {
    * @param {string} roomName 방 이름
    * @param {string} id 유저 id 
    */
-  const addPlayer = (roomName, playerId) => {
+  const addPlayer = (rooms, roomName, playerId) => {
     const room = rooms[roomName];
     room.playerCount ++;
-    room[playerCount] = new Player(playerId);
+    room.players.push({...Player(playerId)});
 
     /*TODO - send room data and playerdata to backend server */
 
@@ -78,21 +80,26 @@ const roomSocketMethods = () => {
 
   }
 
+  /**
+   * Socket IO 관련 함수들 정의
+   */
 
   /* 방 정보 전달 */  
-  const sendRoomInfo = async (socket, rooms) => {
-    socket.on('requestRoomsInfo',(callback) => {
+  const sendRoomInfo = async (socket, io,  rooms) => {
+    socket.on('requestRoomsInfo', (callback) => {
+      console.log("##### callback roomsInfo");
       callback(rooms);
     });
   }
 
   /* 방 생성 이벤트 */
-  const createRoom = async(socket, rooms) => {
+  const createRoom = async(socket, io, rooms) => {
     socket.on('createRoom', (room, callback) => {
       if(Object.keys(rooms).includes(room)){
         callback(false);
       }else{
-        addRoom(room, socket.id);
+        addRoom(rooms, room, socket.id);
+        console.log(`##### player [${socket.id}], make room ${room}`)
 
         // 기존방 나가기
         for(let nowRoom of socket.rooms){
@@ -109,7 +116,7 @@ const roomSocketMethods = () => {
   }
 
   /* 방 입장 이벤트 */
-  const enterRoom = async (socket, rooms) => {
+  const enterRoom = async (socket, io, rooms) => {
     socket.on('enterRoom', (room, callback) => {
         // 인원수 체크
       if(rooms[room] && rooms[room].playerCount >= 6){
@@ -127,15 +134,15 @@ const roomSocketMethods = () => {
 
         // console.log(io.of('/').adapter.rooms);
         socket.emit('updateRoom',rooms);
-        addPlayer(room, socket.id)
+        addPlayer(rooms, room, socket.id)
         callback(true)
-        console.log(`##### join room : ${rooms}`);
+        console.log(`##### player ${socket.id} join room : ${rooms}`);
       }
     });
   }
 
   /* 채팅 메세지 이벤트 */
-  const chatMessage = async(socket, rooms) => {
+  const chatMessage = async(socket, io, rooms) => {
     socket.on('chatMessage', async (msg, user) => {
       let room;
       for(let nowRoom of socket.rooms){
@@ -150,7 +157,7 @@ const roomSocketMethods = () => {
 
 
   /* 게임시작 카드 나눠주기 */
-  const cardShare = async (socket, rooms) => {
+  const cardShare = async (socket, io, rooms) => {
     socket.on('start', () => {
       console.log(`##### card room : ${rooms}`);
       let room;
@@ -172,12 +179,21 @@ const roomSocketMethods = () => {
     });
   }
 
+  /** 방 정보 테스트 구동  */
+  const testRoomsInfo = async(socket, io, rooms) => {
+    socket.on('testRoomsInfo', (callback) =>{
+      console.log("####")
+      callback(rooms);
+    })
+  }
+
   return {
     sendRoomInfo,
     createRoom,
     enterRoom,
     chatMessage,
     cardShare,
+    testRoomsInfo,
   }
 }
 

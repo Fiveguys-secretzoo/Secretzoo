@@ -15,11 +15,14 @@ async function main() {
   
   const roomMethods = roomSocketMethods();
 
-  const {sendRoomInfo,
+  const {
+    sendRoomInfo,
     createRoom,
     enterRoom,
     chatMessage,
-    cardShare} = roomMethods;
+    cardShare,
+    testRoomsInfo,
+  } = roomMethods;
 
   // cors 설정
   app.use(cors({
@@ -40,13 +43,15 @@ async function main() {
   io.on('connection', async (socket) => {
     console.log(`##### connection added, socket.id : ${socket.id}`);
 
-    sendRoomInfo(socket, rooms);
-    createRoom(socket, rooms);
-    enterRoom(socket, rooms);
-    chatMessage(socket, rooms);
-    cardShare(socket, rooms);
+    sendRoomInfo(socket, io, rooms);
+    createRoom(socket, io, rooms);
+    enterRoom(socket, io, rooms);
+    chatMessage(socket, io, rooms);
+    cardShare(socket, io, rooms);
 
-    
+
+    // test codes
+    testRoomsInfo(socket, io, rooms);
   });
 
   server.listen(3000, () => {
