@@ -39,25 +39,26 @@ public class RankService {
 
 
     /**
-     *  members
+     * redis에 player의 랭킹 점수 정보 저장
      * @param players
      */
     public void saveAll(List<Player> players) {
-        for (Player member : players) {
+        for (Player player : players) {
 
             //각 플레이어의 공격, 방어, 패스 점수 redis에 저장
             ZSetOperations<String, String> zSetForAttack = redisTemplate.opsForZSet();
             ZSetOperations<String, String> zSetForDefense = redisTemplate.opsForZSet();
             ZSetOperations<String, String> zSetForPass = redisTemplate.opsForZSet();
-            zSetForAttack.add(attackRankKey, member.getPlayerId(), member.getRankingScore().getAttackScore());
-            zSetForDefense.add(defenseRankKey, member.getPlayerId(), member.getRankingScore().getDefenseScore());
-            zSetForPass.add(passRankKey, member.getPlayerId(), member.getRankingScore().getPassScore());
+            zSetForAttack.add(attackRankKey, player.getPlayerId(), player.getRankingScore().getAttackScore());
+            zSetForDefense.add(defenseRankKey, player.getPlayerId(), player.getRankingScore().getDefenseScore());
+            zSetForPass.add(passRankKey, player.getPlayerId(), player.getRankingScore().getPassScore());
         }
     }
 
     /**
      * attack 랭킹 점수를 Redis 에 저장(업데이트)
      */
+    @Transactional
     public void saveRank(String playerId, Score rankingScore) {
         //redis 에서 각 랭킹 정보 가져오기
         ZSetOperations<String, String> zSetForAttack = redisTemplate.opsForZSet();
@@ -68,6 +69,19 @@ public class RankService {
         zSetForAttack.incrementScore(attackRankKey, playerId, rankingScore.getAttackScore());
         zSetForDefense.incrementScore(defenseRankKey, playerId, rankingScore.getDefenseScore());
         zSetForPass.incrementScore(passRankKey, playerId, rankingScore.getPassScore());
+
+        //DB에 업데이트
+
+        //점수
+        Player findPlayer = playerRepository.findByPlayerId(playerId);
+        findPlayer.setRankingScore(
+            new Score (
+                findPlayer.getRankingScore().getAttackScore() + rankingScore.getAttackScore(),
+                findPlayer.getRankingScore().getDefenseScore() + rankingScore.getDefenseScore(),
+                findPlayer.getRankingScore().getPassScore() + rankingScore.getPassScore()
+            )
+        );
+
     }
 
     /**
@@ -144,11 +158,12 @@ public class RankService {
     /**
      * 랭킹 정보를 주기적으로 갱신하는 스케줄링 메서드
      */
+
     @Transactional
 //    @Scheduled(fixedRateString = "${rank.update.interval}") //interval 방식의 스케줄링
     @Scheduled(cron = "0 59 23 * * *") // 특정 시간 기준 스케줄링 ex : 매월 매일 23시 59분 마다
-    public void updateAttackRanking() {
-        log.debug("DB 랭킹 점수 갱신 시작");
+    public void updateAllRanking() {
+        log.info("DB 랭킹 점수 갱신 시작");
         List<Player> players = playerRepository.findAll();
         //레디스의 점수 정보를 DB 정보에 업데이트
         ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
@@ -178,7 +193,7 @@ public class RankService {
             }
         }
 //        em.flush();
-        log.debug("DB 랭킹 점수 갱신 완료");
+        log.info("DB 랭킹 점수 갱신 완료");
         updateRedisRanking(players);
     }
 

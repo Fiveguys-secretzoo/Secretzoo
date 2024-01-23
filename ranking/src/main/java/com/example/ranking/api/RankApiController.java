@@ -39,15 +39,15 @@ public class RankApiController {
 
 
     //초기 랭킹 정보 redis에 캐싱
-    @GetMapping("/init")
-    public ResponseEntity<?> init() {
-        // 더미 데이터 초기화 (실제 운영에서는 필요 없음)
-        List<Player> players = playerRepository.findAll();
-
-        log.info("dummy create");
-        rankService.saveAll(players);
-        return new ResponseEntity<List<Player>>(players, HttpStatus.OK);
-    }
+//    @GetMapping("/init")
+//    public ResponseEntity<?> init() {
+//        // 더미 데이터 초기화 (실제 운영에서는 필요 없음)
+//        List<Player> players = playerRepository.findAll();
+//
+//        log.info("dummy create");
+//        rankService.saveAll(players);
+//        return new ResponseEntity<List<Player>>(players, HttpStatus.OK);
+//    }
 
     /**
      * 사용자의 게임 결과에서 랭킹 정보를 저장

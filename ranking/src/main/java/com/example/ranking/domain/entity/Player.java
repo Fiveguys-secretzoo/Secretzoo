@@ -20,6 +20,8 @@ public class Player extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long playerSequence;
+    @Column(name = "user_sequence", unique = true)
+    private Long userSequence;
 
     private Long totalRound;
     private Long totalTurn;
@@ -28,8 +30,6 @@ public class Player extends BaseTimeEntity {
     @Column(name = "player_id",  unique = true)
     private String playerId;
 
-    private String playerName;
-    private String playerPassword;
     private Score rankingScore;
 
 
@@ -45,8 +45,6 @@ public class Player extends BaseTimeEntity {
 
         Player player = new Player();
         player.setPlayerId(playerId);
-        player.setPlayerName(playerName);
-        player.setPlayerPassword(playerPassword);
         player.setRankingScore(new Score(0.0, 0.0, 0.0));
 
         return player;
