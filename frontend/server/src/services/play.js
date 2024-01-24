@@ -75,6 +75,7 @@ const playSocketMethods = () => {
           }
         }
       }
+      console.log(`##### send card Dropped Data to ${room}`)
       io.to(room).emit('cardDrop', from, to);
     })
   }

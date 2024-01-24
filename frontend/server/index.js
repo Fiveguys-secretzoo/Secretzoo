@@ -38,6 +38,10 @@ async function main() {
     passingTurnSelect,
   } = playMethods;
 
+  const handleException = (socket) => {
+
+  }
+
   // cors 설정
   app.use(cors({
     origin: 'http://localhost:3001'
@@ -62,6 +66,7 @@ async function main() {
     let disconnectedTimeout;
     console.log(`##### connection added, socket.id : ${socket.id}`);
 
+
     // room listening
     sendRoomInfo(socket, io, rooms);
     createRoom(socket, io, rooms);
@@ -78,9 +83,19 @@ async function main() {
 
     // test codes
     testRoomsInfo(socket, io, rooms);
-
     disconnected(socket, io, rooms);
-    
+
+    process.on('uncaughtException', (err) => {
+      console.log(err);
+      io.emit("serverClosed", "err");
+      process.exit(1);
+    })
+    process.on('exit', (err) => {
+      console.log(err);
+      io.emit("serverClosed", "close");
+      process.exit(1);
+    })
+  
   });
 
   server.listen(3000, () => {

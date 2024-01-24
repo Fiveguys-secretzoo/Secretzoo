@@ -24,6 +24,7 @@ const Play = () => {
   const handleDrop = (e) => {
     e.preventDefault();
     alert(dragItem.current + " drop " + e.target.textContent);
+    socket.emit("cardDrop", pid, e.target.textContent);
   };
 
   const pid = sessionStorage.getItem("userName");
@@ -32,18 +33,18 @@ const Play = () => {
   }
 
   const handleCardDragResponse = (from, to) => {
-    console.log("something happens")
+    console.log("card Dragged")
     setCardDrag((value) => {
     });
-    console.log(`${from} , ${to}`);
+    console.log(`${from} to ${to}`);
   };
 
-  const handleCardDropResponse = (e) => {
-    setCardDrop((value) => {
-      value = e;
-    });
+  const handleCardDropResponse = (from, to ) => {
     
-    console.log(cardDrop)
+    console.log("card Dragged")
+    setCardDrop((value) => {
+    });
+    console.log(`${from} to ${to}`);
   };
 
   const handleCardBluffResponse = (e) => {

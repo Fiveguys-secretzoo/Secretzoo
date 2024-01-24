@@ -1,4 +1,4 @@
-import React, {createContext}  from 'react';
+import React, {createContext, useEffect}  from 'react';
 import {BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import io from 'socket.io-client';
@@ -14,6 +14,7 @@ export const SocketContext = createContext();
 
 
 function App() {
+
   return (
     <BrowserRouter>
       <SocketContext.Provider value={socket}>
