@@ -74,6 +74,7 @@ docker build -t springbootapp01 C:\Users\hyuns\docker-image
 spring boot 서버가 mysql 서버에 의존하고 있을 때 두 이미지를 함께 생성하고 실행 시킬 수 있는 docker-compose 파일을 작성한다
 
 
+### 🔔Spring boot + Mysql 
 #### docker-compose.yml
 
 ```yaml
@@ -108,6 +109,91 @@ services:
       - mysql001
 
 ```
+### 🎈 Spring boot + Mysql + Redis
+#### docker-compose.yml
+```yaml
+version: '3'
+
+services:
+  mysql:
+    image: mysql:8.2
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --default-authentication-plugin=mysql_native_password
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ssafy
+      MYSQL_DATABASE: rank_db
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_USER: ssafy
+      MYSQL_PASSWORD: ssafy
+      TZ: 'Asia/Seoul'
+    ports:
+      - "3307:3306"
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    hostname: redis
+    ports:
+      - 6379:6379
+    extra_hosts:
+      - host.docker.internal:host-gateway
+
+  spring-app:
+    container_name: spring-app
+    build:
+      context: .
+      dockerfile: Dockerfile.spring
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/rank_db?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&useLegacyDatetimeCode=false
+      SPRING_DATASOURCE_USERNAME: "root"
+      SPRING_DATASOURCE_PASSWORD: "ssafy"
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: 6379
+    depends_on:
+      - mysql
+      - redis
+
+```
+
+Dockerfile.mysql
+```Docker
+FROM mysql:latest
+
+# 환경 변수 설정 (예: 데이터베이스 이름, 사용자, 비밀번호)
+ENV MYSQL_DATABASE=rank_db \
+    MYSQL_USER=ssafy \
+    MYSQL_PASSWORD=ssafy \
+    MYSQL_ROOT_PASSWORD=ssafy
+
+# 포트 설정 (기본 MySQL 포트는 3306)
+EXPOSE 3306
+```
+
+Dockerfile.redis
+```Docker
+# Redis base image
+FROM redis:latest
+
+# Expose the default Redis port
+EXPOSE 6379
+
+# Set a custom configuration if needed
+# COPY redis.conf /etc/redis/redis.conf
+# CMD ["redis-server", "/etc/redis/redis.conf"]
+
+```
+
+Dockerfile.spring
+
+```Docker
+FROM openjdk:17-alpine
+ARG JAR_FILE=game-0.0.1-SNAPSHOT.jar
+COPY ${JAR_FILE} myboot.jar
+ENTRYPOINT ["java", "-jar", "/myboot.jar"]
+```
+
 
 #### docker compose up
 컴포즈 파일의 내용에 따라 컨테이너와 볼륨, 네트워크가 생성되고 실행된다.
@@ -115,3 +201,51 @@ services:
 docker-compose -f [정의 파일 경로] up [옵션]
 docker-compose -f C:\Users\hyuns\docker\com_folder\docker-compose.yml up -d
 ```
+
+
+
+
+## React Docker
+
+### STEP1
+react root폴더 위치에 Dockerfile 작성
+
+```Docker
+# 기반 이미지 설정
+FROM node:16
+
+# 앱 디렉터리 생성
+WORKDIR /usr/src/app
+
+# 앱 종속성 설치
+COPY package*.json ./
+
+RUN npm install
+
+# 앱 소스 추가
+COPY . .
+
+# 앱 빌드
+RUN npm run build
+
+# 앱 실행
+CMD ["npm", "start"]
+
+```
+
+
+### STEP2
+
+Dockerfile로 이미지 생성
+(Dockerfile이 위치한 디렉터리에서 명령어를 실행할 경우)
+```bash
+docker build -t my-react-app .
+```
+
+### STEP3
+도커 컨테이너 실행(바인트 마운트)
+```bash
+docker run --name react-container -d -p 3001:3000 -v C:/Users/hyns/docker/react_test/my-app:/usr/src/app my-react-app
+```
+
+
