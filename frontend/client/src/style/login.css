@@ -1,0 +1,17 @@
+.loginContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 250px
+}
+.left {
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  flex-basis: 30%;
+}
+.right{
+  background-color: #fff;
+  padding: 20px0;
+  flex-basis: 30%;
+}

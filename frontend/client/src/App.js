@@ -5,6 +5,7 @@ import io from 'socket.io-client';
 import Lobby from './pages/lobby'
 import Login from './pages/login'
 import Play from './pages/play'
+import Signup from './pages/signup';
 import Rooms from './components/lobby/rooms';
 import Ranking from './components/lobby/ranking';
 import MyPage from './components/lobby/myPage';
@@ -20,6 +21,7 @@ function App() {
         <div className="App">
           <Routes>
             <Route path='/' element={<Login/>}/>
+            <Route path='/signup' element={<Signup/>}/>
             <Route path='/lobby' element={<Lobby/>}>
               <Route index element = {<Rooms/>}/>
               <Route path='/lobby/ranking' element={<Ranking/>}/>
