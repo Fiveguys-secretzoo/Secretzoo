@@ -15,7 +15,7 @@ async function main() {
   const app = express();
   
   const roomMethods = roomSocketMethods();
-
+  const playMethods = playSocketMethods();
   const {
     sendRoomInfo,
     createRoom,
@@ -24,7 +24,19 @@ async function main() {
     cardShare,
     testRoomsInfo,
     disconnected,
+    checkReconnection,
   } = roomMethods;
+
+  const {
+    sendGameInfo,
+    cardDrag,
+    cardDrop,
+    cardBluffSelect, 
+    givingTurnStart,
+    givingTurnSelect,
+    cardReveal,
+    passingTurnSelect,
+  } = playMethods;
 
   // cors 설정
   app.use(cors({
@@ -50,17 +62,25 @@ async function main() {
     let disconnectedTimeout;
     console.log(`##### connection added, socket.id : ${socket.id}`);
 
+    // room listening
     sendRoomInfo(socket, io, rooms);
     createRoom(socket, io, rooms);
     enterRoom(socket, io, rooms);
     chatMessage(socket, io, rooms);
     cardShare(socket, io, rooms);
+    checkReconnection(socket, io, rooms);
 
+    // game listening 
+    sendGameInfo(socket, io, rooms);
+    cardDrag(socket, io, rooms);
+    cardDrop(socket, io, rooms);
+    cardBluffSelect(socket, io, rooms);
 
     // test codes
     testRoomsInfo(socket, io, rooms);
 
     disconnected(socket, io, rooms);
+    
   });
 
   server.listen(3000, () => {

@@ -8,101 +8,103 @@ const { animals,
   score,
   Player,
   roomInfo } = model
-
-const roomSocketMethods = () => {
-
-  /**
+/**
      * 카드 셔플 후 분배
      * @param {Object} room 방 객체
      * @returns 
      */
-  const shuffleArray = (rooms, roomName) => {
-    let array = rooms[roomName].card
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    let i = 20;
-    console.log(`##### room card : ${rooms[roomName].card}`);
+const shuffleArray = (rooms, roomName) => {
+  let array = rooms[roomName].card
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  let i = 20;
+  console.log(`##### room card : ${rooms[roomName].card}`);
 
-    while (i > 0) {
-      i--;
-      for (let k = 0; k < rooms[roomName].playerCount; k++) {
-        if (rooms[roomName].card.length === 0) {
-          break;
-        }
-        rooms[roomName].players[k].hand.push(rooms[roomName].card.pop());
+  while (i > 0) {
+    i--;
+    for (let k = 0; k < rooms[roomName].playerCount; k++) {
+      if (rooms[roomName].card.length === 0) {
+        break;
       }
+      rooms[roomName].players[k].hand.push(rooms[roomName].card.pop());
     }
   }
+}
 
-  /**
-   * 방 생성 (방이 존재하지 않는 경우)
-   * @param {string} roomName 방 이름 
-   * @param {string} id 유저 id 
-   */
-  const addRoom = (rooms, roomName, playerId, socketId) => {
-    rooms[roomName] = { ...roomInfo };
-    rooms[roomName].roomName = roomName;
-    rooms[roomName].players.push(Player(playerId, socketId));
-    console.log(`##### player ${playerId} socket ${socketId} created Room ${roomName}`);
-    /*TODO - send room data to backend server!!! */
+/**
+ * 방 생성 (방이 존재하지 않는 경우)
+ * @param {string} roomName 방 이름 
+ * @param {string} id 유저 id 
+ */
+const addRoom = (rooms, roomName, playerId, socketId) => {
+  rooms[roomName] = { ...roomInfo };
+  rooms[roomName].roomName = roomName;
+  rooms[roomName].players.push(Player(playerId, socketId));
+  console.log(`##### player ${playerId} socket ${socketId} created Room ${roomName}`);
+  /*TODO - send room data to backend server!!! */
 
-    console.log(`##### create room : ${rooms[roomName].players}`);
+  console.log(`##### create room : ${rooms[roomName].players}`);
+}
+
+/**
+ * 유저 추가 (방이 존재하는 경우)
+ * @param {string} roomName 방 이름
+ * @param {string} id 유저 id 
+ */
+const addPlayer = (rooms, roomName, playerId, socketId) => {
+  const room = rooms[roomName];
+  room.playerCount++;
+  room.players.push({ ...Player(playerId, socketId) });
+  console.log(`##### player ${playerId} socket ${socketId} entered Room ${roomName}`);
+  /*TODO - send room data and player data to backend server */
+}
+
+/**
+ * cut room info for security, only used sending lobby data
+ * @param {Object} rooms 
+ * @returns 
+ */
+const getRoomInfoForLobby = (rooms) => {
+  let lobbyInfo = {};
+
+  for(let room in rooms){
+    let info = rooms[room];
+    lobbyInfo[room] = {
+      'roomId': info['roomId'],
+      'roomName': info['roomName'],
+      'roomAddress': info['roomAddress'],
+      'status': info['status'],
+      'createdDate': info['createdDate'],
+      'playerCount': info['playerCount'],
+      'adminPlayer': info['adminPlayer']
+    };
   }
+  return lobbyInfo;
+}
 
-  /**
-   * 유저 추가 (방이 존재하는 경우)
-   * @param {string} roomName 방 이름
-   * @param {string} id 유저 id 
-   */
-  const addPlayer = (rooms, roomName, playerId, socketId) => {
-    const room = rooms[roomName];
-    room.playerCount++;
-    room.players.push({ ...Player(playerId, socketId) });
-    console.log(`##### player ${playerId} socket ${socketId} entered Room ${roomName}`);
-    /*TODO - send room data and player data to backend server */
-  }
 
-  /**
-   * cut room info for security, only used sending lobby data
-   * @param {Object} rooms 
-   * @returns 
-   */
-  const getRoomInfoForLobby = (rooms) => {
-    let lobbyInfo = {};
 
-    for(let room in rooms){
-      let info = rooms[room];
-      lobbyInfo[room] = {
-        'roomId': info['roomId'],
-        'roomName': info['roomName'],
-        'roomAddress': info['roomAddress'],
-        'status': info['status'],
-        'createdDate': info['createdDate'],
-        'playerCount': info['playerCount'],
-        'adminPlayer': info['adminPlayer']
-      };
-    }
+/**
+ * 유저 퇴장 
+ * @param {String} roomName 
+ * @param {String} playerId 
+ */
+const removePlayer = (playerId) => {
 
-    return lobbyInfo;
-  }
+  /*TODO - send room data and playerdata to backend server */
 
-  /**
-   * 유저 퇴장 
-   * @param {String} roomName 
-   * @param {String} playerId 
-   */
-  const removePlayer = (playerId) => {
+}
 
-    /*TODO - send room data and playerdata to backend server */
+const handleDisconnect = (socket, io, rooms) => {
 
-  }
+}
 
-  const handleDisconnect = (socket, io, rooms) => {
 
-  }
+const roomSocketMethods = () => {
 
+  
 
   /**
    * Socket IO 관련 함수들 정의
@@ -119,12 +121,6 @@ const roomSocketMethods = () => {
     });
   }
 
-  /* 방 정보 전달 / Room 에서 사용 */ 
-  const sendGameInfo = async (socket, io, rooms) => {
-    socket.on('requestRoomsInfo', (callback) => {
-      console.log('##### callback roomsInfo');
-    }
-  }
   /* 방 생성 이벤트 */
   const createRoom = async (socket, io, rooms) => {
     socket.on('createRoom', (room, id, callback) => {
@@ -177,7 +173,7 @@ const roomSocketMethods = () => {
   /* 방 새로고침 이벤트 */
   const checkReconnection = async (socket, io, rooms) => {
     socket.on('checkReconnection', (pid, callback) => {
-      console.log(`##### Checking Reconnection of User ${pid}`)
+      console.log(`##### Checking Reconnection of User ${pid}`);
       for(let room in rooms){
         for(let player of rooms[room].players){
           if(player.playerId === pid){
@@ -224,9 +220,8 @@ const roomSocketMethods = () => {
       console.log('##### Shuffle End')
 
       for (let k = 0; k < rooms[room].players.length; k++) {
-        io.to(rooms[room].players[k].socketId).emit('game start', rooms[room].players[k].hand)
+        io.to(rooms[room].players[k].socketId).emit('gameStart', rooms[room].players[k].hand)
       }
-
       console.log(`#####  card ended : ${rooms}`);
     });
   }
@@ -257,6 +252,7 @@ const roomSocketMethods = () => {
     cardShare,
     testRoomsInfo,
     disconnected,
+    checkReconnection,
   }
 }
 

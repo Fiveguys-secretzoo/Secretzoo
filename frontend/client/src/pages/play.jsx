@@ -29,20 +29,22 @@ const Play = () => {
   useEffect(() => {
     console.log("check if the refresh button see this");
 
+    const handleResponse = () => {
+
+    }
     const messageHandler = (msg) => {
       console.log(1)
       setMessages((msgs) => [...msgs, msg]);
     };
     const gameStart = (cards) => {
       setCards(cards)
+      socket.on("gameListen", handleResponse)
     }
 
     const gameInfoHandler = (game) => {
       console.log(game);
     }
-    socket.emit('checkReconnection', pid, ()=>{
-      
-    })
+    socket.emit('checkReconnection', pid);
     socket.on('gameInfo', gameInfoHandler);
     socket.on('chatMessage', messageHandler);
     socket.on('gameStart', gameStart);
@@ -58,7 +60,7 @@ const Play = () => {
   }, []);
 
   const imageRoute = (item) => {
-    return `../assets/img/card/0${Math.floor(item / 8)}/00${item % 8}.png`;
+    return require(`../assets/img/card/0${Math.floor(item / 8)}/00${item % 8}.png`);
   }
 
   const sendMessage = () => {
@@ -113,7 +115,7 @@ const Play = () => {
                 className="card"
                 style={{ zIndex: cards.length - index }}
               >
-                <img className="card-image" src={require(imageRoute(item))} alt=""/>
+                <img className="card-image" src={imageRoute(item)} alt=""/>
               </div>
             ))}
         </div>
