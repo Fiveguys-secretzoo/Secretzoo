@@ -1,6 +1,6 @@
 package com.example.ranking.domain.entity;
 
-import com.example.ranking.domain.Score;
+import com.example.ranking.domain.RankingScore;
 import com.example.ranking.domain.entity.base.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,7 +30,7 @@ public class Player extends BaseTimeEntity {
     @Column(name = "player_id",  unique = true)
     private String playerId;
 
-    private Score rankingScore;
+    private RankingScore rankingScore;
 
 
 
@@ -45,7 +45,7 @@ public class Player extends BaseTimeEntity {
 
         Player player = new Player();
         player.setPlayerId(playerId);
-        player.setRankingScore(new Score(0.0, 0.0, 0.0));
+        player.setRankingScore(new RankingScore(0.0, 0.0, 0.0));
 
         return player;
     }

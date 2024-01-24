@@ -1,13 +1,18 @@
 package com.example.ranking.domain.dto.animal;
 
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 
-@AllArgsConstructor
-@Getter @ToString
-public class Cat extends AnimalDto {
+@RequiredArgsConstructor
+@Getter @Setter
+@ToString
+public class Cat extends AnimalType {
+
+    private final String animalId = "CAT02";
+
 
 }

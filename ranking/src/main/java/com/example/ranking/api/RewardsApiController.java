@@ -1,10 +1,8 @@
 package com.example.ranking.api;
 
-import com.example.ranking.domain.Score;
+import com.example.ranking.domain.dto.AnimalDto;
 import com.example.ranking.domain.dto.GameResult;
-import com.example.ranking.domain.entity.Player;
 import com.example.ranking.repository.PlayerRepository;
-import com.example.ranking.service.RankService;
 import com.example.ranking.service.RewardsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +31,12 @@ public class RewardsApiController {
     public ResponseEntity<String> saveRewards(@RequestBody GameResult gameResult) {
         log.info("gameResult = {}", gameResult);
         rewardsService.saveRewards(gameResult);
+        return ResponseEntity.ok(" 성공적으로 저장되었습니다.");
+    }
+    @PostMapping("/save2")
+    public ResponseEntity<String> saveRewards2(@RequestBody AnimalDto animalDto) {
+        log.info("animalDto = {}", animalDto);
+        rewardsService.saveRewards2(animalDto);
         return ResponseEntity.ok(" 성공적으로 저장되었습니다.");
     }
 

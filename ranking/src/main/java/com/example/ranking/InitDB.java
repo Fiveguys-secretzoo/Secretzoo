@@ -23,7 +23,7 @@ public class InitDB {
     private final RankService rankService;
     private final RedisTemplate<String, String> redisTemplate;
     private final EntityManager em;
-    private final RedisRepository redisRepository;
+//    private final RedisRepository redisRepository;
 //    private final LettuceConnectionFactory lettuceConnectionFactory;
     private String attackRankKey = "rank:attack";
     private String defenseRankKey = "rank:defense";

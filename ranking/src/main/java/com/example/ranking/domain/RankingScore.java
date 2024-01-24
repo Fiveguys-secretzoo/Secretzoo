@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Score {
+public class RankingScore {
 
     private static final double ATTEMPT  = 10.0; //시도애 대한 가중치를 10으로 설정
     private static final double SUCCESS = 100.0; //성공에 대한 가중치를 100으로 설정(시도의 10배 점수 부여)
