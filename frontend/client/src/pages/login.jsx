@@ -1,19 +1,26 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-
+import React from "react";
+import LoginForm from "../components/login/loginForm";
+import NoLogin from "../components/login/noLogin";
+import GoogleLogin from "../components/login/googleLogin";
+import KakaoLogin from "../components/login/kakaoLogin";
+import NaverLogin from "../components/login/naverLogin";
+import '../style/login.css';
 const Login = () => {
-  const [name, setName] = useState("");
-  const navigate = useNavigate();
 
-  const saveName = () => {
-    sessionStorage.setItem('userName', name);
-    navigate("/lobby");
-  };
   return (
-    <div>
-      <input value={name} onChange={(e) => setName(e.target.value)}></input>
-      <button onClick={saveName}>로그인</button>
-    </div>
+    <>
+      <div className="loginContainer">
+        <div className="left">
+          <LoginForm></LoginForm>
+          <GoogleLogin></GoogleLogin>
+          <KakaoLogin></KakaoLogin>
+          <NaverLogin></NaverLogin>
+        </div>
+        <div className="right">
+          <NoLogin></NoLogin>
+        </div>
+      </div>
+    </>
   );
 };
 
