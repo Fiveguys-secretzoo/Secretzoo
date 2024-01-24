@@ -2,12 +2,21 @@
 import { Server } from 'socket.io';
 import models from '../models/models.js';
 
+import playSocketMethods from './play.js';
+
 const model = models();
+const playMethods = playSocketMethods();
 
 const { animals,
   score,
   Player,
   roomInfo } = model
+
+const {
+  getRoomInfoForGame,
+  sendGameInfo,
+} = playMethods;
+
 /**
      * 카드 셔플 후 분배
      * @param {Object} room 방 객체
@@ -53,12 +62,14 @@ const addRoom = (rooms, roomName, playerId, socketId) => {
  * @param {string} roomName 방 이름
  * @param {string} id 유저 id 
  */
-const addPlayer = (rooms, roomName, playerId, socketId) => {
+const addPlayer = (rooms, roomName, playerId, socketId, socket, io) => {
   const room = rooms[roomName];
   room.playerCount++;
   room.players.push({ ...Player(playerId, socketId) });
   console.log(`##### player ${playerId} socket ${socketId} entered Room ${roomName}`);
   /*TODO - send room data and player data to backend server */
+  
+  sendGameInfo(socket, io, rooms);
 }
 
 /**
@@ -95,6 +106,7 @@ const removePlayer = (playerId) => {
 
   /*TODO - send room data and playerdata to backend server */
 
+  sendGameInfo(socket, io, rooms);
 }
 
 const handleDisconnect = (socket, io, rooms) => {
@@ -163,7 +175,7 @@ const roomSocketMethods = () => {
 
         // console.log(io.of('/').adapter.rooms);
         socket.emit('updateRoom', rooms);
-        addPlayer(rooms, room, id, socket.id)
+        addPlayer(rooms, room, id, socket.id, socket, io)
         callback(true)
         console.log(`##### player ${socket.id} join room : ${rooms}`);
       }
@@ -215,7 +227,7 @@ const roomSocketMethods = () => {
           }
         }
       }
-      console.log(`##### current Room : (${rooms[room].roomName||"undefined"})`);
+      console.log(`##### current Room : (${(rooms[room].roomName)?rooms[room].roomName:"err"})`);
       shuffleArray(rooms, room);
       console.log('##### Shuffle End')
 

@@ -9,29 +9,28 @@ const { animals,
   roomInfo } = model;
 
 
-const getRoomInfoForGame = (rooms, roomName) => {
-  let extractedData = {};
-
-  let room = rooms[roomName];
-  let roomInfo = rooms[room];
-  extractedData[room] = {
-    'roomId': roomInfo['roomId'],
-    'roomName': roomInfo['roomName'],
-    'roomAddress': roomInfo['roomAddress'],
-    'status': roomInfo['status'],
-    'createdDate': roomInfo['createdDate'],
-    'playerCount': roomInfo['playerCount'],
-    'adminPlayer': roomInfo['adminPlayer'],
-    'players': roomInfo['players'].map(player => ({
-      'playerId': player['playerId'],
-      'playerName': player['Name'],
-    }))
-  };
-  
-}
 
 const playSocketMethods = () => {
-
+  const getRoomInfoForGame = (rooms, roomName) => {
+    let extractedData = {};
+  
+    let room = rooms[roomName];
+    let roomInfo = rooms[room];
+    extractedData[room] = {
+      'roomId': roomInfo['roomId'],
+      'roomName': roomInfo['roomName'],
+      'roomAddress': roomInfo['roomAddress'],
+      'status': roomInfo['status'],
+      'createdDate': roomInfo['createdDate'],
+      'playerCount': roomInfo['playerCount'],
+      'adminPlayer': roomInfo['adminPlayer'],
+      'players': roomInfo['players'].map(player => ({
+        'playerId': player['playerId'],
+        'playerName': player['Name'],
+      }))
+    };
+  }
+  
   /* 방 정보 전달 / Game 에서 사용 */ 
   const sendGameInfo = async (socket, io, rooms) => {
     socket.on('requestGameInfo', () => {
@@ -44,22 +43,46 @@ const playSocketMethods = () => {
 
   const cardDrag = (socket, io, rooms) => {
     socket.on('cardDrag', (from, to) => {
+      console.log("##### card Dragged and Entered...")
+      let room;
+      let roomsKeys = Object.keys(rooms);
+      for (let roomName of roomsKeys) {
+        for (let player of rooms[roomName].players) {
+          if (player.socketId === socket.id) {
+            room = roomName;
+            break;
+          }
+        }
+      }
       // io.to(rooms[socket.room].players[k].socketId).emit('cardDrag', from, to);
-      io.to(`/${socket.room}`).emit('cardDrag', from, to);
+      console.log(`##### send card Dragged Data to ${room}`)
+      io.to(room).emit('cardDrag', from, to);
     })
   }
 
   const cardDrop = (socket, io, rooms) => {
     socket.on('cardDrop', (from, to) => {
+      
+      console.log("##### card Dragged and Dropped...")
       // io.to(rooms[socket.room].players[k].socketId).emit('cardDrop', from, to);
-      io.to(`/${socket.room}`).emit('cardDrop', from, to);
+      let room;
+      let roomsKeys = Object.keys(rooms);
+      for (let roomName of roomsKeys) {
+        for (let player of rooms[roomName].players) {
+          if (player.socketId === socket.id) {
+            room = roomName;
+            break;
+          }
+        }
+      }
+      io.to(room).emit('cardDrop', from, to);
     })
   }
 
   const cardBluffSelect = (socket, io, rooms) => {
     socket.on('cardBluffSelect', (from, to, card) => {
       // io.to(rooms[socket.room].players[k].socketId).emit('cardBluffSelect', from, to);
-      io.to(`/${socket.room}`).emit('cardBluffSelect', from, to);
+      socket.broadcast.to(`${socket.room}`).emit('cardBluffSelect', from, to);
     })
   }
 
@@ -79,7 +102,8 @@ const playSocketMethods = () => {
 
   }
 
-  return {
+  return { 
+    getRoomInfoForGame,
     sendGameInfo,
     cardDrag,
     cardDrop,

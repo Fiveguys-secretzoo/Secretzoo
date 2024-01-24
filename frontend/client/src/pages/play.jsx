@@ -6,6 +6,8 @@ const Play = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [cards, setCards] = useState([1, 2, 3, 4]);
+  const [cardDrag, setCardDrag] = useState({'from' : -1, 'to' : -1, 'card':-1});
+  const [cardDrop, setCardDrop] = useState({'from' : -1, 'to' : -1, 'card':-1});
   const socket = useContext(SocketContext);
   const dragItem = useRef();
   
@@ -15,37 +17,66 @@ const Play = () => {
   const dragOver = (e) => {
     e.preventDefault();
   }
-  const dragEnter = (e) => {
+  const handleDragEnter = (e) => {
     console.log(dragItem.current + " hover " + e.target.textContent);
+    socket.emit("cardDrag", pid, e.target.textContent);
   };
-  const drop = (e) => {
+  const handleDrop = (e) => {
     e.preventDefault();
     alert(dragItem.current + " drop " + e.target.textContent);
   };
 
   const pid = sessionStorage.getItem("userName");
+  const handleResponse = () => {
 
+  }
+
+  const handleCardDragResponse = (from, to) => {
+    console.log("something happens")
+    setCardDrag((value) => {
+    });
+    console.log(`${from} , ${to}`);
+  };
+
+  const handleCardDropResponse = (e) => {
+    setCardDrop((value) => {
+      value = e;
+    });
+    
+    console.log(cardDrop)
+  };
+
+  const handleCardBluffResponse = (e) => {
+
+  }
   // 이벤트 수신
   useEffect(() => {
     console.log("check if the refresh button see this");
 
-    const handleResponse = () => {
+    
 
-    }
     const messageHandler = (msg) => {
       console.log(1)
       setMessages((msgs) => [...msgs, msg]);
     };
+
     const gameStart = (cards) => {
+      console.log("##### Game Started !");
       setCards(cards)
+      console.log("##### Card Set");
       socket.on("gameListen", handleResponse)
+      socket.on("cardDrag", handleCardDragResponse)
+      socket.on("cardDrop", handleCardDropResponse)
+      socket.on("cardBluffSelect", handleCardBluffResponse);
     }
 
     const gameInfoHandler = (game) => {
+      console.log("this comes when the game info is change");
       console.log(game);
     }
+
     socket.emit('checkReconnection', pid);
-    socket.on('gameInfo', gameInfoHandler);
+    socket.on('requestGameInfo', gameInfoHandler);
     socket.on('chatMessage', messageHandler);
     socket.on('gameStart', gameStart);
     socket.emit('testRoomsInfo', (rooms) => {
@@ -76,33 +107,33 @@ const Play = () => {
     <div className="chat-container">
       <div id='root'>
         <div className="player"
-          onDragEnter={(e) => dragEnter(e)}
+          onDragEnter={(e) => handleDragEnter(e)}
           onDragOver={(e) => dragOver(e)}
-          onDrop={(e) => drop(e)}>
+          onDrop={(e) => handleDrop(e)}>
           player1
         </div>
         <div className="player"
-          onDragEnter={(e) => dragEnter(e)}
+          onDragEnter={(e) => handleDragEnter(e)}
           onDragOver={(e) => dragOver(e)}
-          onDropCapture={(e) => drop(e)}>
+          onDropCapture={(e) => handleDrop(e)}>
           player2
         </div>
         <div className="player"
-          onDragEnter={(e) => dragEnter(e)}
+          onDragEnter={(e) => handleDragEnter(e)}
           onDragOver={(e) => dragOver(e)}
-          onDrop={(e) => drop(e)}>
+          onDrop={(e) => handleDrop(e)}>
           player3
         </div>
         <div className="player"
-          onDragEnter={(e) => dragEnter(e)}
+          onDragEnter={(e) => handleDragEnter(e)}
           onDragOver={(e) => dragOver(e)}
-          onDrop={(e) => drop(e)}>
+          onDrop={(e) => handleDrop(e)}>
           player4
         </div>
         <div className="player"
-          onDragEnter={(e) => dragEnter(e)}
+          onDragEnter={(e) => handleDragEnter(e)}
           onDragOver={(e) => dragOver(e)}
-          onDrop={(e) => drop(e)}>
+          onDrop={(e) => handleDrop(e)}>
           player5
         </div>
         <div className="cards">
