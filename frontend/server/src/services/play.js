@@ -40,3 +40,5 @@ const playSocketMethods = () => {
 
   
 }
+
+export default playSocketMethods;

@@ -8,23 +8,7 @@ const Play = () => {
   const [cards, setCards] = useState([1, 2, 3, 4]);
   const socket = useContext(SocketContext);
   const dragItem = useRef();
-  const [list, setList] = useState([
-    "Card 1",
-    "Card 2",
-    "Card 3",
-    "Card 4",
-    "Card 5",
-    "Card 6",
-    "Card 7",
-    "Card 8",
-    "Card 9",
-    "Card 10",
-    "Card 11",
-    "Card 12",
-    "Card 13",
-    "Card 14",
-
-  ]);
+  
   const dragStart = (e) => {
     dragItem.current = e.target.textContent;
   };
@@ -38,8 +22,13 @@ const Play = () => {
     e.preventDefault();
     alert(dragItem.current + " drop " + e.target.textContent);
   };
+
+  const pid = sessionStorage.getItem("userName");
+
   // 이벤트 수신
   useEffect(() => {
+    console.log("check if the refresh button see this");
+
     const messageHandler = (msg) => {
       console.log(1)
       setMessages((msgs) => [...msgs, msg]);
@@ -47,21 +36,36 @@ const Play = () => {
     const gameStart = (cards) => {
       setCards(cards)
     }
-    socket.on('chat message', messageHandler);
-    socket.on('game start', gameStart);
+
+    const gameInfoHandler = (game) => {
+      console.log(game);
+    }
+    socket.emit('checkReconnection', pid, ()=>{
+      
+    })
+    socket.on('gameInfo', gameInfoHandler);
+    socket.on('chatMessage', messageHandler);
+    socket.on('gameStart', gameStart);
     socket.emit('testRoomsInfo', (rooms) => {
       console.log(rooms);
     })
+
     return () => {
-      socket.off('chat message', messageHandler);
-      socket.off('game start', gameStart);
+      socket.off('gameInfo', gameInfoHandler);
+      socket.off('chatMessage', messageHandler);
+      socket.off('gameStart', gameStart);
     };
   }, []);
 
-  // const sendMessage = () => {
-  //     socket.emit('chat message', input, localStorage.getItem('userName'));
-  //     setInput('');
-  // };
+  const imageRoute = (item) => {
+    return `../assets/img/card/0${Math.floor(item / 8)}/00${item % 8}.png`;
+  }
+
+  const sendMessage = () => {
+      socket.emit('chat message', input, localStorage.getItem('userName'));
+      setInput('');
+  };
+
   // 게임시작 이벤트 호출
   const start = () => {
     socket.emit('start');
@@ -107,14 +111,14 @@ const Play = () => {
                 onDragStart={(e) => dragStart(e)}
                 draggable
                 className="card"
-                style={{ zIndex: list.length - index }}
+                style={{ zIndex: cards.length - index }}
               >
-                <img className="card-image" src={require(`../assets/img/card/0${Math.floor(item / 8)}/00${item % 8}.png`)} />
+                <img className="card-image" src={require(imageRoute(item))} alt=""/>
               </div>
             ))}
         </div>
       </div>
-      {/* <h1>Chat Application</h1>
+      <h1>Chat Application</h1>
       <div className="message-list">
         {messages.map((msg, index) => (
         <div key={index} className="message">{msg}</div>
@@ -128,7 +132,7 @@ const Play = () => {
         placeholder="Type a message..."
         />
         <button onClick={sendMessage}>Send</button>
-      </div> */}
+      </div>
       <button onClick={start}>start</button>
       {
         cards.map((card) => (

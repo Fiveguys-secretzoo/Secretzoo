@@ -5,7 +5,8 @@ import cors from 'cors';
 import { Socket } from 'node:dgram';
 import express from 'express';
 
-import roomSocketMethods from './services/room.js'
+import roomSocketMethods from './src/services/room.js';
+import playSocketMethods from './src/services/play.js';
 
 //TODO Node.js 에서 Spring으로 보낼 때의 인증(IP 체크!)
 
@@ -31,7 +32,11 @@ async function main() {
   }));
 
   const server = createServer(app);
-  const io = new Server(server, {
+  const io = new Server(server, { 
+    reconnection: true,
+    reconnectionDelay: 1000,
+    reconnectionAttempts: 5,
+    forceNew: false,
     connectionStateRecovery: {},
     cors: {
       origin: "http://localhost:3001",

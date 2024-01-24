@@ -45,7 +45,7 @@ const roomSocketMethods = () => {
     rooms[roomName] = { ...roomInfo };
     rooms[roomName].roomName = roomName;
     rooms[roomName].players.push(Player(playerId, socketId));
-
+    console.log(`##### player ${playerId} socket ${socketId} created Room ${roomName}`);
     /*TODO - send room data to backend server!!! */
 
     console.log(`##### create room : ${rooms[roomName].players}`);
@@ -60,9 +60,32 @@ const roomSocketMethods = () => {
     const room = rooms[roomName];
     room.playerCount++;
     room.players.push({ ...Player(playerId, socketId) });
+    console.log(`##### player ${playerId} socket ${socketId} entered Room ${roomName}`);
+    /*TODO - send room data and player data to backend server */
+  }
 
-    /*TODO - send room data and playerdata to backend server */
+  /**
+   * cut room info for security, only used sending lobby data
+   * @param {Object} rooms 
+   * @returns 
+   */
+  const getRoomInfoForLobby = (rooms) => {
+    let lobbyInfo = {};
 
+    for(let room in rooms){
+      let info = rooms[room];
+      lobbyInfo[room] = {
+        'roomId': info['roomId'],
+        'roomName': info['roomName'],
+        'roomAddress': info['roomAddress'],
+        'status': info['status'],
+        'createdDate': info['createdDate'],
+        'playerCount': info['playerCount'],
+        'adminPlayer': info['adminPlayer']
+      };
+    }
+
+    return lobbyInfo;
   }
 
   /**
@@ -85,14 +108,23 @@ const roomSocketMethods = () => {
    * Socket IO 관련 함수들 정의
    */
 
-  /* 방 정보 전달 */
+  /* 방 정보 전달 / 로비에서 사용 */
   const sendRoomInfo = async (socket, io, rooms) => {
     socket.on('requestRoomsInfo', (callback) => {
       console.log("##### callback roomsInfo");
-      callback(rooms);
+
+      // roomName, roomId, playerCount, roomAdmin, roomStatus 전달
+
+      callback(getRoomInfoForLobby(rooms));
     });
   }
 
+  /* 방 정보 전달 / Room 에서 사용 */ 
+  const sendGameInfo = async (socket, io, rooms) => {
+    socket.on('requestRoomsInfo', (callback) => {
+      console.log('##### callback roomsInfo');
+    }
+  }
   /* 방 생성 이벤트 */
   const createRoom = async (socket, io, rooms) => {
     socket.on('createRoom', (room, id, callback) => {
@@ -140,6 +172,22 @@ const roomSocketMethods = () => {
         console.log(`##### player ${socket.id} join room : ${rooms}`);
       }
     });
+  }
+
+  /* 방 새로고침 이벤트 */
+  const checkReconnection = async (socket, io, rooms) => {
+    socket.on('checkReconnection', (pid, callback) => {
+      console.log(`##### Checking Reconnection of User ${pid}`)
+      for(let room in rooms){
+        for(let player of rooms[room].players){
+          if(player.playerId === pid){
+            player.socketId = socket.id;
+            socket.join(room);
+            break;
+          }
+        }
+      }
+    })
   }
 
   /* 채팅 메세지 이벤트 */
