@@ -1,9 +1,9 @@
 package com.example.ranking.domain;
 
 
-import com.example.ranking.domain.dto.animal.AnimalType;
-import com.example.ranking.domain.dto.animal.Cat;
-import com.example.ranking.domain.dto.animal.Whale;
+import com.example.ranking.player.dto.animal.AnimalType;
+import com.example.ranking.player.dto.animal.Cat;
+import com.example.ranking.player.dto.animal.Whale;
 import org.junit.jupiter.api.Test;
 
 public class AnimalTest {

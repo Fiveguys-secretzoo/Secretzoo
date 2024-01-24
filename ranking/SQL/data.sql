@@ -64,3 +64,18 @@ VALUES
 (14, 'WHALE08', 23, 6, 19, 4, 80, 20, 72, 12),
 (14, 'TIGER01', 19, 8, 15, 7, 78, 22, 70, 10),
 (15, 'WHALE08', 26, 4, 23, 2, 85, 16, 75, 5);
+
+-- 업적 데이터 
+INSERT INTO rewards(rewards_id, rewards_name, rewards_key, rewards_value)
+VALUES
+('T001', "TIGER KING", "attack_success", 100),
+('C001', "고양이 집사", "cat_trust", 100),
+('G001', "꾸준한 게이머", "total_round", 100);
+
+
+-- 플레이어-업적 데이터 
+INSERT INTO player_rewards(player_sequence, rewards_id, is_done)
+VALUES
+(1, "T001", true),
+(1, "C001", false),
+(2, "G001", true);
