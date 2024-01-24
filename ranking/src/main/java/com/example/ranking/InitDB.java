@@ -1,9 +1,9 @@
 package com.example.ranking;
 
 
-import com.example.ranking.domain.entity.Player;
-import com.example.ranking.repository.PlayerRepository;
-import com.example.ranking.service.RankService;
+import com.example.ranking.player.entity.Player;
+import com.example.ranking.player.repository.PlayerRepository;
+import com.example.ranking.player.service.RankService;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import java.util.List;

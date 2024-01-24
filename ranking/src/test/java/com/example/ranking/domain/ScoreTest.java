@@ -1,5 +1,6 @@
 package com.example.ranking.domain;
 
+import com.example.ranking.player.entity.RankingScore;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
