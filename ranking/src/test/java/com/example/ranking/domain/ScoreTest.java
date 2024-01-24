@@ -11,10 +11,10 @@ class ScoreTest {
     public void scoreTest() {
 
         //예상 득점 example
-        double totalScore0 = Score.scoreCalculator(1250L, 1250L);
-        double totalScore1 = Score.scoreCalculator(125L, 125L);
-        double totalScore2 = Score.scoreCalculator(125L, 5L);
-        double totalScore3 = Score.scoreCalculator(25L, 14L);
+        double totalScore0 = RankingScore.scoreCalculator(1250L, 1250L);
+        double totalScore1 = RankingScore.scoreCalculator(125L, 125L);
+        double totalScore2 = RankingScore.scoreCalculator(125L, 5L);
+        double totalScore3 = RankingScore.scoreCalculator(25L, 14L);
 
         System.out.println("totalScore0 = " + totalScore0);
         System.out.println("totalScore1 = " + totalScore1);

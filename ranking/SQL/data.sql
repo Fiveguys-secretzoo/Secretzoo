@@ -1,14 +1,14 @@
 -- animal 초기 데이터
 INSERT INTO animal (animal_id, animal_eng_name, animal_kor_name)
 VALUES
-("TIGER01", "Tiger", "호랑이"),
-("CAT02", "Cat", "고양이"),
-("DOG03", "Dog", "강아지 "),
-("DEER04", "Deer", "고라니"),
-("PIG05", "Pig", "돼지"),
-("FOX06", "Fox", "여우"),
-("SHEEP07", "Sheep", "양"),
-("WHALE08", "Whale", "혹등고래");
+("TIGER01", "tiger", "호랑이"),
+("CAT02", "cat", "고양이"),
+("DOG03", "dog", "강아지 "),
+("DEER04", "deer", "고라니"),
+("PIG05", "pig", "돼지"),
+("FOX06", "fox", "여우"),
+("SHEEP07", "sheep", "양"),
+("WHALE08", "whale", "혹등고래");
 
 -- player 테이블 초기 데이터
 INSERT INTO player (player_sequence, player_id, attack_score, defense_score, pass_score, total_round, total_turn, created_date, last_modified_date, user_sequence)

@@ -2,7 +2,7 @@ package com.example.ranking.service;
 
 
 import com.example.ranking.domain.entity.Player;
-import com.example.ranking.domain.Score;
+import com.example.ranking.domain.RankingScore;
 import com.example.ranking.repository.PlayerRepository;
 import jakarta.persistence.EntityManager;
 import java.util.List;
@@ -59,7 +59,7 @@ public class RankService {
      * attack 랭킹 점수를 Redis 에 저장(업데이트)
      */
     @Transactional
-    public void saveRank(String playerId, Score rankingScore) {
+    public void saveRank(String playerId, RankingScore rankingScore) {
         //redis 에서 각 랭킹 정보 가져오기
         ZSetOperations<String, String> zSetForAttack = redisTemplate.opsForZSet();
         ZSetOperations<String, String> zSetForDefense = redisTemplate.opsForZSet();
@@ -75,7 +75,7 @@ public class RankService {
         //점수
         Player findPlayer = playerRepository.findByPlayerId(playerId);
         findPlayer.setRankingScore(
-            new Score (
+            new RankingScore(
                 findPlayer.getRankingScore().getAttackScore() + rankingScore.getAttackScore(),
                 findPlayer.getRankingScore().getDefenseScore() + rankingScore.getDefenseScore(),
                 findPlayer.getRankingScore().getPassScore() + rankingScore.getPassScore()

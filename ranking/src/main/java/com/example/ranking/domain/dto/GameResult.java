@@ -1,14 +1,5 @@
 package com.example.ranking.domain.dto;
 
-import com.example.ranking.domain.dto.animal.AnimalDto;
-import com.example.ranking.domain.dto.animal.Cat;
-import com.example.ranking.domain.dto.animal.Deer;
-import com.example.ranking.domain.dto.animal.Dog;
-import com.example.ranking.domain.dto.animal.Fox;
-import com.example.ranking.domain.dto.animal.Pig;
-import com.example.ranking.domain.dto.animal.Sheep;
-import com.example.ranking.domain.dto.animal.Tiger;
-import com.example.ranking.domain.dto.animal.Whale;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -40,14 +31,14 @@ public class GameResult {
     private Long defenseSuccess;
     private Long passCount;
 
-    private AnimalDto cat = new Cat();
-    private AnimalDto dog = new Dog();
-    private AnimalDto tiger = new Tiger();
-    private AnimalDto whale = new Whale();
-    private AnimalDto sheep = new Sheep();
-    private AnimalDto fox = new Fox();
-    private AnimalDto pig = new Pig();
-    private AnimalDto deer = new Deer();
+//    private Animal cat = new Cat();
+//    private Animal dog = new Dog();
+//    private Animal tiger = new Tiger();
+//    private Animal whale = new Whale();
+//    private Animal sheep = new Sheep();
+//    private Animal fox = new Fox();
+//    private Animal pig = new Pig();
+//    private Animal deer = new Deer();
 
     //동물 업적 관련 지표
 //    private Long catAttackSuccess;
