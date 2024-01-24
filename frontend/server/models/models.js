@@ -19,6 +19,7 @@ const models = () => {
 
   // 플레이어의 정보를 담을 객체 
   const Player = (pid, sid) => {
+    let isAdmin = false;
     let playerId = pid;
     let playerName = '';
     let socketId = sid;
@@ -46,6 +47,7 @@ const models = () => {
       penalty,
       datas,
       scores,
+      isAdmin,
     };
   }
 
@@ -60,10 +62,14 @@ const models = () => {
     'card': Array.from({ length: 64 }, (_, i) => i),
     'playerCount': 1,
     'players': [], // 플레이어 정보 배열 
+    'nowTurn' : '',
     'onBoard': {
+      "status" : '',  // 0 : 대기 , 1 : 주는 턴, 2 : 받는 턴, 3: 넘기는 턴 
       "from": '',
       "to": '',
+      "cardBluff" : '',
       "card": '',
+      "availablePlayer" : [],
     }
   }
 

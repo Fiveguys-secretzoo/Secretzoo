@@ -28,10 +28,10 @@ const roomSocketMethods = () => {
     while (i > 0) {
       i--;
       for (let k = 0; k < rooms[roomName].playerCount; k++) {
-        rooms[roomName].players[k].hand.push(rooms[roomName].card.pop());
         if (rooms[roomName].card.length === 0) {
           break;
         }
+        rooms[roomName].players[k].hand.push(rooms[roomName].card.pop());
       }
     }
   }
@@ -171,7 +171,7 @@ const roomSocketMethods = () => {
           }
         }
       }
-      console.log(`##### current Room : ${rooms[room].roomName}`);
+      console.log(`##### current Room : (${rooms[room].roomName||"undefined"})`);
       shuffleArray(rooms, room);
       console.log('##### Shuffle End')
 
@@ -196,7 +196,7 @@ const roomSocketMethods = () => {
     socket.on('disconnect', () => {
       console.log('##### disconnect socket');
       disconnectedTimeout = setTimeout((socket, io, rooms) => {
-
+        handleDisconnect(socket, io, rooms);
       }, 5, 60, 1000);
     })
   }
