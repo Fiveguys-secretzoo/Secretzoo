@@ -44,7 +44,7 @@ const Rooms = () => {
   const filterPlaying = () => {
     let newRooms = {};
     Object.keys(rooms).forEach((key) => {
-      if(rooms[key].status == 'playing'){
+      if(rooms[key].status === 'playing'){
         newRooms[key] = rooms[key]; 
       }
     })
@@ -53,7 +53,7 @@ const Rooms = () => {
   const filterWait = () => {
     let newRooms = {};
     Object.keys(rooms).forEach((key) => {
-      if(rooms[key].status == 'wait'){
+      if(rooms[key].status === 'wait'){
         newRooms[key] = rooms[key]; 
       }
     })
@@ -62,7 +62,7 @@ const Rooms = () => {
   const filterFull = () => {
     let newRooms = {};
     Object.keys(rooms).forEach((key) => {
-      if(rooms[key].playerCount == 6){
+      if(rooms[key].playerCount === 6){
         newRooms[key] = rooms[key]; 
       }
     })

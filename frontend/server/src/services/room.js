@@ -50,7 +50,8 @@ const shuffleArray = (rooms, roomName) => {
 const addRoom = (rooms, roomName, playerId, socketId) => {
   rooms[roomName] = { ...roomInfo };
   rooms[roomName].roomName = roomName;
-  rooms[roomName].players.push(Player(playerId, socketId));
+  rooms[roomName].players.push({...Player(playerId, socketId)});
+  rooms[roomName].adminPlayer = rooms[roomName].players[0].playerName;
   console.log(`##### player ${playerId} socket ${socketId} created Room ${roomName}`);
   /*TODO - send room data to backend server!!! */
 
@@ -63,9 +64,8 @@ const addRoom = (rooms, roomName, playerId, socketId) => {
  * @param {string} id 유저 id 
  */
 const addPlayer = (rooms, roomName, playerId, socketId, socket, io) => {
-  const room = rooms[roomName];
-  room.playerCount++;
-  room.players.push({ ...Player(playerId, socketId) });
+  rooms[roomName].playerCount++;
+  rooms[roomName].players.push({ ...Player(playerId, socketId) });
   console.log(`##### player ${playerId} socket ${socketId} entered Room ${roomName}`);
   /*TODO - send room data and player data to backend server */
   
@@ -89,7 +89,7 @@ const getRoomInfoForLobby = (rooms) => {
       'status': info['status'],
       'createdDate': info['createdDate'],
       'playerCount': info['playerCount'],
-      'adminPlayer': info['adminPlayer']
+      'adminPlayer': info['adminPlayer'],
     };
   }
   return lobbyInfo;

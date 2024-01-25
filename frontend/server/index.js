@@ -87,11 +87,19 @@ async function main() {
 
     process.on('uncaughtException', (err) => {
       console.log(err);
+      console.log("죽음의 메아리");
       io.emit("serverClosed", "err");
       process.exit(1);
     })
     process.on('exit', (err) => {
       console.log(err);
+      console.log("죽음의 메아리");
+      io.emit("serverClosed", "close");
+      process.exit(1);
+    })
+    process.on('SIGINT', (err) => {
+      console.log(err);
+      console.log("죽음의 메아리");
       io.emit("serverClosed", "close");
       process.exit(1);
     })

@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import { SocketContext } from '../App';
+import { useNavigate } from "react-router-dom";
+import '../style/play.css';
 
 const Play = () => {
   const socket = useContext(SocketContext);
   const dragItem = useRef();
   const pid = sessionStorage.getItem("userName");
-  
+
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [cards, setCards] = useState([1, 2, 3, 4]);
@@ -15,6 +17,7 @@ const Play = () => {
   const [cardDrop, setCardDrop] = useState({'from' : -1, 'to' : -1, 'card':-1});
   const [playersId, setPlayersId] = useState(['','','','','', ''])
 
+  const navigate = useNavigate();
   // 플레이어 위에 드래그가 올라갔을 때
   const handleDragEnter = (e) => {
     console.log(dragItem.current + " hover " + e.target.textContent);
@@ -52,6 +55,10 @@ const Play = () => {
   }
   // 이벤트 수신
   useEffect(() => {
+    socket.on("serverClosed", (e) => {
+      console.log("serverClosed");
+      navigate('/');
+    });
     console.log("check if the refresh button see this");
 
     
@@ -110,7 +117,6 @@ const Play = () => {
       <div className='w-screen h-[60%] flex flex-wrap justify-between'>
         <div className="bg-white rounded w-[30%] m-2"
           onDragEnter={(e) => handleDragEnter(e)}
-          onDragOver={(e) => dragOver(e)}
           onDrop={(e) => handleDrop(e)}
         >
         
@@ -144,7 +150,6 @@ const Play = () => {
             cards.map((item, index) => (
               <div
                 key={index}
-                onDragStart={(e) => dragStart(e)}
                 draggable
                 className="w-[8em] h-[13em] ml-[-4em] hover:scale(1.3) hover:-translate-y-20 hover:rotate-[20deg] hover:z-50 transition-transform duration-300 "
                 style={{ zIndex: cards.length - index }}

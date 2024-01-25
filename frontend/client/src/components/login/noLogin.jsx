@@ -8,18 +8,18 @@ const NoLogin = () => {
 
   const saveName = () => {
     sessionStorage.setItem('userName', name);
-    axios.get('url',
-      {
-        param : 'param',
-      },
-      {
-        Headers : {
+    // axios.get('url',
+    //   {
+    //     param : 'param',
+    //   },
+    //   {
+    //     Headers : {
 
-        },
-      }
-    ).then((Response) => {
+    //     },
+    //   }
+    // ).then((Response) => {
       
-    })
+    // })
     navigate("/lobby");
   };
   return (
