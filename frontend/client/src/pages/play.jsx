@@ -2,38 +2,38 @@ import React, { useState, useEffect, useContext, useRef } from 'react';
 import { SocketContext } from '../App';
 
 const Play = () => {
+  const socket = useContext(SocketContext);
+  const dragItem = useRef();
+  const pid = sessionStorage.getItem("userName");
+  
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [cards, setCards] = useState([1, 2, 3, 4]);
+  const [isMyTurn, setIsMyTurn] = useState(false);
+  const [thisTurnPlayer, setThisTurnPlayer] = useState('');
   const [cardDrag, setCardDrag] = useState({'from' : -1, 'to' : -1, 'card':-1});
   const [cardDrop, setCardDrop] = useState({'from' : -1, 'to' : -1, 'card':-1});
-  const socket = useContext(SocketContext);
-  const dragItem = useRef();
-  const [playersId, setPlayersId] = useState(['','','','',''])
-  
-  const dragStart = (e) => {
-    dragItem.current = e.target.textContent;
-  };
-  const dragOver = (e) => {
-    e.preventDefault();
-  }
+  const [playersId, setPlayersId] = useState(['','','','','', ''])
+
+  // 플레이어 위에 드래그가 올라갔을 때
   const handleDragEnter = (e) => {
     console.log(dragItem.current + " hover " + e.target.textContent);
     socket.emit("cardDrag", pid, e.target.textContent);
   };
+
+  // 플레이어 위에 드롭 했을 때
   const handleDrop = (e) => {
     e.preventDefault();
     alert(dragItem.current + " drop " + e.target.textContent);
     socket.emit("cardDrop", pid, e.target.textContent);
   };
 
-  const pid = sessionStorage.getItem("userName");
   const handleResponse = () => {
 
   }
 
   const handleCardDragResponse = (from, to) => {
-    console.log("card Dragged")
+    console.log("card Dragged");
     setCardDrag((value) => {
     });
     console.log(`${from} to ${to}`);
@@ -61,9 +61,10 @@ const Play = () => {
       setMessages((msgs) => [...msgs, msg]);
     };
 
-    const gameStart = (cards) => {
+    const gameStart = (cards, firstPlayer) => {
       console.log("##### Game Started !");
-      setCards(cards)
+      setCards(cards);
+
       console.log("##### Card Set");
       socket.on("gameListen", handleResponse)
       socket.on("cardDrag", handleCardDragResponse)
@@ -110,8 +111,9 @@ const Play = () => {
         <div className="bg-white rounded w-[30%] m-2"
           onDragEnter={(e) => handleDragEnter(e)}
           onDragOver={(e) => dragOver(e)}
-          onDrop={(e) => handleDrop(e)}>
-          player1
+          onDrop={(e) => handleDrop(e)}
+        >
+        
         </div>
         <div className="bg-white rounded w-[30%] m-2"
           onDragEnter={(e) => handleDragEnter(e)}
