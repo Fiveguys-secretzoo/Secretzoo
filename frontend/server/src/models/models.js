@@ -34,14 +34,8 @@ const models = () => {
       'defenseAttempt': 0,
       'defenseSuccess': 0,
       'passCount': 0,
-      'cat': {
-        animalId:'',
-        animalScore:{
-          
-        }
-
       }
-    }
+    
     for (let animal of animals) {
       scores[animal] = { ...score };
     }

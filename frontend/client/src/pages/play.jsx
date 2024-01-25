@@ -10,6 +10,7 @@ const Play = () => {
   const [cardDrop, setCardDrop] = useState({'from' : -1, 'to' : -1, 'card':-1});
   const socket = useContext(SocketContext);
   const dragItem = useRef();
+  const [playersId, setPlayersId] = useState(['','','','',''])
   
   const dragStart = (e) => {
     dragItem.current = e.target.textContent;

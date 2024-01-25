@@ -116,8 +116,6 @@ const handleDisconnect = (socket, io, rooms) => {
 
 const roomSocketMethods = () => {
 
-  
-
   /**
    * Socket IO 관련 함수들 정의
    */
