@@ -1,5 +1,5 @@
 import { createServer } from 'node:http';
-import { join }  from 'node:path';
+import { join } from 'node:path';
 import { Server } from 'socket.io';
 import cors from 'cors';
 import { Socket } from 'node:dgram';
@@ -13,7 +13,7 @@ import playSocketMethods from './src/services/play.js';
 
 async function main() {
   const app = express();
-  
+
   const roomMethods = roomSocketMethods();
   const playMethods = playSocketMethods();
   const {
@@ -31,7 +31,7 @@ async function main() {
     sendGameInfo,
     cardDrag,
     cardDrop,
-    cardBluffSelect, 
+    cardBluffSelect,
     givingTurnStart,
     givingTurnSelect,
     cardReveal,
@@ -48,7 +48,7 @@ async function main() {
   }));
 
   const server = createServer(app);
-  const io = new Server(server, { 
+  const io = new Server(server, {
     reconnection: true,
     reconnectionDelay: 1000,
     reconnectionAttempts: 5,
@@ -85,25 +85,26 @@ async function main() {
     testRoomsInfo(socket, io, rooms);
     disconnected(socket, io, rooms);
 
+    
     process.on('uncaughtException', (err) => {
       console.log(err);
-      console.log("죽음의 메아리");
+      console.log("서버, 죽음의 메아리 발동");
       io.emit("serverClosed", "err");
       process.exit(1);
     })
     process.on('exit', (err) => {
       console.log(err);
-      console.log("죽음의 메아리");
+      console.log("서버, 죽음의 메아리 발동");
       io.emit("serverClosed", "close");
       process.exit(1);
     })
     process.on('SIGINT', (err) => {
       console.log(err);
-      console.log("죽음의 메아리");
+      console.log("서버, 죽음의 메아리 발동");
       io.emit("serverClosed", "close");
       process.exit(1);
     })
-  
+
   });
 
   server.listen(3000, () => {
