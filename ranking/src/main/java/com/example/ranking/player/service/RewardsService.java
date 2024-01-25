@@ -60,12 +60,6 @@ public class RewardsService {
 //            System.out.println("map.get(key).getAnimalScore() = " + map.get(key).getAnimalScore());
 //            playerAnimal.setAnimalScore(map.get(key).getAnimalScore());
         }
-
-
-//        playerAnimalRepository.updatePlayerAnimal();
-
-//        List<PlayerAnimal> playerAnimals = playerAnimalRepository.findByPlayerSequence(gameResult.getPlayerSequence());
-
     }
 
     @Transactional
