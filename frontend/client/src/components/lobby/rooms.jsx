@@ -41,19 +41,63 @@ const Rooms = () => {
       }
     });
   }
+  // 필터 
+  const filterPlaying = () => {
+    let newRooms = {};
+    Object.keys(rooms).forEach((key) => {
+      if(rooms[key].status == 'playing'){
+        newRooms[key] = rooms[key]; 
+      }
+    })
+    setRooms(newRooms);
+  }
+  const filterWait = () => {
+    let newRooms = {};
+    Object.keys(rooms).forEach((key) => {
+      if(rooms[key].status == 'wait'){
+        newRooms[key] = rooms[key]; 
+      }
+    })
+    setRooms(newRooms);
+  }
+  const filterFull = () => {
+    let newRooms = {};
+    Object.keys(rooms).forEach((key) => {
+      if(rooms[key].playerCount == 6){
+        newRooms[key] = rooms[key]; 
+      }
+    })
+    setRooms(newRooms);
+  }
+  // 검색
+  const [searchRoomName, setSearchRoomName] = useState();
+  const searchRoom = () => {
+    let newRooms = {};
+    Object.keys(rooms).forEach((key) => {
+      if(rooms[key].roomName.indexOf() > 0){
+        newRooms[key] = rooms[key]; 
+      }
+    })
+    setRooms(newRooms);
+  }
 
   return (
     <>
       <div>
         <div className="roomList">
           <div className="search">
-            <input type="text" />
-            <button>검색</button>
+            <form onSubmit={(e) => e.preventDefault()}>
+              <input 
+              type="text"
+              value={searchRoomName}
+              onChange={(e) => setSearchRoomName(e.target.value)} />
+              <button type="submit" onClick={searchRoom}>검색</button>
+            </form>
           </div>
           <div className="filter">
-            <button>플레이중</button>
-            <button>대기중</button>
-            <button>꽉찬방</button>
+            <button onClick={filterPlaying}>플레이중</button>
+            <button onClick={filterWait}>대기중</button>
+            <button onClick={filterFull}>꽉찬방</button>
           </div>
           <div>
             <input value={roomName} onChange={(e) => setRoomName(e.target.value)} />

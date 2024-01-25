@@ -1,3 +1,14 @@
+.signupContainer {
+  background-color: #fff;
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  padding: 100px 0;
+  margin: 100px auto;
+  border-radius: 10px;
+  border: 4px solid rgba(29,29,27,.15);
+  box-shadow: inset 0px 2px 0px 0px rgba(255,255,255,.15),0px 3px 0px 0px rgba(255,255,255,0.15);
+}
 form {
   display: flex;
   flex-direction: column;
@@ -5,8 +16,17 @@ form {
   width: 300px;
   margin-bottom: 20px;
 }
+form> div >input {
+  width: 240px;
+  height: 25px;
+  padding: 0;
+  margin-bottom: 4px;
+  margin-right: 2px;
+  border-radius: 5px;
+  border: 1px solid rgba(29,29,27,.15);
+  box-shadow: inset 0px 2px 0px 0px rgba(255,255,255,.15),0px 3px 0px 0px rgba(255,255,255,0.15);
+}
 button {
-  width: 300px;
   height: 25px;
   padding: 0;
   border-radius: 5px;

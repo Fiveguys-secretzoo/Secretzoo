@@ -11,19 +11,21 @@ const LoginForm = () => {
 
   const navigate = useNavigate();
   const requsetLogin = () => {
-    axios.get('url',
-      {
-        params : {
-          
-        },
-        headers : {
-
-        },
-      }
-    ).then((Response) => {
-      
-      navigate("/lobby");
-    })
+    if(id.length>0 && pass.length>0){
+      axios.get('url',
+        {
+          params : {
+            
+          },
+          headers : {
+  
+          },
+        }
+      ).then((Response) => {
+        
+        navigate("/lobby");
+      })
+    }
   }
   const signup = () => {
     navigate("/signup");

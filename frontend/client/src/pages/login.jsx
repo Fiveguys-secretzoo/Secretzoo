@@ -12,9 +12,11 @@ const Login = () => {
       <div className="loginContainer">
         <div className="left">
           <LoginForm></LoginForm>
-          <GoogleLogin></GoogleLogin>
-          <KakaoLogin></KakaoLogin>
-          <NaverLogin></NaverLogin>
+          <div className="social">
+            <GoogleLogin></GoogleLogin>
+            <KakaoLogin></KakaoLogin>
+            <NaverLogin></NaverLogin>
+          </div>
         </div>
         <div className="right">
           <NoLogin></NoLogin>
