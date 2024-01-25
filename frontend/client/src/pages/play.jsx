@@ -15,16 +15,18 @@ const Play = () => {
   const [thisTurnPlayer, setThisTurnPlayer] = useState('');
   const [cardDrag, setCardDrag] = useState({'from' : -1, 'to' : -1, 'card':-1});
   const [cardDrop, setCardDrop] = useState({'from' : -1, 'to' : -1, 'card':-1});
-  const [playersId, setPlayersId] = useState(['','','','','', ''])
+  const [playersId, setPlayersId] = useState(['', '', '', '', '', '']);
 
+  
   const navigate = useNavigate();
-  // 플레이어 위에 드래그가 올라갔을 때
+
+  // 플레이어 위에 드래그가 올라갔을 때 socket.io 로 emit
   const handleDragEnter = (e) => {
     console.log(dragItem.current + " hover " + e.target.textContent);
     socket.emit("cardDrag", pid, e.target.textContent);
   };
 
-  // 플레이어 위에 드롭 했을 때
+  // 플레이어 위에 드롭 했을 때 socket.io 로 emit
   const handleDrop = (e) => {
     e.preventDefault();
     alert(dragItem.current + " drop " + e.target.textContent);
@@ -35,13 +37,14 @@ const Play = () => {
 
   }
 
+  // socket.io drag handle
   const handleCardDragResponse = (from, to) => {
     console.log("card Dragged");
     setCardDrag((value) => {
     });
     console.log(`${from} to ${to}`);
   };
-
+  // socket.io drag handle
   const handleCardDropResponse = (from, to ) => {
     
     console.log("card Dragged")
@@ -50,6 +53,7 @@ const Play = () => {
     console.log(`${from} to ${to}`);
   };
 
+  // socket.io handleBluff Response
   const handleCardBluffResponse = (e) => {
 
   }
