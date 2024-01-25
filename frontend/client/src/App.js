@@ -2,6 +2,8 @@ import React, {createContext}  from 'react';
 import {BrowserRouter, Route, Routes } from 'react-router-dom';
 // import './App.css';
 import io from 'socket.io-client';
+import { Provider } from './store/stores'
+
 import Lobby from './pages/lobby'
 import Login from './pages/login'
 import Play from './pages/play'
