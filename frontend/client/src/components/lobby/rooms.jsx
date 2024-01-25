@@ -45,7 +45,7 @@ const Rooms = () => {
   const filterPlaying = () => {
     let newRooms = {};
     Object.keys(rooms).forEach((key) => {
-      if(rooms[key].status == 'playing'){
+      if(rooms[key].status === 'playing'){
         newRooms[key] = rooms[key]; 
       }
     })
@@ -54,7 +54,7 @@ const Rooms = () => {
   const filterWait = () => {
     let newRooms = {};
     Object.keys(rooms).forEach((key) => {
-      if(rooms[key].status == 'wait'){
+      if(rooms[key].status === 'wait'){
         newRooms[key] = rooms[key]; 
       }
     })
@@ -63,7 +63,7 @@ const Rooms = () => {
   const filterFull = () => {
     let newRooms = {};
     Object.keys(rooms).forEach((key) => {
-      if(rooms[key].playerCount == 6){
+      if(rooms[key].playerCount === 6){
         newRooms[key] = rooms[key]; 
       }
     })
@@ -107,7 +107,7 @@ const Rooms = () => {
             {Object.keys(rooms).map((key) => (
               <div className="roomBox" onClick={() => {enterRoom(rooms[key].roomName)}}>
                 <p>{rooms[key].roomName}</p>
-                <p>{rooms[key].players[0].playerName}</p>
+                <p>{rooms[key].adminPlayer}</p>
                 <p>{rooms[key].playerCount}/6</p>
                 <p>{rooms[key].status}</p>
               </div>
