@@ -1,6 +1,7 @@
 .container{
   display: flex;
   padding: 30px;
+  width: 100%;
 }
 .left{
   flex-basis: 20%;
