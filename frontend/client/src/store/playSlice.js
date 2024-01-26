@@ -2,33 +2,33 @@ import { createSlice } from '@reduxjs/toolkit';
 
 export const playSlice = createSlice({
   name: 'play',
-  initialState: { 
-      'roomId': '',
-      'roomName': '',
-      'roomPassword': '',
-      'roomAddress': '',
-      'status': '',
-      'createdDate': '',
-      'card': [],
-      'playerCount': 1,
-      'players': [], // 플레이어 정보 배열 
-      'adminPlayer' : '',
-      'nowTurn' : '',
-      'onBoard': {
-        "status" : '',  // 0 : 대기 , 1 : 주는 턴, 2 : 받는 턴, 3: 넘기는 턴 
-        "from": '',
-        "to": '',
-        "cardBluff" : '',
-        "card": '',
-        "availablePlayer" : [],
-      }
+  initialState: {
+    'roomId': '',
+    'roomName': '',
+    'roomPassword': '',
+    'roomAddress': '',
+    'status': '',
+    'createdDate': '',
+    'card': [],
+    'playerCount': 1,
+    'players': [], // 플레이어 정보 배열 
+    'adminPlayer': '',
+    'nowTurn': '',
+    'onBoard': {
+      "status": '',  // 0 : 대기 , 1 : 주는 턴, 2 : 받는 턴, 3: 넘기는 턴 
+      "from": '',
+      "to": '',
+      "cardBluff": '',
+      "card": '',
+      "availablePlayer": [],
+    }
   }, //TODO : change initialState
   reducers: {
     plus: state => {
       state.value += 1;
     },
     todoAdded: (state, action) => {
-      
+
     }
     //TODO - 초기 값 추가 / 카드 턴 (from to card) 추가 / players 추가
     //TODO - admin 변경

@@ -48,7 +48,8 @@ const shuffleArray = (rooms, roomName) => {
  * @param {string} id 유저 id 
  */
 const addRoom = (rooms, roomName, playerId, socketId) => {
-  rooms[roomName] = { ...roomInfo };
+  
+  rooms[roomName] = JSON.parse(JSON.stringify(roomInfo)); // 깊은 복사로 수정 완료
   rooms[roomName].roomName = roomName;
   rooms[roomName].players.push({...Player(playerId, socketId)});
   rooms[roomName].adminPlayer = rooms[roomName].players[0].playerName;
