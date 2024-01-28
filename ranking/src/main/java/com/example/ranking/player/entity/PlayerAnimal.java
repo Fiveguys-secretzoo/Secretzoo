@@ -28,18 +28,18 @@ public class PlayerAnimal extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "player_sequence")
-    private Player playerSequence;
+    private Player player;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "animal_id")
-    private Animal animalId;
+    private Animal animal;
 
 
     private AnimalScore animalScore;
 
-    public PlayerAnimal(Player playerSequence, Animal animalId, AnimalScore animalScore) {
-        this.playerSequence = playerSequence;
-        this.animalId = animalId;
+    public PlayerAnimal(Player playerSequence, Animal animal, AnimalScore animalScore) {
+        this.player = playerSequence;
+        this.animal= animal;
         this.animalScore = animalScore;
     }
 

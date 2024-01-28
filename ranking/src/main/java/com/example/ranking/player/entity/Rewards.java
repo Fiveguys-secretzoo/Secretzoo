@@ -18,6 +18,7 @@ public class Rewards extends BaseTimeEntity {
 
     @Id
     private String rewardsId;
+    private String animalId;
 
     private String rewardsName;
     private int rewardsValue;

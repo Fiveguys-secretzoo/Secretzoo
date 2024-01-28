@@ -35,7 +35,7 @@ VALUES
 INSERT INTO player_animal(player_sequence, animal_id, attack_success, attack_fail, defense_success, defense_fail, trust, distrust, truth, lie)
 VALUES
 (1, 'TIGER01', 20, 5, 15, 3, 80, 10, 70, 5),
-(1, 'CAT02', 18, 7, 14, 5, 75, 12, 68, 8),
+(1, 'CAT02', 100, 7, 14, 5, 75, 12, 68, 8),
 (1, 'DOG03', 25, 3, 20, 2, 85, 8, 75, 3),
 (1, 'DEER04', 22, 6, 18, 4, 78, 15, 72, 7),
 (1, 'PIG05', 19, 8, 16, 6, 72, 20, 65, 10),
@@ -66,16 +66,22 @@ VALUES
 (15, 'WHALE08', 26, 4, 23, 2, 85, 16, 75, 5);
 
 -- 업적 데이터 
-INSERT INTO rewards(rewards_id, rewards_name, rewards_key, rewards_value)
+INSERT INTO rewards(rewards_id, animal_id, rewards_name, rewards_key, rewards_value)
 VALUES
-('T001', "TIGER KING", "attack_success", 100),
-('C001', "고양이 집사", "cat_trust", 100),
-('G001', "꾸준한 게이머", "total_round", 100);
+('T001',"TIGER01", "호랑이 제왕", "attackSuccess", 100),
+('C001',"CAT02" , "고양이 집사", "trust", 100),
+('C002',"CAT02", "고양이 패배자", "defenseFail", 100),
+('G001',"GENERNAL", "꾸준한 게이머", "totalRound", 100);
 
 
 -- 플레이어-업적 데이터 
-INSERT INTO player_rewards(player_sequence, rewards_id, is_done)
+INSERT INTO player_rewards(player_sequence, rewards_id, created_date, last_modified_date, is_done)
 VALUES
-(1, "T001", true),
-(1, "C001", false),
-(2, "G001", true);
+(1, "T001", '2024-01-21 12:00:00', '2024-01-23 12:00:00', false),
+(1, "C001", '2024-01-21 12:00:00', '2024-01-23 12:00:00', false),
+(1, "C002", '2024-01-21 12:00:00', '2024-01-23 12:00:00', true),
+(1, "G001", '2024-01-21 12:00:00', '2024-01-23 12:00:00', false),
+(2, "T001", '2024-01-21 12:00:00', '2024-01-23 12:00:00', false),
+(2, "C001", '2024-01-21 12:00:00', '2024-01-23 12:00:00', false),
+(2, "C002", '2024-01-21 12:00:00', '2024-01-23 12:00:00', false),
+(2, "G001", '2024-01-21 12:00:00', '2024-01-23 12:00:00', false);

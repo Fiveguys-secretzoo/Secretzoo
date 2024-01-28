@@ -1,5 +1,6 @@
 package com.example.ranking.player.entity;
 
+import com.example.ranking.player.entity.base.BaseTimeEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -16,7 +17,7 @@ import lombok.ToString;
 @Entity
 @Getter @Setter @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PlayerRewards {
+public class PlayerRewards extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,11 +25,11 @@ public class PlayerRewards {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "player_sequence")
-    private Player playerSequence;
+    private Player player;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rewards_id")
-    private Rewards rewardsId;
+    private Rewards rewards;
 
     private boolean isDone;
 

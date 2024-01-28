@@ -26,6 +26,7 @@ public class RewardsService {
     private final PlayerAnimalRepository playerAnimalRepository;
     private final AnimalRepository animalRepository;
     private final EntityManager em;
+    private final AnimalRewardsService animalRewardsService;
 
     /**
      * player rewards 지표를 DB에 저장(업데이트)
@@ -67,7 +68,17 @@ public class RewardsService {
 
         log.info("animalDto={}", animalDto);
 
+
+
+        //플레이어
         Player player = playerRepository.findByPlayerSequence(animalDto.getPlayerSequence());
+
+        //turn 과 round 누적 업데이트
+        //update 쿼리 1번
+        player.setTotalRound(player.getTotalRound() + animalDto.getRound());
+        player.setTotalTurn(player.getTotalTurn() + animalDto.getTurn());
+
+        //플레이어 - 고양이
         Animal cat = animalRepository.findByAnimalId(animalDto.getCat().getAnimalId());
 
         /**
@@ -85,12 +96,18 @@ public class RewardsService {
             PlayerAnimal playerAnimal = new PlayerAnimal(player, cat, animalDto.getCat().getAnimalScore());
             log.info("playerAnimal= {}", playerAnimal);
             em.persist(playerAnimal);
+            //playerCat 에 방금 생성한 entity 저장 후 담아주기 -> animalRewardsService 에서 확인 절차 들어가야 하기 때문에
+            playerCat = playerAnimal;
         }
 
+        //Cat 업적 데이터 저장 및 업데이트 이후 Cat 관련 업적 달성 여부 확인 메서드 호출
+        animalRewardsService.checkCat(playerCat);
+
+        //플레이어 - 강아지
         Animal dog = animalRepository.findByAnimalId(animalDto.getDog().getAnimalId());
 
         /**
-         * 고양이 업적 정보 추가 및 업데이트
+         * 강아지 업적 정보 추가 및 업데이트
          */
 
         PlayerAnimal playerDog = playerAnimalRepository.findByPlayerSequenceAndAnimalId(player.getPlayerSequence(), animalDto.getDog().getAnimalId());
