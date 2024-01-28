@@ -9,13 +9,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class HomeController {
 
-    @Value("${server.servlet.context-path}")
-    private String contextPath;
 
     //index.html 기본 페이지
     @GetMapping("/")
-    public String home(Model model) {
-        model.addAttribute("contextPath", contextPath);
+    public String home() {
+
         return "index.html";
     }
 }
