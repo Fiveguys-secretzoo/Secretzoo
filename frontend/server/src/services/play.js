@@ -96,9 +96,8 @@ const playSocketMethods = () => {
           }
         }
       }
-      rooms[room].onBoard.status = 2;
-      rooms[room].onBoard.from = from;
-      rooms[room].onBoard.to = to;
+      let to = rooms[room].onBoard.to;
+      rooms[room].onBoard.status = 3;
       rooms[room].onBoard.bluffCard = bCard;
       if (!rooms[room].onBoard.turnedPlayer.includes(from)) {
         rooms[room].onBoard.turnedPlayer.push(from);

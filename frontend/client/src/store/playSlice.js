@@ -24,10 +24,22 @@ export const playSlice = createSlice({
     }
   }, //TODO : change initialState
   reducers: {
-    plus: state => {
-      state.value += 1;
+    initGameState: (state, action) => {
+
     },
-    todoAdded: (state, action) => {
+    addPlayer: (state, action) => {
+      state.value += action.payload;
+    },
+    removePlayer: (state, action) => {
+
+    },
+    changeGameState: (state, action) => {
+
+    },
+    changeAdmin: (state, action) => {
+
+    },
+    changeCardStatus: (state, action) => {
 
     }
     //TODO - 초기 값 추가 / 카드 턴 (from to card) 추가 / players 추가

@@ -13,7 +13,7 @@ const { animals,
   roomInfo } = model
 
 const {
-  getRoomInfoForGame, 
+  getRoomInfoForGame,
   sendGameInfo,
 } = playMethods;
 
@@ -48,10 +48,10 @@ const shuffleArray = (rooms, roomName) => {
  * @param {string} id 유저 id 
  */
 const addRoom = (rooms, roomName, playerId, socketId) => {
-  
+
   rooms[roomName] = JSON.parse(JSON.stringify(roomInfo)); // 깊은 복사로 수정 완료
   rooms[roomName].roomName = roomName;
-  rooms[roomName].players.push({...Player(playerId, socketId)});
+  rooms[roomName].players.push({ ...Player(playerId, socketId) });
   rooms[roomName].adminPlayer = rooms[roomName].players[0].playerName;
   console.log(`##### player ${playerId} socket ${socketId} created Room ${roomName}`);
   /*TODO - send room data to backend server!!! */
@@ -65,11 +65,20 @@ const addRoom = (rooms, roomName, playerId, socketId) => {
  * @param {string} id 유저 id 
  */
 const addPlayer = (rooms, roomName, playerId, socketId, socket, io) => {
-  rooms[roomName].playerCount++;
-  rooms[roomName].players.push({ ...Player(playerId, socketId) });
+  let isFirst = true;
+  for (let player in rooms[roomName].players) {
+    if (player.playerId === playerId) {
+      isFirst = false;
+      break;
+    }
+  }
+  if (isFirst) {
+    rooms[roomName].playerCount++;
+    rooms[roomName].players.push({ ...Player(playerId, socketId) });
+  }
   console.log(`##### player ${playerId} socket ${socketId} entered Room ${roomName}`);
   /*TODO - send room data and player data to backend server */
-  
+
   sendGameInfo(socket, io, rooms);
 }
 
@@ -81,7 +90,7 @@ const addPlayer = (rooms, roomName, playerId, socketId, socket, io) => {
 const getRoomInfoForLobby = (rooms) => {
   let lobbyInfo = {};
 
-  for(let room in rooms){
+  for (let room in rooms) {
     let info = rooms[room];
     lobbyInfo[room] = {
       'roomId': info['roomId'],
@@ -96,7 +105,9 @@ const getRoomInfoForLobby = (rooms) => {
   return lobbyInfo;
 }
 
-
+const removeRoom = (rooms, room) => {
+  rooms.delete(room);
+}
 
 /**
  * 유저 퇴장 
@@ -111,7 +122,7 @@ const removePlayer = (playerId) => {
 }
 
 const handleDisconnect = (socket, io, rooms) => {
-
+  //TODO - handles the disconnection situation
 }
 
 
@@ -134,11 +145,11 @@ const roomSocketMethods = () => {
 
   /* 방 생성 이벤트 */
   const createRoom = async (socket, io, rooms) => {
-    socket.on('createRoom', (room, id, callback) => {
+    socket.on('createRoom', (room, pid, callback) => {
       if (Object.keys(rooms).includes(room)) {
         callback(false);
       } else {
-        addRoom(rooms, room, id, socket.id);
+        addRoom(rooms, room, pid, socket.id);
         console.log(`##### player [${socket.id}], make room ${room}`)
 
         // 기존방 나가기
@@ -150,6 +161,7 @@ const roomSocketMethods = () => {
 
         // 입력받은 방 들어가기
         socket.join(room);
+        rooms[room].nowTurn = pid;
         callback(true);
       }
     });
@@ -181,13 +193,26 @@ const roomSocketMethods = () => {
     });
   }
 
+  const leaveRoom = async (socket, io, rooms) => {
+    socket.on('leaveRoom', (room, id, callback) => {
+      rooms[room].players.filter((e) => e.playerId !== id);
+      rooms[room].playerCount -= 1;
+      if (rooms[room].playerCount === 0) {
+        removeRoom(rooms, room);
+      }
+    })
+
+  }
+
+
+
   /* 방 새로고침 이벤트 */
   const checkReconnection = async (socket, io, rooms) => {
     socket.on('checkReconnection', (pid, callback) => {
       console.log(`##### Checking Reconnection of User ${pid}`);
-      for(let room in rooms){
-        for(let player of rooms[room].players){
-          if(player.playerId === pid){
+      for (let room in rooms) {
+        for (let player of rooms[room].players) {
+          if (player.playerId === pid) {
             player.socketId = socket.id;
             socket.join(room);
             break;
@@ -226,7 +251,7 @@ const roomSocketMethods = () => {
           }
         }
       }
-      console.log(`##### current Room : (${(rooms[room].roomName)?rooms[room].roomName:"err"})`);
+      console.log(`##### current Room : (${(rooms[room].roomName) ? rooms[room].roomName : "err"})`);
       shuffleArray(rooms, room);
       console.log('##### Shuffle End')
 
@@ -264,6 +289,7 @@ const roomSocketMethods = () => {
     testRoomsInfo,
     disconnected,
     checkReconnection,
+    leaveRoom,
   }
 }
 

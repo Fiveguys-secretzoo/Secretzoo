@@ -14,8 +14,9 @@ const Play = () => {
 
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
-  const [cards, setCards] = useState([1, 2, 3, 4]);
+  const [cards, setCards] = useState([]);
   const [isMyTurn, setIsMyTurn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [thisTurnPlayer, setThisTurnPlayer] = useState('');
   const [cardDrag, setCardDrag] = useState({ 'from': -1, 'to': -1, 'card': -1 });
   const [cardDrop, setCardDrop] = useState({ 'from': -1, 'to': -1, 'card': -1 });
@@ -56,7 +57,7 @@ const Play = () => {
   }
 
   // 플레이어 위에 드래그가 올라갔을 때 socket.io 로 emit
-  const handleDragEnter = (e) => {
+  const dragEnterHandler = (e) => {
     console.log(dragItem.current + " hover " + e.target.textContent);
     socket.emit("cardDrag", pid, e.target.textContent);
   };
@@ -65,7 +66,7 @@ const Play = () => {
   }
 
   // 플레이어 위에 드롭 했을 때 socket.io 로 emit
-  const handleDrop = (e) => {
+  const dropHandler = (e) => {
     e.preventDefault();
     console.log(dragItem.current + " drop " + e.target.textContent);
     alert(dragItem.current + " drop " + e.target.textContent);
@@ -74,10 +75,10 @@ const Play = () => {
   };
 
   // 플레이어가 속일 동물 종류를 선택 시
-  const handleCardBluffSelect = (value) => {
+  const cardBluffHandler = (value) => {
     setPlayState(3);
 
-    alert("key " + value);
+    alert("key : value");
     socket.emit("cardBluffSelect", pid, value);
   };
 
@@ -86,22 +87,24 @@ const Play = () => {
     console.log(`Answer : ${val}`);
     if (val === 1) {
       setPlayState(4);
+    } else {
+      setPlayState(5);
     }
   }
 
-  const handleResponse = () => {
+  const responseHandler = () => {
 
   }
 
   // socket.io drag handle
-  const handleCardDragResponse = (from, to) => {
+  const cardDragResponseHandler = (from, to) => {
     console.log("card Dragged");
     setCardDrag((value) => {
     });
     console.log(`${from} to ${to}`);
   };
   // socket.io drag handle
-  const handleCardDropResponse = (from, to) => {
+  const cardDropResponseHandler = (from, to) => {
 
     console.log("card Dragged");
     setCardDrop((value) => {
@@ -110,9 +113,8 @@ const Play = () => {
   };
 
   // socket.io handleBluff Response
-  const handleCardBluffResponse = (from, to, bCard) => {
+  const cardBluffResponseHandler = (from, to, bCard) => {
     console.log(`card Bluffed [${from}] to [${to}] by [${bCard}]`);
-
   }
   // 이벤트 수신
   useEffect(() => {
@@ -134,10 +136,10 @@ const Play = () => {
       setCards(cards);
       setPlayState(1);
       console.log("##### Card Set");
-      socket.on("gameListen", handleResponse)
-      socket.on("cardDrag", handleCardDragResponse)
-      socket.on("cardDrop", handleCardDropResponse)
-      socket.on("cardBluffSelect", handleCardBluffResponse);
+      socket.on("gameListen", responseHandler)
+      socket.on("cardDrag", cardDragResponseHandler)
+      socket.on("cardDrop", cardDropResponseHandler)
+      socket.on("cardBluffSelect", cardBluffResponseHandler);
       socket.on("")
     }
 
@@ -154,6 +156,8 @@ const Play = () => {
     socket.on('requestGameInfo', gameInfoHandler);
     socket.on('chatMessage', messageHandler);
     socket.on('gameStart', gameStart);
+
+    socket.on('playerEnter', playerEnterHandler)
     socket.emit('testRoomsInfo', (rooms) => {
       console.log(rooms);
     })
@@ -192,7 +196,13 @@ const Play = () => {
             <div className="overlay">
               {Object.entries(animalList).map(([key, value]) =>
               (
-                <button key={value} onClick={() => { handleCardBluffSelect(value) }}>{key}</button>
+                <button
+                  className="px-6 mx-4 text-white bg-blue-500 rounded-md hover:bg-blue-600"
+                  key={value}
+                  onClick={() => { cardBluffHandler(value) }}
+                >
+                  {key}
+                </button>
               )
               )}
             </div>
@@ -225,37 +235,37 @@ const Play = () => {
 
         <div className="bg-white rounded w-[30%] m-2"
           onDragOver={(e) => dragOver(e)}
-          onDragEnter={(e) => handleDragEnter(e)}
-          onDrop={(e) => handleDrop(e)}
+          onDragEnter={(e) => dragEnterHandler(e)}
+          onDrop={(e) => dropHandler(e)}
         >
           playerSlot2
         </div>
         <div className="bg-white rounded w-[30%] m-2"
-          onDragEnter={(e) => handleDragEnter(e)}
+          onDragEnter={(e) => dragEnterHandler(e)}
           onDragOver={(e) => dragOver(e)}
-          onDropCapture={(e) => handleDrop(e)}>
+          onDrop={(e) => dropHandler(e)}>
           player2
         </div>
         <div className="bg-white rounded w-[30%] m-2"
-          onDragEnter={(e) => handleDragEnter(e)}
+          onDragEnter={(e) => dragEnterHandler(e)}
           onDragOver={(e) => dragOver(e)}
-          onDrop={(e) => handleDrop(e)}>
+          onDrop={(e) => dropHandler(e)}>
           player3
         </div>
         <div className="bg-white rounded w-[30%] m-2"
-          onDragEnter={(e) => handleDragEnter(e)}
+          onDragEnter={(e) => dragEnterHandler(e)}
           onDragOver={(e) => dragOver(e)}
-          onDrop={(e) => handleDrop(e)}>
+          onDrop={(e) => dropHandler(e)}>
           player4
         </div>
         <div className="bg-white rounded w-[30%] m-2"
-          onDragEnter={(e) => handleDragEnter(e)}
+          onDragEnter={(e) => dragEnterHandler(e)}
           onDragOver={(e) => dragOver(e)}
-          onDrop={(e) => handleDrop(e)}>
+          onDrop={(e) => dropHandler(e)}>
           player5
         </div>
-        <div className='flex absolute left-[35%] bottom-[100px]'>
-          <div className="cards">
+        <div className="cards">
+          <div className='flex absolute left-[35%] bottom-[100px]'>
             {cards &&
               cards.map((item, index) => (
                 <div
@@ -265,11 +275,12 @@ const Play = () => {
                   className="w-[8em] h-[13em] ml-[-4em] hover:scale(1.3) hover:-translate-y-20 hover:rotate-[20deg] hover:z-50 transition-transform duration-300 "
                   style={{ zIndex: cards.length - index }}
                 >
-                  <img key={index} className="card-image" src={imageRoute(item)} alt="" />
+                  <img key={index} className="" src={imageRoute(item)} alt="" />
                 </div>
               ))}
           </div>
         </div>
+
 
         <h1>Chat Application</h1>
         <div className="message-list">
@@ -285,15 +296,17 @@ const Play = () => {
             placeholder="Type a message..."
           />
           <button onClick={sendMessage}>Send</button>
-        </div>
-        <button onClick={start}>start</button>
-        {
+        </div>{
+          playState === 0 && isAdmin &&
+          <button className="px-6 mx-4 text-white bg-blue-500 rounded-md hover:bg-blue-600" onClick={start}>start</button>
+        }
+        {/* {
           cards.map((card) => (
             <div key={card}>{card}</div>
           ))
-        }
+        } */}
       </div >
-    </div>
+    </div >
   );
 };
 
