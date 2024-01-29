@@ -1,6 +1,6 @@
 import React from 'react';
 import SignupForm from '../components/signup/signupForm';
-
+import '../style/play.css'
 
 const Signup = () => {
   return (

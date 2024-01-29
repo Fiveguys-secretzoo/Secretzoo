@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { SocketContext } from "../../App";
 import { useNavigate } from "react-router-dom";
-import '../../style/rooms.css'
 
 const Rooms = () => {
   const navigate = useNavigate();
@@ -83,36 +82,41 @@ const Rooms = () => {
 
   return (
     <>
-      <div>
-        <div className="roomList">
-          <div className="search">
-            <form onSubmit={(e) => e.preventDefault()}>
-              <input 
-              type="text"
-              value={searchRoomName}
-              onChange={(e) => setSearchRoomName(e.target.value)} />
-              <button type="submit" onClick={searchRoom}>검색</button>
-            </form>
-          </div>
-          <div className="filter">
-            <button onClick={filterPlaying}>플레이중</button>
-            <button onClick={filterWait}>대기중</button>
-            <button onClick={filterFull}>꽉찬방</button>
-          </div>
-          <div>
-            <input value={roomName} onChange={(e) => setRoomName(e.target.value)} />
-            <button onClick={createRoom}>방만들기</button>
-          </div>
-          <div className="roomContainer">
-            {Object.keys(rooms).map((key) => (
-              <div className="roomBox" onClick={() => {enterRoom(rooms[key].roomName)}}>
-                <p>{rooms[key].roomName}</p>
-                <p>{rooms[key].adminPlayer}</p>
-                <p>{rooms[key].playerCount}/6</p>
-                <p>{rooms[key].status}</p>
-              </div>
-            ))}
-          </div>
+      <div >
+        <form className="flex"
+        onSubmit={(e) => e.preventDefault()}>
+          <input 
+          className='w-full p-2 m-2 border-2 border-gray-500 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500'
+          type="text"
+          value={searchRoomName}
+          onChange={(e) => setSearchRoomName(e.target.value)} />
+          <button className='w-[100px] m-2 text-white bg-blue-500 rounded-md hover:bg-blue-600'
+          type="submit" onClick={searchRoom}>검색</button>
+        </form>
+        <div className="flex space-x-2 justify-end">
+          <button className='px-6 mt-4 text-white bg-blue-500 rounded-md hover:bg-blue-600' 
+          onClick={filterPlaying}>플레이중</button>
+          <button className='px-6 mt-4 text-white bg-blue-500 rounded-md hover:bg-blue-600'
+          onClick={filterWait}>대기중</button>
+          <button className='px-6 mt-4 text-white bg-blue-500 rounded-md hover:bg-blue-600'
+          onClick={filterFull}>꽉찬방</button>
+        </div>
+        <div className="flex space-x-2 justify-end ">
+          <input className='border px-6 mt-4 border-gray-500 rounded focus:outline-none focus:ring-1 focus:ring-blue-500'
+          value={roomName} onChange={(e) => setRoomName(e.target.value)} />
+          <button className='px-6 mt-4 text-white bg-blue-500 rounded-md hover:bg-blue-600'
+          onClick={createRoom}>방만들기</button>
+        </div>
+        <div className="flex flex-wrap p-5 my-2 border-2 overflow-y-auto h-max-[30em]">
+          {Object.keys(rooms).map((key) => (
+            <div className="min-w-[30%] min-h-[7em] m-2 bg-gray-100 rounded text-right p-5 font-bold " 
+            onClick={() => {enterRoom(rooms[key].roomName)}}>
+              <p>{rooms[key].roomName}</p>
+              {/* <p>{rooms[key].players[0].playerName}</p> */}
+              <p>{rooms[key].playerCount}/6</p>
+              <p>{rooms[key].status}대기중</p>
+            </div>
+          ))}
         </div>
       </div>
     </>

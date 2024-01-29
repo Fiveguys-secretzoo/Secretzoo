@@ -184,8 +184,8 @@ const Play = () => {
     socket.emit('start');
   }
   return (
-    <div className="chat-container">
-      <div id='root'>
+    <div className="h-screen">
+      <div className='w-screen h-[60%] flex flex-wrap justify-between'>
         {
           playState === 2 &&
           <SelectScreen>
@@ -221,58 +221,79 @@ const Play = () => {
             </div>
           </SelectScreen>
         }
-        <div className="playerSlot"
-          onDragOver={(e) => dragOver(e)}
-          onDragEnter={(e) => handleDragEnter(e)}
-          onDrop={(e) => handleDrop(e)}
-        >
-          playerSlot1
-        </div>
-        <div className="playerSlot"
+
+
+        <div className="bg-white rounded w-[30%] m-2"
           onDragOver={(e) => dragOver(e)}
           onDragEnter={(e) => handleDragEnter(e)}
           onDrop={(e) => handleDrop(e)}
         >
           playerSlot2
         </div>
-        <div className="cards">
-          {cards &&
-            cards.map((item, index) => (
-              <div
-                onDragStart={() => dragStart(item)}
-                key={index}
-                draggable
-                className="card"
-                style={{ zIndex: cards.length - index }}
-              >
-                <img key={index} className="card-image" src={imageRoute(item)} alt="" />
-              </div>
-            ))}
+        <div className="bg-white rounded w-[30%] m-2"
+          onDragEnter={(e) => handleDragEnter(e)}
+          onDragOver={(e) => dragOver(e)}
+          onDropCapture={(e) => handleDrop(e)}>
+          player2
         </div>
-      </div >
+        <div className="bg-white rounded w-[30%] m-2"
+          onDragEnter={(e) => handleDragEnter(e)}
+          onDragOver={(e) => dragOver(e)}
+          onDrop={(e) => handleDrop(e)}>
+          player3
+        </div>
+        <div className="bg-white rounded w-[30%] m-2"
+          onDragEnter={(e) => handleDragEnter(e)}
+          onDragOver={(e) => dragOver(e)}
+          onDrop={(e) => handleDrop(e)}>
+          player4
+        </div>
+        <div className="bg-white rounded w-[30%] m-2"
+          onDragEnter={(e) => handleDragEnter(e)}
+          onDragOver={(e) => dragOver(e)}
+          onDrop={(e) => handleDrop(e)}>
+          player5
+        </div>
+        <div className='flex absolute left-[35%] bottom-[100px]'>
+          <div className="cards">
+            {cards &&
+              cards.map((item, index) => (
+                <div
+                  onDragStart={() => dragStart(item)}
+                  key={index}
+                  draggable
+                  className="w-[8em] h-[13em] ml-[-4em] hover:scale(1.3) hover:-translate-y-20 hover:rotate-[20deg] hover:z-50 transition-transform duration-300 "
+                  style={{ zIndex: cards.length - index }}
+                >
+                  <img key={index} className="card-image" src={imageRoute(item)} alt="" />
+                </div>
+              ))}
+          </div>
+        </div>
 
-      <h1>Chat Application</h1>
-      <div className="message-list">
-        {messages.map((msg, index) => (
-          <div key={index} className="message">{msg}</div>
-        ))}
-      </div>
-      <div className="message-input">
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Type a message..."
-        />
-        <button onClick={sendMessage}>Send</button>
-      </div>
-      <button onClick={start}>start</button>
-      {
-        cards.map((card) => (
-          <div key={card}>{card}</div>
-        ))
-      }
-    </div >
+        <h1>Chat Application</h1>
+        <div className="message-list">
+          {messages.map((msg, index) => (
+            <div key={index} className="message">{msg}</div>
+          ))}
+        </div>
+        <div className="message-input">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Type a message..."
+          />
+          <button onClick={sendMessage}>Send</button>
+        </div>
+        <button onClick={start}>start</button>
+        {
+          cards.map((card) => (
+            <div key={card}>{card}</div>
+          ))
+        }
+      </div >
+    </div>
   );
 };
 

@@ -24,11 +24,12 @@ const NoLogin = () => {
   };
   return (
     <>
-      <div>
-        <p>비회원으로 즐기기</p>
-        <input value={name} onChange={(e) => setName(e.target.value)}></input>
-        <button onClick={saveName}>참가</button>
-        <p>비회원은 일부 서비스를 이용할수 없습니다.</p>
+      <div className="pt-20">
+        <h3 className="text-2xl font-bold text-center">비회원으로 즐기기</h3>
+        <input className='w-full p-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500'
+        value={name} onChange={(e) => setName(e.target.value)}></input>
+        <button className='w-full px-6 mt-4 text-white bg-blue-500 rounded-md hover:bg-blue-600'
+        onClick={saveName}>참가</button>
       </div>
     </>
   );

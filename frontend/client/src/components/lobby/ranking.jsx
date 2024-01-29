@@ -6,19 +6,19 @@ const Ranking = () => {
   const [ranking, setRanking] = useState([]);
   // 공격랭킹 가져오기
   const getAttack = () => {
-    axios.get('https://i10a406.p.ssafy.io/rank/attack').then((Response) => {
+    axios.get('https://secretzoo.site/api/rank/attack').then((Response) => {
       setRanking(Response.data.data);
     });
   }
   // 수비랭킹 가져오기
   const getDefense = () => {
-    axios.get('https://i10a406.p.ssafy.io/rank/defense').then((Response) => {
+    axios.get('https://secretzoo.site/api/rank/defense').then((Response) => {
       setRanking(Response.data.data);
     });
   }
   // 패스랭킹 가져오기
   const getPass = () => {
-    axios.get('https://i10a406.p.ssafy.io/rank/pass').then((Response) => {
+    axios.get('https://secretzoo.site/api/rank/pass').then((Response) => {
       setRanking(Response.data.data);
     });
   }
@@ -29,12 +29,20 @@ const Ranking = () => {
 
   return (
     <div>
-      <button onClick={getAttack}>공격</button>
-      <button onClick={getDefense}>수비</button>
-      <button onClick={getPass}>패스</button>
+      <nav className='bg-gray-500 p-4 text-white text-center rounded shadow-md'>
+        <h2 className='text-white'>랭킹보기</h2>
+        <div className="flex space-x-2 justify-center">
+          <button className='px-6 mt-4 text-white bg-blue-500 rounded-md hover:bg-blue-600' 
+          onClick={getAttack}>공격</button>
+          <button className='px-6 mt-4 text-white bg-blue-500 rounded-md hover:bg-blue-600'
+          onClick={getDefense}>수비</button>
+          <button className='px-6 mt-4 text-white bg-blue-500 rounded-md hover:bg-blue-600'
+          onClick={getPass}>패스</button>
+        </div>
+      </nav>
       {
         ranking.map((item,index) => (
-          <div>{index+1}위 : {item.playerId}</div>
+          <div className='p-2 my-2 bg-blue-200 rounded'>{index+1}위 : {item.playerId}</div>
         ))
       }
     </div>
