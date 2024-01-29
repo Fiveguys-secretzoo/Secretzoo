@@ -63,7 +63,7 @@ const playSocketMethods = () => {
   const cardDrop = (socket, io, rooms) => {
     socket.on('cardDrop', (from, to) => {
       
-      console.log("##### card Dragged and Dropped...")
+      console.log("##### card Dragged and Dropped")
       // io.to(rooms[socket.room].players[k].socketId).emit('cardDrop', from, to);
       let room;
       let roomsKeys = Object.keys(rooms);
@@ -81,9 +81,21 @@ const playSocketMethods = () => {
   }
 
   const cardBluffSelect = (socket, io, rooms) => {
-    socket.on('cardBluffSelect', (from, to, card) => {
-      // io.to(rooms[socket.room].players[k].socketId).emit('cardBluffSelect', from, to);
-      socket.broadcast.to(`${socket.room}`).emit('cardBluffSelect', from, to);
+    socket.on('cardBluffSelect', (from,  card) => {
+      let room;
+      let roomsKeys = Object.keys(rooms);
+      for (let roomName of roomsKeys) {
+        for (let player of rooms[roomName].players) {
+          if (player.socketId === socket.id) {
+            room = roomName;
+            break;
+          }
+        }
+      }
+
+      console.log(`##### card Bluffed to ${card}, to room ${room}`)
+      
+      io.to(room).emit('cardBluffSelect', from, to, card);
     })
   }
 
