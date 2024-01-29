@@ -1,9 +1,6 @@
 package com.example.ranking.player.api;
 
-import com.example.ranking.player.api.RankApiController.RankDto;
-import com.example.ranking.player.api.RankApiController.Result;
 import com.example.ranking.player.dto.AnimalDto;
-import com.example.ranking.player.dto.GameResult;
 import com.example.ranking.player.dto.RewardsDto;
 import com.example.ranking.player.entity.PlayerRewards;
 import com.example.ranking.player.repository.PlayerRepository;
@@ -11,14 +8,11 @@ import com.example.ranking.player.repository.PlayerRewardsRepository;
 import com.example.ranking.player.service.AnimalRewardsService;
 import com.example.ranking.player.service.RewardsService;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.ZSetOperations;
-import org.springframework.data.redis.core.ZSetOperations.TypedTuple;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;

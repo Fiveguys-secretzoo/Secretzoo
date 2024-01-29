@@ -2,7 +2,7 @@ package com.example.ranking.player.service;
 
 
 import com.example.ranking.player.dto.AnimalDto;
-import com.example.ranking.player.dto.GameResult;
+import com.example.ranking.player.dto.RankRequestDto;
 import com.example.ranking.player.dto.animal.AnimalType;
 import com.example.ranking.player.entity.Animal;
 import com.example.ranking.player.entity.Player;
@@ -32,7 +32,7 @@ public class RewardsService {
      * player rewards 지표를 DB에 저장(업데이트)
      */
     @Transactional
-    public void saveRewards(GameResult gameResult) {
+    public void saveRewards(RankRequestDto gameResult) {
 
         //플레이어 찾기
         //select player 쿼리 1번

@@ -1,8 +1,8 @@
 package com.example.ranking.player.api;
 
+import com.example.ranking.player.dto.RankRequestDto;
 import com.example.ranking.player.entity.Player;
 import com.example.ranking.player.entity.RankingScore;
-import com.example.ranking.player.dto.GameResult;
 import com.example.ranking.player.repository.PlayerRepository;
 import com.example.ranking.player.service.RankService;
 import java.util.List;
@@ -51,16 +51,20 @@ public class RankApiController {
      * 사용자의 게임 결과에서 랭킹 정보를 저장
      */
     @PostMapping("/save")
-    public ResponseEntity<String> saveRank(@RequestBody GameResult gameResult) {
-        log.info("gameResult = {}", gameResult);
+    public ResponseEntity<String> saveRank(@RequestBody RankRequestDto rankRequestDto) {
+        log.info("rankRequestDto = {}", rankRequestDto);
         //attack, defense, pass 점수 계산 로직으로 계산 후 Score 인스턴스로 만든 후에 rankService 에 저장해주기
-        double attackScore = RankingScore.scoreCalculator(gameResult.getAttackAttempt(), gameResult.getAttackSuccess());
-        double defenseScore = RankingScore.scoreCalculator(gameResult.getDefenseAttempt(), gameResult.getDefenseSuccess());
+        double attackScore = RankingScore.scoreCalculator(rankRequestDto.getAttackAttempt(), rankRequestDto.getAttackSuccess());
+        double defenseScore = RankingScore.scoreCalculator(rankRequestDto.getDefenseAttempt(), rankRequestDto.getDefenseSuccess());
         //pass 는 attempt 를 turn 으로, success 를 passCount 로 계산
-        double passScore = RankingScore.scoreCalculator(gameResult.getTurn(), gameResult.getPassCount());
+        double passScore = RankingScore.scoreCalculator(rankRequestDto.getTurn(), rankRequestDto.getPassCount());
         RankingScore rankingScore = new RankingScore(attackScore, defenseScore, passScore);
         //playerId에 랭킹 정보 점수 저장
-        rankService.saveRank(gameResult.getPlayerId(), rankingScore);
+        rankService.saveRank(rankRequestDto.getPlayerId(), rankingScore);
+
+        //player 경험지 점수 서장
+        int totalSuccess = (int)(rankRequestDto.getAttackSuccess() + rankRequestDto.getDefenseSuccess());
+
         return ResponseEntity.ok("랭킹 정보가 성공적으로 저장되었습니다.");
     }
 
@@ -70,8 +74,8 @@ public class RankApiController {
     @GetMapping("/attack")
     public Result getAttackRanking() {
         Set<ZSetOperations.TypedTuple<String>> topRankings = rankService.getTopRankingsOfAttack();
-        List<RankDto> collect = topRankings.stream()
-            .map(m -> new RankDto(m.getValue(), m.getScore()))
+        List<RankResponseDto> collect = topRankings.stream()
+            .map(m -> new RankResponseDto(m.getValue(), m.getScore()))
             .collect(Collectors.toList());
         return new Result(collect.size(), collect);
     }
@@ -81,8 +85,8 @@ public class RankApiController {
     @GetMapping("/defense")
     public Result getDefenseRanking() {
         Set<ZSetOperations.TypedTuple<String>> topRankings = rankService.getTopRankingsOfDefense();
-        List<RankDto> collect = topRankings.stream()
-            .map(m -> new RankDto(m.getValue(), m.getScore()))
+        List<RankResponseDto> collect = topRankings.stream()
+            .map(m -> new RankResponseDto(m.getValue(), m.getScore()))
             .collect(Collectors.toList());
         return new Result(collect.size(), collect);
     }
@@ -92,8 +96,8 @@ public class RankApiController {
     @GetMapping("/pass")
     public Result getPassRanking() {
         Set<ZSetOperations.TypedTuple<String>> topRankings = rankService.getTopRankingsOfPass();
-        List<RankDto> collect = topRankings.stream()
-            .map(m -> new RankDto(m.getValue(), m.getScore()))
+        List<RankResponseDto> collect = topRankings.stream()
+            .map(m -> new RankResponseDto(m.getValue(), m.getScore()))
             .collect(Collectors.toList());
         return new Result(collect.size(), collect);
     }
@@ -108,17 +112,17 @@ public class RankApiController {
         List<Player> players3 = playerRepository.findTop10ByOrderByRankingScorePassScoreDesc();
         int size = players1.size() + players2.size() + players3.size();
 
-        List<RankDto> attack = players1.stream()
-            .map(player -> new RankDto(player.getPlayerId(), player.getRankingScore().getAttackScore()))
+        List<RankResponseDto> attack = players1.stream()
+            .map(player -> new RankResponseDto(player.getPlayerId(), player.getRankingScore().getAttackScore()))
             .toList();
-        List<RankDto> defense = players2.stream()
-            .map(player -> new RankDto(player.getPlayerId(), player.getRankingScore().getDefenseScore()))
+        List<RankResponseDto> defense = players2.stream()
+            .map(player -> new RankResponseDto(player.getPlayerId(), player.getRankingScore().getDefenseScore()))
             .toList();
-        List<RankDto> pass = players3.stream()
-            .map(player -> new RankDto(player.getPlayerId(), player.getRankingScore().getPassScore()))
+        List<RankResponseDto> pass = players3.stream()
+            .map(player -> new RankResponseDto(player.getPlayerId(), player.getRankingScore().getPassScore()))
             .toList();
 
-        ConcurrentMap<String, List<RankDto>> rankMap = new ConcurrentHashMap<>();
+        ConcurrentMap<String, List<RankResponseDto>> rankMap = new ConcurrentHashMap<>();
         rankMap.put("attack", attack);
         rankMap.put("defense", defense);
         rankMap.put("pass", pass);
@@ -156,7 +160,7 @@ public class RankApiController {
 
     @Data
     @AllArgsConstructor
-    static class RankDto {
+    static class RankResponseDto {
         private String playerId;
         private Double score;
     }
