@@ -2,7 +2,6 @@ import React, {useEffect, useContext} from "react";
 import Profile from "../components/lobby/profile";
 import Navbar from "../components/lobby/navbar";
 import { Outlet, } from "react-router-dom";
-import '../style/lobby.css'
 
 import { SocketContext } from '../App';
 import { useNavigate } from "react-router-dom";
