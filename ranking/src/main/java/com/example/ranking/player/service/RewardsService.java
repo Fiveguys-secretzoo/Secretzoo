@@ -91,7 +91,7 @@ public class RewardsService {
         if(playerCat != null)
             playerCat.updateAnimalScore(playerCat.getAnimalScore(), animalDto.getCat().getAnimalScore());
 
-        //만약 해당 플레이어가 동물에 대한 전적 정보가 없다면 새롭게 만들어 주기
+            //만약 해당 플레이어가 동물에 대한 전적 정보가 없다면 새롭게 만들어 주기
         else{
             PlayerAnimal playerAnimal = new PlayerAnimal(player, cat, animalDto.getCat().getAnimalScore());
             log.info("playerAnimal= {}", playerAnimal);
@@ -116,7 +116,7 @@ public class RewardsService {
         if(playerDog != null)
             playerDog.updateAnimalScore(playerDog.getAnimalScore(), animalDto.getDog().getAnimalScore());
 
-        //만약 해당 플레이어가 동물에 대한 전적 정보가 없다면 새롭게 만들어 주기
+            //만약 해당 플레이어가 동물에 대한 전적 정보가 없다면 새롭게 만들어 주기
         else{
             PlayerAnimal playerAnimal = new PlayerAnimal(player, dog, animalDto.getDog().getAnimalScore());
             log.info("playerAnimal= {}", playerAnimal);
