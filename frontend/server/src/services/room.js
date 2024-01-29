@@ -13,7 +13,7 @@ const { animals,
   roomInfo } = model
 
 const {
-  getRoomInfoForGame,
+  getRoomInfoForGame, 
   sendGameInfo,
 } = playMethods;
 
