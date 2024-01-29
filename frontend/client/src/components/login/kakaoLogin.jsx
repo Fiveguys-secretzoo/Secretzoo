@@ -3,18 +3,7 @@ import axios from 'axios';
 import kakaoLoginImg from '../../assets/img/login/kakaoLoginImg.png';
 
 const requsetKakaoLogin = () => {
-  axios.get('url',
-    {
-      params : {
-        
-      },
-      headers : {
-
-      },
-    }
-  ).then((Response) => {
-    
-  })
+  window.location.href='http://localhost:8080/oauth2/authorization/kakao';
 }
 
 const KakaoLogin = () => {
