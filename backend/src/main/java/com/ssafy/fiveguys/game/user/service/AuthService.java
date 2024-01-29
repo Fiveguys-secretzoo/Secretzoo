@@ -31,7 +31,6 @@ public class AuthService {
     private final RedisService redisService;
     private final BCryptPasswordEncoder passwordEncoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-    private final RedisRepository redisRepository;
 
     public JwtTokenDto login(LoginRequestDto loginDto) {
         UserDto user = userService.findUserById(loginDto.getUserId());
@@ -108,8 +107,8 @@ public class AuthService {
     }
 
     public void logout(String accessToken) {
-        accessToken = resolveToken(accessToken);
-        String principal = jwtTokenProvider.getAuthentication(accessToken).getName();
+        String token = resolveToken(accessToken);
+        String principal = jwtTokenProvider.getAuthentication(token).getName();
         redisService.deleteRefreshToken(principal);
         userService.deleteRefreshToken(principal);
     }
