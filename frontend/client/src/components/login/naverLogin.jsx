@@ -3,18 +3,7 @@ import axios from 'axios';
 import naverLoginImg from '../../assets/img/login/naverLoginImg.png';
 
 const requsetNaverLogin = () => {
-  axios.get('url',
-    {
-      params : {
-        
-      },
-      headers : {
-
-      },
-    }
-  ).then((Response) => {
-    
-  })
+  window.location.href='http://localhost:8080/oauth2/authorization/naver';
 }
 
 const NaverLogin = () => {

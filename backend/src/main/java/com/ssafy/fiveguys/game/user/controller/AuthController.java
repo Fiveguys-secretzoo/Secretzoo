@@ -1,0 +1,71 @@
+package com.ssafy.fiveguys.game.user.controller;
+
+import com.ssafy.fiveguys.game.user.dto.JwtTokenDto;
+import com.ssafy.fiveguys.game.user.dto.LoginRequestDto;
+import com.ssafy.fiveguys.game.user.dto.UserSignDto;
+import com.ssafy.fiveguys.game.user.jwt.JwtProperties;
+import com.ssafy.fiveguys.game.user.service.AuthService;
+import com.ssafy.fiveguys.game.user.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
+@Slf4j
+@Controller
+@RequiredArgsConstructor
+@CrossOrigin("http://localhost:3000")
+@RequestMapping("/auth")
+public class AuthController {
+
+    private final AuthService authService;
+    private final UserService userService;
+
+    @PostMapping("/signup")
+    public ResponseEntity<?> signUp(@RequestBody UserSignDto userSignDto) {
+        System.out.println("userSignDto.getUserId() = " + userSignDto.getUserId());
+        userService.signUp(userSignDto);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("signUp Success")
+                //.build()
+                ;
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequestDto loginDto) {
+        JwtTokenDto jwtTokenDto = authService.login(loginDto);
+        return ResponseEntity.status(HttpStatus.OK)
+                .header(HttpHeaders.AUTHORIZATION,
+                        JwtProperties.TOKEN_PREFIX + jwtTokenDto.getAccessToken())
+                .header(JwtProperties.REFRESH_TOKEN, jwtTokenDto.getRefreshToken())
+                .body("Login Success")
+                //  .build()
+                ;
+    }
+
+    @PostMapping("/token/refresh")
+    public ResponseEntity<?> reissue(HttpServletRequest request) {
+        String accessToken = request.getHeader(HttpHeaders.AUTHORIZATION);
+        String refreshToken = request.getHeader(JwtProperties.REFRESH_TOKEN);
+        System.out.println("accessToken = " + accessToken);
+        System.out.println("refreshToken = " + refreshToken);
+        JwtTokenDto reissuedToken = authService.reissueToken(accessToken, refreshToken);
+        if (reissuedToken != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(reissuedToken.responseDto());
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body("Token reissued fail")
+                //    .build()
+                ;
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken) {
+        authService.logout(accessToken);
+        return null;
+    }
+}
