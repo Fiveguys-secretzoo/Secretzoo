@@ -33,10 +33,14 @@ repositories {
         implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.6.3'
         implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
         implementation 'org.springframework.boot:spring-boot-starter-validation'
+        implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
         compileOnly 'org.projectlombok:lombok'
         developmentOnly 'org.springframework.boot:spring-boot-devtools'
         runtimeOnly 'com.mysql:mysql-connector-j'
         annotationProcessor 'org.projectlombok:lombok'
+        annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
+        annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+        annotationProcessor "jakarta.persistence:jakarta.persistence-api"
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
         testImplementation 'org.springframework.security:spring-security-test'
     }
@@ -46,3 +50,8 @@ repositories {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+clean {
+    delete file('src/main/generated')
+}
+

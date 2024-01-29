@@ -43,6 +43,11 @@ public interface PlayerRewardsRepository extends JpaRepository<PlayerRewards, Lo
     @Query(value = "SELECT * FROM player_rewards WHERE player_sequence = ?", nativeQuery = true)
     List<PlayerRewards> findRewardsByPlayerSequence(Long playerSequence);
 
+    @Query(value = "SELECT pr.player_rewards_sequence, pr.player_sequence,"
+        + " pr.rewards_id, pr.is_done, pr.created_date, pr.last_modified_date FROM player_rewards pr"
+        + " INNER JOIN player p ON pr.player_sequence = p.player_sequence"
+        + " WHERE user_sequence = ?", nativeQuery = true)
+    List<PlayerRewards> findRewardsByUserSequence(Long userSequence);
 
     /**
      * rewardsId 기준으로 is_done = true 인 횟수
@@ -53,9 +58,10 @@ public interface PlayerRewardsRepository extends JpaRepository<PlayerRewards, Lo
     int findDoneRewardsWithRewardsId(String rewardsId);
 
 
-
-
-
-
-
+    @Query(value = "SELECT pr.player_rewards_sequence, pr.player_sequence,"
+        + " pr.rewards_id, pr.is_done, pr.created_date, pr.last_modified_date FROM player_rewards pr"
+        + " INNER JOIN player p ON pr.player_sequence = p.player_sequence"
+        + " WHERE user_sequence = ?"
+        + " AND pr.is_done = true", nativeQuery = true)
+    List<PlayerRewards> findDoneRewardsByUserSequence(Long userSequence);
 }

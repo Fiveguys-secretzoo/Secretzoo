@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class RankResponse {
-    private String playerId;
+    private Long userSequence;
+    private String nickname;
     private Double score;
 }

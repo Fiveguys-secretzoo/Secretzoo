@@ -32,15 +32,16 @@ public class PlayerService {
 
 
     @Transactional
-    public void saveExp(Long playerSequence, long turn, int totalSuccess) {
+    public void saveExp(Long userSequence, long turn, int totalSuccess) {
 
-        log.info("player seq = {}", playerSequence);
+        log.info("user seq = {}", userSequence);
 
         //플에이어 경험지 계산
         long exp = LevelExp.expCalculator(turn, totalSuccess);
 
         //플레이어 조회
-        Player player = playerRepository.findByPlayerSequence(playerSequence);
+//        Player player = playerRepository.findByPlayerSequence(userSequence);
+        Player player = playerRepository.findByUserSequence(userSequence);
 
         log.info("player curr exp = {}", player.getExp());
         log.info("player add exp = {}", exp);
@@ -51,12 +52,12 @@ public class PlayerService {
         log.info("player new exp = {}", player.getExp());
 
         //레벨 업데이트
-        this.updateLevel(playerSequence, player.getExp());
+        this.updateLevel(userSequence, player.getExp());
     }
 
-    public void updateLevel(Long playerSequence, Long exp) {
+    public void updateLevel(Long userSequence, Long exp) {
 
-        Player player = playerRepository.findByPlayerSequence(playerSequence);
+        Player player = playerRepository.findByUserSequence(userSequence);
 
         int playerLevel;
 
@@ -85,7 +86,7 @@ public class PlayerService {
 
         player.setPlayerLevel(playerLevel);
 
-        log.info("player seq = {}", playerSequence);
+        log.info("user seq = {}", userSequence);
         log.info("player exp = {}", player.getExp());
         log.info("player level = {}", player.getPlayerLevel());
 

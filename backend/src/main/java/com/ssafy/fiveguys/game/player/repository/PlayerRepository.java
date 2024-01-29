@@ -6,9 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PlayerRepository extends JpaRepository<Player, Long> {
 
-    Player findByPlayerId(String playerId);
 
     Player findByPlayerSequence(Long playerSequence);
+
+    Player findByUserSequence(Long userSequence);
     List<Player> findTop10ByOrderByRankingScoreAttackScoreDesc();
     List<Player> findTop10ByOrderByRankingScoreDefenseScoreDesc();
     List<Player> findTop10ByOrderByRankingScorePassScoreDesc();

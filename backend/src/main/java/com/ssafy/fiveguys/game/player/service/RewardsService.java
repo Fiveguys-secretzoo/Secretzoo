@@ -37,7 +37,7 @@ public class RewardsService {
         //플레이어 찾기
         //select player 쿼리 1번
 //        Player findByPlayer = playerRepository.findByPlayerId(gameResult.getPlayerId());
-        Player findByPlayer = playerRepository.findByPlayerSequence(gameResult.getPlayerSequence());
+        Player findByPlayer = playerRepository.findByPlayerSequence(gameResult.getUserSequence());
 
         //turn 과 round 누적 업데이트
         //update 쿼리 1번

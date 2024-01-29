@@ -141,5 +141,19 @@ VALUES
 (2, "W002", '2024-01-21 12:00:00', '2024-01-23 12:00:00', false);
 
 -- user 초기 데이터
-INSERT INTO `user` (`email`, `name`, `nickname`, `password`, `role`, `user_id`)
-VALUES ('test@test.com', '테스트', '테스트 계정 닉네임', '$10$EhIdaof5YODkpDZ9fM8fVOEiS6V.sZKEkuIcJOSnecVOcGjP5/SY.', 'USER', 'test');
+INSERT INTO `user` (`user_sequence`, `email`, `name`, `nickname`, `password`, `role`, `user_id`)
+VALUES (101, 'test1@test.com', '테스트1', '테스트 계정 닉네임1', '$10$EhIdaof5YODkpDZ9fM8fVOEiS6V.sZKEkuIcJOSnecVOcGjP5/SY.', 'USER', 'test1'),
+(102, 'test2@test.com', '테스트2', '테스트 계정 닉네임2', '$10$EhIdaof5YODkpDZ9fM8fVOEiS6V.sZKEkuIcJOSnecVOcGjP5/SY.', 'USER', 'test2'),
+(103, 'test3@test.com', '테스트3', '테스트 계정 닉네임3', '$10$EhIdaof5YODkpDZ9fM8fVOEiS6V.sZKEkuIcJOSnecVOcGjP5/SY.', 'USER', 'test3'),
+(104, 'test4@test.com', '테스트4', '테스트 계정 닉네임4', '$10$EhIdaof5YODkpDZ9fM8fVOEiS6V.sZKEkuIcJOSnecVOcGjP5/SY.', 'USER', 'test4'),
+(105, 'test5@test.com', '테스트5', '테스트 계정 닉네임5', '$10$EhIdaof5YODkpDZ9fM8fVOEiS6V.sZKEkuIcJOSnecVOcGjP5/SY.', 'USER', 'test5'),
+(106, 'test6@test.com', '테스트6', '테스트 계정 닉네임6', '$10$EhIdaof5YODkpDZ9fM8fVOEiS6V.sZKEkuIcJOSnecVOcGjP5/SY.', 'USER', 'test6'),
+(107, 'test7@test.com', '테스트7', '테스트 계정 닉네임7', '$10$EhIdaof5YODkpDZ9fM8fVOEiS6V.sZKEkuIcJOSnecVOcGjP5/SY.', 'USER', 'test7'),
+(108, 'test8@test.com', '테스트8', '테스트 계정 닉네임8', '$10$EhIdaof5YODkpDZ9fM8fVOEiS6V.sZKEkuIcJOSnecVOcGjP5/SY.', 'USER', 'test8'),
+(109, 'test9@test.com', '테스트9', '테스트 계정 닉네임9', '$10$EhIdaof5YODkpDZ9fM8fVOEiS6V.sZKEkuIcJOSnecVOcGjP5/SY.', 'USER', 'test9'),
+(110, 'test10@test.com', '테스트10', '테스트 계정 닉네임10', '$10$EhIdaof5YODkpDZ9fM8fVOEiS6V.sZKEkuIcJOSnecVOcGjP5/SY.', 'USER', 'test10'),
+(111, 'test11@test.com', '테스트11', '테스트 계정 닉네임11', '$10$EhIdaof5YODkpDZ9fM8fVOEiS6V.sZKEkuIcJOSnecVOcGjP5/SY.', 'USER', 'test11'),
+(112, 'test12@test.com', '테스트12', '테스트 계정 닉네임12', '$10$EhIdaof5YODkpDZ9fM8fVOEiS6V.sZKEkuIcJOSnecVOcGjP5/SY.', 'USER', 'test12'),
+(113, 'test13@test.com', '테스트13', '테스트 계정 닉네임13', '$10$EhIdaof5YODkpDZ9fM8fVOEiS6V.sZKEkuIcJOSnecVOcGjP5/SY.', 'USER', 'test13'),
+(114, 'test14@test.com', '테스트14', '테스트 계정 닉네임14', '$10$EhIdaof5YODkpDZ9fM8fVOEiS6V.sZKEkuIcJOSnecVOcGjP5/SY.', 'USER', 'test14'),
+(115, 'test15@test.com', '테스트15', '테스트 계정 닉네임15', '$10$EhIdaof5YODkpDZ9fM8fVOEiS6V.sZKEkuIcJOSnecVOcGjP5/SY.', 'USER', 'test15');

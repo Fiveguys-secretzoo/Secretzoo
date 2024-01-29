@@ -44,9 +44,9 @@ services:
     container_name: spring-app
     build:
       context: .
-      dockerfile: /backend/Dockerfile
-    #ports:
-    #  - 81:8080
+      dockerfile: Dockerfile
+    ports:
+     - 8080:8080
     networks:
       - docker_nat
     environment:

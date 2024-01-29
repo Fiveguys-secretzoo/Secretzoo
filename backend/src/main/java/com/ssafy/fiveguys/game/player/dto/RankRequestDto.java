@@ -15,10 +15,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RankRequestDto {
 
-    @NotEmpty(message = "플레이어 식별 번호가 없습니다")
-    private Long playerSequence;
-    @NotEmpty(message = "플레이어 아이디 정보가 없습니다")
-    private String playerId;
+//    @NotEmpty(message = "플레이어 식별 번호가 없습니다")
+//    private Long playerSequence;
+//    @NotEmpty(message = "플레이어 아이디 정보가 없습니다")
+//    private String playerId;
+
+    @NotEmpty(message = "user sequence 가 없습니다")
+    private Long userSequence;
 
     //턴 라운드
     private long round;

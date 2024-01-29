@@ -84,18 +84,22 @@ public class AnimalRewardsService {
      * @param playerSequence
      * @return
      */
-    public List<PlayerRewards> getPlayerDoneRewards(Long playerSequence) {
-        return playerRewardsRepository.findDoneRewardsByPlayerSequence(
-            playerSequence);
+    public List<PlayerRewards> getPlayerDoneRewards(Long userSequence) {
+        return playerRewardsRepository.findDoneRewardsByUserSequence(userSequence);
     }
+//    public List<PlayerRewards> getPlayerDoneRewards(Long playerSequence) {
+//        return playerRewardsRepository.findDoneRewardsByPlayerSequence(playerSequence);
+//    }
     /**
      * player의 모든 업적 조회
      * @param playerSequence
      * @return
      */
-    public List<PlayerRewards> getPlayerAllRewards(Long playerSequence) {
-        return playerRewardsRepository.findRewardsByPlayerSequence(
-            playerSequence);
+//    public List<PlayerRewards> getPlayerAllRewards(Long playerSequence) {
+//        return playerRewardsRepository.findRewardsByPlayerSequence(playerSequence);
+//    }
+    public List<PlayerRewards> getPlayerAllRewards(Long userSequence) {
+        return playerRewardsRepository.findRewardsByUserSequence(userSequence);
     }
 
     public int getDoneRewardsCount(String rewardsId) {

@@ -56,10 +56,9 @@ public class RewardsApiController {
     /**
      * 플레이어의 완료 업적 정보 조회
      */
-    @GetMapping("/done/{playerSequence}")
-    public Result2 getPlayerRewards(@PathVariable("playerSequence") Long playerSequence) {
-        List<PlayerRewards> playerDoneRewards = animalRewardsService.getPlayerDoneRewards(
-            playerSequence);
+    @GetMapping("/done/{userSequence}")
+    public Result2 getPlayerRewards(@PathVariable("userSequence") Long userSequence) {
+        List<PlayerRewards> playerDoneRewards = animalRewardsService.getPlayerDoneRewards(userSequence);
         long totalPlayerCount = playerService.playerTotalCount();
 
 
@@ -73,24 +72,54 @@ public class RewardsApiController {
             .collect(Collectors.toList());
 
         return new Result2(collect.size(), collect, totalPlayerCount);
-
     }
+
+    /**
+     * 플레이어의 완료 업적 정보 조회
+     */
+//    @GetMapping("/done/{playerSequence}")
+//    public Result2 getPlayerRewards(@PathVariable("playerSequence") Long playerSequence) {
+//        List<PlayerRewards> playerDoneRewards = animalRewardsService.getPlayerDoneRewards(
+//            playerSequence);
+//        long totalPlayerCount = playerService.playerTotalCount();
+//
+//
+//        List<RewardsDto> collect = playerDoneRewards.stream()
+//            .map(m -> new RewardsDto(m.getPlayer().getPlayerSequence(), m.getRewards(), m.getLastModifiedDate(), m.isDone(),
+//                animalRewardsService.getDoneRewardsCount(m.getRewards().getRewardsId())))
+//            .collect(Collectors.toList());
+//
+//        return new Result2(collect.size(), collect, totalPlayerCount);
+//    }
+
+//    /**
+//     * 플레이어의 모든 업적 정보 조회
+//     */
+//    @GetMapping("/total/{playerSequence}")
+//    public Result2 getTotalPlayerRewards(@PathVariable("playerSequence") Long playerSequence) {
+//        List<PlayerRewards> playerDoneRewards = animalRewardsService.getPlayerAllRewards(
+//            playerSequence);
+//
+//        long totalPlayerCount = playerService.playerTotalCount();
+//
+//
+//        List<RewardsDto> collect = playerDoneRewards.stream()
+//            .map(m -> new RewardsDto(m.getPlayer().getPlayerSequence(), m.getRewards(), m.getLastModifiedDate(), m.isDone(),
+//                animalRewardsService.getDoneRewardsCount(m.getRewards().getRewardsId())))
+//            .collect(Collectors.toList());
+//
+//        return new Result2(collect.size(), collect, totalPlayerCount);
+//
+//    }
     /**
      * 플레이어의 모든 업적 정보 조회
      */
-    @GetMapping("/total/{playerSequence}")
-    public Result2 getTotalPlayerRewards(@PathVariable("playerSequence") Long playerSequence) {
-        List<PlayerRewards> playerDoneRewards = animalRewardsService.getPlayerAllRewards(
-            playerSequence);
+    @GetMapping("/total/{userSequence}")
+    public Result2 getTotalPlayerRewards2(@PathVariable("userSequence") Long userSequence) {
+        List<PlayerRewards> playerDoneRewards = animalRewardsService.getPlayerAllRewards(userSequence);
 
         long totalPlayerCount = playerService.playerTotalCount();
 
-
-
-//        List<RewardsDto> collect = playerDoneRewards.stream()
-//            .map(m -> new RewardsDto(m.getPlayer().getPlayerSequence(), m.getRewards(), m.getLastModifiedDate(), m.isDone(),
-//                playerRewardsRepository.findDoneRewardsWithRewardsId(m.getRewards().getRewardsId())))
-//            .collect(Collectors.toList());
 
         List<RewardsDto> collect = playerDoneRewards.stream()
             .map(m -> new RewardsDto(m.getPlayer().getPlayerSequence(), m.getRewards(), m.getLastModifiedDate(), m.isDone(),
