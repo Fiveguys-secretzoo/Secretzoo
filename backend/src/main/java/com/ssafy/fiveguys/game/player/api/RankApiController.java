@@ -1,14 +1,15 @@
 package com.ssafy.fiveguys.game.player.api;
 
-import com.example.ranking.player.dto.RankRequestDto;
-import com.example.ranking.player.dto.TotalRankDto;
-import com.example.ranking.player.dto.response.RankResponse;
-import com.example.ranking.player.dto.response.Result;
-import com.example.ranking.player.dto.response.Result2;
-import com.example.ranking.player.entity.Player;
-import com.example.ranking.player.entity.RankingScore;
-import com.example.ranking.player.service.PlayerService;
-import com.example.ranking.player.service.RankService;
+import com.ssafy.fiveguys.game.player.dto.RankRequestDto;
+import com.ssafy.fiveguys.game.player.dto.TotalRankDto;
+import com.ssafy.fiveguys.game.player.dto.response.RankResponse;
+import com.ssafy.fiveguys.game.player.dto.response.Result;
+import com.ssafy.fiveguys.game.player.dto.response.Result2;
+import com.ssafy.fiveguys.game.player.entity.Player;
+import com.ssafy.fiveguys.game.player.entity.RankingScore;
+import com.ssafy.fiveguys.game.player.repository.PlayerRepository;
+import com.ssafy.fiveguys.game.player.service.PlayerService;
+import com.ssafy.fiveguys.game.player.service.RankService;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.ZSetOperations;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,6 +38,7 @@ public class RankApiController {
 
     private final RankService rankService;
     private final PlayerService playerService;
+//    private final PlayerRepository playerRepository;
 
     //초기 랭킹 정보 redis에 캐싱
 //    @GetMapping("/init")

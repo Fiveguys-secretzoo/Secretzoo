@@ -1,10 +1,10 @@
 package com.ssafy.fiveguys.game.player.service;
 
 
-import com.example.ranking.player.dto.PlayerDto;
-import com.example.ranking.player.entity.LevelExp;
-import com.example.ranking.player.entity.Player;
-import com.example.ranking.player.repository.PlayerRepository;
+import com.ssafy.fiveguys.game.player.dto.PlayerDto;
+import com.ssafy.fiveguys.game.player.entity.LevelExp;
+import com.ssafy.fiveguys.game.player.entity.Player;
+import com.ssafy.fiveguys.game.player.repository.PlayerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class PlayerService {
 
         if(player == null) return null;
         return new PlayerDto(playerSequence, player.getTotalRound(),
-            player.getTotalTurn(), player.getRankingScore(), player.getExp(), player.getLevel());
+            player.getTotalTurn(), player.getRankingScore(), player.getExp(), player.getPlayerLevel());
     }
 
 
@@ -58,36 +58,36 @@ public class PlayerService {
 
         Player player = playerRepository.findByPlayerSequence(playerSequence);
 
-        int level;
+        int playerLevel;
 
 
 
         // 레벨 로직 -> 현재 만렙 20
-        if (exp < 100) level = 1;
-        else if (exp < 200) level = 2;
-        else if (exp < 400) level = 3;
-        else if (exp < 600) level = 4;
-        else if (exp < 800) level = 5;
-        else if (exp < 1000) level = 6;
-        else if (exp < 1400) level = 7;
-        else if (exp < 1800) level = 8;
-        else if (exp < 2200) level = 9;
-        else if (exp < 2800) level = 10;
-        else if (exp < 3200) level = 11;
-        else if (exp < 4000) level = 12;
-        else if (exp < 4800) level = 13;
-        else if (exp < 5600) level = 15;
-        else if (exp < 6600) level = 16;
-        else if (exp < 7600) level = 17;
-        else if (exp < 8600) level = 18;
-        else if (exp < 10000) level = 19;
-        else level  = 20;
+        if (exp < 100) playerLevel = 1;
+        else if (exp < 200) playerLevel = 2;
+        else if (exp < 400) playerLevel = 3;
+        else if (exp < 600) playerLevel = 4;
+        else if (exp < 800) playerLevel = 5;
+        else if (exp < 1000) playerLevel = 6;
+        else if (exp < 1400) playerLevel = 7;
+        else if (exp < 1800) playerLevel = 8;
+        else if (exp < 2200) playerLevel = 9;
+        else if (exp < 2800) playerLevel = 10;
+        else if (exp < 3200) playerLevel = 11;
+        else if (exp < 4000) playerLevel = 12;
+        else if (exp < 4800) playerLevel = 13;
+        else if (exp < 5600) playerLevel = 15;
+        else if (exp < 6600) playerLevel = 16;
+        else if (exp < 7600) playerLevel = 17;
+        else if (exp < 8600) playerLevel = 18;
+        else if (exp < 10000) playerLevel = 19;
+        else playerLevel  = 20;
 
-        player.setLevel(level);
+        player.setPlayerLevel(playerLevel);
 
         log.info("player seq = {}", playerSequence);
         log.info("player exp = {}", player.getExp());
-        log.info("player level = {}", player.getLevel());
+        log.info("player level = {}", player.getPlayerLevel());
 
     }
 }

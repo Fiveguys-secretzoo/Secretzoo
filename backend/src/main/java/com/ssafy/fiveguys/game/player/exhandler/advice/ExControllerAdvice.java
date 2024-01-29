@@ -1,8 +1,8 @@
 package com.ssafy.fiveguys.game.player.exhandler.advice;
 
 
-import com.example.ranking.player.exception.UserException;
-import com.example.ranking.player.exhandler.ErrorResult;
+import com.ssafy.fiveguys.game.player.exception.UserException;
+import com.ssafy.fiveguys.game.player.exhandler.ErrorResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

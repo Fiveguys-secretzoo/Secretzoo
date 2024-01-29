@@ -1,15 +1,15 @@
 package com.ssafy.fiveguys.game.player.service;
 
 
-import com.example.ranking.player.dto.AnimalDto;
-import com.example.ranking.player.dto.RankRequestDto;
-import com.example.ranking.player.dto.animal.AnimalType;
-import com.example.ranking.player.entity.Animal;
-import com.example.ranking.player.entity.Player;
-import com.example.ranking.player.entity.PlayerAnimal;
-import com.example.ranking.player.repository.AnimalRepository;
-import com.example.ranking.player.repository.PlayerAnimalRepository;
-import com.example.ranking.player.repository.PlayerRepository;
+import com.ssafy.fiveguys.game.player.dto.AnimalDto;
+import com.ssafy.fiveguys.game.player.dto.RankRequestDto;
+import com.ssafy.fiveguys.game.player.dto.animal.AnimalType;
+import com.ssafy.fiveguys.game.player.entity.Animal;
+import com.ssafy.fiveguys.game.player.entity.Player;
+import com.ssafy.fiveguys.game.player.entity.PlayerAnimal;
+import com.ssafy.fiveguys.game.player.repository.AnimalRepository;
+import com.ssafy.fiveguys.game.player.repository.PlayerAnimalRepository;
+import com.ssafy.fiveguys.game.player.repository.PlayerRepository;
 import jakarta.persistence.EntityManager;
 import java.util.concurrent.ConcurrentHashMap;
 import lombok.RequiredArgsConstructor;

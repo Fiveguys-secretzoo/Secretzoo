@@ -78,6 +78,8 @@ public class SecurityConfig {
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers(swaggerURL).permitAll()
                 .requestMatchers("/api/v1/**").permitAll()
+                .requestMatchers("/rank/**").permitAll()
+                .requestMatchers("/rewards/**").permitAll()
                 .anyRequest().permitAll());
                // .anyRequest().authenticated());
 

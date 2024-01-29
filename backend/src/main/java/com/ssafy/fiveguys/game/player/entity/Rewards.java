@@ -1,6 +1,6 @@
 package com.ssafy.fiveguys.game.player.entity;
 
-import com.example.ranking.player.entity.base.BaseTimeEntity;
+import com.ssafy.fiveguys.game.player.entity.base.BaseTimeEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;

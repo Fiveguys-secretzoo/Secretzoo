@@ -1,9 +1,10 @@
 package com.ssafy.fiveguys.game.player.api;
 
 
-import com.example.ranking.player.dto.PlayerDto;
-import com.example.ranking.player.dto.response.Result;
-import com.example.ranking.player.service.PlayerService;
+
+import com.ssafy.fiveguys.game.player.dto.PlayerDto;
+import com.ssafy.fiveguys.game.player.dto.response.Result;
+import com.ssafy.fiveguys.game.player.service.PlayerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.CrossOrigin;

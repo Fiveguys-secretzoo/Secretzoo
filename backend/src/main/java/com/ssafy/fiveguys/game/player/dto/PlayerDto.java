@@ -1,7 +1,7 @@
 package com.ssafy.fiveguys.game.player.dto;
 
 
-import com.example.ranking.player.entity.RankingScore;
+import com.ssafy.fiveguys.game.player.entity.RankingScore;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;

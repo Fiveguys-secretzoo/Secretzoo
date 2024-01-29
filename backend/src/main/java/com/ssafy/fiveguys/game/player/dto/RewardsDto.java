@@ -1,6 +1,6 @@
 package com.ssafy.fiveguys.game.player.dto;
 
-import com.example.ranking.player.entity.Rewards;
+import com.ssafy.fiveguys.game.player.entity.Rewards;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

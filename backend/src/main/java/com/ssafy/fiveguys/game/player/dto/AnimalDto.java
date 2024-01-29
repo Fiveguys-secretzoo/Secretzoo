@@ -1,15 +1,15 @@
 package com.ssafy.fiveguys.game.player.dto;
 
 
-import com.example.ranking.player.dto.animal.AnimalType;
-import com.example.ranking.player.dto.animal.Cat;
-import com.example.ranking.player.dto.animal.Deer;
-import com.example.ranking.player.dto.animal.Dog;
-import com.example.ranking.player.dto.animal.Fox;
-import com.example.ranking.player.dto.animal.Pig;
-import com.example.ranking.player.dto.animal.Sheep;
-import com.example.ranking.player.dto.animal.Tiger;
-import com.example.ranking.player.dto.animal.Whale;
+import com.ssafy.fiveguys.game.player.dto.animal.AnimalType;
+import com.ssafy.fiveguys.game.player.dto.animal.Cat;
+import com.ssafy.fiveguys.game.player.dto.animal.Deer;
+import com.ssafy.fiveguys.game.player.dto.animal.Dog;
+import com.ssafy.fiveguys.game.player.dto.animal.Fox;
+import com.ssafy.fiveguys.game.player.dto.animal.Pig;
+import com.ssafy.fiveguys.game.player.dto.animal.Sheep;
+import com.ssafy.fiveguys.game.player.dto.animal.Tiger;
+import com.ssafy.fiveguys.game.player.dto.animal.Whale;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -11,22 +11,20 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
-@EnableRedisRepositories
-public class RedisConfig {
+public class RedisRankingConfig {
 
-    @Value("${spring.redis.port}")
+    @Value("${spring.data.redis.port2}")
     private int port;
 
-    @Value("${spring.redis.host}")
+    @Value("${spring.data.redis.host2}")
     private String host;
 
-    @Bean
+    @Bean(name = "rankingRedisConnectionFactory")
     public RedisConnectionFactory redisConnectionFactory() {
         return new LettuceConnectionFactory(host, port);
     }
 
-    @Bean
-    @Primary
+    @Bean(name = "rankingRedisTemplate")
     public RedisTemplate<String, String> redisTemplate() {
         RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
         redisTemplate.setKeySerializer(new StringRedisSerializer());//key 깨짐 방지

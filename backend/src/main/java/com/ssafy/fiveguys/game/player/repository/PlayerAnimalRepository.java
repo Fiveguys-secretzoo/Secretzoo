@@ -1,6 +1,6 @@
 package com.ssafy.fiveguys.game.player.repository;
 
-import com.example.ranking.player.entity.PlayerAnimal;
+import com.ssafy.fiveguys.game.player.entity.PlayerAnimal;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

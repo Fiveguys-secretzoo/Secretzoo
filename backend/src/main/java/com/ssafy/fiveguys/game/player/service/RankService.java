@@ -1,9 +1,9 @@
 package com.ssafy.fiveguys.game.player.service;
 
 
-import com.example.ranking.player.entity.Player;
-import com.example.ranking.player.entity.RankingScore;
-import com.example.ranking.player.repository.PlayerRepository;
+import com.ssafy.fiveguys.game.player.entity.Player;
+import com.ssafy.fiveguys.game.player.entity.RankingScore;
+import com.ssafy.fiveguys.game.player.repository.PlayerRepository;
 import jakarta.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +11,8 @@ import java.util.Optional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
@@ -21,12 +23,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class RankService {
-
     private final RedisTemplate<String, String> redisTemplate;
     private final PlayerRepository playerRepository;
-    private final EntityManager em;
+
+    @Autowired
+    public RankService(@Qualifier("rankingRedisTemplate") RedisTemplate<String, String> redisTemplate,
+        PlayerRepository playerRepository) {
+        this.redisTemplate = redisTemplate;
+        this.playerRepository = playerRepository;
+    }
 
     private String attackRankKey = "rank:attack";
     private String defenseRankKey = "rank:defense";

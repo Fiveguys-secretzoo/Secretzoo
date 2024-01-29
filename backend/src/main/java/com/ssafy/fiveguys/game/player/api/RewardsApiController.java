@@ -1,12 +1,12 @@
 package com.ssafy.fiveguys.game.player.api;
 
-import com.example.ranking.player.dto.AnimalDto;
-import com.example.ranking.player.dto.RewardsDto;
-import com.example.ranking.player.dto.response.Result2;
-import com.example.ranking.player.entity.PlayerRewards;
-import com.example.ranking.player.service.AnimalRewardsService;
-import com.example.ranking.player.service.PlayerService;
-import com.example.ranking.player.service.RewardsService;
+import com.ssafy.fiveguys.game.player.dto.AnimalDto;
+import com.ssafy.fiveguys.game.player.dto.RewardsDto;
+import com.ssafy.fiveguys.game.player.dto.response.Result2;
+import com.ssafy.fiveguys.game.player.entity.PlayerRewards;
+import com.ssafy.fiveguys.game.player.service.AnimalRewardsService;
+import com.ssafy.fiveguys.game.player.service.PlayerService;
+import com.ssafy.fiveguys.game.player.service.RewardsService;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;

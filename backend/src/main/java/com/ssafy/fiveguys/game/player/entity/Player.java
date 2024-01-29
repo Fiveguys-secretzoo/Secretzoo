@@ -1,6 +1,6 @@
 package com.ssafy.fiveguys.game.player.entity;
 
-import com.example.ranking.player.entity.base.BaseTimeEntity;
+import com.ssafy.fiveguys.game.player.entity.base.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,7 +32,7 @@ public class Player extends BaseTimeEntity {
     private RankingScore rankingScore;
 
     private Long exp;
-    private int level;
+    private int playerLevel;
 
 
 

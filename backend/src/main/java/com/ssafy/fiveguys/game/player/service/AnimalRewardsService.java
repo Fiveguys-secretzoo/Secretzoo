@@ -1,11 +1,11 @@
 package com.ssafy.fiveguys.game.player.service;
 
-import com.example.ranking.player.entity.AnimalScore;
-import com.example.ranking.player.entity.PlayerAnimal;
-import com.example.ranking.player.entity.PlayerRewards;
-import com.example.ranking.player.entity.Rewards;
-import com.example.ranking.player.repository.PlayerRewardsRepository;
-import com.example.ranking.player.repository.RewardsRepository;
+import com.ssafy.fiveguys.game.player.entity.AnimalScore;
+import com.ssafy.fiveguys.game.player.entity.PlayerAnimal;
+import com.ssafy.fiveguys.game.player.entity.PlayerRewards;
+import com.ssafy.fiveguys.game.player.entity.Rewards;
+import com.ssafy.fiveguys.game.player.repository.PlayerRewardsRepository;
+import com.ssafy.fiveguys.game.player.repository.RewardsRepository;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
