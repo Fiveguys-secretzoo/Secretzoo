@@ -42,7 +42,7 @@ public class RankingScore {
         return attemptScore + successScore;
     }
 
-//    public static int levelCalculator(int turn, int success);
+
 
 
 }

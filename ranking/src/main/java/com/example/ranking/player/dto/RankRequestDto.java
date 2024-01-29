@@ -21,8 +21,8 @@ public class RankRequestDto {
     private String playerId;
 
     //턴 라운드
-    private Long round;
-    private Long turn;
+    private long round;
+    private long turn;
 
     //공격, 방어, 패스 지표
     private Long attackAttempt;

@@ -5,6 +5,7 @@ import com.example.ranking.player.entity.Player;
 import com.example.ranking.player.entity.RankingScore;
 import com.example.ranking.player.repository.PlayerRepository;
 import jakarta.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -82,6 +83,26 @@ public class RankService {
             )
         );
 
+    }
+
+    public List<Player> getTotalRanking(String keywords) {
+
+        List<Player> players;
+        switch (keywords) {
+            case "attack":
+                players = playerRepository.findTop10ByOrderByRankingScoreAttackScoreDesc();
+                break;
+            case "defense":
+                players = playerRepository.findTop10ByOrderByRankingScoreDefenseScoreDesc();
+                break;
+            case "pass":
+                players = playerRepository.findTop10ByOrderByRankingScorePassScoreDesc();
+                break;
+            default:
+                players = new ArrayList<>();
+        }
+
+        return players;
     }
 
     /**

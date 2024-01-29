@@ -31,6 +31,9 @@ public class Player extends BaseTimeEntity {
 
     private RankingScore rankingScore;
 
+    private Long exp;
+    private int level;
+
 
 
     /**

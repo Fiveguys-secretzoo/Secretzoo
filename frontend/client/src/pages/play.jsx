@@ -255,7 +255,6 @@ const Play = () => {
           player5
         </div>
         <div className='flex absolute left-[35%] bottom-[100px]'>
-          <div className="cards">
             {cards &&
               cards.map((item, index) => (
                 <div
@@ -268,7 +267,6 @@ const Play = () => {
                   <img key={index} className="card-image" src={imageRoute(item)} alt="" />
                 </div>
               ))}
-          </div>
         </div>
 
         <h1>Chat Application</h1>
