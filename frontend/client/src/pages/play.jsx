@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import { SocketContext } from '../App';
-import '../style/play.css';
 
 const Play = () => {
   const [messages, setMessages] = useState([]);
@@ -106,49 +105,49 @@ const Play = () => {
     socket.emit('start');
   }
   return (
-    <div className="chat-container">
-      <div id='root'>
-        <div className="player"
+    <div className="h-screen">
+      <div className='w-screen h-[60%] flex flex-wrap justify-between'>
+        <div className="bg-white rounded w-[30%] m-2"
           onDragEnter={(e) => handleDragEnter(e)}
           onDragOver={(e) => dragOver(e)}
           onDrop={(e) => handleDrop(e)}>
           player1
         </div>
-        <div className="player"
+        <div className="bg-white rounded w-[30%] m-2"
           onDragEnter={(e) => handleDragEnter(e)}
           onDragOver={(e) => dragOver(e)}
           onDropCapture={(e) => handleDrop(e)}>
           player2
         </div>
-        <div className="player"
+        <div className="bg-white rounded w-[30%] m-2"
           onDragEnter={(e) => handleDragEnter(e)}
           onDragOver={(e) => dragOver(e)}
           onDrop={(e) => handleDrop(e)}>
           player3
         </div>
-        <div className="player"
+        <div className="bg-white rounded w-[30%] m-2"
           onDragEnter={(e) => handleDragEnter(e)}
           onDragOver={(e) => dragOver(e)}
           onDrop={(e) => handleDrop(e)}>
           player4
         </div>
-        <div className="player"
+        <div className="bg-white rounded w-[30%] m-2"
           onDragEnter={(e) => handleDragEnter(e)}
           onDragOver={(e) => dragOver(e)}
           onDrop={(e) => handleDrop(e)}>
           player5
         </div>
-        <div className="cards">
+        <div className='flex absolute left-[35%] bottom-[100px]'>
           {cards &&
             cards.map((item, index) => (
               <div
                 key={index}
                 onDragStart={(e) => dragStart(e)}
                 draggable
-                className="card"
+                className="w-[8em] h-[13em] ml-[-4em] hover:scale(1.3) hover:-translate-y-20 hover:rotate-[20deg] hover:z-50 transition-transform duration-300 "
                 style={{ zIndex: cards.length - index }}
               >
-                <img className="card-image" src={imageRoute(item)} alt=""/>
+                <img className="" src={imageRoute(item)} alt=""/>
               </div>
             ))}
         </div>

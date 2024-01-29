@@ -1,24 +1,21 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const MypageNav = () => {
+  const location = useLocation();
+
+  const active = (path) =>{
+    return location.pathname === path ? "px-6 text-white font-bold" : "px-6 text-black font-bold"
+  };
   return (
     <>
-      <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/lobby/mypage">내 정보</Link>
-            </li>
-            <li>
-              <Link to="/lobby/mypage/myranking">내 랭킹</Link>
-            </li>
-            <li>
-              <Link to="/lobby/mypage/myreward">내 업적</Link>
-            </li>
-          </ul>
-        </nav>
-      </div>
+      <nav className='bg-gray-500 p-4 text-white text-center rounded shadow-md'>
+        <div className="flex space-x-2 justify-center">
+          <Link className={active('/lobby/mypage')} to="/lobby/mypage">내 정보</Link>
+          <Link className={active('/lobby/mypage/myranking')} to="/lobby/mypage/myranking">내 랭킹</Link>
+          <Link className={active('/lobby/mypage/myreward')} to="/lobby/mypage/myreward">내 업적</Link>
+        </div>
+      </nav>
     </>
   );
 };

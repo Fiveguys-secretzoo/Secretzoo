@@ -1,6 +1,6 @@
 import React, {createContext, useEffect}  from 'react';
 import {BrowserRouter, Route, Routes } from 'react-router-dom';
-import './App.css';
+// import './App.css';
 import io from 'socket.io-client';
 import Lobby from './pages/lobby'
 import Login from './pages/login'

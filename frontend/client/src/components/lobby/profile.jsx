@@ -1,5 +1,4 @@
 import React from "react";
-import "../../style/profile.css";
 let user = {
   userId: "t1faker",
   username: "대상혁",
@@ -15,28 +14,25 @@ let user = {
 const profile = () => {
   return (
     <>
-      <div className="profile">
-        <div className="profileCard">
+      <div className='flex flex-col bg-gray-500 p-3 shadow-lg rounded mb-5'>
+        <div className='flex items-center mb-5'>
           <img
             src={require(`../../assets/Untitled ${user.profileNumber}.png`)}
             alt="프로필 이미지"
-            className="profileImage"
-            width={50}
-            height={50}
+            className='w-20 h-20 m-2 rounded-full'
           />
-          <div>
+          <div className='flex-grow text-center'>
             <b>{user.nickname}</b>
             <p>{user.achievementName}</p>
           </div>
         </div>
-        <div className="exp">
+        <div className='exp'>
           <div>
             <span>다음레벨까지 </span>
             <span>level {user.level}</span>
           </div>
-          <div className="expBar">
-            <span></span>
-            <span></span>
+          <div className='w-full bg-gray-200 rounded-full h-4'>
+            <div className='bg-blue-600 h-4 rounded-full w-[40%]'></div>
           </div>
         </div>
       </div>
