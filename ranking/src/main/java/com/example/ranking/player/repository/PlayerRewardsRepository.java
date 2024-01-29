@@ -45,6 +45,15 @@ public interface PlayerRewardsRepository extends JpaRepository<PlayerRewards, Lo
     List<PlayerRewards> findRewardsByPlayerSequence(Long playerSequence);
 
 
+    /**
+     * rewardsId 기준으로 is_done = true 인 횟수
+     * @param rewardsId
+     * @return
+     */
+    @Query(value = "SELECT count(*) FROM player_rewards WHERE rewards_id = ? AND is_done = true", nativeQuery = true)
+    int findDoneRewardsWithRewardsId(String rewardsId);
+
+
 
 
 

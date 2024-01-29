@@ -37,19 +37,24 @@ public class RewardsApiController {
 
     private final RewardsService rewardsService;
     private final AnimalRewardsService animalRewardsService;
+    private final PlayerRepository playerRepository;
+    private final PlayerRewardsRepository playerRewardsRepository;
 
 
     /**
      * 플레이어의 게임 결과에서 리워드(업적) 정보를 저장
      */
-    @PostMapping("/save")
-    public ResponseEntity<String> saveRewards(@RequestBody GameResult gameResult) {
-        log.info("gameResult = {}", gameResult);
-        rewardsService.saveRewards(gameResult);
-        return ResponseEntity.ok(" 성공적으로 저장되었습니다.");
-    }
+//    @PostMapping("/save")
+//    public ResponseEntity<String> saveRewards(@RequestBody GameResult gameResult) {
+//        log.info("gameResult = {}", gameResult);
+//        rewardsService.saveRewards(gameResult);
+//        return ResponseEntity.ok(" 성공적으로 저장되었습니다.");
+//    }
 
-    @PostMapping("/save2")
+    /**
+     * 플레이어의 게임 결과에서 리워드(업적) 정보를 저장
+     */
+    @PostMapping("/save")
     public ResponseEntity<String> saveRewards2(@RequestBody AnimalDto animalDto) {
         log.info("animalDto = {}", animalDto);
         rewardsService.saveRewards2(animalDto);
@@ -63,11 +68,14 @@ public class RewardsApiController {
     public Result getPlayerRewards(@PathVariable("playerSequence") Long playerSequence) {
         List<PlayerRewards> playerDoneRewards = animalRewardsService.getPlayerDoneRewards(
             playerSequence);
+        long totalPlayerCount = playerRepository.count();
+
+
         List<RewardsDto> collect = playerDoneRewards.stream()
-            .map(m -> new RewardsDto(m.getPlayer().getPlayerSequence(), m.getRewards(), m.getLastModifiedDate(), m.isDone()))
+            .map(m -> new RewardsDto(m.getPlayer().getPlayerSequence(), m.getRewards(), m.getLastModifiedDate(), m.isDone(), playerRewardsRepository.findDoneRewardsWithRewardsId(m.getRewards().getRewardsId())))
             .collect(Collectors.toList());
 
-        return new Result(collect.size(), collect);
+        return new Result(collect.size(), collect, totalPlayerCount);
 
     }
     /**
@@ -77,11 +85,15 @@ public class RewardsApiController {
     public Result getTotalPlayerRewards(@PathVariable("playerSequence") Long playerSequence) {
         List<PlayerRewards> playerDoneRewards = animalRewardsService.getPlayerAllRewards(
             playerSequence);
+
+        long count = playerRepository.count();
+
         List<RewardsDto> collect = playerDoneRewards.stream()
-            .map(m -> new RewardsDto(m.getPlayer().getPlayerSequence(), m.getRewards(), m.getLastModifiedDate(), m.isDone()))
+            .map(m -> new RewardsDto(m.getPlayer().getPlayerSequence(), m.getRewards(), m.getLastModifiedDate(), m.isDone(),
+                playerRewardsRepository.findDoneRewardsWithRewardsId(m.getRewards().getRewardsId())))
             .collect(Collectors.toList());
 
-        return new Result(collect.size(), collect);
+        return new Result(collect.size(), collect, count);
 
     }
 
@@ -90,5 +102,6 @@ public class RewardsApiController {
     static class Result<T> {
         private int count;
         private T data;
+        private long totalPlayer;
     }
 }
