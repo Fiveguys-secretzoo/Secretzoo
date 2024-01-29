@@ -24,20 +24,28 @@ export const playSlice = createSlice({
     }
   }, //TODO : change initialState
   reducers: {
-    initGameState: (state, action) => {
-
+    initRoomInfo: (state, action) => {
+      state.roomId = action.payload.roomId;
+      state.roomName = action.payload.roomName;
+      state.roomAddress = action.payload.roomAddess;
+      state.status = action.payload.status;
+      state.createdDate = action.payload.createDate;
+      state.playerCount = action.payload.playerCount;
+      state.players = action.payload.playerCount
     },
     addPlayer: (state, action) => {
-      state.value += action.payload;
+      state.players.push(action.payload);
     },
     removePlayer: (state, action) => {
-
+      state.players = state.players.filter((e) => (
+        e.playerId !== action.payload.playerId
+      ))
     },
     changeGameState: (state, action) => {
-
+      state.status = action.payload.status;
     },
     changeAdmin: (state, action) => {
-
+      state.adminPlayer = action.payload.adminPlayer
     },
     changeCardStatus: (state, action) => {
 

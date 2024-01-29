@@ -23,11 +23,13 @@ const playSocketMethods = () => {
       'status': roomInfo['status'],
       'createdDate': roomInfo['createdDate'],
       'playerCount': roomInfo['playerCount'],
-      'adminPlayer': roomInfo['adminPlayer'],
       'players': roomInfo['players'].map(player => ({
         'playerId': player['playerId'],
         'playerName': player['Name'],
-      }))
+      })),
+      'adminPlayer': roomInfo['adminPlayer'],
+      'nowTurn': roomInfo['nowTurn'],
+      'onBoard': { ...roomInfo['onBoard'] },
     };
   }
 

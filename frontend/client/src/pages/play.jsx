@@ -35,6 +35,7 @@ const Play = () => {
     '고래': 7,
   }
 
+  // 화면 가리는 창 띄우기 , children에 띄우고 싶은 요소 정의하면 ok.
   const SelectScreen = ({ children }) => {
     const el = document.createElement('div');
     useEffect(() => {
@@ -116,6 +117,21 @@ const Play = () => {
   const cardBluffResponseHandler = (from, to, bCard) => {
     console.log(`card Bluffed [${from}] to [${to}] by [${bCard}]`);
   }
+
+  // player enter socket event handle
+  const playerEnterHandler = () => {
+
+  }
+
+  // player leave socket event handle
+  const playerLeaveHandler = () => {
+
+  }
+
+
+  const leaveRoom = () => {
+
+  }
   // 이벤트 수신
   useEffect(() => {
     socket.on("serverClosed", (e) => {
@@ -140,13 +156,16 @@ const Play = () => {
       socket.on("cardDrag", cardDragResponseHandler)
       socket.on("cardDrop", cardDropResponseHandler)
       socket.on("cardBluffSelect", cardBluffResponseHandler);
-      socket.on("")
+      socket.on("playerEnter", playerEnterHandler);
+      socket.on("playerLeave", playerLeaveHandler);
     }
-
+    // 게임 종료 시 사용 
+    // playState 0 으로 정의 
     const gameEnd = () => {
       setPlayState(0);
     }
 
+    // game Info 변경 시 사용
     const gameInfoHandler = (game) => {
       console.log("this comes when the game info is change");
       console.log(game);
@@ -234,9 +253,11 @@ const Play = () => {
 
 
         <div className="bg-white rounded w-[30%] m-2"
+
           onDragOver={(e) => dragOver(e)}
           onDragEnter={(e) => dragEnterHandler(e)}
           onDrop={(e) => dropHandler(e)}
+
         >
           playerSlot2
         </div>
@@ -271,7 +292,7 @@ const Play = () => {
                 <div
                   onDragStart={() => dragStart(item)}
                   key={index}
-                  draggable
+                  draggable={isMyTurn}
                   className="w-[8em] h-[13em] ml-[-4em] hover:scale(1.3) hover:-translate-y-20 hover:rotate-[20deg] hover:z-50 transition-transform duration-300 "
                   style={{ zIndex: cards.length - index }}
                 >
@@ -305,6 +326,7 @@ const Play = () => {
             <div key={card}>{card}</div>
           ))
         } */}
+        <button className="px-6 mx-4 text-white bg-blue-500 rounded-md hover:bg-blue-600" onClick={leaveRoom}>난 나갈거다.</button>
       </div >
     </div >
   );
