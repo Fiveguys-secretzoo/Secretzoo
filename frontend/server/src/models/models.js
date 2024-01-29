@@ -34,8 +34,8 @@ const models = () => {
       'defenseAttempt': 0,
       'defenseSuccess': 0,
       'passCount': 0,
-      }
-    
+    }
+
     for (let animal of animals) {
       scores[animal] = { ...score };
     }
@@ -58,20 +58,20 @@ const models = () => {
     'roomName': '',
     'roomPassword': '',
     'roomAddress': '',
-    'status': '',
+    'status': '0',
     'createdDate': '',
     'card': Array.from({ length: 64 }, (_, i) => i),
     'playerCount': 1,
     'players': [], // 플레이어 정보 배열 
-    'adminPlayer' : '',
-    'nowTurn' : '',
+    'adminPlayer': '',
+    'nowTurn': '',
     'onBoard': {
-      "status" : '',  // 0 : 대기 , 1 : 주는 턴, 2 : 받는 턴, 3: 넘기는 턴 
+      "status": '',  // 0 : 대기, 1 : 시작, 2 : 주는 턴, 3 : 받는 턴, 4: 넘기는 턴 
       "from": '',
       "to": '',
-      "cardBluff" : '',
+      "bluffCard": '',
       "card": '',
-      "availablePlayer" : [],
+      "turnedPlayer": [],
     }
   }
 

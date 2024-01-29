@@ -69,7 +69,7 @@ const Play = () => {
     e.preventDefault();
     console.log(dragItem.current + " drop " + e.target.textContent);
     alert(dragItem.current + " drop " + e.target.textContent);
-    socket.emit("cardDrop", pid, e.target.textContent);
+    socket.emit("cardDrop", pid, e.target.textContent, dragItem.current);
     setPlayState(2);
   };
 
