@@ -53,8 +53,8 @@ export const playSlice = createSlice({
         e.playerId !== action.payload.playerId
       ))
     },
-    changeGameState: (state, action) => {
-      state.status = action.payload.status;
+    changePlayState: (state, action) => {
+      state.onBoard.status = action.payload;
     },
     changeAdmin: (state, action) => {
       state.adminPlayer = action.payload.adminPlayer
@@ -80,7 +80,7 @@ export const {
   initCardInfo,
   addPlayer,
   removePlayer,
-  changeGameStatus,
+  changePlayState,
   changeAdmin,
   changeCardStatus,
 } = playSlice.actions;

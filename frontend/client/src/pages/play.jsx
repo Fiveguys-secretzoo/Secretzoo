@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import '../style/play.css';
 import { Spinner, Button } from 'flowbite-react';
 import { useSelector, useDispatch } from 'react-redux';
-import { addPlayer, removePlayer, initRoomInfo } from '../store/playSlice'
+import { addPlayer, removePlayer, initRoomInfo, changePlayState } from '../store/playSlice'
 
 import PlayerView from '../components/play/playerView'
 
@@ -13,7 +13,12 @@ const Play = () => {
   const socket = useContext(SocketContext);
   const dragItem = useRef();
   const pid = sessionStorage.getItem("userName");
+  const navigate = useNavigate();
+
+  // redux related const.
   const roomInfo = useSelector(state => state.plays);
+  const playState = useSelector(state => state.plays.onBoard.status);
+  const dispatch = useDispatch();
 
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
@@ -25,9 +30,8 @@ const Play = () => {
   const [cardDrop, setCardDrop] = useState({ 'from': -1, 'to': -1, 'card': -1 });
   const [playersId, setPlayersId] = useState(['', '', '', '', '', '']);
   // 0 대기 1 시작 2 카드 드롭 후 동물 선택 3 동물 선택 후 방어 턴 4 넘기는 턴 드래그 5 넘기는 턴 동물 선택 6 결과 확인
-  const [playState, setPlayState] = useState(0);
 
-  const dispatch = useDispatch();
+
 
   const animalList = {
     '호랑이': 0,
@@ -38,6 +42,10 @@ const Play = () => {
     '여우': 5,
     '양': 6,
     '고래': 7,
+  }
+
+  const dragStart = (item) => {
+    dragItem.current = item;
   }
 
   // 화면 가리는 창 띄우기 , children에 띄우고 싶은 요소 정의하면 ok.
@@ -57,67 +65,15 @@ const Play = () => {
     )
   }
 
-  // drag 할 떄 item 기록
-  const navigate = useNavigate();
-  const dragStart = (item) => {
-    dragItem.current = item;
-  }
-
-  // 플레이어 위에 드래그가 올라갔을 때 socket.io 로 emit
-  const dragEnterHandler = (e) => {
-    console.log(dragItem.current + " hover " + e.target.textContent);
-    socket.emit("cardDrag", pid, e.target.textContent);
-  };
-
-  // 드래그 Over 기본 Event
-  const dragOver = (e) => {
-    e.preventDefault();
-  }
-
-  // 플레이어 위에 드롭 했을 때 socket.io 로 emit
-  const dropHandler = (e) => {
-    e.preventDefault();
-    console.log(dragItem.current + " drop " + e.target.textContent);
-    alert(dragItem.current + " drop " + e.target.textContent);
-    socket.emit("cardDrop", pid, e.target.textContent, dragItem.current);
-    setPlayState(2);
-  };
-
-  // 플레이어가 속일 동물 종류를 선택 시
-  const cardBluffHandler = (value) => {
-    setPlayState(3);
-
-    alert("key : value");
-    socket.emit("cardBluffSelect", pid, value);
-  };
-
-  // 공격당한 플레이어의 선택지 발생 시 
-  const handleAnswer = (val) => {
-    console.log(`Answer : ${val}`);
-    if (val === 1) {
-      setPlayState(4);
-    } else {
-      setPlayState(5);
-    }
-  }
-
-  const responseHandler = () => {
-
-  }
-
   // socket.io drag handle
   const cardDragResponseHandler = (from, to) => {
     console.log("card Dragged");
-    setCardDrag((value) => {
-    });
     console.log(`${from} to ${to}`);
   };
   // socket.io drag handle
   const cardDropResponseHandler = (from, to) => {
 
     console.log("card Dragged");
-    setCardDrop((value) => {
-    });
     console.log(`${from} to ${to}`);
   };
 
@@ -126,15 +82,24 @@ const Play = () => {
     console.log(`card Bluffed [${from}] to [${to}] by [${bCard}]`);
   }
 
+
   // player enter socket event handle
   const playerEnterHandler = (player) => {
-
+    dispatch(addPlayer(player));
   }
 
   // player leave socket event handle
   const playerLeaveHandler = (player) => {
-
+    dispatch(removePlayer(player));
   }
+
+  // 플레이어가 속일 동물 종류를 선택 시
+  const cardBluffHandler = (value, pid) => {
+    dispatch(changePlayState(3));
+
+    alert("key : value");
+    socket.emit("cardBluffSelect", pid, value);
+  };
 
   // 방을 나간다. 나는 나간다.
   const leaveRoom = () => {
@@ -152,9 +117,9 @@ const Play = () => {
   const gameStart = (cards, firstPlayer) => {
     console.log("##### Game Started !");
     setCards(cards);
-    setPlayState(1);
+    dispatch(changePlayState(1));
     console.log("##### Card Set");
-    socket.on("gameListen", responseHandler)
+
     socket.on("cardDrag", cardDragResponseHandler)
     socket.on("cardDrop", cardDropResponseHandler)
     socket.on("cardBluffSelect", cardBluffResponseHandler);
@@ -164,14 +129,26 @@ const Play = () => {
   // 게임 종료 시 사용
   // playState 0 으로 정의 
   const gameEnd = () => {
-    setPlayState(0);
+    dispatch(changePlayState(0));
   }
+
   // game Info 변경 시 사용
   const gameInfoHandler = async (game) => {
     console.log("this comes when the game info is change");
     console.log(game);
     dispatch(initRoomInfo(game));
   }
+
+  // 공격당한 플레이어의 선택지 발생 시 
+  const handleAnswer = (val, pid) => {
+    console.log(`Answer : ${val}`);
+    if (val === 1) {
+      dispatch(changePlayState(4));
+    } else {
+      dispatch(changePlayState(5));
+    }
+  }
+
 
   /* 이벤트 수신, 방 입장 시 실행 */
   useEffect(() => {
@@ -205,7 +182,7 @@ const Play = () => {
 
 
   useEffect(() => {
-
+    console.log(playState);
   }, [playState]);
 
   useEffect(() => {
@@ -216,9 +193,11 @@ const Play = () => {
     if (roomInfo.adminPlayer === pid) {
       setIsAdmin(true);
     }
+    console.log(isMyTurn);
+    console.log(isAdmin);
     // checkMyTurn(roomInfo.adminPlayer);
     // checkIsAdmin(roomInfo.nowTurn);
-  }, [roomInfo.adminPlayer, roomInfo.nowTurn, pid])
+  }, [roomInfo.adminPlayer, roomInfo.nowTurn, pid, isMyTurn, isAdmin])
   const imageRoute = (item) => {
     return require(`../assets/img/card/0${Math.floor(item / 8)}/00${item % 8}.png`);
   }
@@ -300,30 +279,6 @@ const Play = () => {
         }
 
         <PlayerView></PlayerView>
-        <div className="bg-white rounded w-[30%] m-2"
-          onDragEnter={(e) => dragEnterHandler(e)}
-          onDragOver={(e) => dragOver(e)}
-          onDrop={(e) => dropHandler(e)}>
-          player2
-        </div>
-        <div className="bg-white rounded w-[30%] m-2"
-          onDragEnter={(e) => dragEnterHandler(e)}
-          onDragOver={(e) => dragOver(e)}
-          onDrop={(e) => dropHandler(e)}>
-          player3
-        </div>
-        <div className="bg-white rounded w-[30%] m-2"
-          onDragEnter={(e) => dragEnterHandler(e)}
-          onDragOver={(e) => dragOver(e)}
-          onDrop={(e) => dropHandler(e)}>
-          player4
-        </div>
-        <div className="bg-white rounded w-[30%] m-2"
-          onDragEnter={(e) => dragEnterHandler(e)}
-          onDragOver={(e) => dragOver(e)}
-          onDrop={(e) => dropHandler(e)}>
-          player5
-        </div>
         <div className="cards">
           <div className='flex absolute left-[35%] bottom-[100px]'>
             {cards &&
