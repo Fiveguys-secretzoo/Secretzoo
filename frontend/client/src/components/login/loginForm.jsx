@@ -10,13 +10,18 @@ const LoginForm = () => {
 
   const navigate = useNavigate();
   const requsetLogin = () => {
-    axios.post('http://localhost:8080/login',
+    axios.post('http://localhost:8080/auth/login',
       {
         "userId": id,
         "password": pass,
       }
-    ).then((response) => {
-      console.log(response.data);
+    ).then(response => {
+      sessionStorage.setItem('authorization' , response.headers['authorization']);
+      sessionStorage.setItem('refresh_token' , response.headers['refresh_token']);
+      navigate('/lobby');
+    }).catch(e => {
+      console.log(e);
+      alert('로그인 실패');
     })
   }
   const signup = () => {

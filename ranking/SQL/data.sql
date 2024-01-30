@@ -11,30 +11,29 @@ VALUES
 ("WHALE08", "whale", "혹등고래");
 
 -- player 테이블 초기 데이터
-INSERT INTO player (player_sequence, player_id, attack_score, defense_score, pass_score, total_round, total_turn, created_date, last_modified_date, user_sequence)
+INSERT INTO player (player_sequence, attack_score, defense_score, pass_score, total_round, total_turn, exp, player_level, created_date, last_modified_date, user_sequence)
 VALUES
-(1, 'player1', 85.0, 90.5, 78.2, 15, 10, '2024-01-21 12:00:00', '2024-01-23 12:00:00', 101),
-(2, 'player2', 78.5, 88.0, 92.3, 20, 15, '2024-01-22 12:30:00', '2024-01-23 12:30:00', 102),
-(3, 'player3', 92.8, 85.5, 80.1, 18, 12, '2024-01-23 13:00:00', '2024-01-23 13:00:00', 103),
-(4, 'player4', 185.0, 77.5, 71.2, 35, 10, '2024-01-21 12:00:00', '2024-01-23 12:00:00', 104),
-(5, 'player5', 54.5, 5.0, 12.3, 20, 15, '2024-01-22 12:30:00', '2024-01-23 12:30:00', 105),
-(6, 'player6', 77.8, 32.5, 180.1, 18, 12, '2024-01-23 13:00:00', '2024-01-23 13:00:00', 106),
-(7, 'player7', 25.0, 91.5, 118.2, 15, 10, '2024-01-21 12:00:00', '2024-01-23 12:00:00', 107),
-(8, 'player8', 45.5, 33.0, 92.3, 20, 15, '2024-01-22 12:30:00', '2024-01-23 12:30:00', 108),
-(9, 'player9', 19.8, 12.5, 180.1, 18, 12, '2024-01-23 13:00:00', '2024-01-23 13:00:00', 109),
-(10, 'player10', 185.0, 110.5, 68.1, 15, 10, '2024-01-21 12:00:00', '2024-01-23 12:00:00', 110),
-(11, 'player11', 33.5, 18.0, 12.3, 20, 15, '2024-01-22 12:30:00', '2024-01-23 12:30:00', 111),
-(12, 'player12', 44.8, 5.5, 83.1, 18, 12, '2024-01-23 13:00:00', '2024-01-23 13:00:00', 112),
-(13, 'player13', 56.0, 10.5, 79.2, 15, 10, '2024-01-21 12:00:00', '2024-01-23 12:00:00', 113),
-(14, 'player14', 88.5, 28.0, 91.3, 20, 15, '2024-01-22 12:30:00', '2024-01-23 12:30:00', 114),
-(15, 'player15', 21.2, 75.5, 81.1, 18, 12, '2024-01-23 13:00:00', '2024-01-23 13:00:00', 115);
+(1,  85.0, 90.5, 78.2, 15, 10, 0, 0, '2024-01-21 12:00:00', '2024-01-23 12:00:00', 101),
+(2, 78.5, 88.0, 92.3, 20, 15, 0, 0, '2024-01-22 12:30:00', '2024-01-23 12:30:00', 102),
+(3, 92.8, 85.5, 80.1, 18, 12, 0, 0, '2024-01-23 13:00:00', '2024-01-23 13:00:00', 103),
+(4, 185.0, 77.5, 71.2, 35, 10, 0, 0,  '2024-01-21 12:00:00', '2024-01-23 12:00:00', 104),
+(5, 54.5, 5.0, 12.3, 20, 15, 0, 0, '2024-01-22 12:30:00', '2024-01-23 12:30:00', 105),
+(6, 77.8, 32.5, 180.1, 18, 12, 0, 0, '2024-01-23 13:00:00', '2024-01-23 13:00:00', 106),
+(7, 5.0, 91.5, 118.2, 15, 10, 0, 0, '2024-01-21 12:00:00', '2024-01-23 12:00:00', 107),
+(8, 5.5, 33.0, 92.3, 20, 15, 0, 0, '2024-01-22 12:30:00', '2024-01-23 12:30:00', 108),
+(9, 9.8, 12.5, 180.1, 18, 12, 0, 0, '2024-01-23 13:00:00', '2024-01-23 13:00:00', 109),
+(10, 185.0, 110.5, 68.1, 15, 10, 0, 0, '2024-01-21 12:00:00', '2024-01-23 12:00:00', 110),
+(11, 33.5, 18.0, 12.3, 20, 15, 0, 0, '2024-01-22 12:30:00', '2024-01-23 12:30:00', 111),
+(12, 44.8, 5.5, 83.1, 18, 12, 0, 0, '2024-01-23 13:00:00', '2024-01-23 13:00:00', 112),
+(13, 56.0, 10.5, 79.2, 15, 10, 0, 0,  '2024-01-21 12:00:00', '2024-01-23 12:00:00', 113),
+(14, 88.5, 28.0, 91.3, 20, 15, 0, 0, '2024-01-22 12:30:00', '2024-01-23 12:30:00', 114),
+(15, 21.2, 75.5, 81.1, 18, 12, 0, 0, '2024-01-23 13:00:00', '2024-01-23 13:00:00', 115);
 
 
 -- player_animal 초기 데이터
 
 INSERT INTO player_animal(player_sequence, animal_id, attack_success, attack_fail, defense_success, defense_fail, trust, distrust, truth, lie)
 VALUES
-
 
 (1, 'TIGER01', 0, 0, 0, 0, 0, 0, 0, 0),
 (1, 'CAT02', 0, 0, 0, 0, 0, 0, 0, 0),
@@ -139,5 +138,24 @@ VALUES
 (2, "S002", '2024-01-21 12:00:00', '2024-01-23 12:00:00', false),
 (2, "W001", '2024-01-21 12:00:00', '2024-01-23 12:00:00', false),
 (2, "W002", '2024-01-21 12:00:00', '2024-01-23 12:00:00', false);
+
+
+-- user 초기 데이터
+INSERT INTO `user` (`user_sequence`, `email`, `name`, `nickname`, `password`, `role`, `user_id`)
+VALUES (101, 'test1@test.com', '테스트1', '테스트 계정 닉네임1', '$10$EhIdaof5YODkpDZ9fM8fVOEiS6V.sZKEkuIcJOSnecVOcGjP5/SY.', 'USER', 'test1'),
+(102, 'test2@test.com', '테스트2', '테스트 계정 닉네임2', '$10$EhIdaof5YODkpDZ9fM8fVOEiS6V.sZKEkuIcJOSnecVOcGjP5/SY.', 'USER', 'test2'),
+(103, 'test3@test.com', '테스트3', '테스트 계정 닉네임3', '$10$EhIdaof5YODkpDZ9fM8fVOEiS6V.sZKEkuIcJOSnecVOcGjP5/SY.', 'USER', 'test3'),
+(104, 'test4@test.com', '테스트4', '테스트 계정 닉네임4', '$10$EhIdaof5YODkpDZ9fM8fVOEiS6V.sZKEkuIcJOSnecVOcGjP5/SY.', 'USER', 'test4'),
+(105, 'test5@test.com', '테스트5', '테스트 계정 닉네임5', '$10$EhIdaof5YODkpDZ9fM8fVOEiS6V.sZKEkuIcJOSnecVOcGjP5/SY.', 'USER', 'test5'),
+(106, 'test6@test.com', '테스트6', '테스트 계정 닉네임6', '$10$EhIdaof5YODkpDZ9fM8fVOEiS6V.sZKEkuIcJOSnecVOcGjP5/SY.', 'USER', 'test6'),
+(107, 'test7@test.com', '테스트7', '테스트 계정 닉네임7', '$10$EhIdaof5YODkpDZ9fM8fVOEiS6V.sZKEkuIcJOSnecVOcGjP5/SY.', 'USER', 'test7'),
+(108, 'test8@test.com', '테스트8', '테스트 계정 닉네임8', '$10$EhIdaof5YODkpDZ9fM8fVOEiS6V.sZKEkuIcJOSnecVOcGjP5/SY.', 'USER', 'test8'),
+(109, 'test9@test.com', '테스트9', '테스트 계정 닉네임9', '$10$EhIdaof5YODkpDZ9fM8fVOEiS6V.sZKEkuIcJOSnecVOcGjP5/SY.', 'USER', 'test9'),
+(110, 'test10@test.com', '테스트10', '테스트 계정 닉네임10', '$10$EhIdaof5YODkpDZ9fM8fVOEiS6V.sZKEkuIcJOSnecVOcGjP5/SY.', 'USER', 'test10'),
+(111, 'test11@test.com', '테스트11', '테스트 계정 닉네임11', '$10$EhIdaof5YODkpDZ9fM8fVOEiS6V.sZKEkuIcJOSnecVOcGjP5/SY.', 'USER', 'test11'),
+(112, 'test12@test.com', '테스트12', '테스트 계정 닉네임12', '$10$EhIdaof5YODkpDZ9fM8fVOEiS6V.sZKEkuIcJOSnecVOcGjP5/SY.', 'USER', 'test12'),
+(113, 'test13@test.com', '테스트13', '테스트 계정 닉네임13', '$10$EhIdaof5YODkpDZ9fM8fVOEiS6V.sZKEkuIcJOSnecVOcGjP5/SY.', 'USER', 'test13'),
+(114, 'test14@test.com', '테스트14', '테스트 계정 닉네임14', '$10$EhIdaof5YODkpDZ9fM8fVOEiS6V.sZKEkuIcJOSnecVOcGjP5/SY.', 'USER', 'test14'),
+(115, 'test15@test.com', '테스트15', '테스트 계정 닉네임15', '$10$EhIdaof5YODkpDZ9fM8fVOEiS6V.sZKEkuIcJOSnecVOcGjP5/SY.', 'USER', 'test15');
 
 

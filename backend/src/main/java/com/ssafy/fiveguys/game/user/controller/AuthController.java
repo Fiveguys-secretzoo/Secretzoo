@@ -47,6 +47,7 @@ public class AuthController {
             .header(HttpHeaders.AUTHORIZATION,
                 JwtProperties.TOKEN_PREFIX + jwtTokenDto.getAccessToken())
             .header(JwtProperties.REFRESH_TOKEN, jwtTokenDto.getRefreshToken())
+            .header(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.AUTHORIZATION + "," + JwtProperties.REFRESH_TOKEN)
             .body("Login Success")
             //  .build();
             ;

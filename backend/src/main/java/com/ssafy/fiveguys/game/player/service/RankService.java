@@ -66,6 +66,12 @@ public class RankService {
      */
     @Transactional
     public void saveRank(Long userSequence, RankingScore rankingScore) {
+
+        //userSequence 에 해당하는 유저가 있는지 먼저 확인
+        Player findPlayer = playerRepository.findByUserSequence(userSequence);
+
+//        if(findPlayer == null) return
+
         //redis 에서 각 랭킹 정보 가져오기
         ZSetOperations<String, String> zSetForAttack = redisTemplate.opsForZSet();
         ZSetOperations<String, String> zSetForDefense = redisTemplate.opsForZSet();
@@ -78,9 +84,6 @@ public class RankService {
 
         //DB에 업데이트
 
-        //점수
-//        Player findPlayer = playerRepository.findByPlayerId(userSequence);
-        Player findPlayer = playerRepository.findByUserSequence(userSequence);
 
         findPlayer.setRankingScore(
             new RankingScore(
