@@ -10,22 +10,16 @@ const LoginForm = () => {
 
   const navigate = useNavigate();
   const requsetLogin = () => {
-    if(id.length>0 && pass.length>0){
-      axios.get('url',
-        {
-          params : {
-            
-          },
-          headers : {
-  
-          },
-        }
-      ).then((Response) => {
-        
-        navigate("/lobby");
-      })
-    }
+    axios.post('http://localhost:8080/login',
+      {
+        "userId": id,
+        "password": pass,
+      }
+    ).then((response) => {
+      console.log(response.data);
+    })
   }
+
   const signup = () => {
     navigate("/signup");
   }

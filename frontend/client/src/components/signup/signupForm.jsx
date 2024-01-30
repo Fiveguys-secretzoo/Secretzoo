@@ -14,20 +14,20 @@ const SignupForm = () => {
   const requsetLogin = () => {
     if(idCheck && emailCheck && pass===passCheck && 
       name.length > 0 && id.length > 0 && pass.length > 0 && passCheck.length > 0 && email.length > 0){
-        axios.get('url',
-          {
-            params : {
-              
-            },
-            headers : {
-    
-            },
-          }
-        ).then((Response) => {
-          navigate("/");
-        })
+        axios.post('http://localhost:8080/users/signup',
+      {
+        "userId": id,
+        "password": pass,
+        "name": name,
+        "email": email,
+        "nickname": "kjy"
+      }
+    ).then((Response) => {
+      console.log(Response.data);
+    })
       }
   }
+
   return (
     <>
       <div className='container max-w-[35%] mx-auto py-12 flex flex-col items-center justify-center mt-[100px] bg-white shadow-lg rounded-xl'>

@@ -94,11 +94,11 @@ const Rooms = () => {
           type="submit" onClick={searchRoom}>검색</button>
         </form>
         <div className="flex space-x-2 justify-end">
-          <button className='px-6 mt-4 text-white bg-blue-500 rounded-md hover:bg-blue-600' 
+          <button className='px-4 mt-4 text-white bg-blue-500 rounded-md hover:bg-blue-600' 
           onClick={filterPlaying}>플레이중</button>
-          <button className='px-6 mt-4 text-white bg-blue-500 rounded-md hover:bg-blue-600'
+          <button className='px-4 mt-4 text-white bg-blue-500 rounded-md hover:bg-blue-600'
           onClick={filterWait}>대기중</button>
-          <button className='px-6 mt-4 text-white bg-blue-500 rounded-md hover:bg-blue-600'
+          <button className='px-4 mt-4 text-white bg-blue-500 rounded-md hover:bg-blue-600'
           onClick={filterFull}>꽉찬방</button>
         </div>
         <div className="flex space-x-2 justify-end ">
