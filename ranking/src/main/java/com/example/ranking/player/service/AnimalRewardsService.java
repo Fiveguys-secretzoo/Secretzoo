@@ -97,4 +97,9 @@ public class AnimalRewardsService {
         return playerRewardsRepository.findRewardsByPlayerSequence(
             playerSequence);
     }
+
+    public int getDoneRewardsCount(String rewardsId) {
+
+        return playerRewardsRepository.findDoneRewardsWithRewardsId(rewardsId);
+    }
 }

@@ -2,7 +2,7 @@ package com.example.ranking.player.service;
 
 
 import com.example.ranking.player.dto.AnimalDto;
-import com.example.ranking.player.dto.GameResult;
+import com.example.ranking.player.dto.RankRequestDto;
 import com.example.ranking.player.dto.animal.AnimalType;
 import com.example.ranking.player.entity.Animal;
 import com.example.ranking.player.entity.Player;
@@ -32,7 +32,7 @@ public class RewardsService {
      * player rewards 지표를 DB에 저장(업데이트)
      */
     @Transactional
-    public void saveRewards(GameResult gameResult) {
+    public void saveRewards(RankRequestDto gameResult) {
 
         //플레이어 찾기
         //select player 쿼리 1번
@@ -91,7 +91,7 @@ public class RewardsService {
         if(playerCat != null)
             playerCat.updateAnimalScore(playerCat.getAnimalScore(), animalDto.getCat().getAnimalScore());
 
-        //만약 해당 플레이어가 동물에 대한 전적 정보가 없다면 새롭게 만들어 주기
+            //만약 해당 플레이어가 동물에 대한 전적 정보가 없다면 새롭게 만들어 주기
         else{
             PlayerAnimal playerAnimal = new PlayerAnimal(player, cat, animalDto.getCat().getAnimalScore());
             log.info("playerAnimal= {}", playerAnimal);
@@ -116,7 +116,7 @@ public class RewardsService {
         if(playerDog != null)
             playerDog.updateAnimalScore(playerDog.getAnimalScore(), animalDto.getDog().getAnimalScore());
 
-        //만약 해당 플레이어가 동물에 대한 전적 정보가 없다면 새롭게 만들어 주기
+            //만약 해당 플레이어가 동물에 대한 전적 정보가 없다면 새롭게 만들어 주기
         else{
             PlayerAnimal playerAnimal = new PlayerAnimal(player, dog, animalDto.getDog().getAnimalScore());
             log.info("playerAnimal= {}", playerAnimal);

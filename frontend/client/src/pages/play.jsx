@@ -267,7 +267,6 @@ const Play = () => {
                   <img key={index} className="card-image" src={imageRoute(item)} alt="" />
                 </div>
               ))}
-          </div>
         </div>
 
         <h1>Chat Application</h1>

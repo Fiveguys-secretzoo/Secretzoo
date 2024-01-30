@@ -1,7 +1,5 @@
-package com.ssafy.fiveguys.game.user.config;
+package com.ssafy.fiveguys.game.user.handler;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
