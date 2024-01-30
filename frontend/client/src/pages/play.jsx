@@ -5,13 +5,14 @@ import { useNavigate } from "react-router-dom";
 import '../style/play.css';
 import { Spinner, Button } from 'flowbite-react';
 import { useSelector, useDispatch } from 'react-redux';
-import { addPlayer, removePlayer} from '../store/playSlice'
+import { addPlayer, removePlayer, initRoomInfo } from '../store/playSlice'
 
 
 const Play = () => {
   const socket = useContext(SocketContext);
   const dragItem = useRef();
   const pid = sessionStorage.getItem("userName");
+  const roomInfo = useSelector(state => state.plays);
 
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
@@ -24,6 +25,8 @@ const Play = () => {
   const [playersId, setPlayersId] = useState(['', '', '', '', '', '']);
   // 0 대기 1 시작 2 카드 드롭 후 동물 선택 3 동물 선택 후 방어 턴 4 넘기는 턴 드래그 5 넘기는 턴 동물 선택 6 결과 확인
   const [playState, setPlayState] = useState(0);
+
+  const dispatch = useDispatch();
 
   const animalList = {
     '호랑이': 0,
@@ -53,6 +56,7 @@ const Play = () => {
     )
   }
 
+  // drag 할 떄 item 기록
   const navigate = useNavigate();
   const dragStart = (item) => {
     dragItem.current = item;
@@ -63,6 +67,8 @@ const Play = () => {
     console.log(dragItem.current + " hover " + e.target.textContent);
     socket.emit("cardDrag", pid, e.target.textContent);
   };
+
+  // 드래그 Over 기본 Event
   const dragOver = (e) => {
     e.preventDefault();
   }
@@ -129,52 +135,73 @@ const Play = () => {
 
   }
 
-
+  // 방을 나간다. 나는 나간다.
   const leaveRoom = () => {
     socket.emit("leaveRoom", pid);
-    navigate('/')
+    navigate('/lobby')
   }
-  // 이벤트 수신
+
+  // 메시지를 처리한다. 그런 함수다.
+  const messageHandler = (msg) => {
+    console.log(1)
+    setMessages((msgs) => [...msgs, msg]);
+  };
+
+  // 게임 시작 버튼을 눌렀을 때 작동하는 함수, 여러가지 socket을 on 처리 시킨다.
+  const gameStart = (cards, firstPlayer) => {
+    console.log("##### Game Started !");
+    setCards(cards);
+    setPlayState(1);
+    console.log("##### Card Set");
+    socket.on("gameListen", responseHandler)
+    socket.on("cardDrag", cardDragResponseHandler)
+    socket.on("cardDrop", cardDropResponseHandler)
+    socket.on("cardBluffSelect", cardBluffResponseHandler);
+    socket.on("playerEnter", playerEnterHandler);
+    socket.on("playerLeave", playerLeaveHandler);
+  }
+  // 게임 종료 시 사용
+  // playState 0 으로 정의 
+  const gameEnd = () => {
+    setPlayState(0);
+  }
+  // game Info 변경 시 사용
+  const gameInfoHandler = async (game) => {
+    console.log("this comes when the game info is change");
+    console.log(game);
+    dispatch(initRoomInfo(game));
+    checkMyTurn(roomInfo.nowTurn);
+    checkIsAdmin(roomInfo.adminPlayer);
+  }
+
+  // 지금 내 턴인지를 확인한다.
+  const checkMyTurn = (nowTurn) => {
+    console.log(nowTurn);
+    if (nowTurn === pid) {
+      setIsMyTurn(true);
+    }
+    setThisTurnPlayer(nowTurn);
+  }
+
+  const checkIsAdmin = (admin) => {
+    console.log(admin);
+    if (admin === pid) {
+      setIsAdmin(true);
+    }
+  }
+
+  /* 이벤트 수신, 방 입장 시 실행 */
   useEffect(() => {
+    // 서버 닫혔을 때 유저를 대방출
     socket.on("serverClosed", (e) => {
       console.log("serverClosed");
       navigate('/');
     });
-    console.log("check if the refresh Button see this");
 
-
-
-    const messageHandler = (msg) => {
-      console.log(1)
-      setMessages((msgs) => [...msgs, msg]);
-    };
-
-    const gameStart = (cards, firstPlayer) => {
-      console.log("##### Game Started !");
-      setCards(cards);
-      setPlayState(1);
-      console.log("##### Card Set");
-      socket.on("gameListen", responseHandler)
-      socket.on("cardDrag", cardDragResponseHandler)
-      socket.on("cardDrop", cardDropResponseHandler)
-      socket.on("cardBluffSelect", cardBluffResponseHandler);
-      socket.on("playerEnter", playerEnterHandler);
-      socket.on("playerLeave", playerLeaveHandler);
-    }
-    // 게임 종료 시 사용 
-    // playState 0 으로 정의 
-    const gameEnd = () => {
-      setPlayState(0);
-    }
-
-    // game Info 변경 시 사용
-    const gameInfoHandler = (game) => {
-      console.log("this comes when the game info is change");
-      console.log(game);
-    }
-
+    // Reconnection 확인용
     socket.emit('checkReconnection', pid);
-    socket.on('requestGameInfo', gameInfoHandler);
+    // 게임 방의 초기 정보 확인 후 가져옴
+    socket.emit('requestGameInfo', gameInfoHandler);
     socket.on('chatMessage', messageHandler);
     socket.on('gameStart', gameStart);
 
@@ -182,9 +209,9 @@ const Play = () => {
     socket.on('playerLeave', playerLeaveHandler);
 
     //test, and get the every room info
-    socket.emit('testRoomsInfo', (rooms) => {
-      console.log(rooms);
-    })
+    // socket.emit('testRoomsInfo', (rooms) => {
+    //   console.log(rooms);
+    // })
 
     return () => {
       socket.off('gameInfo', gameInfoHandler);
@@ -211,6 +238,8 @@ const Play = () => {
   const start = () => {
     socket.emit('start');
   }
+
+
   return (
     <div className="h-screen">
       <div className='w-screen h-[60%] flex flex-wrap justify-between'>
@@ -341,7 +370,7 @@ const Play = () => {
             onChange={(e) => setInput(e.target.value)}
             placeholder="Type a message..."
           />
-          <Button onClick={sendMessage}>Send</Button>
+          <Button onClick={/*sendMessage*/() => { console.log(roomInfo) }}>Send</Button>
         </div>{
           playState === 0 && isAdmin &&
           <Button color="success" onClick={start}>start</Button>

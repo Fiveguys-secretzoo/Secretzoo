@@ -25,17 +25,21 @@ export const playSlice = createSlice({
   }, //TODO : change initialState
   reducers: {
     initRoomInfo: (state, action) => {
-      state = JSON.parse(JSON.stringify(action.payload));
-      // state.roomId = action.payload.roomId;
-      // state.roomName = action.payload.roomName;
-      // state.roomAddress = action.payload.roomAddess;
-      // state.status = action.payload.status;
-      // state.createdDate = action.payload.createDate;
-      // state.playerCount = action.payload.playerCount;
-      // state.players = [...action.payload.players];
-      // state.adminPlayer = action.payload.adminPlayer;
-      // state.nowTurn = action.payload.nowTurn;
-      // state.onBoard = JSON.parse(JSON.stringify(action.payload.onBoard));
+      console.log(action);
+      // state = JSON.parse(JSON.stringify(action.payload));
+      state.roomId = action.payload.roomId;
+      state.roomName = action.payload.roomName;
+      state.roomAddress = action.payload.roomAddess;
+      state.status = action.payload.status;
+      state.createdDate = action.payload.createDate;
+      state.playerCount = action.payload.playerCount;
+      state.players = [...action.payload.players];
+      state.adminPlayer = action.payload.adminPlayer;
+      state.nowTurn = action.payload.nowTurn;
+      Object.keys(action.payload.onBoard).forEach(key => {
+        state.onBoard[key] = action.payload.onBoard[key];
+      });
+      console.log(state.roomName);
     },
     initCardInfo: (state, action) => {
       state.card = [...action.payload];
@@ -57,12 +61,11 @@ export const playSlice = createSlice({
     },
     changeCardStatus: (state, action) => {
 
-    }
+    },
     //TODO - 초기 값 추가 / 카드 턴 (from to card) 추가 / players 추가
     //TODO - admin 변경
     //TODO - 지금 턴 상태 추가
-    //TODO 
-
+    //TODO
 
 
 
@@ -72,5 +75,13 @@ export const playSlice = createSlice({
   },
 },);
 
-export const { plus } = playSlice.actions;
+export const {
+  initRoomInfo,
+  initCardInfo,
+  addPlayer,
+  removePlayer,
+  changeGameStatus,
+  changeAdmin,
+  changeCardStatus,
+} = playSlice.actions;
 export default playSlice.reducer;

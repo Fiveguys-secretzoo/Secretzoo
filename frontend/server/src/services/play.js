@@ -11,18 +11,22 @@ const { animals,
 
 
 const playSocketMethods = () => {
+
+  // 방에 처음 입장할 때 실행하게 되는 함수
   const getRoomInfoForGame = (rooms, roomName) => {
     let extractedData = {};
 
-    let room = rooms[roomName];
-    let roomInfo = rooms[room];
-    extractedData[room] = {
+    let roomInfo = rooms[roomName];
+
+    console.log(`##### rooms[roomName] : ${rooms[roomName]}, and roomName : ${roomName}`)
+    extractedData = {
       'roomId': roomInfo['roomId'],
       'roomName': roomInfo['roomName'],
       'roomAddress': roomInfo['roomAddress'],
       'status': roomInfo['status'],
       'createdDate': roomInfo['createdDate'],
       'playerCount': roomInfo['playerCount'],
+      // socket 방에 추가적으로 플레이어의 정보를 넘길 시 여기에 넘겨야 한다.
       'players': roomInfo['players'].map(player => ({
         'playerId': player['playerId'],
         'playerName': player['Name'],
@@ -31,16 +35,31 @@ const playSocketMethods = () => {
       'nowTurn': roomInfo['nowTurn'],
       'onBoard': { ...roomInfo['onBoard'] },
     };
+
+    return extractedData;
   }
 
-  /* 방 정보 전달 / Game 에서 사용 */
+  /* 방 정보 전달, 보통 방 입장 시 초기에 혹은 Game 중간에 들어올 때 사용 */
   const sendGameInfo = async (socket, io, rooms) => {
-    socket.on('requestGameInfo', () => {
-      callback(getRoomInfoForGame(rooms, socket.room));
-      console.log(`##### Callback Game Info to Room ${socket.room}`);
+    socket.on('requestGameInfo', (callback) => {
+
+      let room;
+      let roomsKeys = Object.keys(rooms);
+      // pid 가 들어간 방 정보 찾기
+      for (let roomName of roomsKeys) {
+        for (let player of rooms[roomName].players) {
+          if (player.socketId === socket.id) {
+            room = roomName;
+            break;
+          }
+        }
+      }
+      callback(getRoomInfoForGame(rooms, room));
+      console.log(`##### Callback Game Info to Room ${room}`);
     });
   }
 
+  // 카드 드래그한 정보를 받고 같은 정보를 다른 모든 socket room 참여자 들에게 뿌린다.
   const cardDrag = (socket, io, rooms) => {
     socket.on('cardDrag', (from, to) => {
       console.log("##### card Dragged and Entered...")
@@ -57,11 +76,13 @@ const playSocketMethods = () => {
       }
 
       // io.to(rooms[socket.room].players[k].socketId).emit('cardDrag', from, to);
+
       console.log(`##### send card Dragged Data to ${room}`)
       io.to(room).emit('cardDrag', from, to);
     })
   }
 
+  // 카드 드롭한 정보를 받고 같은 정보를 다른 모든 socket room 참여자 들에게 뿌린다.
   const cardDrop = (socket, io, rooms) => {
     socket.on('cardDrop', (from, to, card) => {
 
@@ -86,6 +107,7 @@ const playSocketMethods = () => {
     })
   }
 
+  // 카드 블러핑한 정보를 받고 같은 정보를 다른 모든 socket room 참여자 들에게 뿌린다.
   const cardBluffSelect = (socket, io, rooms) => {
     socket.on('cardBluffSelect', (from, bCard) => {
       let room;
@@ -111,10 +133,12 @@ const playSocketMethods = () => {
     })
   }
 
+
   const givingTurnStart = (socket, io, rooms) => {
 
   }
 
+  // 주는 턴에서 선택하는 경우!
   const givingTurnSelect = (socket, io, rooms) => {
 
   }

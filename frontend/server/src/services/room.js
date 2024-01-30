@@ -52,7 +52,7 @@ const addRoom = (rooms, roomName, playerId, socketId) => {
   rooms[roomName] = JSON.parse(JSON.stringify(roomInfo)); // 깊은 복사로 수정 완료
   rooms[roomName].roomName = roomName;
   rooms[roomName].players.push({ ...Player(playerId, socketId) });
-  rooms[roomName].adminPlayer = rooms[roomName].players[0].playerName;
+  rooms[roomName].adminPlayer = playerId;
   console.log(`##### player ${playerId} socket ${socketId} created Room ${roomName}`);
   /*TODO - send room data to backend server!!! */
 
