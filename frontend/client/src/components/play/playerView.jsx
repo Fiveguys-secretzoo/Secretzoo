@@ -1,15 +1,17 @@
+import { Card } from 'flowbite-react'
 
-
-const PlayerView = ({ pid, key, pn = "SomethingSomethingSomethingWewin" }) => {
+const PlayerView = ({ pid, key, pn = "SomethingSomething" }) => {
 
   return (
     <>
-      <div className="playerSlot" 
+      <Card className="max-w-sm"
       // onDragEnter={(e) => handleDragEnter(e)}
       // onDrop={(e) => handleDrop(e)}
       >
-        {pn}
-      </div>
+        <p className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+          {pn}
+        </p>
+      </Card>
     </>
   );
 }

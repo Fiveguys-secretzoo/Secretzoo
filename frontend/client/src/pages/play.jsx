@@ -7,6 +7,7 @@ import { Spinner, Button } from 'flowbite-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { addPlayer, removePlayer, initRoomInfo } from '../store/playSlice'
 
+import PlayerView from '../components/play/playerView'
 
 const Play = () => {
   const socket = useContext(SocketContext);
@@ -170,24 +171,6 @@ const Play = () => {
     console.log("this comes when the game info is change");
     console.log(game);
     dispatch(initRoomInfo(game));
-    checkMyTurn(roomInfo.nowTurn);
-    checkIsAdmin(roomInfo.adminPlayer);
-  }
-
-  // 지금 내 턴인지를 확인한다.
-  const checkMyTurn = (nowTurn) => {
-    console.log(nowTurn);
-    if (nowTurn === pid) {
-      setIsMyTurn(true);
-    }
-    setThisTurnPlayer(nowTurn);
-  }
-
-  const checkIsAdmin = (admin) => {
-    console.log(admin);
-    if (admin === pid) {
-      setIsAdmin(true);
-    }
   }
 
   /* 이벤트 수신, 방 입장 시 실행 */
@@ -225,6 +208,17 @@ const Play = () => {
 
   }, [playState]);
 
+  useEffect(() => {
+    if (roomInfo.nowTurn === pid) {
+      setIsMyTurn(true);
+    }
+    setThisTurnPlayer(roomInfo.nowTurn);
+    if (roomInfo.adminPlayer === pid) {
+      setIsAdmin(true);
+    }
+    // checkMyTurn(roomInfo.adminPlayer);
+    // checkIsAdmin(roomInfo.nowTurn);
+  }, [roomInfo.adminPlayer, roomInfo.nowTurn, pid])
   const imageRoute = (item) => {
     return require(`../assets/img/card/0${Math.floor(item / 8)}/00${item % 8}.png`);
   }
@@ -305,16 +299,7 @@ const Play = () => {
           </SelectScreen>
         }
 
-
-        <div className="bg-white rounded w-[30%] m-2"
-
-          onDragOver={(e) => dragOver(e)}
-          onDragEnter={(e) => dragEnterHandler(e)}
-          onDrop={(e) => dropHandler(e)}
-
-        >
-          playerSlot2
-        </div>
+        <PlayerView></PlayerView>
         <div className="bg-white rounded w-[30%] m-2"
           onDragEnter={(e) => dragEnterHandler(e)}
           onDragOver={(e) => dragOver(e)}
@@ -371,7 +356,8 @@ const Play = () => {
             placeholder="Type a message..."
           />
           <Button onClick={/*sendMessage*/() => { console.log(roomInfo) }}>Send</Button>
-        </div>{
+        </div>
+        {
           playState === 0 && isAdmin &&
           <Button color="success" onClick={start}>start</Button>
         }
