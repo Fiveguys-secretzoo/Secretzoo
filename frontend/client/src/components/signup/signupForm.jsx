@@ -11,21 +11,20 @@ const SignupForm = () => {
   const [idCheck, setIdCheck] = useState(false);
   const [emailCheck, setEmailCheck] = useState(false);
   const navigate = useNavigate();
-  const requsetLogin = () => {
+  const requsetSignup = () => {
     if(idCheck && emailCheck && pass===passCheck && 
       name.length > 0 && id.length > 0 && pass.length > 0 && passCheck.length > 0 && email.length > 0){
-        axios.get('url',
-          {
-            params : {
-              
-            },
-            headers : {
-    
-            },
-          }
-        ).then((Response) => {
-          navigate("/");
-        })
+        axios.post('http://localhost:8080/users/signup',
+      {
+        "userId": id,
+        "password": pass,
+        "name": name,
+        "email": email,
+        "nickname": "kjy"
+      }
+    ).then((Response) => {
+      console.log(Response.data);
+    })
       }
   }
   return (
@@ -70,7 +69,7 @@ const SignupForm = () => {
             <button onClick={() => setEmailCheck(true)}>중복체크</button>
           </div>
           <button className='w-full px-6 py-2 mt-4 text-white bg-blue-500 rounded-md hover:bg-blue-600'
-          type="submit" onClick={() => (requsetLogin())}>회원가입</button>
+          type="submit" onClick={() => (requsetSignup())}>회원가입</button>
         </form>
       </div>
     </>
