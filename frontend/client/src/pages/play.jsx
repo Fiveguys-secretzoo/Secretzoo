@@ -291,8 +291,8 @@ const Play = () => {
           ))
         }
       </div >
+      </div>
     </div>
   );
 };
-
 export default Play;

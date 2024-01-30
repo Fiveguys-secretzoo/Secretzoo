@@ -1,4 +1,7 @@
 import React from "react";
+import { Progress } from 'flowbite-react';
+import { Card } from 'flowbite-react';
+
 let user = {
   userId: "t1faker",
   username: "대상혁",
@@ -31,9 +34,7 @@ const profile = () => {
             <span>다음레벨까지 </span>
             <span>level {user.level}</span>
           </div>
-          <div className='w-full bg-gray-200 rounded-full h-4'>
-            <div className='bg-blue-600 h-4 rounded-full w-[40%]'></div>
-          </div>
+          <Progress progress={45} />
         </div>
       </div>
     </>

@@ -22,7 +22,7 @@ const Lobby = () => {
           <Profile></Profile>
           <Navbar></Navbar>
         </div>
-        <div className='min-h-[90%] min-w-[50em] px-20 py-5 bg-white rounded-md'>
+        <div className='h-[90%] min-w-[50em] px-20 py-5 bg-white rounded-md'>
           <Outlet></Outlet>
         </div>
       </div>
