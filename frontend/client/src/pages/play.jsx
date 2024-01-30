@@ -3,8 +3,9 @@ import ReactDOM from 'react-dom';
 import { SocketContext } from '../App';
 import { useNavigate } from "react-router-dom";
 import '../style/play.css';
-
-
+import { Spinner, Button } from 'flowbite-react';
+import { useSelector, useDispatch } from 'react-redux';
+import { addPlayer, removePlayer} from '../store/playSlice'
 
 
 const Play = () => {
@@ -119,18 +120,19 @@ const Play = () => {
   }
 
   // player enter socket event handle
-  const playerEnterHandler = () => {
+  const playerEnterHandler = (player) => {
 
   }
 
   // player leave socket event handle
-  const playerLeaveHandler = () => {
+  const playerLeaveHandler = (player) => {
 
   }
 
 
   const leaveRoom = () => {
-
+    socket.emit("leaveRoom", pid);
+    navigate('/')
   }
   // 이벤트 수신
   useEffect(() => {
@@ -138,7 +140,7 @@ const Play = () => {
       console.log("serverClosed");
       navigate('/');
     });
-    console.log("check if the refresh button see this");
+    console.log("check if the refresh Button see this");
 
 
 
@@ -176,7 +178,10 @@ const Play = () => {
     socket.on('chatMessage', messageHandler);
     socket.on('gameStart', gameStart);
 
-    socket.on('playerEnter', playerEnterHandler)
+    socket.on('playerEnter', playerEnterHandler);
+    socket.on('playerLeave', playerLeaveHandler);
+
+    //test, and get the every room info
     socket.emit('testRoomsInfo', (rooms) => {
       console.log(rooms);
     })
@@ -210,39 +215,59 @@ const Play = () => {
     <div className="h-screen">
       <div className='w-screen h-[60%] flex flex-wrap justify-between'>
         {
-          playState === 2 &&
+          playState === 2 && isMyTurn &&
           <SelectScreen>
             <div className="overlay">
               {Object.entries(animalList).map(([key, value]) =>
               (
-                <button
-                  className="px-6 mx-4 text-white bg-blue-500 rounded-md hover:bg-blue-600"
+                <Button
+                  className=""
                   key={value}
                   onClick={() => { cardBluffHandler(value) }}
                 >
                   {key}
-                </button>
+                </Button>
               )
               )}
             </div>
           </SelectScreen>
         }
         {
-          playState === 3 &&
+          playState === 2 && !isMyTurn &&
           <SelectScreen>
             <div className="overlay">
-              <button onClick={() => handleAnswer(0)}>
+              <h2>다른 플레이어가 선택 중 입니다...!</h2>
+              <Spinner aria-label="Success spinner" size="xl" />
+            </div>
+          </SelectScreen>
+        }
+        {
+          playState === 3 && isMyTurn &&
+          <SelectScreen>
+            <div className="overlay">
+              <Button onClick={() => handleAnswer(0)}>
                 맞다
-              </button>
-              <button onClick={() => handleAnswer(1)}>
+              </Button>
+              <Button onClick={() => handleAnswer(1)}>
                 패스
-              </button>
-              <button onClick={() => handleAnswer(2)} >
+              </Button>
+              <Button onClick={() => handleAnswer(2)} >
                 아니다
-              </button>
+              </Button>
             </div>
           </SelectScreen>
         }{
+          playState === 3 && !isMyTurn &&
+          <SelectScreen>
+            <div className="overlay">
+
+              <h3>A 플레이어가 B 플레이어에게 말했습니다.</h3>
+              <h2>이거 <strong>알락꼬리마도요</strong>야.</h2>
+              <Spinner aria-label="Success spinner" size="xl" />
+            </div>
+          </SelectScreen>
+        }
+        {
           playState === 4 &&
           <SelectScreen>
             <div className="overlay">
@@ -316,17 +341,17 @@ const Play = () => {
             onChange={(e) => setInput(e.target.value)}
             placeholder="Type a message..."
           />
-          <button onClick={sendMessage}>Send</button>
+          <Button onClick={sendMessage}>Send</Button>
         </div>{
           playState === 0 && isAdmin &&
-          <button className="px-6 mx-4 text-white bg-blue-500 rounded-md hover:bg-blue-600" onClick={start}>start</button>
+          <Button color="success" onClick={start}>start</Button>
         }
         {/* {
           cards.map((card) => (
             <div key={card}>{card}</div>
           ))
         } */}
-        <button className="px-6 mx-4 text-white bg-blue-500 rounded-md hover:bg-blue-600" onClick={leaveRoom}>난 나갈거다.</button>
+        <Button color="success" onClick={leaveRoom}>난 나갈거다.</Button>
       </div >
     </div >
   );

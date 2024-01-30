@@ -25,14 +25,22 @@ export const playSlice = createSlice({
   }, //TODO : change initialState
   reducers: {
     initRoomInfo: (state, action) => {
-      state.roomId = action.payload.roomId;
-      state.roomName = action.payload.roomName;
-      state.roomAddress = action.payload.roomAddess;
-      state.status = action.payload.status;
-      state.createdDate = action.payload.createDate;
-      state.playerCount = action.payload.playerCount;
-      state.players = action.payload.playerCount
+      state = JSON.parse(JSON.stringify(action.payload));
+      // state.roomId = action.payload.roomId;
+      // state.roomName = action.payload.roomName;
+      // state.roomAddress = action.payload.roomAddess;
+      // state.status = action.payload.status;
+      // state.createdDate = action.payload.createDate;
+      // state.playerCount = action.payload.playerCount;
+      // state.players = [...action.payload.players];
+      // state.adminPlayer = action.payload.adminPlayer;
+      // state.nowTurn = action.payload.nowTurn;
+      // state.onBoard = JSON.parse(JSON.stringify(action.payload.onBoard));
     },
+    initCardInfo: (state, action) => {
+      state.card = [...action.payload];
+    },
+
     addPlayer: (state, action) => {
       state.players.push(action.payload);
     },
