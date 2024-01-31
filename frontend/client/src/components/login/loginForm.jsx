@@ -10,13 +10,15 @@ const LoginForm = () => {
 
   const navigate = useNavigate();
   const requsetLogin = () => {
-    axios.post('http://localhost:8080/login',
+    axios.post('http://localhost:8080/auth/login',
       {
         "userId": id,
         "password": pass,
       }
     ).then((response) => {
-      console.log(response.data);
+      alert('')
+      sessionStorage.setItem('');
+      console.log(response.headers);
     })
   }
 
@@ -33,7 +35,7 @@ const LoginForm = () => {
           <TextInput
           value={id}
           onChange={(e) => setId(e.target.value)} 
-          type="email" 
+          type="text  " 
           placeholder="아이디" required />
         </div>
         <div>
@@ -45,8 +47,8 @@ const LoginForm = () => {
           onChange={(e) => setPass(e.target.value)}
           type="password" required />
         </div>
-        <Button type="submit" onClick={() => (requsetLogin())}>로그인</Button>
       </form>
+        <Button type="submit" onClick={() => (requsetLogin())}>로그인</Button>
 
         <p className='mt-2 text-blue-500 hover:text-blue-700 cursor-pointer underline hover:no-underline transition duration-300 ease-in-out text-right' 
         onClick={() => (signup())}>회원가입</p>
