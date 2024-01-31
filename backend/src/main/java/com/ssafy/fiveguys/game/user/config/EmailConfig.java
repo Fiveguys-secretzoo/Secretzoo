@@ -36,7 +36,6 @@ public class EmailConfig {
         javaMailProperties.put("mail.smtp.ssl.protocols", "TLSv1.2");//사용할 ssl 프로토콜 버젼
 
         mailSender.setJavaMailProperties(javaMailProperties);//mailSender에 우리가 만든 properties 넣고
-
         return mailSender;//빈으로 등록한다.
     }
 }
