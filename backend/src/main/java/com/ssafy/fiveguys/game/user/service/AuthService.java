@@ -55,7 +55,6 @@ public class AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         JwtTokenDto tokenSet = jwtTokenProvider.generateToken(authentication);
-        System.out.println("tokenSet.getRefreshToken() = " + tokenSet.getRefreshToken());
         // DB에 Refreshtoken 저장
         user.setRefreshToken(tokenSet.getRefreshToken());
         userService.saveUser(user);
