@@ -1,6 +1,5 @@
 import React from "react";
-import { Progress } from 'flowbite-react';
-import { Card } from 'flowbite-react';
+import { Card, Progress, Label } from 'flowbite-react';
 
 let user = {
   userId: "t1faker",
@@ -17,7 +16,7 @@ let user = {
 const profile = () => {
   return (
     <>
-      <div className='flex flex-col bg-gray-500 p-3 shadow-lg rounded mb-5'>
+      <Card className="mb-5">
         <div className='flex items-center mb-5'>
           <img
             src={require(`../../assets/Untitled ${user.profileNumber}.png`)}
@@ -30,13 +29,11 @@ const profile = () => {
           </div>
         </div>
         <div className='exp'>
-          <div>
-            <span>다음레벨까지 </span>
-            <span>level {user.level}</span>
-          </div>
+
+          <Label value='레벨 {data.s}' />
           <Progress progress={45} />
         </div>
-      </div>
+      </Card>
     </>
   );
 };

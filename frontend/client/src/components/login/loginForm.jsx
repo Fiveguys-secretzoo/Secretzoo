@@ -18,6 +18,7 @@ const LoginForm = () => {
       sessionStorage.setItem('refresh_token',response.headers['refresh_token']);
       navigate('lobby');
       console.log(response.headers);
+      console.log(response.data);
     })
   }
 

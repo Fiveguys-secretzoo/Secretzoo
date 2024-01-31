@@ -1,17 +1,42 @@
-import React, {useState} from 'react';
-let user = {
-  userId : "t1faker",
-  username : "대상혁",
-  mainAchievement : "26",
-  profileNumber : "58",
-  level : "12",
-  point : "32",
-  nickname : "hide on bush",
-  achievementId : 23,
-  achievementName : "G.O.A.T",
-  email : "eotkdgur@naver.com",
-};
+import React, {useEffect, useState} from 'react';
+import axios from 'axios';
+
+
 const MyInfo = () => {
+  const [user, setUser] = useState({});
+  const getUserInfo = () => {
+    const headers = {
+      'Authorization': sessionStorage.getItem('authorization')
+    };
+    axios.get('http://localhost:8080/users/user',{headers})
+    .then(response => {
+      console.log(response.data)
+      setUser(response.data)
+    });
+  }
+  useEffect(()=>{
+    getUserInfo();
+  },[])
+  axios.defaults.headers.common['Authorization'] = sessionStorage.getItem('authorization');
+  const updateProfileImage = () => {
+    axios.put('http://localhost:8080/users/profile-number','23')
+    .then(response => {
+      getUserInfo();
+    });
+  };
+  const updateNickname = () => {
+    axios.put('http://localhost:8080/users/nickname','23')
+    .then(response => {
+      getUserInfo();
+    });
+  };
+  const updateMainAchievement = () => {
+    axios.put('http://localhost:8080/users/nickname','23')
+    .then(response => {
+      getUserInfo();
+    });
+  };
+   
   const [showProfileImageModal, setShowProfileImageModal] = useState(false);
   const openShowProfileImageModal = () => {
     setShowProfileImageModal(true);
@@ -37,7 +62,7 @@ const MyInfo = () => {
         <div className='flex items-center justify-end'>
           <p>업적 : {user.achievementName}</p>
           <button className='m-2 p-2 bg-blue-500 rounded'
-          >변경</button>
+          onClick={updateMainAchievement}>변경</button>
         </div>
         <p className='m-2 p-2 text-right'
         >level : {user.level}</p>
