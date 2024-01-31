@@ -63,4 +63,5 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("password incorrect");
     }
 
+    // 닉네임변경, 업적변경, 프로필변경, 비밀변호변경
 }
