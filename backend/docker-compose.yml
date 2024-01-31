@@ -15,7 +15,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - "/db/mysql:/var/lib/mysql"
+      - "home/ubuntu/db/mysql_vol:/var/lib/mysql"
     
     networks:
       - docker_nat
@@ -25,7 +25,8 @@ services:
     container_name: redis1
     hostname: redis1
     volumes:
-      - /db/redis1:/data
+      - home/ubuntu/db/redis1_vol:/data
+      - home/ubuntu/db/redis1/redis1.conf:/etc/redis/redis.conf
     # ports:
     #   - 6379:6379
     extra_hosts:
@@ -38,7 +39,8 @@ services:
     container_name: redis2
     hostname: redis2
     volumes:
-      - /db/redis2:/data
+      - home/ubuntu/db/redis2_vol:/data
+      - home/ubuntu/db/redis2/redis2.conf:/etc/redis/redis2.conf
     # ports:
     #   - 6380:6379
     extra_hosts:
