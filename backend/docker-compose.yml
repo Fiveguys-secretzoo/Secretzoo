@@ -26,7 +26,7 @@ services:
     hostname: redis1
     volumes:
       - /home/ubuntu/db/redis1_vol:/data
-      - /home/ubuntu/db/redis1/redis1.conf:/etc/redis/redis.conf
+      - /home/ubuntu/db/redis1_vol/redis1.conf:/etc/redis/redis.conf
     # ports:
     #   - 6379:6379
     extra_hosts:
@@ -40,7 +40,7 @@ services:
     hostname: redis2
     volumes:
       - /home/ubuntu/db/redis2_vol:/data
-      - /home/ubuntu/db/redis2/redis2.conf:/etc/redis/redis2.conf
+      - /home/ubuntu/db/redis2_vol/redis2.conf:/etc/redis/redis.conf
     # ports:
     #   - 6380:6379
     extra_hosts:
