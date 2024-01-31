@@ -3,11 +3,7 @@ import axios from 'axios';
 import googleLoginImg from '../../assets/img/login/googleLoginImg.png';
 
 const requsetGoogleLogin = () => {
-<<<<<<< HEAD
-  window.location.href=('http://localhost:8080/oauth2/authorization/google')
-=======
   window.location.href='http://localhost:8080/oauth2/authorization/google';
->>>>>>> 02b36548b02e1c04d3edf61908092d7babe82d0c
 }
 
 const GoogleLogin = () => {
