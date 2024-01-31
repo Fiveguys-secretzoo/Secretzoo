@@ -60,7 +60,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/secretzoo?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&useLegacyDatetimeCode=false
       SPRING_DATASOURCE_USERNAME: "root"
       SPRING_DATASOURCE_PASSWORD: "zoo1qsecret2wguys3efive4r!"
-      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_HOST: redis1
       SPRING_REDIS_PORT: 6379
       SPRING_REDIS_HOST2: redis2
       SPRING_REDIS_PORT2: 6379
