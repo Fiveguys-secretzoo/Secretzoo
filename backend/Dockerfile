@@ -7,6 +7,6 @@ ARG JAR_FILE_PATH=build/libs
 COPY ${JAR_FILE_PATH}/game-0.0.1-SNAPSHOT.jar myboot.jar
 
 # 실행시 사용할 환경 변수 설정 (예: 프로파일 설정)
-ENV SPRING_PROFILES_ACTIVE=dev,oauth
+# ENV SPRING_PROFILES_ACTIVE=dev,oauth
 
 ENTRYPOINT ["java", "-jar", "./myboot.jar"]
