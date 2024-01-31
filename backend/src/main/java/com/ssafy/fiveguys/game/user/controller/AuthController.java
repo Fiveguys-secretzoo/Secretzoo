@@ -77,10 +77,9 @@ public class AuthController {
     //닉네임변경, 업적변경, 프로필변경, 비밀변호변경
     @Operation(summary = "아이디 중복체크 API")
     @PostMapping("/check/{userId}")
-    public ResponseEntity<?> checkUserId(@PathVariable String userId) {
-        if (authService.idDuplicated(userId)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("중복된 아이디입니다.");
-        }
+    public ResponseEntity<?> checkUserId(@PathVariable String userId){
+        if(authService.idDuplicated(userId))
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("중복된 아이디 입니다.");
         return ResponseEntity.status(HttpStatus.OK).body("사용 가능한 아이디입니다.");
     }
 

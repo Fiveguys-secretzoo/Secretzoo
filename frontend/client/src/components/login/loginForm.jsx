@@ -45,8 +45,8 @@ const LoginForm = () => {
           onChange={(e) => setPass(e.target.value)}
           type="password" required />
         </div>
+        <Button type="submit" onClick={(e) => {e.preventDefault(); requsetLogin()}}>로그인</Button>
       </form>
-        <Button type="submit" onClick={() => (requsetLogin())}>로그인</Button>
 
         <p className='mt-2 text-blue-500 hover:text-blue-700 cursor-pointer underline hover:no-underline transition duration-300 ease-in-out text-right' 
         onClick={() => (signup())}>회원가입</p>
