@@ -10,13 +10,13 @@ const LoginForm = () => {
 
   const navigate = useNavigate();
   const requsetLogin = () => {
-    axios.post('http://localhost:8080/login',
+    axios.post('http://localhost:8080/auth/login',
       {
         "userId": id,
         "password": pass,
       }
     ).then((response) => {
-      console.log(response.data);
+      console.log(response.headers);
     })
   }
 

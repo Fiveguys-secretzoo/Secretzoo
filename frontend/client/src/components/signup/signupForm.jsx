@@ -13,9 +13,8 @@ const SignupForm = () => {
   const [emailCheck, setEmailCheck] = useState(false);
   const navigate = useNavigate();
   const requsetLogin = () => {
-    if(idCheck && emailCheck && pass===passCheck && 
-      name.length > 0 && id.length > 0 && pass.length > 0 && passCheck.length > 0 && email.length > 0){
-        axios.post('http://localhost:8080/users/signup',
+{
+        axios.post('http://localhost:8080/auth/signup',
       {
         "userId": id,
         "password": pass,
