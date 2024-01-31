@@ -110,9 +110,9 @@ const Rooms = () => {
           <Button color="gray"
           onClick={() => setOpenModal(true)}>방만들기</Button>
         </div>
-        <div className="flex flex-wrap p-2 my-2 border-2 overflow-y-auto h-max-[30em] space-x-5 justify-center">
+        <div className="flex flex-wrap  my-2 border-2 overflow-y-auto h-max-[30em] justify-start">
           {Object.keys(rooms).map((key) => (
-            <Card href="#" className="w-[45%] m-2 "
+            <Card href="#" className="w-[47%] m-2"
             onClick={(e) => {e.preventDefault(); enterRoom(rooms[key].roomName)}}>
               <p>{rooms[key].roomName}</p>
               {/* <p>{rooms[key].players[0].playerName}</p> */}

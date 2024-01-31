@@ -14,7 +14,7 @@ const GoogleLogin = () => {
         src={googleLoginImg}
         alt="구글 로그인"
         onClick={() => requsetGoogleLogin()}
-        className='w-10 h-10 rounded-full hover:cursor-pointer'  />
+        className='w-10 h-10 rounded-full border-2  hover:border-blue-500 hover:cursor-pointer'  />
       </div>
     </>
   );

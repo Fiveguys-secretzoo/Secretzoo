@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import { Button, Label, TextInput } from 'flowbite-react';
 
 const SignupForm = () => {
   const [name, setName] = useState("");
@@ -30,7 +31,33 @@ const SignupForm = () => {
 
   return (
     <>
-      <div className='container max-w-[35%] mx-auto py-12 flex flex-col items-center justify-center mt-[100px] bg-white shadow-lg rounded-xl'>
+      <div className='container p-16 max-w-[35%] mx-auto py-12 flex flex-col items-center justify-center mt-[100px] bg-white shadow-lg rounded-xl'>
+        <form className="flex w-full flex-col gap-4">
+          <div>
+            <div className="mb-2 block">
+              <Label value="아이디" />
+            </div>
+            <TextInput
+            value={id}
+            onChange={(e) => setId(e.target.value)} 
+            type="email" 
+            placeholder="아이디" required />
+          </div>
+          <div>
+            <div className="mb-2 block">
+              <Label value="비밀번호" />
+            </div>
+            <div className='flex'>
+            <TextInput 
+            value={pass}
+            onChange={(e) => setPass(e.target.value)}
+            type="password" required 
+            className='flex-grow'/>
+            <Button>인증</Button>
+            </div>
+          </div>
+          <Button type="submit" onClick={() => (requsetLogin())}>로그인</Button>
+        </form>
         <h2 className='text-3xl font-bold'>회원가입</h2>
         <form className='px-8 py-6 mt-4 text-left '
         onSubmit={(e) => e.preventDefault()}>
