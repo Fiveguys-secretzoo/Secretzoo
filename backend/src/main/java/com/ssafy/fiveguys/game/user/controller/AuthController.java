@@ -85,8 +85,5 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.OK).body("사용 가능한 아이디입니다.");
     }
 
-    @Operation(summary = "닉네임 변경 API")
-    @PostMapping("/rename/{nickname}")
-    public ResponseEntity<?> checkUserId(@PathVariable Str
 
 }

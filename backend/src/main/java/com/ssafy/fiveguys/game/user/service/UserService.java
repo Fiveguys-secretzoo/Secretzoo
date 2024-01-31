@@ -99,4 +99,52 @@ public class UserService {
             throw new UserIdNotFoundException("user does not exist.");
         }
     }
+
+    public void changePassword(String userId, String password) {
+        User user = userRepositoy.findByUserId(userId).orElse(null);
+        if (user != null) {
+            UserDto userDto = UserDto.getUser(user);
+            userDto.setPassword(passwordEncoder.encode(password));
+            User updatedUser = User.getUserDto(userDto);
+            userRepositoy.save(updatedUser);
+        } else {
+            throw new UserIdNotFoundException("user does not exist.");
+        }
+    }
+
+    public void changeProfileNumber(String userId, String profileNumber) {
+        User user = userRepositoy.findByUserId(userId).orElse(null);
+        if (user != null) {
+            UserDto userDto = UserDto.getUser(user);
+            userDto.setProfileNumber(profileNumber);
+            User updatedUser = User.getUserDto(userDto);
+            userRepositoy.save(updatedUser);
+        } else {
+            throw new UserIdNotFoundException("user does not exist.");
+        }
+    }
+
+    public void changeMainAchievement(String userId, String mainAcheiveMent) {
+        User user = userRepositoy.findByUserId(userId).orElse(null);
+        if (user != null) {
+            UserDto userDto = UserDto.getUser(user);
+            userDto.setMainAchievement(mainAcheiveMent);
+            User updatedUser = User.getUserDto(userDto);
+            userRepositoy.save(updatedUser);
+        } else {
+            throw new UserIdNotFoundException("user does not exist.");
+        }
+    }
+
+    public void changeNickname(String userId, String nickname) {
+        User user = userRepositoy.findByUserId(userId).orElse(null);
+        if (user != null) {
+            UserDto userDto = UserDto.getUser(user);
+            userDto.setNickname(nickname);
+            User updatedUser = User.getUserDto(userDto);
+            userRepositoy.save(updatedUser);
+        } else {
+            throw new UserIdNotFoundException("user does not exist.");
+        }
+    }
 }
