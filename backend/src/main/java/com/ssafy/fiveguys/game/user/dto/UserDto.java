@@ -20,8 +20,6 @@ public class UserDto {
     private String mainAchievement;
     private Role role;
     private String profileNumber;
-    private Long level;
-    private Long point;
     private String provider;
     private String providerId;
     private String refreshToken;
@@ -39,8 +37,6 @@ public class UserDto {
                 .mainAchievement(user.getMainAchievement())
                 .role(user.getRole())
                 .profileNumber(user.getProfileNumber())
-                .level(user.getLevel())
-                .point(user.getPoint())
                 .provider(user.getProvider())
                 .providerId(user.getProviderId())
                 .refreshToken(user.getRefreshToken())

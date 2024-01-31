@@ -1,5 +1,6 @@
 package com.ssafy.fiveguys.game.user.controller;
 
+import com.ssafy.fiveguys.game.user.dto.UserDto;
 import com.ssafy.fiveguys.game.user.dto.UserInfoDto;
 import com.ssafy.fiveguys.game.user.service.AuthService;
 import com.ssafy.fiveguys.game.user.service.UserService;
@@ -43,8 +44,8 @@ public class UserController {
     }
 
     @Operation(summary = "회원 삭제 API")
-    @DeleteMapping("/user/{password}")
-    public ResponseEntity<?> deleteUser(HttpServletRequest request, @PathVariable String password) {
+    @DeleteMapping("/user")
+    public ResponseEntity<?> deleteUser(HttpServletRequest request, @RequestBody String password) {
         String accessToken = request.getHeader(HttpHeaders.AUTHORIZATION);
         String userId = authService.extractUserId(accessToken);
         userService.deleteUser(userId, password);
@@ -63,5 +64,43 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("password incorrect");
     }
 
-    // 닉네임변경, 업적변경, 프로필변경, 비밀변호변경
+    @Operation(summary = "닉네임 변경 API")
+    @PutMapping("/nickname")
+    public ResponseEntity<?> changeNickname(HttpServletRequest request,
+        @RequestBody String nickname) {
+        String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+        String userId = authService.extractUserId(token);
+        userService.changeNickname(userId, nickname);
+        return ResponseEntity.status(HttpStatus.OK).body("nickname update successfully");
+    }
+
+    @Operation(summary = "업적 변경 API")
+    @PutMapping("/main-achievement")
+    public ResponseEntity<?> changeMainAchievement(HttpServletRequest request,
+        @RequestBody String mainAcheiveMent) {
+        String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+        String userId = authService.extractUserId(token);
+        userService.changeMainAchievement(userId, mainAcheiveMent);
+        return ResponseEntity.status(HttpStatus.OK).body("main_achievement update successfully");
+    }
+
+    @Operation(summary = "프로필 사진 변경 API")
+    @PutMapping("/profile-number")
+    public ResponseEntity<?> changeProfileNumber(HttpServletRequest request,
+        @RequestBody String profileNumber) {
+        String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+        String userId = authService.extractUserId(token);
+        userService.changeProfileNumber(userId, profileNumber);
+        return ResponseEntity.status(HttpStatus.OK).body("main_achievement update successfully");
+    }
+
+    @Operation(summary = "비밀번호 변경 API")
+    @PutMapping("/password")
+    public ResponseEntity<?> changePassword(HttpServletRequest request,
+        @RequestBody String password) {
+        String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+        String userId = authService.extractUserId(token);
+        userService.changePassword(userId, password);
+        return ResponseEntity.status(HttpStatus.OK).body("main_achievement update successfully");
+    }
 }

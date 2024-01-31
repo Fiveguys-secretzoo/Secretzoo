@@ -8,15 +8,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Getter
-@NoArgsConstructor
 @Entity
 @Builder
 @Table(name = "user")
+@NoArgsConstructor
 @AllArgsConstructor
 public class User extends BaseTimeEntity {
 
@@ -52,14 +50,6 @@ public class User extends BaseTimeEntity {
     @Builder.Default
     private String profileNumber = "000";
 
-    @Column
-    @Builder.Default
-    private Long level = 1L;
-
-    @Column
-    @Builder.Default
-    private Long point = 0L;
-
     @Column(name = "provider")
     private String provider;
 
@@ -88,8 +78,6 @@ public class User extends BaseTimeEntity {
                 .mainAchievement(userDto.getMainAchievement())
                 .role(userDto.getRole())
                 .profileNumber(userDto.getProfileNumber())
-                .level(userDto.getLevel())
-                .point(userDto.getPoint())
                 .provider(userDto.getProvider())
                 .providerId(userDto.getProviderId())
                 .refreshToken(userDto.getRefreshToken())
