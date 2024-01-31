@@ -25,6 +25,7 @@ async function main() {
     testRoomsInfo,
     disconnected,
     checkReconnection,
+    leaveRoom,
   } = roomMethods;
 
   const {
@@ -74,7 +75,7 @@ async function main() {
     chatMessage(socket, io, rooms);
     cardShare(socket, io, rooms);
     checkReconnection(socket, io, rooms);
-
+    leaveRoom(socket, io, rooms);
     // game listening 
     sendGameInfo(socket, io, rooms);
     cardDrag(socket, io, rooms);
@@ -85,7 +86,7 @@ async function main() {
     testRoomsInfo(socket, io, rooms);
     disconnected(socket, io, rooms);
 
-    
+
     process.on('uncaughtException', (err) => {
       console.log(err);
       console.log("서버, 죽음의 메아리 발동");

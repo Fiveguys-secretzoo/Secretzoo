@@ -2,7 +2,7 @@ import { Card } from 'flowbite-react'
 import PlayerContainer from './playerContainer';
 
 
-const PlayerView = ({ pid, key, pn = "SomethingSomething" }) => {
+const PlayerView = ({ pid, key, pn = "SomethingSomething", activate = false }) => {
 
   const playerContainer = PlayerContainer();
   const { dragOver, dragEnterHandler, dropHandler } = playerContainer;
@@ -10,12 +10,13 @@ const PlayerView = ({ pid, key, pn = "SomethingSomething" }) => {
   return (
     <>
       <Card className="max-w-sm"
+        key={key}
         onDragEnter={(e) => dragEnterHandler(e, pid)}
         onDragOver={(e) => dragOver(e, pid)}
         onDrop={(e) => dropHandler(e, pid)}
       >
         <p className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-          {pn}
+          {pid}
         </p>
       </Card>
     </>

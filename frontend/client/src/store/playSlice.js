@@ -7,7 +7,7 @@ export const playSlice = createSlice({
     'roomName': '',
     'roomPassword': '',
     'roomAddress': '',
-    'status': '',
+    'status': 0,
     'createdDate': '',
     'card': [],
     'playerCount': 1,
@@ -15,7 +15,7 @@ export const playSlice = createSlice({
     'adminPlayer': '',
     'nowTurn': '',
     'onBoard': {
-      "status": '',  // 0 : 대기 , 1 : 주는 턴, 2 : 받는 턴, 3: 넘기는 턴 
+      "status": 0,  // 0 : 대기 , 1 : 주는 턴, 2 : 받는 턴, 3: 넘기는 턴 
       "from": '',
       "to": '',
       "cardBluff": '',
@@ -46,21 +46,44 @@ export const playSlice = createSlice({
     },
 
     addPlayer: (state, action) => {
-      state.players.push(action.payload);
+      let isAlreadyIn = false;
+      for (let player in state.players) {
+        if (player.playerId === action.payload.playerId) {
+          isAlreadyIn = true;
+          break;
+        }
+      }
+      if (!isAlreadyIn) {
+        state.players = [...state.players, action.payload];
+      }
+      console.log(`##### player added, ${action.payload}`)
+      console.log(state.players);
     },
     removePlayer: (state, action) => {
-      state.players = state.players.filter((e) => (
-        e.playerId !== action.payload.playerId
-      ))
+      console.log(`remove player to store [${action.payload}]`);
+      state.players = [...state.players.filter((e) => (
+        e.playerId !== action.payload
+      ))]
     },
     changePlayState: (state, action) => {
+      console.log(`change status to store [${action.payload}]`);
       state.onBoard.status = action.payload;
     },
     changeAdmin: (state, action) => {
-      state.adminPlayer = action.payload.adminPlayer
+      console.log(`change admin to store [${action.payload}]`);
+      state.adminPlayer = action.payload.adminPlayer;
     },
     changeCardStatus: (state, action) => {
-
+      console.log(`change card drag to store [${action.payload.from}] [${action.payload.card}]`);
+      state.onBoard.from = action.payload.from;
+      state.onBoard.card = action.payload.card;
+    },
+    changeCardDrag: (state, action) => {
+      console.log(action.payload)
+      state.onBoard.to = action.payload;
+    },
+    changeCardDrop: (state, action) => {
+      state.onBoard.to = action.payload;
     },
     //TODO - 초기 값 추가 / 카드 턴 (from to card) 추가 / players 추가
     //TODO - admin 변경
