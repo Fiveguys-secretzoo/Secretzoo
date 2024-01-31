@@ -16,8 +16,11 @@ const LoginForm = () => {
         "password": pass,
       }
     ).then((response) => {
+<<<<<<< HEAD
       alert('')
       sessionStorage.setItem('');
+=======
+>>>>>>> 02b36548b02e1c04d3edf61908092d7babe82d0c
       console.log(response.headers);
     })
   }

@@ -13,8 +13,12 @@ const SignupForm = () => {
   const [emailCheck, setEmailCheck] = useState(false);
   const navigate = useNavigate();
   const requsetLogin = () => {
+<<<<<<< HEAD
     if(idCheck && emailCheck && pass===passCheck && 
       name.length > 0 && id.length > 0 && pass.length > 0 && passCheck.length > 0 && email.length > 0){
+=======
+{
+>>>>>>> 02b36548b02e1c04d3edf61908092d7babe82d0c
         axios.post('http://localhost:8080/auth/signup',
       {
         "userId": id,

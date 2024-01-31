@@ -9,8 +9,8 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class UserInfoDto {
-    private String userId;
-    private String email;
+    private String userId; // 변경불가
+    private String email;   // 변경불가
     private String name;
     private String nickname;
     private String mainAchievement;

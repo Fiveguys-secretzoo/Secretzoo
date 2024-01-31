@@ -7,7 +7,7 @@ public interface JwtProperties {
     final Long REFRESH_TOKEN_EXPIRATION_TIME = 1209600000L; // 14일
     final String HEADER = "Authorization";
     final String TOKEN_PREFIX = "Bearer ";
-    final String ACCESS_TOKEN = "Access_token";
-    final String REFRESH_TOKEN = "Refresh_token";
-    final String EXPRIES_IN = "Expires_in";
+    final String ACCESS_TOKEN = "access_token";
+    final String REFRESH_TOKEN = "refresh_token";
+    final String EXPRIES_IN = "expires_in";
 }

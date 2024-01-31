@@ -123,5 +123,9 @@ public class AuthService {
             return accessToken.substring(7);
         return null;
     }
+
+    public boolean idDuplicated(String userId){
+        return true;
+    }
 }
 
