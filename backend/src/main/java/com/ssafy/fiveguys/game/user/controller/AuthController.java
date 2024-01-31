@@ -2,6 +2,7 @@ package com.ssafy.fiveguys.game.user.controller;
 
 import com.ssafy.fiveguys.game.user.dto.JwtTokenDto;
 import com.ssafy.fiveguys.game.user.dto.LoginRequestDto;
+import com.ssafy.fiveguys.game.user.dto.UserDto;
 import com.ssafy.fiveguys.game.user.dto.UserSignDto;
 import com.ssafy.fiveguys.game.user.jwt.JwtProperties;
 import com.ssafy.fiveguys.game.user.service.AuthService;
@@ -31,7 +32,6 @@ public class AuthController {
     @Operation(summary = "회원가입 API")
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody UserSignDto userSignDto) {
-        System.out.println("userSignDto.getUserId() = " + userSignDto.getUserId());
         userService.signUp(userSignDto);
         return ResponseEntity.status(HttpStatus.OK)
             .body("signUp Success")
@@ -43,11 +43,12 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDto loginDto) {
         JwtTokenDto jwtTokenDto = authService.login(loginDto);
+        UserDto userDto = userService.findUserById(loginDto.getUserId());
         return ResponseEntity.status(HttpStatus.OK)
             .header(HttpHeaders.AUTHORIZATION,
                 JwtProperties.TOKEN_PREFIX + jwtTokenDto.getAccessToken())
             .header(JwtProperties.REFRESH_TOKEN, jwtTokenDto.getRefreshToken())
-            .body("Login Success")
+            .body(userDto)
             //  .build()
             ;
     }
@@ -77,10 +78,15 @@ public class AuthController {
     //닉네임변경, 업적변경, 프로필변경, 비밀변호변경
     @Operation(summary = "아이디 중복체크 API")
     @PostMapping("/check/{userId}")
-    public ResponseEntity<?> checkUserId(@PathVariable String userId){
-        if(authService.idDuplicated(userId))
+    public ResponseEntity<?> checkUserId(@PathVariable String userId) {
+        if (authService.idDuplicated(userId)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("중복된 아이디 입니다.");
+        }
         return ResponseEntity.status(HttpStatus.OK).body("사용 가능한 아이디입니다.");
     }
+
+    @Operation(summary = "닉네임 변경 API")
+    @PostMapping("/rename/{nickname}")
+    public ResponseEntity<?> checkUserId(@PathVariable Str
 
 }
