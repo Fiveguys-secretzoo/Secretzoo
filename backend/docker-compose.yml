@@ -20,10 +20,12 @@ services:
     networks:
       - docker_nat
 
-  redis:
+  redis1:
     image: redis:latest
-    container_name: redis
-    hostname: redis
+    container_name: redis1
+    hostname: redis1
+    volumes:
+      - /db/redis1:/data
     # ports:
     #   - 6379:6379
     extra_hosts:
@@ -35,6 +37,8 @@ services:
     image: redis:latest
     container_name: redis2
     hostname: redis2
+    volumes:
+      - /db/redis2:/data
     # ports:
     #   - 6380:6379
     extra_hosts:
@@ -62,7 +66,7 @@ services:
       SPRING_REDIS_PORT2: 6379
     depends_on:
       - mysql
-      - redis
+      - redis1
       - redis2
 networks:
   docker_nat:
