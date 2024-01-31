@@ -1,9 +1,10 @@
 package com.ssafy.fiveguys.game.player;
 
 
-import com.example.ranking.player.dto.animal.AnimalType;
-import com.example.ranking.player.dto.animal.Cat;
-import com.example.ranking.player.dto.animal.Whale;
+
+import com.ssafy.fiveguys.game.player.dto.animal.AnimalType;
+import com.ssafy.fiveguys.game.player.dto.animal.Cat;
+import com.ssafy.fiveguys.game.player.dto.animal.Whale;
 import org.junit.jupiter.api.Test;
 
 public class AnimalTest {
