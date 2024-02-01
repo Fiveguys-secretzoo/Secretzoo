@@ -8,7 +8,7 @@ const LoginForm = () => {
   const [pass, setPass] = useState("");
   const navigate = useNavigate();
   const requsetLogin = () => {
-    axios.post('http://localhost:8080/auth/login',
+    axios.post('https://secretzoo.site/api/auth/login',
       {
         "userId": id,
         "password": pass,

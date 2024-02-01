@@ -12,7 +12,6 @@ const SignupForm = () => {
   const [emailCheck, setEmailCheck] = useState(false);
   const navigate = useNavigate();
   const requsetLogin = () => {
-    {
       if(!idCheck){
         alert("id 중복체크하세요");
         return;
@@ -28,7 +27,6 @@ const SignupForm = () => {
       ).then((Response) => {
         console.log(Response.data);
       })
-    }
     }
     const [idCheck, setIdCheck] = useState(false);
     const [openIdCheckModal, setOpenIdCheckModal] = useState(false);

@@ -11,7 +11,7 @@ const Profile = () => {
     const headers = {
       'Authorization': sessionStorage.getItem('authorization')
     };
-    axios.get('http://localhost:8080/users/user',{headers})
+    axios.get('https://secretzoo.site/api/users/user',{headers})
     .then(response => {
       console.log(response.data)
       setUser(response.data)
