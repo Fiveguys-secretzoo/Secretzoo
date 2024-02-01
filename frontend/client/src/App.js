@@ -15,9 +15,10 @@ import MyInfo from './components/mypage/myInfo';
 import MyRanking from './components/mypage/myRanking';
 import MyReward from './components/mypage/myReward';
 import Callback from './pages/callback';
+
 //노드 서버
 // const socket = io('http://localhost:3001');
-const socket = io('https://secretzoo.site')
+const socket = io('https://secretzoo.site');
 export const SocketContext = createContext();
 
 

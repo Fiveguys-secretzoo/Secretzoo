@@ -12,6 +12,8 @@ services:
     #  - /home/ubuntu/secretzoo/frontend/client:/usr/src/app
     #volumes:
     #  - /usr/src/app:/usr/share/nginx/html
+    environment:
+      - WDS_SOCKET_PROT=0
     networks:
       - docker_nat
 
