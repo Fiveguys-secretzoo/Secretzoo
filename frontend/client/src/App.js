@@ -17,7 +17,7 @@ import MyReward from './components/mypage/myReward';
 import Callback from './pages/callback';
 //노드 서버
 // const socket = io('http://localhost:3001');
-const socket = io('http://node-server:3001')
+const socket = io('https://secretzoo.site:3001')
 export const SocketContext = createContext();
 
 
