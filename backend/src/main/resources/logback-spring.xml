@@ -9,38 +9,38 @@
   </appender>
 
   <!-- Appenders -->
-  <appender name="DEBUG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>log/spring/debug.log</file> <!-- 로그 파일 경로 -->
-    <encoder>
-      <pattern>%date{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg%n</pattern>
-    </encoder>
-    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <fileNamePattern>log/logzip/spring/debug.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
-      <maxHistory>7</maxHistory> <!-- 보관할 일자 수 -->
-    </rollingPolicy>
-  </appender>
+<!--  <appender name="DEBUG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+<!--    <file>log/spring/debug.log</file> &lt;!&ndash; 로그 파일 경로 &ndash;&gt;-->
+<!--    <encoder>-->
+<!--      <pattern>%date{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg%n</pattern>-->
+<!--    </encoder>-->
+<!--    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+<!--      <fileNamePattern>log/logzip/spring/debug.%d{yyyy-MM-dd}.log.gz</fileNamePattern>-->
+<!--      <maxHistory>7</maxHistory> &lt;!&ndash; 보관할 일자 수 &ndash;&gt;-->
+<!--    </rollingPolicy>-->
+<!--  </appender>-->
 
   <!-- Logger -->
-  <logger name="com.ssafy.fiveguys.game" level="DEBUG" additivity="false">
-    <appender-ref ref="DEBUG_FILE"/>
-  </logger>
+<!--  <logger name="com.ssafy.fiveguys.game" level="DEBUG" additivity="false">-->
+<!--    <appender-ref ref="DEBUG_FILE"/>-->
+<!--  </logger>-->
 
   <!-- Appenders -->
-  <appender name="WARN_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>log/spring/warn.log</file> <!-- 로그 파일 경로 -->
-    <encoder>
-      <pattern>%date{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg%n</pattern>
-    </encoder>
-    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <fileNamePattern>log/logzip/spring/warn.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
-      <maxHistory>7</maxHistory> <!-- 보관할 일자 수 -->
-    </rollingPolicy>
-  </appender>
+<!--  <appender name="WARN_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+<!--    <file>log/spring/warn.log</file> &lt;!&ndash; 로그 파일 경로 &ndash;&gt;-->
+<!--    <encoder>-->
+<!--      <pattern>%date{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg%n</pattern>-->
+<!--    </encoder>-->
+<!--    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+<!--      <fileNamePattern>log/logzip/spring/warn.%d{yyyy-MM-dd}.log.gz</fileNamePattern>-->
+<!--      <maxHistory>7</maxHistory> &lt;!&ndash; 보관할 일자 수 &ndash;&gt;-->
+<!--    </rollingPolicy>-->
+<!--  </appender>-->
 
   <!-- Logger -->
-  <logger name="com.ssafy.fiveguys.game" level="WARN" additivity="false">
-    <appender-ref ref="WARN_FILE"/>
-  </logger>
+<!--  <logger name="com.ssafy.fiveguys.game" level="WARN" additivity="false">-->
+<!--    <appender-ref ref="WARN_FILE"/>-->
+<!--  </logger>-->
 
   <!-- Root Logger -->
   <root level="INFO">
