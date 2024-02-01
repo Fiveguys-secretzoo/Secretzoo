@@ -111,9 +111,9 @@ async function main() {
   });
 
   //노드
-  server.listen(3001, () => {
+  server.listen(3000, () => {
     console.log(server.address);
-    console.log('server running at http://localhost:3001');
+    console.log('server running at http://localhost:3000');
   });
 }
 
