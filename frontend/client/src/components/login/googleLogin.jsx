@@ -3,7 +3,7 @@ import axios from 'axios';
 import googleLoginImg from '../../assets/img/login/googleLoginImg.png';
 
 const requsetGoogleLogin = () => {
-  axios.get('http://localhost:8080/api/v1/google');
+  window.location.href='http://localhost:8080/oauth2/authorization/google';
 }
 
 const GoogleLogin = () => {
@@ -14,7 +14,7 @@ const GoogleLogin = () => {
         src={googleLoginImg}
         alt="구글 로그인"
         onClick={() => requsetGoogleLogin()}
-        className='w-10 h-10 rounded-full hover:cursor-pointer'  />
+        className='w-10 h-10 rounded-full border-2  hover:border-blue-500 hover:cursor-pointer'  />
       </div>
     </>
   );
