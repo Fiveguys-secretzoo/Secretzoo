@@ -15,8 +15,8 @@ import MyInfo from './components/mypage/myInfo';
 import MyRanking from './components/mypage/myRanking';
 import MyReward from './components/mypage/myReward';
 import Callback from './pages/callback';
-
-const socket = io('http://localhost:3000');
+//노드 서버
+const socket = io('http://localhost:3001');
 export const SocketContext = createContext();
 
 

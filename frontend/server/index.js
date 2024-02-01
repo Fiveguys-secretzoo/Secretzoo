@@ -41,7 +41,8 @@ async function main() {
   const handleException = (socket) => {
 
   }
-  const serverURL = 'http://localhost:3001'
+  //리액트
+  const serverURL = 'http://localhost:3000'
   // cors 설정
   app.use(cors({
     origin: serverURL
@@ -107,6 +108,7 @@ async function main() {
 
   });
 
+  //노드
   server.listen(3001, () => {
     console.log('server running at http://localhost:3000');
   });
