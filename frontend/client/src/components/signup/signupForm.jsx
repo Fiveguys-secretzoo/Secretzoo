@@ -26,6 +26,7 @@ const SignupForm = () => {
       }
       ).then((Response) => {
         console.log(Response.data);
+        navigate('/lobby')
       })
     }
     const [idCheck, setIdCheck] = useState(false);
@@ -134,7 +135,7 @@ const SignupForm = () => {
             <Button>인증</Button>
             </div>
           </div>
-          <Button type="submit" onClick={() => (requsetLogin())}>로그인</Button>
+          <Button type="submit" onClick={() => (requsetLogin())}>회원가입</Button>
         </form>
       </div>
       <IdCheckModal></IdCheckModal>

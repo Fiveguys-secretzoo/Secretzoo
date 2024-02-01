@@ -1,7 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+body > iframe { display: none }
 body {
   @apply bg-gray-500;
   margin: 0;

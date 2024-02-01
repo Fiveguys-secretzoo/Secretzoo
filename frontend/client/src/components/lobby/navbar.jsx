@@ -1,9 +1,5 @@
 import React from "react";
-<<<<<<< HEAD
-import { Link } from "react-router-dom";
-=======
 import { useNavigate } from "react-router-dom";
->>>>>>> dev/frontend
 import { Sidebar } from 'flowbite-react';
 import { IoGameController, IoTrophy  } from 'react-icons/io5';
 import { HiUser } from 'react-icons/hi'
@@ -31,23 +27,6 @@ const Navbar = () => {
       <Sidebar aria-label="Default sidebar example" className="w-full">
         <Sidebar.Items>
           <Sidebar.ItemGroup>
-<<<<<<< HEAD
-            <Link to="/lobby">
-              <Sidebar.Item icon={IoGameController}>
-                로비
-              </Sidebar.Item>
-            </Link>
-            <Link to="/lobby/ranking">
-              <Sidebar.Item icon={IoTrophy}>
-                랭킹
-              </Sidebar.Item>
-            </Link>
-            <Link to="/lobby/mypage">
-              <Sidebar.Item icon={HiUser}>
-                내정보
-              </Sidebar.Item>
-            </Link>
-=======
             <CustomSidebar to='/lobby' icon={IoGameController}>
               로비
             </CustomSidebar>
@@ -57,7 +36,6 @@ const Navbar = () => {
             <CustomSidebar to='/lobby/mypage' icon={HiUser}>
               내 정보
             </CustomSidebar>
->>>>>>> dev/frontend
           </Sidebar.ItemGroup>
         </Sidebar.Items>
       </Sidebar>

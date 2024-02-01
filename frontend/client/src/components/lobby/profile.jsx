@@ -1,24 +1,6 @@
-<<<<<<< HEAD
-import React from "react";
-import { Progress } from 'flowbite-react';
-import { Card } from 'flowbite-react';
-
-let user = {
-  userId: "t1faker",
-  username: "대상혁",
-  mainAchievement: "26",
-  profileNumber: "58",
-  level: "12",
-  point: "32",
-  nickname: "hide on bush",
-  achievementId: 23,
-  achievementName: "G.O.A.T",
-};
-=======
 import React,{useState, useEffect} from "react";
 import axios from 'axios';
 import { Card, Progress, Label } from 'flowbite-react';
->>>>>>> dev/frontend
 
 
 
@@ -36,6 +18,15 @@ const Profile = () => {
     });
   }
   useEffect(()=>{
+    if(sessionStorage.getItem('noLogin')){
+      setUser({
+        "name" : 'noLoginUser',
+        "nickname" : sessionStorage.getItem('userNickname'),
+        "mainAchievement" : '로그인 하세요',
+        "profileNumber" : '000',
+      })
+      return;
+    }
     getUserInfo();
   },[])
   if (!user) {
@@ -57,15 +48,8 @@ const Profile = () => {
           </div>
         </div>
         <div className='exp'>
-<<<<<<< HEAD
-          <div>
-            <span>다음레벨까지 </span>
-            <span>level {user.level}</span>
-          </div>
-=======
 
           <Label value='레벨 {data.s}' />
->>>>>>> dev/frontend
           <Progress progress={45} />
         </div>
       </Card>

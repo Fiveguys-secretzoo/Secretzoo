@@ -45,29 +45,6 @@ const Ranking = () => {
     }, 500);
   }, [])
   return (
-<<<<<<< HEAD
-    <div>
-      <nav className='bg-gray-500 p-4 text-white text-center rounded shadow-md'>
-        <h2 className='text-white'>랭킹보기</h2>
-        <div className="flex space-x-2 justify-center">
-          <button className='px-6 mt-4 text-white bg-blue-500 rounded-md hover:bg-blue-600' 
-          onClick={getAttack}>공격</button>
-          <button className='px-6 mt-4 text-white bg-blue-500 rounded-md hover:bg-blue-600'
-          onClick={getDefense}>수비</button>
-          <button className='px-6 mt-4 text-white bg-blue-500 rounded-md hover:bg-blue-600'
-          onClick={getPass}>패스</button>
-        </div>
-      </nav>
-      {
-        ranking.map((item,index) => (
-          <div className={`p-2 my-2 bg-blue-200 rounded transition-opacity duration-1000  ${isLoaded ? 'rotate-y' : ''} shadow`}
-          style={{
-            animationDelay: `${index * 0.1}s` // 0.1초 단위로 각 아이템의 지연 시간 증가
-          }}>{index+1}위 : {item.playerId}</div>
-        ))
-      }
-    </div>
-=======
     <>
       <div>
         <nav className='p-4 text-center rounded shadow-md'>
@@ -91,7 +68,6 @@ const Ranking = () => {
         }
       </div>
     </>
->>>>>>> dev/frontend
   );
 };
 
