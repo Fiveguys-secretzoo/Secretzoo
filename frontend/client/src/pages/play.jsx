@@ -255,7 +255,7 @@ const Play = () => {
           player5
         </div>
         <div className='flex absolute left-[35%] bottom-[100px]'>
-            {cards &&
+          <div className="cards">{cards &&
               cards.map((item, index) => (
                 <div
                   onDragStart={() => dragStart(item)}
@@ -291,8 +291,8 @@ const Play = () => {
           ))
         }
       </div >
+      </div>
     </div>
   );
 };
-
 export default Play;

@@ -8,6 +8,5 @@ public interface UserRepositoy extends JpaRepository<User, Long> {
 
     Optional<User> findByUserId(String userId);
     Optional<User> findByProviderAndProviderId(String provider, String providerId);
-
-    User findByUserSequence(Long userSequence);
+    void deleteByUserId(String userId);
 }

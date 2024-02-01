@@ -1,43 +1,51 @@
-import React from "react";
-let user = {
-  userId: "t1faker",
-  username: "대상혁",
-  mainAchievement: "26",
-  profileNumber: "58",
-  level: "12",
-  point: "32",
-  nickname: "hide on bush",
-  achievementId: 23,
-  achievementName: "G.O.A.T",
-};
+import React,{useState, useEffect} from "react";
+import axios from 'axios';
+import { Card, Progress, Label } from 'flowbite-react';
 
-const profile = () => {
+
+
+const Profile = () => {
+  
+  const [user, setUser] = useState(null);
+  const getUserInfo = () => {
+    const headers = {
+      'Authorization': sessionStorage.getItem('authorization')
+    };
+    axios.get('https://secretzoo.site/api/users/user',{headers})
+    .then(response => {
+      console.log(response.data)
+      setUser(response.data)
+    });
+  }
+  useEffect(()=>{
+    getUserInfo();
+  },[])
+  if (!user) {
+    return <div>Loading...</div>;
+  }
   return (
     <>
-      <div className='flex flex-col bg-gray-500 p-3 shadow-lg rounded mb-5'>
+      <Card className="mb-5">
         <div className='flex items-center mb-5'>
           <img
-            src={require(`../../assets/Untitled ${user.profileNumber}.png`)}
+            src={require(`../../assets//img/profile/Untitled ${user.profileNumber}.png`)}
             alt="프로필 이미지"
             className='w-20 h-20 m-2 rounded-full'
           />
-          <div className='flex-grow text-center'>
+          <div className='flex-grow text-center max-w-20'>
+            <p>{user.name}</p>
             <b>{user.nickname}</b>
-            <p>{user.achievementName}</p>
+            <p>{user.mainAchievement}</p>
           </div>
         </div>
         <div className='exp'>
-          <div>
-            <span>다음레벨까지 </span>
-            <span>level {user.level}</span>
-          </div>
-          <div className='w-full bg-gray-200 rounded-full h-4'>
-            <div className='bg-blue-600 h-4 rounded-full w-[40%]'></div>
-          </div>
+
+          <Label value='레벨 {data.s}' />
+          <Progress progress={45} />
         </div>
-      </div>
+      </Card>
     </>
   );
 };
 
-export default profile;
+export default Profile;

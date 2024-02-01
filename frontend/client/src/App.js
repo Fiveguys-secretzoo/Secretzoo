@@ -14,6 +14,7 @@ import MyPage from './components/lobby/myPage';
 import MyInfo from './components/mypage/myInfo';
 import MyRanking from './components/mypage/myRanking';
 import MyReward from './components/mypage/myReward';
+import Callback from './pages/callback';
 
 const socket = io('http://localhost:3000');
 export const SocketContext = createContext();
@@ -27,6 +28,7 @@ function App() {
       <SocketContext.Provider value={socket}>
         <div className="App">
           <Routes>
+            <Route path='/auth/callback' element={<Callback/>}></Route>
             <Route path='/' element={<Login/>}/>
             <Route path='/signup' element={<Signup/>}/>
             <Route path='/lobby' element={<Lobby/>}>
