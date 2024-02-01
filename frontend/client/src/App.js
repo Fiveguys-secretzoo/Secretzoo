@@ -23,7 +23,7 @@ export const SocketContext = createContext();
 
 
 function App() {
-  
+  console.error = error => error.apply;
 
   return (
     <BrowserRouter>
