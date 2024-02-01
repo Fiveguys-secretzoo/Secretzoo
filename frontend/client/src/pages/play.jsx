@@ -19,7 +19,6 @@ import {
 } from '../store/playSlice'
 
 import PlayerView from '../components/play/playerView'
-
 const Play = () => {
   const socket = useContext(SocketContext);
   const dragItem = useRef();
@@ -48,7 +47,7 @@ const Play = () => {
   const [cardDrag, setCardDrag] = useState({ 'from': -1, 'to': -1, 'card': -1 });
   const [cardDrop, setCardDrop] = useState({ 'from': -1, 'to': -1, 'card': -1 });
   const [playersId, setPlayersId] = useState(['', '', '', '', '', '']);
-  const [cards, setCards] = useState(['']); // 손에 들고 있는 카드 관리
+  const [cards, setCards] = useState([0, 1, 2, 3]); // 손에 들고 있는 카드 관리
   const [gameResult, setGameResult] = useState(false);
   // 0 대기 1 시작 2 카드 드롭 후 동물 선택 3 동물 선택 후 방어 턴 4 넘기는 턴 드래그 5 넘기는 턴 동물 선택 6 결과 확인
 
@@ -128,6 +127,7 @@ const Play = () => {
     } else {
       setIsMyTurn(false);
     }
+    console.log(`[cardPass] draggable [${((playState === 1 || playState === 4) && isMyTurn)}]`)
   }
 
   // player enter socket event handle
@@ -194,6 +194,8 @@ const Play = () => {
     setCards(cards);
     dispatch(changePlayState(1));
     console.log("##### Card Set");
+    console.log(cards);
+    console.log(images);
 
     socket.on("cardDrag", cardDragResponseHandler);
     socket.on("cardDrop", cardDropResponseHandler);
@@ -220,9 +222,9 @@ const Play = () => {
 
   /* 이벤트 수신, 방 입장 시 실행 */
   useEffect(() => {
-
-    for (let i = 0; i < 64; i++) {
-      images[i] = imageRoute(i);
+    for (let i = 0; i < 65; i++) {
+      images[i] = require(
+        `../assets/img/card/0${Math.floor(i / 8)}/00${i % 8}.png`);
     }
     // 서버 닫혔을 때 유저를 대방출
     socket.on("serverClosed", (e) => {
@@ -270,9 +272,7 @@ const Play = () => {
     // checkIsAdmin(roomInfo.nowTurn);
   }, [adminPlayer, nowTurn, isAdmin])
 
-  const imageRoute = (item) => {
-    return require(`../assets/img/card/0${Math.floor(item / 8)}/00${item % 8}.png`);
-  }
+
 
   const sendMessage = () => {
     socket.emit('chat message', input, localStorage.getItem('userName'));
@@ -382,7 +382,7 @@ const Play = () => {
             draggable={isMyTurn}
             className="w-[8em] h-[13em] ml-[-4em] hover:scale(1.3) hover:-translate-y-20 hover:rotate-[20deg] hover:z-50 transition-transform duration-300 "
           >
-            <img src={imageRoute(64)} alt="" />
+            <img src={images[64]} alt="" />
           </div>
         }
 
@@ -402,7 +402,7 @@ const Play = () => {
               draggable={isMyTurn}
               className="w-[8em] h-[13em] ml-[-4em] hover:scale(1.3) hover:-translate-y-20 hover:rotate-[20deg] hover:z-50 transition-transform duration-300 "
             >
-              <img src={imageRoute(64)} alt="" />
+              <img src={images[64]} alt="" />
             </div>
 
           </SelectScreen>
@@ -411,11 +411,11 @@ const Play = () => {
         {
           playState === 5 &&
           <SelectScreen>
-            <div disabled={!gameResult}>
-              플레이어가 정답을 맞췄습니다.
+            <div hidden={!gameResult}>
+              <h3>플레이어가 정답을 맞췄습니다.</h3>
             </div>
-            <div disabled={gameResult}>
-              플레이어가 정답을 틀렸습니다.
+            <div hidden={gameResult}>
+              <h3>플레이어가 정답을 틀렸습니다.</h3>
             </div>
             <Button onClick={dispatch(changePlayState(1))}></Button>
           </SelectScreen>

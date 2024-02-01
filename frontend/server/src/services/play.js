@@ -39,7 +39,7 @@ const playSocketMethods = () => {
 
     if (extractedData.onBoard.status !== 0) {
       socket.emit('sendCardInfo', () => {
-        for (let player in extractedData.players) {
+        for (let player in roomInfo.players) {
           if (player.playerId === pid) {
             return player.hand
           }
