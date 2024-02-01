@@ -2,7 +2,7 @@ package com.ssafy.fiveguys.game.player.api;
 
 import com.ssafy.fiveguys.game.player.dto.AnimalDto;
 import com.ssafy.fiveguys.game.player.dto.RewardsDto;
-import com.ssafy.fiveguys.game.player.dto.response.Result2;
+import com.ssafy.fiveguys.game.player.dto.api.ApiResponse;
 import com.ssafy.fiveguys.game.player.entity.PlayerRewards;
 import com.ssafy.fiveguys.game.player.service.AnimalRewardsService;
 import com.ssafy.fiveguys.game.player.service.PlayerService;
@@ -57,7 +57,7 @@ public class RewardsApiController {
      * 플레이어의 완료 업적 정보 조회
      */
     @GetMapping("/done/{userSequence}")
-    public Result2 getPlayerRewards(@PathVariable("userSequence") Long userSequence) {
+    public ApiResponse getPlayerRewards(@PathVariable("userSequence") Long userSequence) {
         List<PlayerRewards> playerDoneRewards = animalRewardsService.getPlayerDoneRewards(userSequence);
         long totalPlayerCount = playerService.playerTotalCount();
 
@@ -71,7 +71,7 @@ public class RewardsApiController {
                 animalRewardsService.getDoneRewardsCount(m.getRewards().getRewardsId())))
             .collect(Collectors.toList());
 
-        return new Result2(collect.size(), collect, totalPlayerCount);
+        return new ApiResponse(collect.size(), collect, totalPlayerCount);
     }
 
     /**
@@ -115,7 +115,7 @@ public class RewardsApiController {
      * 플레이어의 모든 업적 정보 조회
      */
     @GetMapping("/total/{userSequence}")
-    public Result2 getTotalPlayerRewards2(@PathVariable("userSequence") Long userSequence) {
+    public ApiResponse getTotalPlayerRewards2(@PathVariable("userSequence") Long userSequence) {
         List<PlayerRewards> playerDoneRewards = animalRewardsService.getPlayerAllRewards(userSequence);
 
         long totalPlayerCount = playerService.playerTotalCount();
@@ -126,7 +126,7 @@ public class RewardsApiController {
                 animalRewardsService.getDoneRewardsCount(m.getRewards().getRewardsId())))
             .collect(Collectors.toList());
 
-        return new Result2(collect.size(), collect, totalPlayerCount);
+        return new ApiResponse(collect.size(), collect, totalPlayerCount);
 
     }
 
