@@ -3,6 +3,7 @@ package com.ssafy.fiveguys.game.player.api;
 import com.ssafy.fiveguys.game.player.dto.AnimalDto;
 import com.ssafy.fiveguys.game.player.dto.RewardsDto;
 import com.ssafy.fiveguys.game.player.dto.api.ApiResponse;
+import com.ssafy.fiveguys.game.player.entity.AnimalScore;
 import com.ssafy.fiveguys.game.player.entity.PlayerRewards;
 import com.ssafy.fiveguys.game.player.service.AnimalRewardsService;
 import com.ssafy.fiveguys.game.player.service.PlayerService;
@@ -59,7 +60,7 @@ public class RewardsApiController {
     @GetMapping("/done/{userSequence}")
     public ApiResponse getPlayerRewards(@PathVariable("userSequence") Long userSequence) {
         List<PlayerRewards> playerDoneRewards = animalRewardsService.getPlayerDoneRewards(userSequence);
-        long totalPlayerCount = playerService.playerTotalCount();
+        int totalPlayerCount = playerService.playerTotalCount();
 
 
 //        List<RewardsDto> collect = playerDoneRewards.stream()
@@ -118,7 +119,7 @@ public class RewardsApiController {
     public ApiResponse getTotalPlayerRewards2(@PathVariable("userSequence") Long userSequence) {
         List<PlayerRewards> playerDoneRewards = animalRewardsService.getPlayerAllRewards(userSequence);
 
-        long totalPlayerCount = playerService.playerTotalCount();
+        int totalPlayerCount = playerService.playerTotalCount();
 
 
         List<RewardsDto> collect = playerDoneRewards.stream()

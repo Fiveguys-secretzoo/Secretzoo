@@ -4,6 +4,7 @@ package com.ssafy.fiveguys.game.player.api;
 
 import com.ssafy.fiveguys.game.player.dto.PlayerDto;
 import com.ssafy.fiveguys.game.player.dto.api.ApiResponse;
+import com.ssafy.fiveguys.game.player.entity.Player;
 import com.ssafy.fiveguys.game.player.service.PlayerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,8 +27,15 @@ public class PlayerApiController {
     @GetMapping("/{playerSequence}")
     public ApiResponse getPlayerInfo(@PathVariable("playerSequence") Long playerSequence) {
 
-        PlayerDto playerDto = playerService.getPlayerInfo(playerSequence);
-        long totalPlayerCount = playerService.playerTotalCount();
+
+        Player player = playerService.getPlayerInfo(playerSequence);
+        if(player == null) return null;
+        int totalPlayerCount = playerService.playerTotalCount();
+
+        PlayerDto playerDto = new PlayerDto(playerSequence, player.getTotalRound(),
+            player.getTotalTurn(), player.getRankingScore(), player.getExp(),
+            player.getPlayerLevel());
+
         return new ApiResponse(1, playerDto, totalPlayerCount);
 
     }

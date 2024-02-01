@@ -4,6 +4,7 @@ package com.ssafy.fiveguys.game.player.service;
 import com.ssafy.fiveguys.game.player.entity.Player;
 import com.ssafy.fiveguys.game.player.entity.RankingScore;
 import com.ssafy.fiveguys.game.player.repository.PlayerRepository;
+import com.sun.jdi.LongValue;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -51,7 +52,7 @@ public class RankService {
     public void saveAll(List<Player> players) {
         for (Player player : players) {
 
-            //각 플레이어의 공격, 방어, 패스 점수 redis에 저장
+            //각 플레이어의 공격, 방어, 패스 점수 redis 에 저장
             ZSetOperations<String, String> zSetForAttack = redisTemplate.opsForZSet();
             ZSetOperations<String, String> zSetForDefense = redisTemplate.opsForZSet();
             ZSetOperations<String, String> zSetForPass = redisTemplate.opsForZSet();
@@ -141,45 +142,45 @@ public class RankService {
     }
 
     /**
-     * playerId의 attack 랭킹 정보 조회
+     * userSequence attack 랭킹 정보 조회
      */
-    public Long getPlayerRankingOfAttack(Long userSequence) {
+    public int getPlayerRankingOfAttack(Long userSequence) {
         ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
         // 랭킹은 0부터 시작하므로 1을 더해 실제 랭킹을 계산
         //playerId가 null이면 NullPointer Exception
 //        return zSetOperations.reverseRank(attackRankKey, Objects.requireNonNull(playerId)) + 1;
         // userSequence 가 null인 경우 기본값으로 Optional.ofNullable을 사용하여 0으로 설정
-        Long userRank = Optional.ofNullable(String.valueOf(userSequence))
+        int userRank = Math.toIntExact(Optional.ofNullable(String.valueOf(userSequence))
             .map(seq -> zSetOperations.reverseRank(attackRankKey, seq))
-            .orElse(-1L);
+            .orElse(-1L));
 
         return userRank+1;
     }
 
     /**
-     * playerId의 defense 랭킹 정보 조회
+     * userSequence defense 랭킹 정보 조회
      */
-    public Long getPlayerRankingOfDefense(Long userSequence) {
+    public int getPlayerRankingOfDefense(Long userSequence) {
         ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
         // 랭킹은 0부터 시작하므로 1을 더해 실제 랭킹을 계산
         // playerId가 null인 경우 기본값으로 Optional.ofNullable을 사용하여 0으로 설정
-        Long userRank = Optional.ofNullable(String.valueOf(userSequence))
+        int userRank = Math.toIntExact(Optional.ofNullable(String.valueOf(userSequence))
             .map(seq -> zSetOperations.reverseRank(defenseRankKey, seq))
-            .orElse(-1L);
+            .orElse(-1L));
 
         return userRank+1;
     }
 
     /**
-     * playerId의 pass 랭킹 정보 조회
+     * userSequence pass 랭킹 정보 조회
      */
-    public Long getPlayerRankingOfPass(Long userSequence) {
+    public int getPlayerRankingOfPass(Long userSequence) {
         ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
         // 랭킹은 0부터 시작하므로 1을 더해 실제 랭킹을 계산
         // playerId가 null인 경우 기본값으로 Optional.ofNullable을 사용하여 0으로 설정
-        Long userRank = Optional.ofNullable(String.valueOf(userSequence))
+        int userRank = Math.toIntExact(Optional.ofNullable(String.valueOf(userSequence))
             .map(seq -> zSetOperations.reverseRank(passRankKey, seq))
-            .orElse(-1L);
+            .orElse(-1L));
 
         return userRank+1;
     }

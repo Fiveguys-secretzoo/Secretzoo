@@ -33,7 +33,7 @@ public class AopTest {
 
     @Test
     void success() {
-        Long playerTotalCount = playerService.playerTotalCount();
+        int playerTotalCount = playerService.playerTotalCount();
         System.out.println("playerTotalCount = " + playerTotalCount);
     }
 

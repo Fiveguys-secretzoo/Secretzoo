@@ -21,4 +21,11 @@ public class AnimalScore {
     private Long distrust = 0L;
     private Long truth = 0L;
     private Long lie = 0L;
+
+    /**
+     * AnimalScore sum 메서드
+     */
+    private static void sum(AnimalScore animalScore) {
+//        animalScore.getAttackSuccess()
+    }
 }

@@ -8,5 +8,5 @@ import lombok.Data;
 public class ApiResponse<T> {
     private int count;
     private T data;
-    private long totalPlayer;
+    private int totalPlayer;
 }
