@@ -1,5 +1,6 @@
 package com.ssafy.fiveguys.game.user.controller;
 
+import com.ssafy.fiveguys.game.user.dto.EmailRequestDto;
 import com.ssafy.fiveguys.game.user.dto.JwtTokenDto;
 import com.ssafy.fiveguys.game.user.dto.LoginRequestDto;
 import com.ssafy.fiveguys.game.user.dto.UserDto;
@@ -75,7 +76,6 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.OK).body("Logout Success");
     }
 
-    //닉네임변경, 업적변경, 프로필변경, 비밀변호변경
     @Operation(summary = "아이디 중복체크 API")
     @PostMapping("/check/{userId}")
     public ResponseEntity<?> checkUserId(@PathVariable String userId) {
@@ -84,6 +84,5 @@ public class AuthController {
         }
         return ResponseEntity.status(HttpStatus.OK).body("사용 가능한 아이디입니다.");
     }
-
 
 }

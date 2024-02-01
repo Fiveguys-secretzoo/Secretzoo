@@ -18,7 +18,5 @@ public class RefreshToken {
     @Id
     private String userId; // key
     private String refreshToken; // value
-    @TimeToLive
-    private Long expirationTime;
 
 }

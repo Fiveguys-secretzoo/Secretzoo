@@ -27,9 +27,19 @@ public class UserController {
     private final UserService userService;
     private final AuthService authService;
 
-    @Operation(summary = "회원 정보 조회 API")
+    @Operation(summary = "회원 정보 API")
     @GetMapping("/user")
     public ResponseEntity<?> getUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken) {
+        String userId = authService.extractUserId(accessToken);
+        log.debug("userId = {}", userId);
+        UserDto userDto = userService.findUserById(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(userDto);
+    }
+
+    @Operation(summary = "회원 프로필 조회 API")
+    @GetMapping("/profile")
+    public ResponseEntity<?> profileUser(
+        @RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken) {
         String userId = authService.extractUserId(accessToken);
         log.debug("userId = {}", userId);
         UserInfoDto userInfo = UserInfoDto.userInfoFromUserDto(userService.findUserById(userId));

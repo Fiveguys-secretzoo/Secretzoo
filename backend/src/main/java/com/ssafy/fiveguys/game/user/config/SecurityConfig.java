@@ -46,7 +46,7 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring()
-            .requestMatchers("/auth/**") // '인증','인가' 서비스 적용x
+            .requestMatchers("/auth/**","/verify-email/**") // '인증','인가' 서비스 적용x
             .requestMatchers(swaggerURL)
             .requestMatchers(PathRequest.toStaticResources().atCommonLocations()); // 정적 리소스들
     }
@@ -75,7 +75,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/", "/css/**", "/images/**", "/js/**", "/favicon.ico", "/error")
                 .permitAll() // '인증' 무시
-                .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/auth/**","/verify-email/**").permitAll()
                 .requestMatchers(swaggerURL).permitAll()
                 .anyRequest().permitAll());
                // .anyRequest().authenticated());
