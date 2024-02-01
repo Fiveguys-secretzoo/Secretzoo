@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import { Button, Label, TextInput } from 'flowbite-react';
+import { Button, Label, TextInput, Modal } from 'flowbite-react';
 
 const SignupForm = () => {
   const [name, setName] = useState("");
@@ -9,23 +9,65 @@ const SignupForm = () => {
   const [pass, setPass] = useState("");
   const [passCheck, setPassCheck] = useState("");
   const [email, setEmail] = useState("");
-  const [idCheck, setIdCheck] = useState(false);
   const [emailCheck, setEmailCheck] = useState(false);
   const navigate = useNavigate();
   const requsetLogin = () => {
-{
-        axios.post('http://localhost:8080/auth/signup',
+    {
+      if(!idCheck){
+        alert("id 중복체크하세요");
+        return;
+      }
+      axios.post('https://secretzoo.site/api/auth/signup',
       {
         "userId": id,
         "password": pass,
         "name": name,
         "email": email,
-        "nickname": "kjy"
+        "nickname": "임시닉네임",
       }
-    ).then((Response) => {
-      console.log(Response.data);
-    })
-      }
+      ).then((Response) => {
+        console.log(Response.data);
+      })
+    }
+    }
+    const [idCheck, setIdCheck] = useState(false);
+    const [openIdCheckModal, setOpenIdCheckModal] = useState(false);
+    const IdCheckModal = () => {
+      const [checkIdInput, setCheckIdInput] = useState(id);
+      const [idCheckState, setIdCheckState] = useState(false);
+      const checkid = (id) => {
+        axios.post('https://secretzoo.site/api/auth/check/'+id)
+        .then(Response =>{
+          alert(Response.data);
+          setIdCheckState(true);
+        }
+        )
+        .catch(e => {
+          alert('중복입니다.')
+        }
+        )
+      };
+      return (
+        <Modal show={openIdCheckModal} size="2xl" onClose={() => setOpenIdCheckModal(false)}>
+          <Modal.Body className='flex flex-wrap'>
+            <Label>아이디</Label>
+            <TextInput value={checkIdInput} onChange={(e) => {setCheckIdInput(e.target.value); setIdCheck(false)}}></TextInput>
+            <Button onClick={() => {checkid(checkIdInput)}}>조회</Button>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={() => {
+              if(idCheckState){
+                setOpenIdCheckModal(false); setId(checkIdInput); setIdCheck(true);
+              }else{
+                alert('중복체크하세요');
+              }}}
+              >사용</Button>
+            <Button color="gray" onClick={() => {setOpenIdCheckModal(false); setIdCheck(false)}}>
+              취소
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      )
     }
     
     return (
@@ -43,9 +85,10 @@ const SignupForm = () => {
             onChange={(e) => setId(e.target.value)}
             type="text"
             placeholder="아이디" 
-            required 
+            required
+            disabled={idCheck ? true : false}
             className='flex-grow'/>
-            <Button>중복확인</Button>
+            <Button onClick={() => setOpenIdCheckModal(true)}>중복확인</Button>
             </div>
           </div>
           <div>
@@ -96,6 +139,7 @@ const SignupForm = () => {
           <Button type="submit" onClick={() => (requsetLogin())}>로그인</Button>
         </form>
       </div>
+      <IdCheckModal></IdCheckModal>
     </>
   );
 };

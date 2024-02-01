@@ -85,4 +85,6 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.OK).body("사용 가능한 아이디입니다.");
     }
 
+
+
 }
