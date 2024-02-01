@@ -2,6 +2,7 @@ package com.ssafy.fiveguys.game.user.service;
 
 import com.ssafy.fiveguys.game.user.dto.LoginRequestDto;
 import com.ssafy.fiveguys.game.user.entity.RefreshToken;
+import com.ssafy.fiveguys.game.user.entity.User;
 import com.ssafy.fiveguys.game.user.jwt.JwtProperties;
 import com.ssafy.fiveguys.game.user.jwt.JwtTokenProvider;
 import com.ssafy.fiveguys.game.user.dto.JwtTokenDto;
@@ -9,8 +10,10 @@ import com.ssafy.fiveguys.game.user.dto.UserDto;
 import com.ssafy.fiveguys.game.user.exception.PasswordException;
 import com.ssafy.fiveguys.game.user.exception.UserIdNotFoundException;
 import com.ssafy.fiveguys.game.user.repository.RedisRepository;
+import com.ssafy.fiveguys.game.user.repository.UserRepositoy;
 import jakarta.transaction.Transactional;
 
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,6 +31,7 @@ public class AuthService {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
+    private final UserRepositoy userRepositoy;
     private final RedisService redisService;
     private final BCryptPasswordEncoder passwordEncoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -42,27 +46,26 @@ public class AuthService {
         }
         // Login ID/PW를 기반으로 Authentication Token 생성
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken
-                = new UsernamePasswordAuthenticationToken(loginDto.getUserId(), loginDto.getPassword());
+            = new UsernamePasswordAuthenticationToken(loginDto.getUserId(), loginDto.getPassword());
         // 실제로 검증이 이루어지는 부분
         Authentication authentication =
-                authenticationManagerBuilder.getObject()
-                        .authenticate(usernamePasswordAuthenticationToken);
+            authenticationManagerBuilder.getObject()
+                .authenticate(usernamePasswordAuthenticationToken);
         // 인증 정보를 기반으로 JWT 토큰 생성
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         JwtTokenDto tokenSet = jwtTokenProvider.generateToken(authentication);
-        System.out.println("tokenSet.getRefreshToken() = " + tokenSet.getRefreshToken());
         // DB에 Refreshtoken 저장
         user.setRefreshToken(tokenSet.getRefreshToken());
         userService.saveUser(user);
         // RefreshToken Redis에 저장
         RefreshToken refreshToken = RefreshToken.builder()
-                .userId(authentication.getName())
-                .refreshToken(tokenSet.getRefreshToken())
-                .expirationTime(60 * 24L) // 1일
-                .build();
+            .userId(authentication.getName())
+            .refreshToken(tokenSet.getRefreshToken())
+            .expirationTime(60 * 24L) // 1일
+            .build();
 
-        redisService.saveRefreshToken(refreshToken.getUserId(),refreshToken.getRefreshToken());
+        redisService.saveRefreshToken(refreshToken.getUserId(), refreshToken.getRefreshToken());
 
         log.debug("User Id = {}", refreshToken.getUserId());
         log.debug("RefreshToken in Redis = {}", refreshToken.getRefreshToken());
@@ -73,7 +76,8 @@ public class AuthService {
 
 
     public JwtTokenDto reissueToken(String accessToken, String refreshToken) {
-        Authentication authentication = jwtTokenProvider.getAuthentication(resolveToken(accessToken));
+        Authentication authentication = jwtTokenProvider.getAuthentication(
+            resolveToken(accessToken));
         String principal = authentication.getName();
         String refreshTokenInDB = redisService.getRefreshToken(principal);
         log.debug("User Id = {}", principal);
@@ -82,7 +86,8 @@ public class AuthService {
         if (refreshTokenInDB == null) { // Redis에 RT 없을 경우
             refreshTokenInDB = user.getRefreshToken();
         }
-        if (!refreshTokenInDB.equals(refreshToken) || !jwtTokenProvider.validateToken(refreshToken)) {
+        if (!refreshTokenInDB.equals(refreshToken) || !jwtTokenProvider.validateToken(
+            refreshToken)) {
             redisService.deleteRefreshToken(refreshToken);
             userService.deleteRefreshToken(principal);
             log.info("Delete token potentially hijacking");
@@ -113,10 +118,21 @@ public class AuthService {
         userService.deleteRefreshToken(principal);
     }
 
+    public String extractUserId(String accessToken) {
+        String token = resolveToken(accessToken);
+        return jwtTokenProvider.parseClaims(token).getSubject();
+    }
+
     public String resolveToken(String accessToken) {
-        if (accessToken != null && accessToken.startsWith(JwtProperties.TOKEN_PREFIX))
+        if (accessToken != null && accessToken.startsWith(JwtProperties.TOKEN_PREFIX)) {
             return accessToken.substring(7);
+        }
         return null;
+    }
+
+    public boolean idDuplicated(String userId) {
+        Optional<User> optionalUser = userRepositoy.findByUserId(userId);
+        return optionalUser.isPresent();
     }
 }
 

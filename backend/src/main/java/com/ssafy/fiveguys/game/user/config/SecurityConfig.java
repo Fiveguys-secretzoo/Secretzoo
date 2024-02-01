@@ -77,9 +77,6 @@ public class SecurityConfig {
                 .permitAll() // '인증' 무시
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers(swaggerURL).permitAll()
-                .requestMatchers("/api/v1/**").permitAll()
-                .requestMatchers("/rank/**").permitAll()
-                .requestMatchers("/rewards/**").permitAll()
                 .anyRequest().permitAll());
                // .anyRequest().authenticated());
 
