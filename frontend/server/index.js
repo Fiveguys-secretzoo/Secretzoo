@@ -36,6 +36,7 @@ async function main() {
     givingTurnStart,
     givingTurnSelect,
     cardReveal,
+    passingTurnStart,
     passingTurnSelect,
   } = playMethods;
 
@@ -76,11 +77,14 @@ async function main() {
     cardShare(socket, io, rooms);
     checkReconnection(socket, io, rooms);
     leaveRoom(socket, io, rooms);
+
     // game listening 
     sendGameInfo(socket, io, rooms);
     cardDrag(socket, io, rooms);
     cardDrop(socket, io, rooms);
     cardBluffSelect(socket, io, rooms);
+    passingTurnStart(socket, io, rooms);
+    cardReveal(socket, io, rooms);
 
     // test codes
     testRoomsInfo(socket, io, rooms);

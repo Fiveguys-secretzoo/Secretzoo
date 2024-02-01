@@ -13,7 +13,7 @@ const { animals,
 const playSocketMethods = () => {
 
   // 방에 처음 입장할 때 실행하게 되는 함수
-  const getRoomInfoForGame = (rooms, roomName) => {
+  const getRoomInfoForGame = (rooms, roomName, pid) => {
     let extractedData = {};
 
     let roomInfo = rooms[roomName];
@@ -30,19 +30,29 @@ const playSocketMethods = () => {
       'players': roomInfo['players'].map(player => ({
         'playerId': player['playerId'],
         'playerName': player['Name'],
+        'penalty': [...player['penalty']],
       })),
       'adminPlayer': roomInfo['adminPlayer'],
       'nowTurn': roomInfo['nowTurn'],
       'onBoard': { ...roomInfo['onBoard'] },
     };
 
+    if (extractedData.onBoard.status !== 0) {
+      socket.emit('sendCardInfo', () => {
+        for (let player in extractedData.players) {
+          if (player.playerId === pid) {
+            return player.hand
+          }
+        }
+      })
+    }
     return extractedData;
   }
 
   /* 방 정보 전달, 보통 방 입장 시 초기에 혹은 Game 중간에 들어올 때 사용 */
   const sendGameInfo = async (socket, io, rooms) => {
     socket.on('requestGameInfo', (callback) => {
-
+      let pid;
       let room;
       let roomsKeys = Object.keys(rooms);
       // pid 가 들어간 방 정보 찾기
@@ -50,11 +60,12 @@ const playSocketMethods = () => {
         for (let player of rooms[roomName].players) {
           if (player.socketId === socket.id) {
             room = roomName;
+            pid = player.playerId;
             break;
           }
         }
       }
-      callback(getRoomInfoForGame(rooms, room));
+      callback(getRoomInfoForGame(rooms, room, pid));
       console.log(`##### Callback Game Info to Room ${room}`);
     });
   }
@@ -134,9 +145,13 @@ const playSocketMethods = () => {
   }
 
 
-  // 주는 턴 
-  const givingTurnStart = (socket, io, rooms) => {
-    socket.emit()
+  // 패스 선택시 
+  const passingTurnStart = (socket, io, rooms) => {
+    socket.on('cardPass', (room, callback) => {
+      callback(rooms[room].onBoard.card);
+      rooms[room].onBoard.status = 4;
+      io.to(room).emit('cardPass',);
+    })
   }
 
 
@@ -146,11 +161,16 @@ const playSocketMethods = () => {
   }
 
   const cardReveal = (socket, io, rooms) => {
+    socket.on('cardReveal', (room) => {
 
+      io.to(room).emit('cardReveal', checkCardReveal());
+    })
   }
 
   const passingTurnSelect = (socket, io, rooms) => {
+    socket.on('cardPass', () => {
 
+    })
   }
 
   return {
@@ -159,7 +179,7 @@ const playSocketMethods = () => {
     cardDrag,
     cardDrop,
     cardBluffSelect,
-    givingTurnStart,
+    passingTurnStart,
     givingTurnSelect,
     cardReveal,
     passingTurnSelect,

@@ -9,6 +9,7 @@ import {
   addPlayer,
   removePlayer,
   initRoomInfo,
+  initCardInfo,
   changePlayState,
   changeCardStatus,
   changeNowTurn,
@@ -36,11 +37,20 @@ const Play = () => {
   const toP = useSelector(state => state.plays.onBoard.to);
   const card = useSelector(state => state.plays.onBoard.card);
   const bCard = useSelector(state => state.plays.onBoard.cardBluff);
+  const cards = useSelector(state => {
+    for (let player of state.plays.players) {
+      if (pid === player.playerId) {
+        console.log(`[playerhand]`)
+        console.log(player.hand)
+        return player.hand;
+      }
+      return [];
+    }
+  })
   const dispatch = useDispatch();
 
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
-  const [cards, setCards] = useState([]);
   const [isMyTurn, setIsMyTurn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [thisTurnPlayer, setThisTurnPlayer] = useState('');
@@ -115,10 +125,6 @@ const Play = () => {
     console.log(`card Pass Response!`)
   }
 
-
-
-
-
   // player enter socket event handle
   const playerEnterHandler = (player) => {
     console.log(`##### player entered...`);
@@ -146,7 +152,7 @@ const Play = () => {
       cardPassHandler();
       dispatch(changePlayState(4));
     } else {
-      cardAnswerHandler();
+      cardAnswerHandler(val);
       dispatch(changePlayState(5));
     }
   }
@@ -154,10 +160,13 @@ const Play = () => {
   // 카드 패스 선택시
   const cardPassHandler = () => {
     console.log(`card Passed!`);
+    socket.emit('cardPass', roomName);
   }
 
-  const cardAnswerHandler = () => {
+  // 카드 정답 맞추기
+  const cardAnswerHandler = (answer) => {
     console.log(`card Answered!`);
+    socket.emit('cardAnswer', answer) // 0 is trust, 2 is distrust
   }
 
   // 방을 나간다. 나는 나간다.
@@ -175,15 +184,15 @@ const Play = () => {
   // 게임 시작 버튼을 눌렀을 때 작동하는 함수, 여러가지 socket을 on 처리 시킨다.
   const gameStart = (cards, firstPlayer) => {
     console.log("##### Game Started !");
-    setCards(cards);
+    dispatch(initCardInfo(cards));
     dispatch(changePlayState(1));
     console.log("##### Card Set");
 
     socket.on("cardDrag", cardDragResponseHandler);
     socket.on("cardDrop", cardDropResponseHandler);
     socket.on("cardBluffSelect", cardBluffResponseHandler);
-    socket.on("cardPass",);
-    socket.on("cardAnswer",);
+    socket.on("cardPass", cardPassResponseHandler);
+    socket.on("cardAnswer", cardAnswerResponseHandler);
   }
   // 게임 종료 시 사용
   // playState 0 으로 정의 
@@ -198,7 +207,9 @@ const Play = () => {
     dispatch(initRoomInfo(game));
   }
 
-
+  const cardInfoHandler = (cards) => {
+    dispatch(initCardInfo(cards));
+  }
 
   /* 이벤트 수신, 방 입장 시 실행 */
   useEffect(() => {
@@ -212,11 +223,11 @@ const Play = () => {
     socket.emit('checkReconnection', pid);
     // 게임 방의 초기 정보 확인 후 가져옴
     socket.emit('requestGameInfo', gameInfoHandler);
+    socket.on('SendCardInfo', cardInfoHandler);
     socket.on('chatMessage', messageHandler);
     socket.on('gameStart', gameStart);
     socket.on('playerEnter', playerEnterHandler);
     socket.on('playerLeave', playerLeaveHandler);
-
     //test, and get the every room info
     // socket.emit('testRoomsInfo', (rooms) => {
     //   console.log(rooms);
@@ -353,28 +364,41 @@ const Play = () => {
         }
         {/* 넘기기 */}
         {
-          playState === 4 &&
-          <SelectScreen>
-            <div className="overlay">
-              <h1>Something Something Something We win</h1>
-            </div>
-          </SelectScreen>
-        }
-
-        {
-          playState === 5 && isMyTurn &&
+          playState === 4 && isMyTurn &&
           <div
             onDragStart={() => dragStart()}
             draggable={isMyTurn}
             className="w-[8em] h-[13em] ml-[-4em] hover:scale(1.3) hover:-translate-y-20 hover:rotate-[20deg] hover:z-50 transition-transform duration-300 "
           >
-            <img src={imageRoute()} alt="" />
+            <img src={imageRoute(64)} alt="" />
           </div>
         }
+
 
         {/* 플레이어 표현 부분 */}
         {
           playerSlot(playerList)
+        }
+
+        {/* 넘기는 턴에 카드 부분  */}
+        {
+          playState === 4 && !isMyTurn &&
+
+          <SelectScreen>
+            <div
+              onDragStart={() => dragStart()}
+              draggable={isMyTurn}
+              className="w-[8em] h-[13em] ml-[-4em] hover:scale(1.3) hover:-translate-y-20 hover:rotate-[20deg] hover:z-50 transition-transform duration-300 "
+            >
+              <img src={imageRoute(64)} alt="" />
+            </div>
+
+          </SelectScreen>
+        }
+        {
+          playState === 5 &&
+          <div>
+          </div>
         }
 
 
@@ -388,7 +412,7 @@ const Play = () => {
                 <div
                   onDragStart={() => dragStart(item)}
                   key={index}
-                  draggable={isMyTurn}
+                  draggable={((playState === 1 || playState === 4) && isMyTurn)}
                   className="w-[8em] h-[13em] ml-[-4em] hover:scale(1.3) hover:-translate-y-20 hover:rotate-[20deg] hover:z-50 transition-transform duration-300 "
                   style={{ zIndex: cards.length - index }}
                 >

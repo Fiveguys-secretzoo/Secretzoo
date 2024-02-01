@@ -41,6 +41,7 @@ export const playSlice = createSlice({
       });
       console.log(state.roomName);
     },
+    
     initCardInfo: (state, action) => {
       state.card = [...action.payload];
     },
@@ -61,43 +62,52 @@ export const playSlice = createSlice({
       console.log(`##### player added, ${action.payload}`)
       console.log(state.players);
     },
+
     removePlayer: (state, action) => {
       console.log(`remove player to store [${action.payload}]`);
       state.players = [...state.players.filter((e) => (
         e.playerId !== action.payload
       ))]
     },
+
     changePlayState: (state, action) => {
       console.log(`change status to store [${action.payload}]`);
       state.onBoard.status = action.payload;
     },
+
     changeAdmin: (state, action) => {
       console.log(`change admin to store [${action.payload}]`);
       state.adminPlayer = action.payload.adminPlayer;
     },
+
     changeNowTurn: (state, action) => {
       console.log(`Now Turn has been changed to ${action.payload}`);
       state.nowTurn = action.payload;
     },
+
     changeCardStatus: (state, action) => {
       console.log(`change card drag to store [${action.payload.from}] [${action.payload.card}]`);
       state.onBoard.from = action.payload.from;
       state.onBoard.card = action.payload.card;
     },
+
     changeCardDrag: (state, action) => {
       console.log(`[cardDrag] changed / from : [${action.payload.from}] to : [${action.payload.to}]`)
       state.onBoard.from = action.payload.from;
       state.onBoard.to = action.payload.to;
     },
+
     changeCardDrop: (state, action) => {
       console.log(`[cardDrop] changed / from : [${action.payload.from}] to : [${action.payload.to}]`)
       state.onBoard.from = action.payload.from;
       state.onBoard.to = action.payload.to;
     },
+
     changeCardBluff: (state, action) => {
       console.log(`[cardBluff] bluffed to [${action.payload}]`)
       state.onBoard.cardBluff = action.payload;
     },
+
     changeInitOnBoardCard: (state, action) => {
       state.onBoard.from = '';
       state.onBoard.to = '';
