@@ -13,7 +13,7 @@ const { animals,
 const playSocketMethods = () => {
 
   // 방에 처음 입장할 때 실행하게 되는 함수
-  const getRoomInfoForGame = (rooms, roomName, pid) => {
+  const getRoomInfoForGame = (rooms, roomName, pid, socket) => {
     let extractedData = {};
 
     let roomInfo = rooms[roomName];
@@ -56,6 +56,7 @@ const playSocketMethods = () => {
       let room;
       let roomsKeys = Object.keys(rooms);
       // pid 가 들어간 방 정보 찾기
+
       for (let roomName of roomsKeys) {
         for (let player of rooms[roomName].players) {
           if (player.socketId === socket.id) {
@@ -65,7 +66,7 @@ const playSocketMethods = () => {
           }
         }
       }
-      callback(getRoomInfoForGame(rooms, room, pid));
+      callback(getRoomInfoForGame(rooms, room, pid, socket));
       console.log(`##### Callback Game Info to Room ${room}`);
     });
   }
@@ -148,9 +149,9 @@ const playSocketMethods = () => {
   // 패스 선택시 
   const passingTurnStart = (socket, io, rooms) => {
     socket.on('cardPass', (room, callback) => {
-      callback(rooms[room].onBoard.card);
       rooms[room].onBoard.status = 4;
       io.to(room).emit('cardPass',);
+      callback(rooms[room].onBoard.card);
     })
   }
 
@@ -160,10 +161,20 @@ const playSocketMethods = () => {
 
   }
 
-  const cardReveal = (socket, io, rooms) => {
-    socket.on('cardReveal', (room) => {
+  const checkCardReveal = (rooms, room, answer) => {
+    let card = rooms[room].onBoard.card;
+    let bCard = rooms[room].onBoard.bCard;
+    let isSame = (card / 8) === bCard;http://localhost:3000/static/media/000.7debb096620a360bdc0f.png
+    if ((answer === 0 && isSame) || (answer === 1 && !isSame))
+      return true;
+    else
+      return false;
+  }
 
-      io.to(room).emit('cardReveal', checkCardReveal());
+  const cardReveal = (socket, io, rooms) => {
+    socket.on('cardReveal', (room, answer) => {
+
+      io.to(room).emit('cardReveal', checkCardReveal(rooms, room, answer));
     })
   }
 

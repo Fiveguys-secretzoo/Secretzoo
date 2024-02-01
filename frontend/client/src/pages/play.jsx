@@ -37,16 +37,7 @@ const Play = () => {
   const toP = useSelector(state => state.plays.onBoard.to);
   const card = useSelector(state => state.plays.onBoard.card);
   const bCard = useSelector(state => state.plays.onBoard.cardBluff);
-  const cards = useSelector(state => {
-    for (let player of state.plays.players) {
-      if (pid === player.playerId) {
-        console.log(`[playerhand]`)
-        console.log(player.hand)
-        return player.hand;
-      }
-      return [];
-    }
-  })
+  const images = {};
   const dispatch = useDispatch();
 
   const [messages, setMessages] = useState([]);
@@ -57,6 +48,8 @@ const Play = () => {
   const [cardDrag, setCardDrag] = useState({ 'from': -1, 'to': -1, 'card': -1 });
   const [cardDrop, setCardDrop] = useState({ 'from': -1, 'to': -1, 'card': -1 });
   const [playersId, setPlayersId] = useState(['', '', '', '', '', '']);
+  const [cards, setCards] = useState(['']); // 손에 들고 있는 카드 관리
+  const [gameResult, setGameResult] = useState(false);
   // 0 대기 1 시작 2 카드 드롭 후 동물 선택 3 동물 선택 후 방어 턴 4 넘기는 턴 드래그 5 넘기는 턴 동물 선택 6 결과 확인
 
 
@@ -105,7 +98,6 @@ const Play = () => {
     dispatch(changeNowTurn(from));
     dispatch(changeCardDrop({ from: from, to: to }))
     console.log(`[cardDrop] nowTurn : ${nowTurn} / pid : ${pid}`);
-    if (nowTurn === pid) setIsMyTurn(true);
     console.log(`[cardDrop] playState is ${playState} / isMyTurn : ${isMyTurn}`)
   };
 
@@ -114,15 +106,28 @@ const Play = () => {
     console.log(`card Bluffed [${from}] to [${to}] by [${bCard}]`);
     dispatch(changePlayState(3));
     dispatch(changeNowTurn(to));
+    if (nowTurn === pid) {
+      setIsMyTurn(true);
+    } else {
+      setIsMyTurn(false);
+    }
     dispatch(changeCardBluff(bCard));
   }
 
-  const cardAnswerResponseHandler = () => {
+  const cardAnswerResponseHandler = (result) => {
+    setGameResult(result);
+    dispatch(changePlayState(5));
     console.log(`card Answer Response!`);
   }
 
   const cardPassResponseHandler = () => {
     console.log(`card Pass Response!`)
+    dispatch(changePlayState(4))
+    if (nowTurn === pid) {
+      setIsMyTurn(true);
+    } else {
+      setIsMyTurn(false);
+    }
   }
 
   // player enter socket event handle
@@ -160,13 +165,15 @@ const Play = () => {
   // 카드 패스 선택시
   const cardPassHandler = () => {
     console.log(`card Passed!`);
-    socket.emit('cardPass', roomName);
+    socket.emit('cardPass', roomName, (result) => {
+      console.log(`[cardPass] ${result}`)
+    });
   }
 
   // 카드 정답 맞추기
   const cardAnswerHandler = (answer) => {
     console.log(`card Answered!`);
-    socket.emit('cardAnswer', answer) // 0 is trust, 2 is distrust
+    socket.emit('cardReveal', roomName, answer) // 0 is trust, 2 is distrust
   }
 
   // 방을 나간다. 나는 나간다.
@@ -184,7 +191,7 @@ const Play = () => {
   // 게임 시작 버튼을 눌렀을 때 작동하는 함수, 여러가지 socket을 on 처리 시킨다.
   const gameStart = (cards, firstPlayer) => {
     console.log("##### Game Started !");
-    dispatch(initCardInfo(cards));
+    setCards(cards);
     dispatch(changePlayState(1));
     console.log("##### Card Set");
 
@@ -208,11 +215,15 @@ const Play = () => {
   }
 
   const cardInfoHandler = (cards) => {
-    dispatch(initCardInfo(cards));
+    setCards([...cards])
   }
 
   /* 이벤트 수신, 방 입장 시 실행 */
   useEffect(() => {
+
+    for (let i = 0; i < 64; i++) {
+      images[i] = imageRoute(i);
+    }
     // 서버 닫혔을 때 유저를 대방출
     socket.on("serverClosed", (e) => {
       console.log("serverClosed");
@@ -223,7 +234,7 @@ const Play = () => {
     socket.emit('checkReconnection', pid);
     // 게임 방의 초기 정보 확인 후 가져옴
     socket.emit('requestGameInfo', gameInfoHandler);
-    socket.on('SendCardInfo', cardInfoHandler);
+    socket.on('sendCardInfo', cardInfoHandler);
     socket.on('chatMessage', messageHandler);
     socket.on('gameStart', gameStart);
     socket.on('playerEnter', playerEnterHandler);
@@ -258,6 +269,7 @@ const Play = () => {
     // checkMyTurn(roomInfo.adminPlayer);
     // checkIsAdmin(roomInfo.nowTurn);
   }, [adminPlayer, nowTurn, isAdmin])
+
   const imageRoute = (item) => {
     return require(`../assets/img/card/0${Math.floor(item / 8)}/00${item % 8}.png`);
   }
@@ -395,10 +407,18 @@ const Play = () => {
 
           </SelectScreen>
         }
+        {/* 게임결과 */}
         {
           playState === 5 &&
-          <div>
-          </div>
+          <SelectScreen>
+            <div disabled={!gameResult}>
+              플레이어가 정답을 맞췄습니다.
+            </div>
+            <div disabled={gameResult}>
+              플레이어가 정답을 틀렸습니다.
+            </div>
+            <Button onClick={dispatch(changePlayState(1))}></Button>
+          </SelectScreen>
         }
 
 
@@ -416,7 +436,7 @@ const Play = () => {
                   className="w-[8em] h-[13em] ml-[-4em] hover:scale(1.3) hover:-translate-y-20 hover:rotate-[20deg] hover:z-50 transition-transform duration-300 "
                   style={{ zIndex: cards.length - index }}
                 >
-                  <img key={index} className="" src={imageRoute(item)} alt="" />
+                  <img key={index} className="" src={images[item]} alt="" />
                 </div>
               ))}
           </div>
