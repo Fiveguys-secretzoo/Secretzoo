@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000", exposedHeaders = "*")
+@CrossOrigin(origins = "https://secretzoo", exposedHeaders = "*")
 @RequestMapping("/auth")
 @Tag(name = "AuthController", description = "사용자(회원, 비회원)가 이용할 수 있는 서비스")
 public class AuthController {
