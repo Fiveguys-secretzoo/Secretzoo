@@ -3,7 +3,7 @@ version: '3'
 services:
   react-app:
     build:
-      context: .
+      context: /client
       dockerfile: Dockerfile
     container_name: react-app
     ports:
@@ -14,6 +14,16 @@ services:
     #  - /usr/src/app:/usr/share/nginx/html
     networks:
       - docker_nat
+
+  node-server:
+      build:
+        context: /server
+        dockerfile: Dockerfile # Node.js 서버를 위한 Dockerfile
+      container_name: node-server
+      ports:
+      - "3001:3001" # Node.js 서버 포트 설정
+      networks:
+        - docker_nat
 networks:
   docker_nat:
     external: true
