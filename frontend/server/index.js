@@ -41,7 +41,7 @@ async function main() {
   const handleException = (socket) => {
 
   }
-  //리액트
+  //리액트 서버
   // const serverURL = 'http://localhost:3000'
   const serverURL = 'http://react-app:3000'
   // cors 설정
