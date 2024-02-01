@@ -47,7 +47,9 @@ export const playSlice = createSlice({
 
     addPlayer: (state, action) => {
       let isAlreadyIn = false;
-      for (let player in state.players) {
+      for (let player of state.players) {
+        console.log(player);
+
         if (player.playerId === action.payload.playerId) {
           isAlreadyIn = true;
           break;
@@ -73,23 +75,35 @@ export const playSlice = createSlice({
       console.log(`change admin to store [${action.payload}]`);
       state.adminPlayer = action.payload.adminPlayer;
     },
+    changeNowTurn: (state, action) => {
+      console.log(`Now Turn has been changed to ${action.payload}`);
+      state.nowTurn = action.payload;
+    },
     changeCardStatus: (state, action) => {
       console.log(`change card drag to store [${action.payload.from}] [${action.payload.card}]`);
       state.onBoard.from = action.payload.from;
       state.onBoard.card = action.payload.card;
     },
     changeCardDrag: (state, action) => {
-      console.log(action.payload)
-      state.onBoard.to = action.payload;
+      console.log(`[cardDrag] changed / from : [${action.payload.from}] to : [${action.payload.to}]`)
+      state.onBoard.from = action.payload.from;
+      state.onBoard.to = action.payload.to;
     },
     changeCardDrop: (state, action) => {
-      state.onBoard.to = action.payload;
+      console.log(`[cardDrop] changed / from : [${action.payload.from}] to : [${action.payload.to}]`)
+      state.onBoard.from = action.payload.from;
+      state.onBoard.to = action.payload.to;
     },
-    //TODO - 초기 값 추가 / 카드 턴 (from to card) 추가 / players 추가
-    //TODO - admin 변경
-    //TODO - 지금 턴 상태 추가
-    //TODO
-
+    changeCardBluff: (state, action) => {
+      console.log(`[cardBluff] bluffed to [${action.payload}]`)
+      state.onBoard.cardBluff = action.payload;
+    },
+    changeInitOnBoardCard: (state, action) => {
+      state.onBoard.from = '';
+      state.onBoard.to = '';
+      state.onBoard.cardBluff = -1;
+      state.onBoard.card = -1;
+    }
 
 
 
@@ -105,6 +119,10 @@ export const {
   removePlayer,
   changePlayState,
   changeAdmin,
+  changeNowTurn,
   changeCardStatus,
+  changeCardDrag,
+  changeCardDrop,
+  changeCardBluff,
 } = playSlice.actions;
 export default playSlice.reducer;

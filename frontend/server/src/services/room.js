@@ -68,11 +68,16 @@ const addPlayer = (rooms, roomName, playerId, socketId, socket, io) => {
   let isFirst = true;
   console.log(rooms[roomName]);
   // 이미 방에 들어가 있는지 체크 
-  for (let player of rooms[roomName].players) {
-    if (player.playerId === playerId) {
-      isFirst = false;
-      break;
+  try {
+    for (let player of rooms[roomName].players) {
+      if (player.playerId === playerId) {
+        isFirst = false;
+        break;
+      }
     }
+  } catch (e) {
+    console.log("##### Error!!! players not Exist!!")
+    console.log(rooms[roomName])
   }
   if (isFirst) {
     rooms[roomName].playerCount++;
@@ -186,7 +191,7 @@ const roomSocketMethods = () => {
 
   /* 방 입장 이벤트 */
   const enterRoom = async (socket, io, rooms) => {
-    socket.on('enterRoom', (room, id, callback) => {
+    socket.on('enterRoom', (room, pid, callback) => {
       // 인원수 체크
       if (rooms[room] && rooms[room].playerCount >= 6) {
         callback(false);
@@ -195,7 +200,7 @@ const roomSocketMethods = () => {
         for (let nowRoom of socket.rooms) {
           if (nowRoom !== socket.id) {
             socket.leave(nowRoom);
-            removePlayer(rooms, nowRoom, id, socket, io);
+            removePlayer(rooms, nowRoom, pid, socket, io);
           }
         }
 
@@ -204,7 +209,7 @@ const roomSocketMethods = () => {
 
         // console.log(io.of('/').adapter.rooms);
         socket.emit('updateRoom', rooms);
-        addPlayer(rooms, room, id, socket.id, socket, io)
+        addPlayer(rooms, room, pid, socket.id, socket, io)
         callback(true)
         console.log(`##### player ${socket.id} join room : ${room}`);
       }
@@ -227,14 +232,18 @@ const roomSocketMethods = () => {
   const checkReconnection = async (socket, io, rooms) => {
     socket.on('checkReconnection', (pid, callback) => {
       console.log(`##### Checking Reconnection of User ${pid}`);
-      for (let room in rooms) {
-        for (let player of rooms[room].players) {
-          if (player.playerId === pid) {
-            player.socketId = socket.id;
-            socket.join(room);
-            break;
+      try {
+        for (let room in rooms) {
+          for (let player of rooms[room].players) {
+            if (player.playerId === pid) {
+              player.socketId = socket.id;
+              socket.join(room);
+              break;
+            }
           }
         }
+      } catch (err) {
+        console.log(err);
       }
     })
   }

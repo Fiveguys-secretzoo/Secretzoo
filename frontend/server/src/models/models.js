@@ -69,7 +69,7 @@ const models = () => {
       "status": 0,  // 0 : 대기, 1 : 시작, 2 : 주는 턴, 3 : 받는 턴, 4: 넘기는 턴 
       "from": '',
       "to": '',
-      "bluffCard": '',
+      "cardBluff": '',
       "card": '',
       "turnedPlayer": [],
     }

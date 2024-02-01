@@ -85,7 +85,6 @@ const playSocketMethods = () => {
   // 카드 드롭한 정보를 받고 같은 정보를 다른 모든 socket room 참여자 들에게 뿌린다.
   const cardDrop = (socket, io, rooms) => {
     socket.on('cardDrop', (from, to, card) => {
-
       console.log("##### card Dragged and Dropped")
       // io.to(rooms[socket.room].players[k].socketId).emit('cardDrop', from, to);
       let room;
@@ -102,14 +101,14 @@ const playSocketMethods = () => {
       rooms[room].onBoard.from = from;
       rooms[room].onBoard.to = to;
       rooms[room].onBoard.card = card;
-      console.log(`##### send card Dropped Data to ${room}`)
+      console.log(`##### send card Dropped Data to [${room}], [${from}] => [${to}] a [${card}]`)
       io.to(room).emit('cardDrop', from, to);
     })
   }
 
   // 카드 블러핑한 정보를 받고 같은 정보를 다른 모든 socket room 참여자 들에게 뿌린다.
   const cardBluffSelect = (socket, io, rooms) => {
-    socket.on('cardBluffSelect', (from, bCard) => {
+    socket.on('cardBluffSelect', (bCard) => {
       let room;
       let roomsKeys = Object.keys(rooms);
       for (let roomName of roomsKeys) {
@@ -120,9 +119,10 @@ const playSocketMethods = () => {
           }
         }
       }
+      let from = rooms[room].onBoard.from;
       let to = rooms[room].onBoard.to;
       rooms[room].onBoard.status = 3;
-      rooms[room].onBoard.bluffCard = bCard;
+      rooms[room].onBoard.cardBluff = bCard;
       if (!rooms[room].onBoard.turnedPlayer.includes(from)) {
         rooms[room].onBoard.turnedPlayer.push(from);
       }
@@ -134,9 +134,11 @@ const playSocketMethods = () => {
   }
 
 
+  // 주는 턴 
   const givingTurnStart = (socket, io, rooms) => {
-
+    socket.emit()
   }
+
 
   // 주는 턴에서 선택하는 경우!
   const givingTurnSelect = (socket, io, rooms) => {

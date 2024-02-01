@@ -45,7 +45,7 @@ async function main() {
 
   // cors 설정
   app.use(cors({
-    origin: 'http://localhost:3001'
+    origin: 'http://localhost:3000'
   }));
 
   const server = createServer(app);
@@ -56,7 +56,7 @@ async function main() {
     forceNew: false,
     connectionStateRecovery: {},
     cors: {
-      origin: "http://localhost:3001",
+      origin: "http://localhost:3000",
       methods: ["GET", "POST"]
     }
   });
@@ -108,8 +108,8 @@ async function main() {
 
   });
 
-  server.listen(3000, () => {
-    console.log('server running at http://localhost:3000');
+  server.listen(3001, () => {
+    console.log('server running at http://localhost:3001');
   });
 }
 

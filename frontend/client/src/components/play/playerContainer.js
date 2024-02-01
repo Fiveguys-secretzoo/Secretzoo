@@ -23,9 +23,10 @@ const PlayerContainer = () => {
   // 플레이어 위에 드롭 했을 때 socket.io 로 emit
   const dropHandler = (e, pid) => {
     e.preventDefault();
-    console.log(dragItem + " drop " + dragTo);
+    dispatch(changeCardDrop({ from: dragFrom, to: pid }))
+    console.log(`[dropHandler] [${dragItem}] drop [${dragTo}], pid : [${pid}]`);
     alert(dragItem + " drop " + e.target.textContent);
-    socket.emit("cardDrop", dragFrom, dragTo, dragItem);
+    socket.emit("cardDrop", dragFrom, pid, dragItem);
     dispatch(changePlayState(2));
   };
 

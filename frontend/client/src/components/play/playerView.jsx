@@ -2,7 +2,7 @@ import { Card } from 'flowbite-react'
 import PlayerContainer from './playerContainer';
 
 
-const PlayerView = ({ pid, key, pn = "SomethingSomething", activate = false }) => {
+const PlayerView = ({ pid, key, pn = "SomethingWrong", activate = false }) => {
 
   const playerContainer = PlayerContainer();
   const { dragOver, dragEnterHandler, dropHandler } = playerContainer;
