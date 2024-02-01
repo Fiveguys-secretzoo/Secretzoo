@@ -7,22 +7,10 @@ const NoLogin = () => {
   const [name, setName] = useState("");
   const navigate = useNavigate();
 
-  const saveName = () => {
-    sessionStorage.setItem('userName', name);
-    // axios.get('url',
-    //   {
-    //     param : 'param',
-    //   },
-    //   {
-    //     Headers : {
-
-    //     },
-    //   }
-    // ).then((Response) => {
-      
-    // })
-    navigate("/lobby");
-  };
+  // const saveName = () => {
+  //   sessionStorage.setItem('userName', name);
+  //   navigate("/lobby");
+  // };
   return (
     <>
       <div className='pt-20'>
@@ -37,7 +25,11 @@ const NoLogin = () => {
       </div>
       <Button 
       type="submit" 
+<<<<<<< HEAD
       onClick={() => (saveName())}
+=======
+      // onClick={() => (saveName())}
+>>>>>>> dev/frontend
       className="w-full mt-2">참가</Button>
       {/* <div className="pt-20">
         <h3 className="text-2xl font-bold text-center">비회원으로 즐기기</h3>
