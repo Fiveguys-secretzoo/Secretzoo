@@ -6,8 +6,8 @@ services:
       context: ./client
       dockerfile: Dockerfile
     container_name: react-app
-    # ports:
-    #  - "3000:3000"
+    ports:
+     - "3000:3000"
     #volumes:
     #  - /home/ubuntu/secretzoo/frontend/client:/usr/src/app
     #volumes:
@@ -20,8 +20,8 @@ services:
         context: ./server
         dockerfile: Dockerfile # Node.js 서버를 위한 Dockerfile
       container_name: node-server
-      # ports:
-      # - "3001:3001" # Node.js 서버 포트 설정
+      ports:
+      - "3001:3001" # Node.js 서버 포트 설정
       networks:
         - docker_nat
 networks:
