@@ -43,10 +43,10 @@ async function main() {
   const handleException = (socket) => {
 
   }
-
+  const serverURL = 'http://localhost:3000'
   // cors 설정
   app.use(cors({
-    origin: 'http://localhost:3000'
+    origin: serverURL
   }));
 
   const server = createServer(app);
@@ -57,7 +57,7 @@ async function main() {
     forceNew: false,
     connectionStateRecovery: {},
     cors: {
-      origin: "http://localhost:3000",
+      origin: serverURL,
       methods: ["GET", "POST"]
     }
   });

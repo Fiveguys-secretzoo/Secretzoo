@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  react-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: react-app
+    # ports:
+    #  - "3000:3000"
+    #volumes:
+    #  - /home/ubuntu/secretzoo/frontend/client:/usr/src/app
+    #volumes:
+    #  - /usr/src/app:/usr/share/nginx/html
+    networks:
+      - docker_nat
+networks:
+  docker_nat:
+    external: true

@@ -1,36 +1,39 @@
 import React, { useState } from "react";
-import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import { Button, Label, TextInput } from 'flowbite-react';
 
 const NoLogin = () => {
   const [name, setName] = useState("");
   const navigate = useNavigate();
 
   const saveName = () => {
-    sessionStorage.setItem('userName', name);
-    // axios.get('url',
-    //   {
-    //     param : 'param',
-    //   },
-    //   {
-    //     Headers : {
-
-    //     },
-    //   }
-    // ).then((Response) => {
-      
-    // })
-    navigate("/lobby");
+    if (name.length > 0) {
+      sessionStorage.setItem('noLogin', true);
+      sessionStorage.setItem('userNickname', name);
+      navigate("/lobby");
+    } else {
+      alert('닉네임은 필수입니다.')
+    }
   };
+
   return (
     <>
-      <div className="pt-20">
-        <h3 className="text-2xl font-bold text-center">비회원으로 즐기기</h3>
-        <input className='w-full p-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500'
-        value={name} onChange={(e) => setName(e.target.value)}></input>
-        <button className='w-full px-6 mt-4 text-white bg-blue-500 rounded-md hover:bg-blue-600'
-        onClick={saveName}>참가</button>
-      </div>
+      <form>
+        <div className='pt-20'>
+          <div className="mb-2 block">
+            <Label value="닉네임" />
+          </div>
+          <TextInput
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="비회원으로 사용할 닉네임"
+            type="text" required />
+        </div>
+        <Button
+          type="submit"
+          onClick={(e) => { e.preventDefault(); saveName(); }}
+          className="w-full mt-2">참가</Button>
+      </form>
     </>
   );
 };
