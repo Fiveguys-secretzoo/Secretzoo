@@ -224,7 +224,7 @@ const Play = () => {
   const cardInfoHandler = (cards) => {
     try { setCards([...cards]) }
     catch (e) {
-      
+
     }
   }
 
@@ -301,7 +301,7 @@ const Play = () => {
 
   const playerSlot = (playerArr) => {
     const slotArr = [];
-    for (let k = 0; k < 6; k++) {
+    for (let k = 0; k < 5; k++) {
       let playerId = "", playerName = "";
       let activate = false;
       if (playerArr[k] != null || playerArr[k] !== undefined) {
@@ -326,11 +326,7 @@ const Play = () => {
       <div className='w-screen h-[60%] flex flex-wrap justify-between'>
         {/* 내 턴 아닐 때 드래그 공유 */}
 
-        {playState === 1 && !isMyTurn &&
-          < div >
-            {fromP} / {toP} / {card}
-          </div>
-        }
+
         {/* 내 턴일 때 드롭 시 버튼 */}
         {
           playState === 2 && isMyTurn &&
@@ -402,11 +398,6 @@ const Play = () => {
         }
 
 
-        {/* 플레이어 표현 부분 */}
-        {
-          playerSlot(playerList)
-        }
-
         {/* 넘기는 턴에 카드 부분  */}
         {
           playState === 4 && !isMyTurn &&
@@ -435,47 +426,51 @@ const Play = () => {
             <Button onClick={dispatch(changePlayState(1))}></Button>
           </SelectScreen>
         }
-
+        {/* 플레이어 표현 부분 */}
+        {
+          playerSlot(playerList)
+        }
         {/* <img className="" src={require(`../assets/img/card/00/000.png`)} alt="" /> */}
-        <div className="cards">
-          <div className='flex absolute left-[35%] bottom-[100px]'>
 
-            {/* 카드 표현 부분 */}
-            {cards &&
-              cards.map((i, index) => (
-                <div
-                  onDragStart={() => dragStart(i)}
-                  key={index}
-                  draggable={((playState === 1 || playState === 4) && isMyTurn)}
-                  className="w-[8em] h-[13em] ml-[-4em] hover:scale(1.3) hover:-translate-y-20 hover:rotate-[20deg] hover:z-50 transition-transform duration-300 "
-                  style={{ zIndex: cards.length - index }}
-                >
-                  {/* <img key={index} className="" src={require(`../assets/img/card/0${Math.floor(i / 8)}/00${i % 8}.png`)} alt="" /> */}
-                  <img key={index} className="" src={images[i]} alt="" />
-                </div>
-              ))}
+        <div className='flex absolute left-[35%] bottom-[100px]'>
+
+          {/* 카드 표현 부분 */}
+          {cards &&
+            cards.map((i, index) => (
+              <div
+                onDragStart={() => dragStart(i)}
+                key={index}
+                draggable={((playState === 1 || playState === 4) && isMyTurn)}
+                className="w-[8em] h-[13em] ml-[-4em] hover:scale(1.3) hover:-translate-y-20 hover:rotate-[20deg] hover:z-50 transition-transform duration-300 "
+                style={{ zIndex: cards.length - index }}
+              >
+                {/* <img key={index} className="" src={require(`../assets/img/card/0${Math.floor(i / 8)}/00${i % 8}.png`)} alt="" /> */}
+                <img key={index} className="" src={images[i]} alt="" />
+              </div>
+            ))}
+
+
+          <h1>Chat Application</h1>
+          <div className="message-list">
+            {messages.map((msg, index) => (
+              <div key={index} className="message">{msg}</div>
+            ))}
           </div>
+          <div className="message-input">
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Type a message..."
+            />
+            <Button onClick={/*sendMessage*/() => { console.log(roomInfo) }}>Send</Button>
+          </div>
+          <Button className={(playState === 0) ? '' : 'hidden'} disabled={!isAdmin} color="success" onClick={start}>start</Button>
+          <Button color="success" onClick={leaveRoom}>난 나갈거다.</Button>
         </div>
 
-
-        <h1>Chat Application</h1>
-        <div className="message-list">
-          {messages.map((msg, index) => (
-            <div key={index} className="message">{msg}</div>
-          ))}
-        </div>
-        <div className="message-input">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Type a message..."
-          />
-          <Button onClick={/*sendMessage*/() => { console.log(roomInfo) }}>Send</Button>
-        </div>
-        <Button className={(playState === 0) ? '' : 'hidden'} disabled={!isAdmin} color="success" onClick={start}>start</Button>
-        <Button color="success" onClick={leaveRoom}>난 나갈거다.</Button>
       </div>
+
     </div>
   );
 };

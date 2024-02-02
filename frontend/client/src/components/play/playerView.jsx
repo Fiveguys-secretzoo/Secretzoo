@@ -12,7 +12,7 @@ const PlayerView = ({ pid, key, pn = "SomethingWrong", activate = false }) => {
 
   return (
     <>
-      <Card className="max-w-sm"
+      <div className="bg-white rounded w-[30%] m-2"
         key={key}
 
         onDragEnter={(e) => dragEnterHandler(e, pid)}
@@ -23,7 +23,7 @@ const PlayerView = ({ pid, key, pn = "SomethingWrong", activate = false }) => {
         <p className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
           {pid}
         </p>
-      </Card>
+      </div>
     </>
   );
 }
