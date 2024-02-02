@@ -10,3 +10,4 @@ COPY ${JAR_FILE_PATH}/game-0.0.1-SNAPSHOT.jar myboot.jar
 # ENV SPRING_PROFILES_ACTIVE=dev,oauth
 
 ENTRYPOINT ["java", "-jar", "./myboot.jar"]
+# ENTRYPOINT ["java", "-Dspring.profiles.active=${SPRING_PROFILES_ACTIVE}", "-jar", "./myboot.jar"]

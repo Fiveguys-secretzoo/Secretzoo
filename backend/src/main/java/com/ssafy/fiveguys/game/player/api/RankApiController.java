@@ -42,18 +42,6 @@ public class RankApiController {
     private final PlayerService playerService;
     private final RewardsService  rewardsService;
     private final UserRepositoy userRepositoy; //실시간 랭킹의 성능을 위해 특수한 상황 repository 주입
-//    private final PlayerRepository playerRepository;
-
-    //초기 랭킹 정보 redis에 캐싱
-//    @GetMapping("/init")
-//    public ResponseEntity<?> init() {
-//        // 더미 데이터 초기화 (실제 운영에서는 필요 없음)
-//        List<Player> players = playerRepository.findAll();
-//
-//        log.info("dummy create");
-//        rankService.saveAll(players);
-//        return new ResponseEntity<List<Player>>(players, HttpStatus.OK);
-//    }
 
     /**
      * 사용자의 게임 결과에서 랭킹 정보를 저장
@@ -84,7 +72,7 @@ public class RankApiController {
     }
 
     /**
-     * 상위 N명의 랭킹 정보 조회(공격)
+     * 상위 10명의 랭킹 정보 조회(공격)
      */
     @GetMapping("/attack")
     public ApiResponse getAttackRanking() {
@@ -102,7 +90,7 @@ public class RankApiController {
     }
 
     /**
-     * 상위 N명의 랭킹 정보 조회(방어)
+     * 상위 10명의 랭킹 정보 조회(방어)
      */
     @GetMapping("/defense")
     public ApiResponse getDefenseRanking() {
@@ -120,7 +108,7 @@ public class RankApiController {
     }
 
     /**
-     * 상위 N명의 랭킹 정보 조회(패스)
+     * 상위 10명의 랭킹 정보 조회(패스)
      */
     @GetMapping("/pass")
     public ApiResponse getPassRanking() {
@@ -136,17 +124,7 @@ public class RankApiController {
 
         return new ApiResponse(collect.size(), collect, totalPlayerCount);
     }
-    /**
-     * 상위 N명의 랭킹 정보 조회(패스)
-     */
-//    @GetMapping("/pass")
-//    public Result getPassRanking() {
-//        Set<ZSetOperations.TypedTuple<String>> topRankings = rankService.getTopRankingsOfPass();
-//        List<RankResponse> collect = topRankings.stream()
-//            .map(m -> new RankResponse(m.getValue(), m.getScore()))
-//            .collect(Collectors.toList());
-//        return new Result(collect.size(), collect);
-//    }
+
 
     /**
      * 상위 10명의 랭킹 정보 조회(from DB)
@@ -186,10 +164,7 @@ public class RankApiController {
                     player.getRankingScore().getAttackScore());
             })
             .toList();
-//        List<RankResponse> pass = players3.stream()
-//            .map(player -> new RankResponse(player.getUserSequence(),
-//                player.getRankingScore().getPassScore()))
-//            .toList();
+
 
         ConcurrentMap<String, List<RankResponseDto>> rankMap = new ConcurrentHashMap<>();
         rankMap.put("attack", attack);
