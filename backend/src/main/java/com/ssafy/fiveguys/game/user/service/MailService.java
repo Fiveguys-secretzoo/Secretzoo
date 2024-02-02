@@ -44,6 +44,9 @@ public class MailService {
         mimeMessageHelper.setSubject(title);
         mimeMessageHelper.setFrom(setForm);
         mimeMessageHelper.setText(content, true);
+        if (redisService.getVerificationCode(email) != null) {
+            redisService.deleteVerificationCode(email);
+        }
         redisService.saveVerificationCode(email, verificationCode);
         javaMailSender.send(message);
         return verificationCode;

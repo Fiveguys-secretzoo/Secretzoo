@@ -21,7 +21,6 @@ public class EmailConfig {
             javaMailProperties.put("mail.transport.protocol", "smtp");//프로토콜로 smtp 사용
             javaMailProperties.put("mail.smtp.auth", "true");//smtp 서버에 인증이 필요
             javaMailProperties.put("mail.smtp.starttls.enable", "true");//STARTTLS(TLS를 시작하는 명령)를 사용하여 암호화된 통신을 활성화
-            //javaMailProperties.put("mail.smtp.starttls.required", "true");//STARTTLS(TLS를 시작하는 명령)를 사용하여 암호화된 통신을 활성화
             javaMailProperties.put("mail.smtp.ssl.enable", "false");
             javaMailProperties.put("mail.smtp.ssl.trust", "smtp.gmail.com");//smtp 서버의 ssl 인증서를 신뢰
             javaMailProperties.put("mail.debug", "true");//디버깅 정보 출력
