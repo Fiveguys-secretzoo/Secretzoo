@@ -24,7 +24,7 @@ const models = () => {
     let playerName = '';
     let socketId = sid;
     let hand = [];
-    let penalty = [];
+    let penalty = [0,0,0,0,0,0,0,0];
     let datas = {}
     let scores = {
       'round': 0,
@@ -58,7 +58,7 @@ const models = () => {
     'roomName': '',
     'roomPassword': '',
     'roomAddress': '',
-    'status': '0',
+    'status': 0,
     'createdDate': '',
     'card': Array.from({ length: 64 }, (_, i) => i),
     'playerCount': 1,
@@ -66,10 +66,10 @@ const models = () => {
     'adminPlayer': '',
     'nowTurn': '',
     'onBoard': {
-      "status": '',  // 0 : 대기, 1 : 시작, 2 : 주는 턴, 3 : 받는 턴, 4: 넘기는 턴 
+      "status": 0,  // 0 : 대기, 1 : 시작, 2 : 주는 턴, 3 : 받는 턴, 4: 넘기는 턴 
       "from": '',
       "to": '',
-      "bluffCard": '',
+      "cardBluff": '',
       "card": '',
       "turnedPlayer": [],
     }
