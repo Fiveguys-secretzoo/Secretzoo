@@ -9,7 +9,7 @@ const Ranking = () => {
   // 공격랭킹 가져오기
   const getAttack = () => {
     changeTab();
-    axios.get('https://secretzoo.site/api/rank/attack').then((Response) => {
+    axios.get('https://spring.secretzoo.site/api/rank/attack').then((Response) => {
       setRanking(Response.data.data);
     });
   }
@@ -17,7 +17,7 @@ const Ranking = () => {
   // 수비랭킹 가져오기
   const getDefense = () => {
     changeTab();
-    axios.get('https://secretzoo.site/api/rank/defense').then((Response) => {
+    axios.get('https://spring.secretzoo.site/api/rank/defense').then((Response) => {
       setRanking(Response.data.data);
     });
   }
@@ -25,7 +25,7 @@ const Ranking = () => {
   // 패스랭킹 가져오기
   const getPass = () => {
     changeTab();
-    axios.get('https://secretzoo.site/api/rank/pass').then((Response) => {
+    axios.get('https://spring.secretzoo.site/api/rank/pass').then((Response) => {
       setRanking(Response.data.data);
     });
   }

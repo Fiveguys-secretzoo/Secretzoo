@@ -7,7 +7,7 @@ const LoginForm = () => {
   const [pass, setPass] = useState("");
   const navigate = useNavigate();
   const requsetLogin = () => {
-    axios.post('https://secretzoo.site/api/auth/login',
+    axios.post('https://spring.secretzoo.site/api/auth/login',
       {
         "userId": id,
         "password": pass,
