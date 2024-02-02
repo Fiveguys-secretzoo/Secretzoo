@@ -29,8 +29,8 @@ public class PlayerApiController {
      * @param playerSequence
      * @return
      */
-    @GetMapping("/{playerSequence}")
-    public ApiResponse getPlayerInfo(@PathVariable("playerSequence") Long playerSequence) {
+//    @GetMapping("/{playerSequence}")
+    public ApiResponse getPlayerInfoOld(@PathVariable("playerSequence") Long playerSequence) {
 
 
         //플레이어 정보 조회
@@ -42,6 +42,32 @@ public class PlayerApiController {
 
         //player 정보 조회에 필요한 데이터 dto 에 담기
         PlayerDto playerDto = new PlayerDto(playerSequence, player.getTotalRound(),
+            player.getTotalTurn(), player.getRankingScore(), player.getExp(),
+            player.getPlayerLevel());
+
+        //ApiResponse 형태로 return
+        return new ApiResponse(1, playerDto, totalPlayerCount);
+
+    }
+
+    /**
+     * player sequence로 player 정보조회
+     * @param userSequence
+     * @return
+     */
+    @GetMapping("/{userSequence}")
+    public ApiResponse getPlayerInfo(@PathVariable("userSequence") Long userSequence) {
+
+
+        //플레이어 정보 조회
+        Player player = playerService.getPlayerBySequence(userSequence);
+        // player sequence 가 db에 없는 경우 null 반환
+        if(player == null) return null;
+        // 전체 player 수
+        int totalPlayerCount = playerService.playerTotalCount();
+
+        //player 정보 조회에 필요한 데이터 dto 에 담기
+        PlayerDto playerDto = new PlayerDto(userSequence, player.getTotalRound(),
             player.getTotalTurn(), player.getRankingScore(), player.getExp(),
             player.getPlayerLevel());
 
