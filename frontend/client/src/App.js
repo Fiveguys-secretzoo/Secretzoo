@@ -31,17 +31,17 @@ function App() {
       <SocketContext.Provider value={socket}>
         <div className="App">
           <Routes>
-            <Route path='/' element={<Login/>}/>
+            <Route path='/' element={<Login />} />
             <Route path="*" element={<Page404 />} />
-            <Route path='/auth/callback' element={<Callback/>}></Route>
-            <Route path='/signup' element={<Signup/>}/>
-            <Route path='/lobby' element={<Lobby/>}>
-              <Route index element = {<Rooms/>}/>
-              <Route path='/lobby/ranking' element={<Ranking/>}/>
-              <Route path='/lobby/myPage' element={<MyPage/>}>
-                <Route index element = {<MyInfo/>}/>
-                <Route path='/lobby/myPage/myranking' element={<MyRanking/>}/>
-                <Route path='/lobby/myPage/myreward' element={<MyReward/>}/>
+            <Route path='/auth/callback' element={<Callback />}></Route>
+            <Route path='/signup' element={<Signup />} />
+            <Route path='/lobby' element={<Lobby />}>
+              <Route index element={<Rooms />} />
+              <Route path='/lobby/ranking' element={<Ranking />} />
+              <Route path='/lobby/myPage' element={<MyPage />}>
+                <Route index element={<MyInfo />} />
+                <Route path='/lobby/myPage/myranking' element={<MyRanking />} />
+                <Route path='/lobby/myPage/myreward' element={<MyReward />} />
               </Route>
             </Route>
             <Route path='/play' element={<Play />} />

@@ -58,13 +58,13 @@ const Lobby = () => {
             {rooms !== undefined
               && Object.keys(rooms).length > 0
               && Object.keys(rooms).map((roomName) => {
-                return(
-                <li key={roomName}>
-                  <strong>방제</strong> : {roomName} ({rooms[roomName].playerCount+1} 명 접속중) <button onClick={() => enterRoom(roomName)}>방 입장</button>
-                </li>
+                return (
+                  <li key={roomName}>
+                    <strong>방제</strong> : {roomName} ({rooms[roomName].playerCount + 1} 명 접속중) <button onClick={() => enterRoom(roomName)}>방 입장</button>
+                  </li>
                 )
-            })}
-            </ul>
+              })}
+          </ul>
         </div>
         <div>
           <input value={room} onChange={onType} />
