@@ -1,21 +1,21 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Sidebar } from 'flowbite-react';
-import { IoGameController, IoTrophy  } from 'react-icons/io5';
+import { IoGameController, IoTrophy } from 'react-icons/io5';
 import { HiUser } from 'react-icons/hi'
 
 const Navbar = () => {
-  const CustomSidebar = ({icon : Icon, children, to}) => {
+  const CustomSidebar = ({ icon: Icon, children, to }) => {
     const navigate = useNavigate();
 
     const link = () => {
       navigate(to);
     };
 
-    return(
-      <div 
-      className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100 cursor-pointer"
-      onClick={link}>
+    return (
+      <div
+        className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100 cursor-pointer"
+        onClick={link}>
         {Icon && <Icon className='h-6 w-6 text-gray-500' aria-hidden='true'></Icon>}
         <span className="ml-3">{children}</span>
       </div>
