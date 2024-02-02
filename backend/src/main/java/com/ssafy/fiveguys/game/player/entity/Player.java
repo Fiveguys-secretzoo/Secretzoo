@@ -2,11 +2,12 @@ package com.ssafy.fiveguys.game.player.entity;
 
 import com.ssafy.fiveguys.game.player.entity.base.BaseTimeEntity;
 import com.ssafy.fiveguys.game.user.entity.User;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,19 +21,14 @@ public class Player extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long playerSequence;
-    @Column(name = "user_sequence", unique = true)
-    private Long userSequence;
+    @OneToOne
+    @JoinColumn(name = "user_sequence")
+    private User user;
 
     private Long totalRound;
     private Long totalTurn;
     private Long totalPass;
-
-    //player_id도 고유한 값이므로 unique = true 설정을 통해 중복 값을 방지해준다.
-//    @Column(name = "player_id",  unique = true)
-//    private String playerId;
-
     private RankingScore rankingScore;
-
     private Long exp;
     private int playerLevel;
 

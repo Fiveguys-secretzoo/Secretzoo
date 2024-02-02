@@ -1,6 +1,7 @@
 package com.ssafy.fiveguys.game.user.entity;
 
 import com.ssafy.fiveguys.game.common.entity.BaseTimeEntity;
+import com.ssafy.fiveguys.game.player.entity.Player;
 import com.ssafy.fiveguys.game.user.dto.Role;
 import com.ssafy.fiveguys.game.user.dto.UserDto;
 import jakarta.persistence.*;
@@ -58,6 +59,9 @@ public class User extends BaseTimeEntity {
 
     @Column(name = "refresh-token")
     private String refreshToken;
+
+    @OneToOne(mappedBy = "user")
+    private Player player;
 
     public void authorizeUser() {
         this.role = Role.USER;

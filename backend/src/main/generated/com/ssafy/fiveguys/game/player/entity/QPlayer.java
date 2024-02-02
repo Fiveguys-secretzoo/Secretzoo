@@ -44,7 +44,7 @@ public class QPlayer extends EntityPathBase<Player> {
 
     public final NumberPath<Long> totalTurn = createNumber("totalTurn", Long.class);
 
-    public final NumberPath<Long> userSequence = createNumber("userSequence", Long.class);
+    public final com.ssafy.fiveguys.game.user.entity.QUser user;
 
     public QPlayer(String variable) {
         this(Player.class, forVariable(variable), INITS);
@@ -65,6 +65,7 @@ public class QPlayer extends EntityPathBase<Player> {
     public QPlayer(Class<? extends Player> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.rankingScore = inits.isInitialized("rankingScore") ? new QRankingScore(forProperty("rankingScore")) : null;
+        this.user = inits.isInitialized("user") ? new com.ssafy.fiveguys.game.user.entity.QUser(forProperty("user"), inits.get("user")) : null;
     }
 
 }

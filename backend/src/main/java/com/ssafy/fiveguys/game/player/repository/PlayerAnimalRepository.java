@@ -19,7 +19,7 @@ public interface PlayerAnimalRepository extends JpaRepository<PlayerAnimal, Long
 //        + " FROM player_animal pa INNER JOIN player p ON pa.player_sequence = p.player_sequence WHERE p.user_sequence = ?", nativeQuery = true)
 //    List<PlayerAnimal> findByUserSequence(Long userSequence);
 
-    @Query("SELECT pa FROM PlayerAnimal pa JOIN FETCH pa.player p WHERE p.userSequence = :userSequence")
+    @Query(value ="SELECT pa FROM PlayerAnimal pa JOIN FETCH pa.player p WHERE p.userSequence = :userSequence", nativeQuery = true)
     List<PlayerAnimal> findByUserSequence(@Param("userSequence") Long userSequence);
 
     @Query(value = "SELECT * FROM player_animal WHERE player_sequence = ? AND animal_id = ?", nativeQuery = true)

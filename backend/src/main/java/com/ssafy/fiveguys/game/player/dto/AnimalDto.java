@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AnimalDto {
 
-    private Long playerSequence;
+    private Long userSequence;
     private String playerId;
     private Long round;
     private Long turn;

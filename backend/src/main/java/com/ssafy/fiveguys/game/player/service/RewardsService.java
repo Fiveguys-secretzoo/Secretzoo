@@ -2,8 +2,6 @@ package com.ssafy.fiveguys.game.player.service;
 
 
 import com.ssafy.fiveguys.game.player.dto.AnimalDto;
-import com.ssafy.fiveguys.game.player.dto.RankRequestDto;
-import com.ssafy.fiveguys.game.player.dto.animal.AnimalType;
 import com.ssafy.fiveguys.game.player.entity.Animal;
 import com.ssafy.fiveguys.game.player.entity.AnimalScore;
 import com.ssafy.fiveguys.game.player.entity.Player;
@@ -13,7 +11,6 @@ import com.ssafy.fiveguys.game.player.repository.PlayerAnimalRepository;
 import com.ssafy.fiveguys.game.player.repository.PlayerRepository;
 import jakarta.persistence.EntityManager;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -61,10 +58,8 @@ public class RewardsService {
 
         log.info("animalDto={}", animalDto);
 
-
         //플레이어
-        Player player = playerRepository.findByPlayerSequence(animalDto.getPlayerSequence());
-
+        Player player = playerRepository.findByUser_UserSequence(animalDto.getUserSequence());
         //turn 과 round 누적 업데이트
         //update 쿼리 1번
         player.setTotalRound(player.getTotalRound() + animalDto.getRound());

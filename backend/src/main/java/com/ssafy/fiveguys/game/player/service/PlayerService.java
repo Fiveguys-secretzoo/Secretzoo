@@ -1,7 +1,6 @@
 package com.ssafy.fiveguys.game.player.service;
 
 
-import com.ssafy.fiveguys.game.player.dto.PlayerDto;
 import com.ssafy.fiveguys.game.player.entity.LevelExp;
 import com.ssafy.fiveguys.game.player.entity.Player;
 import com.ssafy.fiveguys.game.player.repository.PlayerRepository;
@@ -17,13 +16,9 @@ public class PlayerService {
 
     private final PlayerRepository playerRepository;
 
-    public Player getPlayerInfo(Long playerSequence) {
-        return playerRepository.findByPlayerSequence(playerSequence);
-
-    }
 
     public Player getPlayerBySequence(Long userSequence) {
-        return playerRepository.findByUserSequence(userSequence);
+        return playerRepository.findByUser_UserSequence(userSequence);
 
     }
 
@@ -39,7 +34,7 @@ public class PlayerService {
      */
     @Transactional
     public void savePassCount(Long userSequence, Long pass) {
-        Player player = playerRepository.findByUserSequence(userSequence);
+        Player player = playerRepository.findByUser_UserSequence(userSequence);
         player.setTotalPass(player.getTotalPass() + pass);
     }
 
@@ -53,7 +48,7 @@ public class PlayerService {
         long exp = LevelExp.expCalculator(turn, totalSuccess);
 
         //플레이어 조회
-        Player player = playerRepository.findByUserSequence(userSequence);
+        Player player = playerRepository.findByUser_UserSequence(userSequence);
 
         log.info("player curr exp = {}", player.getExp());
         log.info("player add exp = {}", exp);
@@ -69,7 +64,7 @@ public class PlayerService {
 
     public void updateLevel(Long userSequence, Long exp) {
 
-        Player player = playerRepository.findByUserSequence(userSequence);
+        Player player = playerRepository.findByUser_UserSequence(userSequence);
 
         int playerLevel;
 

@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -16,6 +17,8 @@ import com.querydsl.core.types.Path;
 public class QUser extends EntityPathBase<User> {
 
     private static final long serialVersionUID = 709901858L;
+
+    private static final PathInits INITS = PathInits.DIRECT2;
 
     public static final QUser user = new QUser("user");
 
@@ -37,6 +40,8 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath password = createString("password");
 
+    public final com.ssafy.fiveguys.game.player.entity.QPlayer player;
+
     public final StringPath profileNumber = createString("profileNumber");
 
     public final StringPath provider = createString("provider");
@@ -52,15 +57,24 @@ public class QUser extends EntityPathBase<User> {
     public final NumberPath<Long> userSequence = createNumber("userSequence", Long.class);
 
     public QUser(String variable) {
-        super(User.class, forVariable(variable));
+        this(User.class, forVariable(variable), INITS);
     }
 
     public QUser(Path<? extends User> path) {
-        super(path.getType(), path.getMetadata());
+        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
     public QUser(PathMetadata metadata) {
-        super(User.class, metadata);
+        this(metadata, PathInits.getFor(metadata, INITS));
+    }
+
+    public QUser(PathMetadata metadata, PathInits inits) {
+        this(User.class, metadata, inits);
+    }
+
+    public QUser(Class<? extends User> type, PathMetadata metadata, PathInits inits) {
+        super(type, metadata, inits);
+        this.player = inits.isInitialized("player") ? new com.ssafy.fiveguys.game.player.entity.QPlayer(forProperty("player"), inits.get("player")) : null;
     }
 
 }
