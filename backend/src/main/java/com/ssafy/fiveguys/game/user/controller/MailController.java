@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"https://secretzoo.site","https://localhost:3000"}, exposedHeaders = "*")
+@CrossOrigin(origins = {"https://secretzoo.site","http://localhost:3000"}, exposedHeaders = "*")
 @RequestMapping("/verify-email")
 @Tag(name = "MailController", description = "이메일 인증 서비스 컨트롤러")
 public class MailController {
