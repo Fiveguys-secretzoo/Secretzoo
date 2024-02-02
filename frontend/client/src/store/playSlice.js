@@ -7,7 +7,7 @@ export const playSlice = createSlice({
     'roomName': '',
     'roomPassword': '',
     'roomAddress': '',
-    'status': '',
+    'status': 0,
     'createdDate': '',
     'card': [],
     'playerCount': 1,
@@ -15,7 +15,7 @@ export const playSlice = createSlice({
     'adminPlayer': '',
     'nowTurn': '',
     'onBoard': {
-      "status": '',  // 0 : 대기 , 1 : 주는 턴, 2 : 받는 턴, 3: 넘기는 턴 
+      "status": 0,  // 0 : 대기 , 1 : 주는 턴, 2 : 받는 턴, 3: 넘기는 턴 
       "from": '',
       "to": '',
       "cardBluff": '',
@@ -24,18 +24,96 @@ export const playSlice = createSlice({
     }
   }, //TODO : change initialState
   reducers: {
-    plus: state => {
-      state.value += 1;
+    initRoomInfo: (state, action) => {
+      console.log(action);
+      // state = JSON.parse(JSON.stringify(action.payload));
+      state.roomId = action.payload.roomId;
+      state.roomName = action.payload.roomName;
+      state.roomAddress = action.payload.roomAddess;
+      state.status = action.payload.status;
+      state.createdDate = action.payload.createDate;
+      state.playerCount = action.payload.playerCount;
+      state.players = [...action.payload.players];
+      state.adminPlayer = action.payload.adminPlayer;
+      state.nowTurn = action.payload.nowTurn;
+      Object.keys(action.payload.onBoard).forEach(key => {
+        state.onBoard[key] = action.payload.onBoard[key];
+      });
+      console.log(state.roomName);
     },
-    todoAdded: (state, action) => {
+    
+    initCardInfo: (state, action) => {
+      state.card = [...action.payload];
+    },
 
+    addPlayer: (state, action) => {
+      let isAlreadyIn = false;
+      for (let player of state.players) {
+        console.log(player);
+
+        if (player.playerId === action.payload.playerId) {
+          isAlreadyIn = true;
+          break;
+        }
+      }
+      if (!isAlreadyIn) {
+        state.players = [...state.players, action.payload];
+      }
+      console.log(`##### player added, ${action.payload}`)
+      console.log(state.players);
+    },
+
+    removePlayer: (state, action) => {
+      console.log(`remove player to store [${action.payload}]`);
+      state.players = [...state.players.filter((e) => (
+        e.playerId !== action.payload
+      ))]
+    },
+
+    changePlayState: (state, action) => {
+      console.log(`change status to store [${action.payload}]`);
+      state.onBoard.status = action.payload;
+    },
+
+    changeAdmin: (state, action) => {
+      console.log(`change admin to store [${action.payload}]`);
+      state.adminPlayer = action.payload.adminPlayer;
+    },
+
+    changeNowTurn: (state, action) => {
+      console.log(`Now Turn has been changed to ${action.payload}`);
+      state.nowTurn = action.payload;
+    },
+
+    changeCardStatus: (state, action) => {
+      console.log(`change card drag to store [${action.payload.from}] [${action.payload.card}]`);
+      state.onBoard.from = action.payload.from;
+      state.onBoard.card = action.payload.card;
+    },
+
+    changeCardDrag: (state, action) => {
+      console.log(`[cardDrag] changed / from : [${action.payload.from}] to : [${action.payload.to}]`)
+      state.onBoard.from = action.payload.from;
+      state.onBoard.to = action.payload.to;
+    },
+
+    changeCardDrop: (state, action) => {
+      console.log(`[cardDrop] changed / from : [${action.payload.from}] to : [${action.payload.to}]`)
+      state.onBoard.from = action.payload.from;
+      state.onBoard.to = action.payload.to;
+    },
+
+    changeCardBluff: (state, action) => {
+      console.log(`[cardBluff] bluffed to [${action.payload}]`)
+      state.onBoard.cardBluff = action.payload;
+    },
+
+    changeInitOnBoardCard: (state, action) => {
+      state.onBoard.from = '';
+      state.onBoard.to = '';
+      state.onBoard.cardBluff = -1;
+      state.onBoard.card = -1;
     }
-    //TODO - 초기 값 추가 / 카드 턴 (from to card) 추가 / players 추가
-    //TODO - admin 변경
-    //TODO - 지금 턴 상태 추가
-    //TODO 
-
-
 
 
 
@@ -44,5 +122,17 @@ export const playSlice = createSlice({
   },
 },);
 
-export const { plus } = playSlice.actions;
+export const {
+  initRoomInfo,
+  initCardInfo,
+  addPlayer,
+  removePlayer,
+  changePlayState,
+  changeAdmin,
+  changeNowTurn,
+  changeCardStatus,
+  changeCardDrag,
+  changeCardDrop,
+  changeCardBluff,
+} = playSlice.actions;
 export default playSlice.reducer;
