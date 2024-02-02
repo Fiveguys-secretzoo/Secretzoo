@@ -41,7 +41,10 @@ async function main() {
   const handleException = (socket) => {
 
   }
-  const serverURL = 'http://localhost:3001'
+  //리액트 서버
+  // const serverURL = 'http://localhost:3000'
+  // const serverURL = 'http://react-app:3000'
+  const serverURL = 'https://secretzoo.site'
   // cors 설정
   app.use(cors({
     origin: serverURL
@@ -107,7 +110,9 @@ async function main() {
 
   });
 
-  server.listen(3001, () => {
+  //노드
+  server.listen(3000, () => {
+    console.log(server.address);
     console.log('server running at http://localhost:3000');
   });
 }

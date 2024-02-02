@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { Button, Label, TextInput } from 'flowbite-react';
-
 const LoginForm = () => {
   const [id, setId] = useState("");
   const [pass, setPass] = useState("");

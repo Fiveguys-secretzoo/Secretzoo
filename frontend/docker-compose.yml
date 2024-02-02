@@ -3,7 +3,7 @@ version: '3'
 services:
   react-app:
     build:
-      context: /client
+      context: ./client
       dockerfile: Dockerfile
     container_name: react-app
     # ports:
@@ -12,16 +12,21 @@ services:
     #  - /home/ubuntu/secretzoo/frontend/client:/usr/src/app
     #volumes:
     #  - /usr/src/app:/usr/share/nginx/html
+    environment:
+      - WDS_SOCKET_PROT=0
+      - REACT_APP_SOCKET_SERVER_URL=ws://node-server:3000
     networks:
       - docker_nat
 
   node-server:
       build:
-        context: /server
+        context: ./server
         dockerfile: Dockerfile # Node.js 서버를 위한 Dockerfile
       container_name: node-server
-      ports:
-      - "3001:3001" # Node.js 서버 포트 설정
+      # ports:
+      # - "3001:3001" # Node.js 서버 포트 설정
+      expose:
+        - 3000
       networks:
         - docker_nat
 networks:

@@ -18,6 +18,15 @@ const Profile = () => {
     });
   }
   useEffect(()=>{
+    if(sessionStorage.getItem('noLogin')){
+      setUser({
+        "name" : 'noLoginUser',
+        "nickname" : sessionStorage.getItem('userNickname'),
+        "mainAchievement" : '로그인 하세요',
+        "profileNumber" : '000',
+      })
+      return;
+    }
     getUserInfo();
   },[])
   if (!user) {

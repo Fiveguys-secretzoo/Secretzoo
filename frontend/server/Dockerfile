@@ -5,7 +5,7 @@ FROM node:20
 WORKDIR /usr/src/app/server
 
 # 앱 종속성 설치
-COPY package*.json ./
+COPY package.json ./
 
 RUN npm install
 

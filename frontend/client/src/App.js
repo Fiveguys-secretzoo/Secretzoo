@@ -16,12 +16,14 @@ import MyRanking from './components/mypage/myRanking';
 import MyReward from './components/mypage/myReward';
 import Callback from './pages/callback';
 
-const socket = io('http://localhost:3000');
+//노드 서버
+// const socket = io('http://localhost:3001');
+const socket = io('https://secretzoo.site');
 export const SocketContext = createContext();
 
 
 function App() {
-  
+  console.error = error => error.apply;
 
   return (
     <BrowserRouter>
