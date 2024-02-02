@@ -29,7 +29,7 @@ public class MailService {
         return randomNumber;
     }
 
-    public String sendEmail(String email) throws MessagingException {
+    public void sendEmail(String email) throws MessagingException {
         String verificationCode = generateRandomNumber();
         String setForm = "jyk.co.ltd";
         String title = "SecretZoo 회원가입 인증 이메일 입니다.";
@@ -49,7 +49,6 @@ public class MailService {
         }
         redisService.saveVerificationCode(email, verificationCode);
         javaMailSender.send(message);
-        return verificationCode;
     }
 
     public boolean checkVerificationCode(EmailVerification emailVerification) {

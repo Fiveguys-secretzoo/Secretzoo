@@ -32,8 +32,8 @@ public class MailController {
     @PostMapping("/send")
     public ResponseEntity<?> sendVerificationCode(@RequestBody @Valid EmailRequestDto emailDto)
         throws MessagingException {
-        String verificationCode = mailService.sendEmail(emailDto.getEmail());
-        return ResponseEntity.status(HttpStatus.OK).body(verificationCode);
+        mailService.sendEmail(emailDto.getEmail());
+        return ResponseEntity.status(HttpStatus.OK).body("인증 메일이 발송되었습니다.");
     }
 
     @PostMapping("/check")
