@@ -1,8 +1,8 @@
 # 기반 이미지 설정
-FROM node:18
+FROM node:20
 
 # 앱 디렉터리 생성
-WORKDIR /usr/src/app
+WORKDIR /usr/src/app/client
 
 # 앱 종속성 설치
 COPY package*.json ./

@@ -6,17 +6,19 @@ import { Button, Label, TextInput } from 'flowbite-react';
 const LoginForm = () => {
   const [id, setId] = useState("");
   const [pass, setPass] = useState("");
-  
-
   const navigate = useNavigate();
   const requsetLogin = () => {
-    axios.post('http://localhost:8080/auth/login',
+    axios.post('https://secretzoo.site/api/auth/login',
       {
         "userId": id,
         "password": pass,
       }
     ).then((response) => {
+      sessionStorage.setItem('authorization',response.headers['authorization']);
+      sessionStorage.setItem('refresh_token',response.headers['refresh_token']);
+      navigate('lobby');
       console.log(response.headers);
+      console.log(response.data);
     })
   }
 
