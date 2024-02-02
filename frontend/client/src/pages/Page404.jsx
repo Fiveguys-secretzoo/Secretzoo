@@ -8,7 +8,7 @@ const Page404 = () => {
   } ;
   return (
     <>
-      <div className='text-center flex flex-col justify-center'>
+      <div className='text-center flex flex-col justify-center w-screen h-screen bg-white'>
         <h1 className='text-center text-9xl'>404</h1>
         <img src={img} alt='404페이지' className='w-[500px] mx-auto rounded'/>
         <p className='p-2'>죄송합니다.</p>
