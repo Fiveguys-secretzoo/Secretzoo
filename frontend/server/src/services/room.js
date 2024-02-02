@@ -281,6 +281,7 @@ const roomSocketMethods = () => {
       shuffleArray(rooms, room);
       console.log('##### Shuffle End')
 
+      rooms[room].onBoard.status = 1;
       for (let k = 0; k < rooms[room].players.length; k++) {
         io.to(rooms[room].players[k].socketId).emit('gameStart', rooms[room].players[k].hand)
       }

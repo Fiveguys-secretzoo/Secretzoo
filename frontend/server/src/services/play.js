@@ -37,14 +37,19 @@ const playSocketMethods = () => {
       'onBoard': { ...roomInfo['onBoard'] },
     };
 
+    console.log(`##### status ${extractedData.onBoard.status}`);
     if (extractedData.onBoard.status !== 0) {
-      socket.emit('sendCardInfo', () => {
-        for (let player in roomInfo.players) {
-          if (player.playerId === pid) {
-            return player.hand
-          }
+      console.log("entered socket emit sendCArdInfo");
+      let hand;
+      for (let player of roomInfo['players']) {
+        console.log(player)
+        if (player.playerId === pid) {
+          console.log("##### player hand is down below")
+          console.log(player.hand);
+          hand = player.hand
         }
-      })
+      }
+      socket.emit('sendCardInfo', hand)
     }
     return extractedData;
   }
@@ -164,7 +169,7 @@ const playSocketMethods = () => {
   const checkCardReveal = (rooms, room, answer) => {
     let card = rooms[room].onBoard.card;
     let bCard = rooms[room].onBoard.bCard;
-    let isSame = (card / 8) === bCard;http://localhost:3000/static/media/000.7debb096620a360bdc0f.png
+    let isSame = (card / 8) === bCard; http://localhost:3000/static/media/000.7debb096620a360bdc0f.png
     if ((answer === 0 && isSame) || (answer === 1 && !isSame))
       return true;
     else

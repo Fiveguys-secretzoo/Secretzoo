@@ -36,7 +36,7 @@ const Play = () => {
   const toP = useSelector(state => state.plays.onBoard.to);
   const card = useSelector(state => state.plays.onBoard.card);
   const bCard = useSelector(state => state.plays.onBoard.cardBluff);
-  const images = {};
+
   const dispatch = useDispatch();
 
   const [messages, setMessages] = useState([]);
@@ -50,7 +50,7 @@ const Play = () => {
   const [cards, setCards] = useState([0, 1, 2, 3]); // 손에 들고 있는 카드 관리
   const [gameResult, setGameResult] = useState(false);
   // 0 대기 1 시작 2 카드 드롭 후 동물 선택 3 동물 선택 후 방어 턴 4 넘기는 턴 드래그 5 넘기는 턴 동물 선택 6 결과 확인
-
+  const [images, setImages] = useState([]);
 
 
   const animalList = {
@@ -62,6 +62,10 @@ const Play = () => {
     '여우': 5,
     '양': 6,
     '고래': 7,
+  }
+
+  const imageRoute = (i) => {
+    return require(`../assets/img/card/0${Math.floor(i / 8)}/00${i % 8}.png`);
   }
 
   const dragStart = (item) => {
@@ -190,6 +194,7 @@ const Play = () => {
 
   // 게임 시작 버튼을 눌렀을 때 작동하는 함수, 여러가지 socket을 on 처리 시킨다.
   const gameStart = (cards, firstPlayer) => {
+
     console.log("##### Game Started !");
     setCards(cards);
     dispatch(changePlayState(1));
@@ -217,15 +222,15 @@ const Play = () => {
   }
 
   const cardInfoHandler = (cards) => {
-    setCards([...cards])
+    try { setCards([...cards]) }
+    catch (e) {
+      
+    }
   }
 
   /* 이벤트 수신, 방 입장 시 실행 */
   useEffect(() => {
-    for (let i = 0; i < 65; i++) {
-      images[i] = require(
-        `../assets/img/card/0${Math.floor(i / 8)}/00${i % 8}.png`);
-    }
+
     // 서버 닫혔을 때 유저를 대방출
     socket.on("serverClosed", (e) => {
       console.log("serverClosed");
@@ -272,6 +277,16 @@ const Play = () => {
     // checkIsAdmin(roomInfo.nowTurn);
   }, [adminPlayer, nowTurn, isAdmin])
 
+  useEffect(() => {
+
+    const newImg = [];
+    for (let k = 0; k < 65; k++) {
+      newImg[k] = imageRoute(k);
+    }
+
+    setImages(newImg);
+
+  }, [cards]);
 
 
   const sendMessage = () => {
@@ -382,7 +397,7 @@ const Play = () => {
             draggable={isMyTurn}
             className="w-[8em] h-[13em] ml-[-4em] hover:scale(1.3) hover:-translate-y-20 hover:rotate-[20deg] hover:z-50 transition-transform duration-300 "
           >
-            <img src={images[64]} alt="" />
+            <img src={imageRoute(64)} alt="" />
           </div>
         }
 
@@ -402,7 +417,7 @@ const Play = () => {
               draggable={isMyTurn}
               className="w-[8em] h-[13em] ml-[-4em] hover:scale(1.3) hover:-translate-y-20 hover:rotate-[20deg] hover:z-50 transition-transform duration-300 "
             >
-              <img src={images[64]} alt="" />
+              <img src={imageRoute(64)} alt="" />
             </div>
 
           </SelectScreen>
@@ -421,22 +436,22 @@ const Play = () => {
           </SelectScreen>
         }
 
-
-
+        {/* <img className="" src={require(`../assets/img/card/00/000.png`)} alt="" /> */}
         <div className="cards">
           <div className='flex absolute left-[35%] bottom-[100px]'>
 
             {/* 카드 표현 부분 */}
             {cards &&
-              cards.map((item, index) => (
+              cards.map((i, index) => (
                 <div
-                  onDragStart={() => dragStart(item)}
+                  onDragStart={() => dragStart(i)}
                   key={index}
                   draggable={((playState === 1 || playState === 4) && isMyTurn)}
                   className="w-[8em] h-[13em] ml-[-4em] hover:scale(1.3) hover:-translate-y-20 hover:rotate-[20deg] hover:z-50 transition-transform duration-300 "
                   style={{ zIndex: cards.length - index }}
                 >
-                  <img key={index} className="" src={images[item]} alt="" />
+                  {/* <img key={index} className="" src={require(`../assets/img/card/0${Math.floor(i / 8)}/00${i % 8}.png`)} alt="" /> */}
+                  <img key={index} className="" src={images[i]} alt="" />
                 </div>
               ))}
           </div>
