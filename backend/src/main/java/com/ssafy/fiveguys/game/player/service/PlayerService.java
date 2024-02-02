@@ -53,7 +53,6 @@ public class PlayerService {
         long exp = LevelExp.expCalculator(turn, totalSuccess);
 
         //플레이어 조회
-//        Player player = playerRepository.findByPlayerSequence(userSequence);
         Player player = playerRepository.findByUserSequence(userSequence);
 
         log.info("player curr exp = {}", player.getExp());

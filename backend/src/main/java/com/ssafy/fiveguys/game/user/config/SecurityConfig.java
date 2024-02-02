@@ -76,6 +76,7 @@ public class SecurityConfig {
                 .requestMatchers("/", "/css/**", "/images/**", "/js/**", "/favicon.ico", "/error")
                 .permitAll() // '인증' 무시
                 .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/rewards/**").permitAll()
                 .requestMatchers(swaggerURL).permitAll()
                 .anyRequest().permitAll());
                // .anyRequest().authenticated());

@@ -3,7 +3,6 @@ package com.ssafy.fiveguys.game.player.api;
 import com.ssafy.fiveguys.game.player.dto.AnimalDto;
 import com.ssafy.fiveguys.game.player.dto.RewardsDto;
 import com.ssafy.fiveguys.game.player.dto.api.ApiResponse;
-import com.ssafy.fiveguys.game.player.entity.AnimalScore;
 import com.ssafy.fiveguys.game.player.entity.PlayerRewards;
 import com.ssafy.fiveguys.game.player.service.AnimalRewardsService;
 import com.ssafy.fiveguys.game.player.service.PlayerService;
@@ -31,16 +30,16 @@ public class RewardsApiController {
     private final RewardsService rewardsService;
     private final AnimalRewardsService animalRewardsService;
     private final PlayerService playerService;
-//    private final PlayerRepository playerRepository;
 
 
     /**
      * 플레이어의 게임 결과에서 리워드(업적) 정보를 저장
+     * gameResult로 받았을 때 처리할 수 있는지 검토 필요하기 때문에 주석 남겨놨음
      */
 //    @PostMapping("/save")
 //    public ResponseEntity<String> saveRewards(@RequestBody GameResult gameResult) {
 //        log.info("gameResult = {}", gameResult);
-//        rewardsService.saveRewards(gameResult);
+//        rewardsService.saveRewardsTest(gameResult);
 //        return ResponseEntity.ok(" 성공적으로 저장되었습니다.");
 //    }
 
@@ -50,7 +49,7 @@ public class RewardsApiController {
     @PostMapping("/save")
     public ResponseEntity<String> saveRewards2(@RequestBody AnimalDto animalDto) {
         log.info("animalDto = {}", animalDto);
-        rewardsService.saveRewards2(animalDto);
+        rewardsService.saveRewards(animalDto);
         return ResponseEntity.ok(" 성공적으로 저장되었습니다.");
     }
 
@@ -63,10 +62,6 @@ public class RewardsApiController {
         int totalPlayerCount = playerService.playerTotalCount();
 
 
-//        List<RewardsDto> collect = playerDoneRewards.stream()
-//            .map(m -> new RewardsDto(m.getPlayer().getPlayerSequence(), m.getRewards(), m.getLastModifiedDate(), m.isDone(), playerRewardsRepository.findDoneRewardsWithRewardsId(m.getRewards().getRewardsId())))
-//            .collect(Collectors.toList());
-
         List<RewardsDto> collect = playerDoneRewards.stream()
             .map(m -> new RewardsDto(m.getPlayer().getPlayerSequence(), m.getRewards(), m.getLastModifiedDate(), m.isDone(),
                 animalRewardsService.getDoneRewardsCount(m.getRewards().getRewardsId())))
@@ -75,43 +70,6 @@ public class RewardsApiController {
         return new ApiResponse(collect.size(), collect, totalPlayerCount);
     }
 
-    /**
-     * 플레이어의 완료 업적 정보 조회
-     */
-//    @GetMapping("/done/{playerSequence}")
-//    public Result2 getPlayerRewards(@PathVariable("playerSequence") Long playerSequence) {
-//        List<PlayerRewards> playerDoneRewards = animalRewardsService.getPlayerDoneRewards(
-//            playerSequence);
-//        long totalPlayerCount = playerService.playerTotalCount();
-//
-//
-//        List<RewardsDto> collect = playerDoneRewards.stream()
-//            .map(m -> new RewardsDto(m.getPlayer().getPlayerSequence(), m.getRewards(), m.getLastModifiedDate(), m.isDone(),
-//                animalRewardsService.getDoneRewardsCount(m.getRewards().getRewardsId())))
-//            .collect(Collectors.toList());
-//
-//        return new Result2(collect.size(), collect, totalPlayerCount);
-//    }
-
-//    /**
-//     * 플레이어의 모든 업적 정보 조회
-//     */
-//    @GetMapping("/total/{playerSequence}")
-//    public Result2 getTotalPlayerRewards(@PathVariable("playerSequence") Long playerSequence) {
-//        List<PlayerRewards> playerDoneRewards = animalRewardsService.getPlayerAllRewards(
-//            playerSequence);
-//
-//        long totalPlayerCount = playerService.playerTotalCount();
-//
-//
-//        List<RewardsDto> collect = playerDoneRewards.stream()
-//            .map(m -> new RewardsDto(m.getPlayer().getPlayerSequence(), m.getRewards(), m.getLastModifiedDate(), m.isDone(),
-//                animalRewardsService.getDoneRewardsCount(m.getRewards().getRewardsId())))
-//            .collect(Collectors.toList());
-//
-//        return new Result2(collect.size(), collect, totalPlayerCount);
-//
-//    }
     /**
      * 플레이어의 모든 업적 정보 조회
      */
