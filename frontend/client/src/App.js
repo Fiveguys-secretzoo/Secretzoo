@@ -1,5 +1,5 @@
-import React, {createContext}  from 'react';
-import {BrowserRouter, Route, Routes } from 'react-router-dom';
+import React, { createContext } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 // import './App.css';
 import io from 'socket.io-client';
 import { Provider } from './store/stores'
@@ -17,7 +17,6 @@ import MyReward from './components/mypage/myReward';
 import Callback from './pages/callback';
 import Page404 from './pages/Page404';
 
-
 const socket = io('http://localhost:3001');
 export const SocketContext = createContext();
 
@@ -30,20 +29,20 @@ function App() {
       <SocketContext.Provider value={socket}>
         <div className="App">
           <Routes>
-            <Route path='/' element={<Login/>}/>
+            <Route path='/' element={<Login />} />
             <Route path="*" element={<Page404 />} />
-            <Route path='/auth/callback' element={<Callback/>}></Route>
-            <Route path='/signup' element={<Signup/>}/>
-            <Route path='/lobby' element={<Lobby/>}>
-              <Route index element = {<Rooms/>}/>
-              <Route path='/lobby/ranking' element={<Ranking/>}/>
-              <Route path='/lobby/myPage' element={<MyPage/>}>
-                <Route index element = {<MyInfo/>}/>
-                <Route path='/lobby/myPage/myranking' element={<MyRanking/>}/>
-                <Route path='/lobby/myPage/myreward' element={<MyReward/>}/>
+            <Route path='/auth/callback' element={<Callback />}></Route>
+            <Route path='/signup' element={<Signup />} />
+            <Route path='/lobby' element={<Lobby />}>
+              <Route index element={<Rooms />} />
+              <Route path='/lobby/ranking' element={<Ranking />} />
+              <Route path='/lobby/myPage' element={<MyPage />}>
+                <Route index element={<MyInfo />} />
+                <Route path='/lobby/myPage/myranking' element={<MyRanking />} />
+                <Route path='/lobby/myPage/myreward' element={<MyReward />} />
               </Route>
             </Route>
-            <Route path='/play' element={<Play/>}/> 
+            <Route path='/play' element={<Play />} />
           </Routes>
         </div>
       </SocketContext.Provider>

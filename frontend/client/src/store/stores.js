@@ -5,6 +5,4 @@ export const store = configureStore({
   reducer: {
     plays: playSlice,
   },
-
-
 })
