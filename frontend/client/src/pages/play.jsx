@@ -322,87 +322,73 @@ const Play = () => {
   }
 
   return (
-    <div className="h-screen">
-      <div className='w-screen h-[60%] flex flex-wrap justify-between'>
-        {/* 내 턴 아닐 때 드래그 공유 */}
+    <>
+      <div className="h-screen">
+        <div className='w-screen h-[60%] flex flex-wrap justify-between'>
+          {/* 내 턴 아닐 때 드래그 공유 */}
 
 
-        {/* 내 턴일 때 드롭 시 버튼 */}
-        {
-          playState === 2 && isMyTurn &&
-          <SelectScreen>
-            <div className="overlay">
-              {Object.entries(animalList).map(([key, value]) =>
-              (
-                <Button
-                  className=""
-                  key={value}
-                  onClick={() => { cardBluffHandler(value) }}
-                >
-                  {key}
+          {/* 내 턴일 때 드롭 시 버튼 */}
+          {
+            playState === 2 && isMyTurn &&
+            <SelectScreen>
+              <div className="overlay">
+                {Object.entries(animalList).map(([key, value]) =>
+                (
+                  <Button
+                    className=""
+                    key={value}
+                    onClick={() => { cardBluffHandler(value) }}
+                  >
+                    {key}
+                  </Button>
+                )
+                )}
+              </div>
+            </SelectScreen>
+          }
+          {/* 내 턴이 아닐 때 관전 */}
+          {
+            playState === 2 && !isMyTurn &&
+            <SelectScreen>
+              <div className="overlay">
+                <h2>다른 플레이어가 선택 중 입니다...!</h2>
+                <Spinner aria-label="Success spinner" size="xl" />
+              </div>
+            </SelectScreen>
+          }
+          {/* 방어 시도 ...! */}
+          {
+            playState === 3 && isMyTurn &&
+            <SelectScreen>
+              <div className="overlay">
+                <Button onClick={() => handleAnswer(0)}>
+                  맞다
                 </Button>
-              )
-              )}
-            </div>
-          </SelectScreen>
-        }
-        {/* 내 턴이 아닐 때 관전 */}
-        {
-          playState === 2 && !isMyTurn &&
-          <SelectScreen>
-            <div className="overlay">
-              <h2>다른 플레이어가 선택 중 입니다...!</h2>
-              <Spinner aria-label="Success spinner" size="xl" />
-            </div>
-          </SelectScreen>
-        }
-        {/* 방어 시도 ...! */}
-        {
-          playState === 3 && isMyTurn &&
-          <SelectScreen>
-            <div className="overlay">
-              <Button onClick={() => handleAnswer(0)}>
-                맞다
-              </Button>
-              <Button onClick={() => handleAnswer(1)}>
-                패스
-              </Button>
-              <Button onClick={() => handleAnswer(2)} >
-                아니다
-              </Button>
-            </div>
-          </SelectScreen>
-        }
-        {/* 방어 시도 관전 */}
-        {
-          playState === 3 && !isMyTurn &&
-          <SelectScreen>
-            <div className="overlay">
+                <Button onClick={() => handleAnswer(1)}>
+                  패스
+                </Button>
+                <Button onClick={() => handleAnswer(2)} >
+                  아니다
+                </Button>
+              </div>
+            </SelectScreen>
+          }
+          {/* 방어 시도 관전 */}
+          {
+            playState === 3 && !isMyTurn &&
+            <SelectScreen>
+              <div className="overlay">
 
-              <h3>A 플레이어가 B 플레이어에게 말했습니다.</h3>
-              <h2>이거 <strong>알락꼬리마도요</strong>야.</h2>
-              <Spinner aria-label="Success spinner" size="xl" />
-            </div>
-          </SelectScreen>
-        }
-        {/* 넘기기 */}
-        {
-          playState === 4 && isMyTurn &&
-          <div
-            onDragStart={() => dragStart()}
-            draggable={isMyTurn}
-            className="w-[8em] h-[13em] ml-[-4em] hover:scale(1.3) hover:-translate-y-20 hover:rotate-[20deg] hover:z-50 transition-transform duration-300 "
-          >
-            <img src={imageRoute(64)} alt="" />
-          </div>
-        }
-
-
-        {/* 넘기는 턴에 카드 부분  */}
-        {
-          playState === 4 && !isMyTurn &&
-
-          <SelectScreen>
+                <h3>A 플레이어가 B 플레이어에게 말했습니다.</h3>
+                <h2>이거 <strong>알락꼬리마도요</strong>야.</h2>
+                <Spinner aria-label="Success spinner" size="xl" />
+              </div>
+            </SelectScreen>
+          }
+          {/* 넘기기 */}
+          {
+            playState === 4 && isMyTurn &&
             <div
               onDragStart={() => dragStart()}
               draggable={isMyTurn}
@@ -410,68 +396,83 @@ const Play = () => {
             >
               <img src={imageRoute(64)} alt="" />
             </div>
+          }
 
-          </SelectScreen>
-        }
-        {/* 게임결과 */}
-        {
-          playState === 5 &&
-          <SelectScreen>
-            <div hidden={!gameResult}>
-              <h3>플레이어가 정답을 맞췄습니다.</h3>
-            </div>
-            <div hidden={gameResult}>
-              <h3>플레이어가 정답을 틀렸습니다.</h3>
-            </div>
-            <Button onClick={dispatch(changePlayState(1))}></Button>
-          </SelectScreen>
-        }
-        {/* 플레이어 표현 부분 */}
-        {
-          playerSlot(playerList)
-        }
-        {/* <img className="" src={require(`../assets/img/card/00/000.png`)} alt="" /> */}
 
-        <div className='flex absolute left-[35%] bottom-[100px]'>
+          {/* 넘기는 턴에 카드 부분  */}
+          {
+            playState === 4 && !isMyTurn &&
 
-          {/* 카드 표현 부분 */}
-          {cards &&
-            cards.map((i, index) => (
+            <SelectScreen>
               <div
-                onDragStart={() => dragStart(i)}
-                key={index}
-                draggable={((playState === 1 || playState === 4) && isMyTurn)}
+                onDragStart={() => dragStart()}
+                draggable={isMyTurn}
                 className="w-[8em] h-[13em] ml-[-4em] hover:scale(1.3) hover:-translate-y-20 hover:rotate-[20deg] hover:z-50 transition-transform duration-300 "
-                style={{ zIndex: cards.length - index }}
               >
-                {/* <img key={index} className="" src={require(`../assets/img/card/0${Math.floor(i / 8)}/00${i % 8}.png`)} alt="" /> */}
-                <img key={index} className="" src={images[i]} alt="" />
+                <img src={imageRoute(64)} alt="" />
               </div>
-            ))}
+
+            </SelectScreen>
+          }
+          {/* 게임결과 */}
+          {
+            playState === 5 &&
+            <SelectScreen>
+              <div hidden={!gameResult}>
+                <h3>플레이어가 정답을 맞췄습니다.</h3>
+              </div>
+              <div hidden={gameResult}>
+                <h3>플레이어가 정답을 틀렸습니다.</h3>
+              </div>
+              <Button onClick={dispatch(changePlayState(1))}></Button>
+            </SelectScreen>
+          }
+          {/* 플레이어 표현 부분 */}
+          {
+            playerSlot(playerList)
+          }
+          {/* <img className="" src={require(`../assets/img/card/00/000.png`)} alt="" /> */}
+
+          <div className='flex absolute left-[35%] bottom-[100px]'>
+
+            {/* 카드 표현 부분 */}
+            {cards &&
+              cards.map((i, index) => (
+                <div
+                  onDragStart={() => dragStart(i)}
+                  key={index}
+                  draggable={((playState === 1 || playState === 4) && isMyTurn)}
+                  className="w-[8em] h-[13em] ml-[-4em] hover:scale(1.3) hover:-translate-y-20 hover:rotate-[20deg] hover:z-50 transition-transform duration-300 "
+                  style={{ zIndex: cards.length - index }}
+                >
+                  {/* <img key={index} className="" src={require(`../assets/img/card/0${Math.floor(i / 8)}/00${i % 8}.png`)} alt="" /> */}
+                  <img key={index} className="" src={images[i]} alt="" />
+                </div>
+              ))}
 
 
-          <h1>Chat Application</h1>
-          <div className="message-list">
-            {messages.map((msg, index) => (
-              <div key={index} className="message">{msg}</div>
-            ))}
+            <h1>Chat Application</h1>
+            <div className="message-list">
+              {messages.map((msg, index) => (
+                <div key={index} className="message">{msg}</div>
+              ))}
+            </div>
+            <div className="message-input">
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="Type a message..."
+              />
+              <Button onClick={/*sendMessage*/() => { console.log(roomInfo) }}>Send</Button>
+            </div>
+            <Button className={(playState === 0) ? '' : 'hidden'} disabled={!isAdmin} color="success" onClick={start}>start</Button>
+            <Button color="success" onClick={leaveRoom}>난 나갈거다.</Button>
           </div>
-          <div className="message-input">
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Type a message..."
-            />
-            <Button onClick={/*sendMessage*/() => { console.log(roomInfo) }}>Send</Button>
-          </div>
-          <Button className={(playState === 0) ? '' : 'hidden'} disabled={!isAdmin} color="success" onClick={start}>start</Button>
-          <Button color="success" onClick={leaveRoom}>난 나갈거다.</Button>
+
         </div>
-
       </div>
-
-    </div>
+    </>
   );
 };
 export default Play;

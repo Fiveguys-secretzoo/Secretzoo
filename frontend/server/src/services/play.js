@@ -8,8 +8,6 @@ const { animals,
   Player,
   roomInfo } = model;
 
-
-
 const playSocketMethods = () => {
 
   // 방에 처음 입장할 때 실행하게 되는 함수

@@ -10,7 +10,7 @@ const Game = () => {
 
   console.log("##### rendered... ")
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log("why...?")
     socket.emit('testRoomsInfo', (rooms) => {
       console.log(`##### roooms `)
@@ -18,8 +18,8 @@ const Game = () => {
       console.log(rooms)
     });
 
-    return (()=>{
-      
+    return (() => {
+
     })
   }, []);
 
