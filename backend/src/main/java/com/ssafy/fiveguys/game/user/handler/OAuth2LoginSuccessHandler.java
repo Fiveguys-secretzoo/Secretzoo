@@ -27,7 +27,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
     private final RedisService redisService;
-    private final String CALLBACK_URL = "http://localhost:3000/auth/callback";
+    private final String CALLBACK_URL = "https://secretzoo.site/auth/callback";
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
