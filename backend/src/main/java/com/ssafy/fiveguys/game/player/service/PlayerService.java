@@ -17,17 +17,30 @@ public class PlayerService {
 
     private final PlayerRepository playerRepository;
 
-    public PlayerDto getPlayerInfo(Long playerSequence) {
-        Player player = playerRepository.findByPlayerSequence(playerSequence);
+    public Player getPlayerInfo(Long playerSequence) {
+        return playerRepository.findByPlayerSequence(playerSequence);
 
-        if(player == null) return null;
-        return new PlayerDto(playerSequence, player.getTotalRound(),
-            player.getTotalTurn(), player.getRankingScore(), player.getExp(), player.getPlayerLevel());
+    }
+
+    public Player getPlayerBySequence(Long userSequence) {
+        return playerRepository.findByUserSequence(userSequence);
+
+    }
+
+    public int playerTotalCount() {
+        return (int) playerRepository.count();
     }
 
 
-    public Long playerTotalCount() {
-        return playerRepository.count();
+    /**
+     * pass 횟수 player 테이블에 저장
+     * @param userSequence
+     * @param pass
+     */
+    @Transactional
+    public void savePassCount(Long userSequence, Long pass) {
+        Player player = playerRepository.findByUserSequence(userSequence);
+        player.setTotalPass(player.getTotalPass() + pass);
     }
 
 
@@ -40,7 +53,6 @@ public class PlayerService {
         long exp = LevelExp.expCalculator(turn, totalSuccess);
 
         //플레이어 조회
-//        Player player = playerRepository.findByPlayerSequence(userSequence);
         Player player = playerRepository.findByUserSequence(userSequence);
 
         log.info("player curr exp = {}", player.getExp());
@@ -91,4 +103,6 @@ public class PlayerService {
         log.info("player level = {}", player.getPlayerLevel());
 
     }
+
+
 }

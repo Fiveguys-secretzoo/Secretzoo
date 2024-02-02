@@ -4,6 +4,7 @@ package com.ssafy.fiveguys.game.player.service;
 import com.ssafy.fiveguys.game.player.entity.Player;
 import com.ssafy.fiveguys.game.player.entity.RankingScore;
 import com.ssafy.fiveguys.game.player.repository.PlayerRepository;
+import com.sun.jdi.LongValue;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -51,7 +52,7 @@ public class RankService {
     public void saveAll(List<Player> players) {
         for (Player player : players) {
 
-            //각 플레이어의 공격, 방어, 패스 점수 redis에 저장
+            //각 플레이어의 공격, 방어, 패스 점수 redis 에 저장
             ZSetOperations<String, String> zSetForAttack = redisTemplate.opsForZSet();
             ZSetOperations<String, String> zSetForDefense = redisTemplate.opsForZSet();
             ZSetOperations<String, String> zSetForPass = redisTemplate.opsForZSet();
@@ -70,7 +71,9 @@ public class RankService {
         //userSequence 에 해당하는 유저가 있는지 먼저 확인
         Player findPlayer = playerRepository.findByUserSequence(userSequence);
 
-//        if(findPlayer == null) return
+        //user 가 없으면 뒤에 로직 실행하지 않을 것임 -> 비회원들의 랭킹과 점수 저장 로직 실행 X
+        if(findPlayer == null) return;
+
 
         //redis 에서 각 랭킹 정보 가져오기
         ZSetOperations<String, String> zSetForAttack = redisTemplate.opsForZSet();
@@ -83,6 +86,7 @@ public class RankService {
         zSetForPass.incrementScore(passRankKey, String.valueOf(userSequence), rankingScore.getPassScore());
 
         //DB에 업데이트
+
 
 
         findPlayer.setRankingScore(
@@ -141,59 +145,48 @@ public class RankService {
     }
 
     /**
-     * playerId의 attack 랭킹 정보 조회
+     * userSequence attack 랭킹 정보 조회
      */
-    public Long getPlayerRankingOfAttack(Long userSequence) {
+    public int getPlayerRankingOfAttack(Long userSequence) {
         ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
         // 랭킹은 0부터 시작하므로 1을 더해 실제 랭킹을 계산
         //playerId가 null이면 NullPointer Exception
-//        return zSetOperations.reverseRank(attackRankKey, Objects.requireNonNull(playerId)) + 1;
+        // return zSetOperations.reverseRank(attackRankKey, Objects.requireNonNull(playerId)) + 1;
         // userSequence 가 null인 경우 기본값으로 Optional.ofNullable을 사용하여 0으로 설정
-        Long userRank = Optional.ofNullable(String.valueOf(userSequence))
+        int userRank = Math.toIntExact(Optional.ofNullable(String.valueOf(userSequence))
             .map(seq -> zSetOperations.reverseRank(attackRankKey, seq))
-            .orElse(-1L);
+            .orElse(-1L));
 
         return userRank+1;
     }
 
     /**
-     * playerId의 defense 랭킹 정보 조회
+     * userSequence defense 랭킹 정보 조회
      */
-    public Long getPlayerRankingOfDefense(Long userSequence) {
+    public int getPlayerRankingOfDefense(Long userSequence) {
         ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
         // 랭킹은 0부터 시작하므로 1을 더해 실제 랭킹을 계산
         // playerId가 null인 경우 기본값으로 Optional.ofNullable을 사용하여 0으로 설정
-        Long userRank = Optional.ofNullable(String.valueOf(userSequence))
+        int userRank = Math.toIntExact(Optional.ofNullable(String.valueOf(userSequence))
             .map(seq -> zSetOperations.reverseRank(defenseRankKey, seq))
-            .orElse(-1L);
+            .orElse(-1L));
 
         return userRank+1;
     }
 
     /**
-     * playerId의 pass 랭킹 정보 조회
+     * userSequence pass 랭킹 정보 조회
      */
-    public Long getPlayerRankingOfPass(Long userSequence) {
+    public int getPlayerRankingOfPass(Long userSequence) {
         ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
         // 랭킹은 0부터 시작하므로 1을 더해 실제 랭킹을 계산
         // playerId가 null인 경우 기본값으로 Optional.ofNullable을 사용하여 0으로 설정
-        Long userRank = Optional.ofNullable(String.valueOf(userSequence))
+        int userRank = Math.toIntExact(Optional.ofNullable(String.valueOf(userSequence))
             .map(seq -> zSetOperations.reverseRank(passRankKey, seq))
-            .orElse(-1L);
+            .orElse(-1L));
 
         return userRank+1;
     }
-//    public Long getPlayerRankingOfPass(String playerId) {
-//        ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
-//        // 랭킹은 0부터 시작하므로 1을 더해 실제 랭킹을 계산
-//        // playerId가 null인 경우 기본값으로 Optional.ofNullable을 사용하여 0으로 설정
-//        Long userRank = Optional.ofNullable(playerId)
-//            .map(seq -> zSetOperations.reverseRank(passRankKey, seq))
-//            .orElse(-1L);
-//
-//        return userRank+1;
-//    }
-
 
 
     /**
@@ -201,7 +194,7 @@ public class RankService {
      */
 
     @Transactional
-//    @Scheduled(fixedRateString = "${rank.update.interval}") //interval 방식의 스케줄링
+    //@Scheduled(fixedRateString = "${rank.update.interval}") //interval 방식의 스케줄링
     @Scheduled(cron = "0 59 23 * * *") // 특정 시간 기준 스케줄링 ex : 매월 매일 23시 59분 마다
     public void updateAllRanking() {
         log.info("DB 랭킹 점수 갱신 시작");
@@ -233,7 +226,7 @@ public class RankService {
                 findPlayer.getRankingScore().setPassScore(tuple.getScore());
             }
         }
-//        em.flush();
+        //em.flush();
         log.info("DB 랭킹 점수 갱신 완료");
         updateRedisRanking(players);
     }

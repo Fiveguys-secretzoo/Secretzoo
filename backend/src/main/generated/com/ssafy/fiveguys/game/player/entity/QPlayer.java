@@ -38,6 +38,8 @@ public class QPlayer extends EntityPathBase<Player> {
 
     public final QRankingScore rankingScore;
 
+    public final NumberPath<Long> totalPass = createNumber("totalPass", Long.class);
+
     public final NumberPath<Long> totalRound = createNumber("totalRound", Long.class);
 
     public final NumberPath<Long> totalTurn = createNumber("totalTurn", Long.class);

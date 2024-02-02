@@ -1,7 +1,9 @@
 package com.ssafy.fiveguys.game.user.controller;
 
+import com.ssafy.fiveguys.game.user.dto.EmailRequestDto;
 import com.ssafy.fiveguys.game.user.dto.JwtTokenDto;
 import com.ssafy.fiveguys.game.user.dto.LoginRequestDto;
+import com.ssafy.fiveguys.game.user.dto.UserDto;
 import com.ssafy.fiveguys.game.user.dto.UserSignDto;
 import com.ssafy.fiveguys.game.user.jwt.JwtProperties;
 import com.ssafy.fiveguys.game.user.service.AuthService;
@@ -20,9 +22,9 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin("http://localhost:3000")
+@CrossOrigin(origins = {"https://secretzoo.site","http://localhost:3000"}, exposedHeaders = "*")
 @RequestMapping("/auth")
-@Tag(name = "AuthController",description = "사용자(회원, 비회원)가 이용할 수 있는 서비스")
+@Tag(name = "AuthController", description = "사용자(회원, 비회원)가 이용할 수 있는 서비스")
 public class AuthController {
 
     private final AuthService authService;
@@ -31,7 +33,6 @@ public class AuthController {
     @Operation(summary = "회원가입 API")
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody UserSignDto userSignDto) {
-        System.out.println("userSignDto.getUserId() = " + userSignDto.getUserId());
         userService.signUp(userSignDto);
         return ResponseEntity.status(HttpStatus.OK)
             .body("signUp Success")
@@ -43,13 +44,13 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDto loginDto) {
         JwtTokenDto jwtTokenDto = authService.login(loginDto);
+        UserDto userDto = userService.findUserById(loginDto.getUserId());
         return ResponseEntity.status(HttpStatus.OK)
             .header(HttpHeaders.AUTHORIZATION,
                 JwtProperties.TOKEN_PREFIX + jwtTokenDto.getAccessToken())
             .header(JwtProperties.REFRESH_TOKEN, jwtTokenDto.getRefreshToken())
-            .header(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.AUTHORIZATION + "," + JwtProperties.REFRESH_TOKEN)
-            .body("Login Success")
-            //  .build();
+            .body(userDto)
+            //  .build()
             ;
     }
 
@@ -58,14 +59,12 @@ public class AuthController {
     public ResponseEntity<?> reissue(HttpServletRequest request) {
         String accessToken = request.getHeader(HttpHeaders.AUTHORIZATION);
         String refreshToken = request.getHeader(JwtProperties.REFRESH_TOKEN);
-        System.out.println("accessToken = " + accessToken);
-        System.out.println("refreshToken = " + refreshToken);
         JwtTokenDto reissuedToken = authService.reissueToken(accessToken, refreshToken);
         if (reissuedToken != null) {
             return ResponseEntity.status(HttpStatus.OK).body(reissuedToken.responseDto());
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-            .body("Token reissued fail")
+            .body("Token reissued fail. please Login again.")
             //    .build()
             ;
     }
@@ -75,5 +74,14 @@ public class AuthController {
     public ResponseEntity<?> logout(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken) {
         authService.logout(accessToken);
         return ResponseEntity.status(HttpStatus.OK).body("Logout Success");
+    }
+
+    @Operation(summary = "아이디 중복체크 API")
+    @PostMapping("/check/{userId}")
+    public ResponseEntity<?> checkUserId(@PathVariable String userId) {
+        if (authService.idDuplicated(userId)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("중복된 아이디 입니다.");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body("사용 가능한 아이디입니다.");
     }
 }

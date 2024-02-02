@@ -1,51 +1,68 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import {Progress } from 'flowbite-react';
 
-let data = {
-  "rewardCount" : 23,
-  "myRewards" : {},
-}
-for (let i = 0; i < 23; i++) {
-  data.myRewards[`업적이름${i + 1}`] = {
-    number: Math.random() * 100,
-    rate: Math.random() * 100,
-  };
-}
 
 const MyReward = () => {
+  const [myRewards, setMyrewards] = useState(null);
+  axios.defaults.headers.common['Authorization'] = sessionStorage.getItem('authorization');
+
+  const authHeader = sessionStorage.getItem('authorization');
+  const token = authHeader.split(' ')[1];
+  const parts = token.split('.');
+  const payloadInBase64 = parts[1];
+  const decodedPayload = atob(payloadInBase64);
+  const payload = JSON.parse(decodedPayload);
+  
+  console.log(payload);
+
+  const getRewrds = (playerSequence) => {
+    axios.get(`https://secretzoo.site/api/rewards/total/101`)
+    .then(response => {
+      console.log(response);
+      setMyrewards(response.data);
+    });
+  };
+  useEffect(() => {
+    getRewrds();
+  },[]);
+
+  if (!myRewards) {
+    return <div>Loading...</div>;
+  }
   return (
-    <div>
-      <div className='container bg-gray-400 p-2 my-4'>
-        <p className='text-white'>도전과제 90개중 {data.rewardCount}개 달성</p>
-        <div className='w-full bg-gray-200 rounded-full h-4'>
-          <div className='bg-blue-600 h-4 rounded-full w-[40%]'></div>
-        </div>
+    <div className='h-[90%]'>
+      <div className='container p-2 my-4 shadow-md'>
+        <p>도전과제 {myRewards.count}개중 {Object.keys(myRewards.data).filter(reward => myRewards.data[reward].done).length}개 달성</p>
+        
+        <Progress progress={Object.keys(myRewards.data).filter(reward => myRewards.data[reward].done).length/myRewards.count*100} />
       </div>
-      <div className='container bg-gray-400 p-2 my-4 overflow-y-auto h-[200px]'>
-        <p className='text-white'>달성한 과제</p>
+      <div className='container p-2 my-4 overflow-y-auto h-[35%] shadow-md'>
+        <p className='mb-2'>달성한 과제</p>
         {
-          Object.keys(data.myRewards).map((reward) => (
-            <div className='flex justify-center space-x-10 space-y-1'>
-              <div className='w-[3em] h-[3em] bg-purple-500'></div>
+          Object.keys(myRewards.data).filter(reward => myRewards.data[reward].done).map((reward) => (
+            <div className='flex justify-center space-x-10 space-y-2 shadow-md'>
+              <div className='w-[3em] h-[3em] bg-blue-100 m-2'></div>
               <div className='min-w-[20em]'>
-                <p className='text-white font-bold'>{reward}</p>
-                <p className='text-white'>{data.myRewards[reward].rate.toFixed(1)}의 플레이어가 이 업적을 달성했습니다.</p>
+                <p className='font-bold'>{myRewards.data[reward].rewardsName}</p>
+                <p className='w-[25em]'>{(myRewards.data[reward].donePlayerCount/myRewards.totalPlayer*100).toFixed(2)}%의 플레이어가 이 업적을 달성했습니다.</p>
               </div>
               <div>
-                <p>달성 날짜</p>
+                <p>{myRewards.data[reward].date[0]}년 {myRewards.data[reward].date[1]}월{myRewards.data[reward].date[2]}일</p>
               </div>
             </div>
           ))
         }
       </div>
-      <div className='container bg-gray-400 p-2 my-4 overflow-y-auto h-[200px]'>
-        <p className='text-white'>아직 달성 못한과제</p>
+      <div className='container p-2 my-4 overflow-y-auto h-[35%] shadow-md'>
+        <p className='text-white mb-2'>아직 달성 못한과제</p>
         {
-          Object.keys(data.myRewards).map((reward) => (
-            <div className='flex justify-center space-x-10 space-y-1'>
-              <div className='w-[3em] h-[3em] bg-purple-500'></div>
+          Object.keys(myRewards.data).filter(reward => !myRewards.data[reward].done).map((reward) => (
+            <div className='flex justify-center space-x-10 my-2 shadow-md'>
+              <div className='w-[3em] h-[3em] bg-gray-100 m-2'></div>
               <div className='min-w-[27em]'>
-                <p className='text-white font-bold'>{reward}</p>
-                <p className='text-white'>{data.myRewards[reward].rate.toFixed(1)}의 플레이어가 이 업적을 달성했습니다.</p>
+                <p className='font-bold'>{myRewards.data[reward].rewardsName}</p>
+                <p className='w-[31.7em]'>{(myRewards.data[reward].donePlayerCount/myRewards.totalPlayer*100).toFixed(2)}%의 플레이어가 이 업적을 달성했습니다.</p>
               </div>
             </div>
           ))

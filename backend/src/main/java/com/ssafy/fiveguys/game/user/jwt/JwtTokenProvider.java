@@ -68,7 +68,6 @@ public class JwtTokenProvider {
 
     // 토큰으로부터 정보 추출
     public Claims parseClaims(String accessToken) {
-        System.out.println("JwtTokenProvider.parseClaims");
         try {
             return Jwts.parserBuilder()
                     .setSigningKey(key)
@@ -82,14 +81,12 @@ public class JwtTokenProvider {
 
     // 토큰으로부터 추출한 정보를 기반으로 AuthenticationToken 객체 생성
     public Authentication getAuthentication(String accessToken) {
-        System.out.println("JwtTokenProvider.getAuthentication - start");
         Claims claims = parseClaims(accessToken);
         Collection<? extends GrantedAuthority> authorities =
                 Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
                         .map(SimpleGrantedAuthority::new)
                         .toList();
         UserDetails principal = new User(claims.getSubject(), "", authorities);
-        System.out.println("JwtTokenProvider.getAuthentication - finish");
         return new UsernamePasswordAuthenticationToken(principal, "", principal.getAuthorities());
     }
 
