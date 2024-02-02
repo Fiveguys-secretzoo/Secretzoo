@@ -46,13 +46,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userInfo);
     }
 
-    @Operation(summary = "회원 정보 갱신 API")
-    @PutMapping("/user")
-    public ResponseEntity<?> updateUser(@RequestBody UserInfoDto userInfoDto) {
-        userService.updateUser(userInfoDto);
-        return ResponseEntity.status(HttpStatus.OK).body("update Success");
-    }
-
     @Operation(summary = "회원 삭제 API")
     @DeleteMapping("/user")
     public ResponseEntity<?> deleteUser(HttpServletRequest request, @RequestBody String password) {
