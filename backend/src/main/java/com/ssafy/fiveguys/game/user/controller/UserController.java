@@ -80,10 +80,10 @@ public class UserController {
     @Operation(summary = "업적 변경 API")
     @PutMapping("/main-achievement")
     public ResponseEntity<?> changeMainAchievement(HttpServletRequest request,
-        @RequestBody String mainAcheiveMent) {
+        @RequestBody String mainAcheivement) {
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
         String userId = authService.extractUserId(token);
-        userService.changeMainAchievement(userId, mainAcheiveMent);
+        userService.changeMainAchievement(userId, mainAcheivement);
         return ResponseEntity.status(HttpStatus.OK).body("main_achievement update successfully");
     }
 
