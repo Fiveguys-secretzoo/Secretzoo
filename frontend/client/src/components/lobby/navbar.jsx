@@ -1,12 +1,12 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Sidebar } from 'flowbite-react';
+import { Sidebar, Button  } from 'flowbite-react';
 import { IoGameController, IoTrophy  } from 'react-icons/io5';
 import { HiUser } from 'react-icons/hi'
 
 const Navbar = () => {
+  const navigate = useNavigate();
   const CustomSidebar = ({icon : Icon, children, to}) => {
-    const navigate = useNavigate();
 
     const link = () => {
       navigate(to);
@@ -21,6 +21,11 @@ const Navbar = () => {
       </div>
     )
   };
+
+  const logout = () => {
+    sessionStorage.clear();
+    navigate('/');
+  }
 
   return (
     <>
@@ -39,6 +44,7 @@ const Navbar = () => {
           </Sidebar.ItemGroup>
         </Sidebar.Items>
       </Sidebar>
+      <Button color='warning' onClick={() => logout()}>로그아웃</Button>
     </>
   );
 };
