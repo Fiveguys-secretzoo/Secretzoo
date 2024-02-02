@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/users")
 @Tag(name = "UserController", description = "회원 관련 서비스 컨트롤러")
-// @CrossOrigin("http://localhost:3000")
+// @CrossOrigin("https://secretzoo.site")
 public class UserController {
 
     private final UserService userService;
