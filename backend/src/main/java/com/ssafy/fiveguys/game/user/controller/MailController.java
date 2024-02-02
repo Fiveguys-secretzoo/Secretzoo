@@ -4,6 +4,7 @@ import com.ssafy.fiveguys.game.user.dto.EmailRequestDto;
 import com.ssafy.fiveguys.game.user.entity.EmailVerification;
 import com.ssafy.fiveguys.game.user.service.MailService;
 import com.ssafy.fiveguys.game.user.service.RedisService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
@@ -29,6 +30,7 @@ public class MailController {
     private final MailService mailService;
     private final RedisService redisService;
 
+    @Operation(summary = "이메일 인증 API")
     @PostMapping("/send")
     public ResponseEntity<?> sendVerificationCode(@RequestBody @Valid EmailRequestDto emailDto)
         throws MessagingException {
@@ -36,6 +38,7 @@ public class MailController {
         return ResponseEntity.status(HttpStatus.OK).body("인증 메일이 발송되었습니다.");
     }
 
+    @Operation(summary = "인증 코드 확인 API")
     @PostMapping("/check")
     public ResponseEntity<?> checkVerificationCode(
         @RequestBody @Valid EmailVerification emailVerification) {
