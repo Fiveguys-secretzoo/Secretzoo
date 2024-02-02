@@ -2,18 +2,18 @@ package com.ssafy.fiveguys.game.player.api;
 
 import com.ssafy.fiveguys.game.player.dto.RankRequestDto;
 import com.ssafy.fiveguys.game.player.dto.TotalRankDto;
-import com.ssafy.fiveguys.game.player.dto.response.RankResponse;
-import com.ssafy.fiveguys.game.player.dto.response.Result;
-import com.ssafy.fiveguys.game.player.dto.response.Result2;
+import com.ssafy.fiveguys.game.player.dto.RankResponseDto;
+import com.ssafy.fiveguys.game.player.dto.api.ApiResponse;
+import com.ssafy.fiveguys.game.player.entity.AnimalScore;
 import com.ssafy.fiveguys.game.player.entity.Player;
 import com.ssafy.fiveguys.game.player.entity.RankingScore;
-import com.ssafy.fiveguys.game.player.repository.PlayerRepository;
+import com.ssafy.fiveguys.game.player.entity.Rewards;
 import com.ssafy.fiveguys.game.player.service.PlayerService;
 import com.ssafy.fiveguys.game.player.service.RankService;
+import com.ssafy.fiveguys.game.player.service.RewardsService;
 import com.ssafy.fiveguys.game.user.entity.User;
 import com.ssafy.fiveguys.game.user.repository.UserRepositoy;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.ZSetOperations;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,6 +40,7 @@ public class RankApiController {
 
     private final RankService rankService;
     private final PlayerService playerService;
+    private final RewardsService  rewardsService;
     private final UserRepositoy userRepositoy; //실시간 랭킹의 성능을 위해 특수한 상황 repository 주입
 //    private final PlayerRepository playerRepository;
 
@@ -70,14 +70,15 @@ public class RankApiController {
         double passScore = RankingScore.scoreCalculator(rankRequestDto.getTurn(),
             rankRequestDto.getPassCount());
         RankingScore rankingScore = new RankingScore(attackScore, defenseScore, passScore);
-        //playerId에 랭킹 정보 점수 저장
+        //redis 에 랭킹 정보 점수 저장
         rankService.saveRank(rankRequestDto.getUserSequence(), rankingScore);
 
-        int totalSuccess = (int) (rankRequestDto.getAttackSuccess()
-            + rankRequestDto.getDefenseSuccess());
+        //player pass count 저장
+        playerService.savePassCount(rankRequestDto.getUserSequence(), rankRequestDto.getPassCount());
+
+        int totalSuccess = (int) (rankRequestDto.getAttackSuccess() + rankRequestDto.getDefenseSuccess());
         //player 경험지 점수 저장
-        playerService.saveExp(rankRequestDto.getUserSequence(), rankRequestDto.getTurn(),
-            totalSuccess);
+        playerService.saveExp(rankRequestDto.getUserSequence(), rankRequestDto.getTurn(), totalSuccess);
 
         return ResponseEntity.ok("랭킹 정보가 성공적으로 저장되었습니다.");
     }
@@ -86,45 +87,54 @@ public class RankApiController {
      * 상위 N명의 랭킹 정보 조회(공격)
      */
     @GetMapping("/attack")
-    public Result getAttackRanking() {
+    public ApiResponse getAttackRanking() {
         Set<ZSetOperations.TypedTuple<String>> topRankings = rankService.getTopRankingsOfAttack();
-        List<RankResponse> collect = topRankings.stream()
+        List<RankResponseDto> collect = topRankings.stream()
             .map(m -> {
                 User user = userRepositoy.findByUserSequence(Long.parseLong(m.getValue()));
-                return new RankResponse(Long.parseLong(m.getValue()), user.getNickname(), m.getScore());
+                return new RankResponseDto(Long.parseLong(m.getValue()), user.getNickname(), m.getScore());
             })
             .collect(Collectors.toList());
-        return new Result(collect.size(), collect);
+
+        int totalPlayerCount = playerService.playerTotalCount();
+
+        return new ApiResponse(collect.size(), collect, totalPlayerCount);
     }
 
     /**
      * 상위 N명의 랭킹 정보 조회(방어)
      */
     @GetMapping("/defense")
-    public Result getDefenseRanking() {
+    public ApiResponse getDefenseRanking() {
         Set<ZSetOperations.TypedTuple<String>> topRankings = rankService.getTopRankingsOfDefense();
-        List<RankResponse> collect = topRankings.stream()
+        List<RankResponseDto> collect = topRankings.stream()
             .map(m -> {
                 User user = userRepositoy.findByUserSequence(Long.parseLong(m.getValue()));
-                return new RankResponse(Long.parseLong(m.getValue()), user.getNickname(), m.getScore());
+                return new RankResponseDto(Long.parseLong(m.getValue()), user.getNickname(), m.getScore());
             })
             .collect(Collectors.toList());
-        return new Result(collect.size(), collect);
+
+        int totalPlayerCount = playerService.playerTotalCount();
+
+        return new ApiResponse(collect.size(), collect, totalPlayerCount);
     }
 
     /**
      * 상위 N명의 랭킹 정보 조회(패스)
      */
     @GetMapping("/pass")
-    public Result getPassRanking() {
+    public ApiResponse getPassRanking() {
         Set<ZSetOperations.TypedTuple<String>> topRankings = rankService.getTopRankingsOfPass();
-        List<RankResponse> collect = topRankings.stream()
+        List<RankResponseDto> collect = topRankings.stream()
             .map(m -> {
                 User user = userRepositoy.findByUserSequence(Long.parseLong(m.getValue()));
-                return new RankResponse(Long.parseLong(m.getValue()), user.getNickname(), m.getScore());
+                return new RankResponseDto(Long.parseLong(m.getValue()), user.getNickname(), m.getScore());
             })
             .collect(Collectors.toList());
-        return new Result(collect.size(), collect);
+
+        int totalPlayerCount = playerService.playerTotalCount();
+
+        return new ApiResponse(collect.size(), collect, totalPlayerCount);
     }
     /**
      * 상위 N명의 랭킹 정보 조회(패스)
@@ -139,10 +149,10 @@ public class RankApiController {
 //    }
 
     /**
-     * 상위 5명의 랭킹 정보 조회(from DB)
+     * 상위 10명의 랭킹 정보 조회(from DB)
      */
     @GetMapping("/total")
-    public Result getTotalRanking() {
+    public ApiResponse getTotalRanking() {
 
         List<Player> players1 = rankService.getTotalRanking("attack");
         List<Player> players2 = rankService.getTotalRanking("defense");
@@ -150,26 +160,28 @@ public class RankApiController {
 
         int size = players1.size() + players2.size() + players3.size();
 
-        List<RankResponse> attack = players1.stream()
+        int totalPlayerCount = playerService.playerTotalCount();
+
+        List<RankResponseDto> attack = players1.stream()
             .map(player -> {
                 User user = userRepositoy.findByUserSequence(player.getUserSequence());
-                return new RankResponse(user.getUserSequence(),
+                return new RankResponseDto(user.getUserSequence(),
                     user.getNickname(),
                     player.getRankingScore().getAttackScore());
             })
             .toList();
-        List<RankResponse> defense = players2.stream()
+        List<RankResponseDto> defense = players2.stream()
             .map(player -> {
                 User user = userRepositoy.findByUserSequence(player.getUserSequence());
-                return new RankResponse(user.getUserSequence(),
+                return new RankResponseDto(user.getUserSequence(),
                     user.getNickname(),
                     player.getRankingScore().getAttackScore());
             })
             .toList();
-        List<RankResponse> pass = players3.stream()
+        List<RankResponseDto> pass = players3.stream()
             .map(player -> {
                 User user = userRepositoy.findByUserSequence(player.getUserSequence());
-                return new RankResponse(user.getUserSequence(),
+                return new RankResponseDto(user.getUserSequence(),
                     user.getNickname(),
                     player.getRankingScore().getAttackScore());
             })
@@ -179,48 +191,49 @@ public class RankApiController {
 //                player.getRankingScore().getPassScore()))
 //            .toList();
 
-        ConcurrentMap<String, List<RankResponse>> rankMap = new ConcurrentHashMap<>();
+        ConcurrentMap<String, List<RankResponseDto>> rankMap = new ConcurrentHashMap<>();
         rankMap.put("attack", attack);
         rankMap.put("defense", defense);
         rankMap.put("pass", pass);
-        return new Result(size, rankMap);
+        return new ApiResponse(size, rankMap, totalPlayerCount);
     }
 
     /**
-     * playerId에 해당하는 유저의 순위 가져오기 (공격)
+     * userSequence 에 해당하는 유저의 순위 가져오기 (공격)
      */
     @GetMapping("/attack/{userSequence}")
-    public Long getPlayerRankingOfAttack(@PathVariable("userSequence") Long userSequence) {
+    public int getPlayerRankingOfAttack(@PathVariable("userSequence") Long userSequence) {
         return rankService.getPlayerRankingOfAttack(userSequence);
     }
 
     /**
-     * playerId에 해당하는 유저의 순위 가져오기 (방어)
+     * userSequence 해당하는 유저의 순위 가져오기 (방어)
      */
     @GetMapping("/defense/{userSequence}")
-    public Long getPlayerRankingOfDefense(@PathVariable("userSequence") Long userSequence) {
+    public int getPlayerRankingOfDefense(@PathVariable("userSequence") Long userSequence) {
         return rankService.getPlayerRankingOfDefense(userSequence);
     }
 
     /**
-     * playerId에 해당하는 유저의 순위 가져오기 (패스)
+     * userSequence 해당하는 유저의 순위 가져오기 (패스)
      */
     @GetMapping("/pass/{userSequence}")
-    public Long getPlayerRankingOfPass(@PathVariable("userSequence") Long userSequence) {
+    public int getPlayerRankingOfPass(@PathVariable("userSequence") Long userSequence) {
         return rankService.getPlayerRankingOfPass(userSequence);
     }
 
     @GetMapping("/total/{userSequence}")
-    public Result2 getPlayerTotalRanking(@PathVariable("userSequence") Long userSequence) {
+    public ApiResponse getPlayerTotalRanking(@PathVariable("userSequence") Long userSequence) {
 
+        int attack = rankService.getPlayerRankingOfAttack(userSequence);
+        int defense = rankService.getPlayerRankingOfDefense(userSequence);
+        int pass = rankService.getPlayerRankingOfPass(userSequence);
+        Player player = playerService.getPlayerBySequence(userSequence);
 
-        Long attack = rankService.getPlayerRankingOfAttack(userSequence);
-        Long defense = rankService.getPlayerRankingOfDefense(userSequence);
-        Long pass = rankService.getPlayerRankingOfPass(userSequence);
+        AnimalScore totalAnimalScore = rewardsService.getTotalAnimalScore(userSequence);
+        TotalRankDto totalRankDto = new TotalRankDto(attack, defense, pass, player.getTotalPass(), totalAnimalScore);
+        int totalPlayerCount = playerService.playerTotalCount();
 
-        TotalRankDto totalRankDto = new TotalRankDto(attack, defense, pass);
-        long totalPlayerCount = playerService.playerTotalCount();
-
-        return new Result2(3, totalRankDto, totalPlayerCount);
+        return new ApiResponse(3, totalRankDto, totalPlayerCount);
     }
 }

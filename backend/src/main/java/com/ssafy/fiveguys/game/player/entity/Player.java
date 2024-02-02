@@ -25,6 +25,7 @@ public class Player extends BaseTimeEntity {
 
     private Long totalRound;
     private Long totalTurn;
+    private Long totalPass;
 
     //player_id도 고유한 값이므로 unique = true 설정을 통해 중복 값을 방지해준다.
 //    @Column(name = "player_id",  unique = true)

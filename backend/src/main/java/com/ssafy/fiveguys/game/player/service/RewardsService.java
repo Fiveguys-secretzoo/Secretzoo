@@ -5,12 +5,14 @@ import com.ssafy.fiveguys.game.player.dto.AnimalDto;
 import com.ssafy.fiveguys.game.player.dto.RankRequestDto;
 import com.ssafy.fiveguys.game.player.dto.animal.AnimalType;
 import com.ssafy.fiveguys.game.player.entity.Animal;
+import com.ssafy.fiveguys.game.player.entity.AnimalScore;
 import com.ssafy.fiveguys.game.player.entity.Player;
 import com.ssafy.fiveguys.game.player.entity.PlayerAnimal;
 import com.ssafy.fiveguys.game.player.repository.AnimalRepository;
 import com.ssafy.fiveguys.game.player.repository.PlayerAnimalRepository;
 import com.ssafy.fiveguys.game.player.repository.PlayerRepository;
 import jakarta.persistence.EntityManager;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -123,6 +125,38 @@ public class RewardsService {
             em.persist(playerAnimal);
         }
 
+
+    }
+
+    //유저의 동물 관련 전체 점수 조회하는 메서드
+    public AnimalScore getTotalAnimalScore(Long userSequence){
+        List<PlayerAnimal> playerAnimals = playerAnimalRepository.findByUserSequence(userSequence);
+
+         Long attackSuccess = 0L;
+         Long attackFail = 0L;
+         Long defenseSuccess = 0L;
+         Long defenseFail = 0L;
+         Long trust = 0L;
+         Long distrust = 0L;
+         Long truth = 0L;
+         Long lie = 0L;
+
+         //전체 animal score 합계
+        for (PlayerAnimal playerAnimal : playerAnimals) {
+            log.info("playerAnimal.getAnimalScore = {}", playerAnimal.getAnimalScore());
+            attackSuccess += playerAnimal.getAnimalScore().getAttackSuccess();
+            attackFail += playerAnimal.getAnimalScore().getAttackFail();
+            defenseSuccess += playerAnimal.getAnimalScore().getDefenseSuccess();
+            defenseFail += playerAnimal.getAnimalScore().getDefenseFail();
+            trust += playerAnimal.getAnimalScore().getTrust();
+            distrust += playerAnimal.getAnimalScore().getDistrust();
+            truth += playerAnimal.getAnimalScore().getTruth();
+            lie += playerAnimal.getAnimalScore().getLie();
+        }
+
+        //AnimalScore 에 담아서 return
+        return new AnimalScore(attackSuccess, attackFail,
+            defenseSuccess, defenseFail, trust, distrust, truth, lie);
 
     }
 

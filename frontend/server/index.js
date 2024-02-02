@@ -43,7 +43,10 @@ async function main() {
   const handleException = (socket) => {
 
   }
-  const serverURL = 'http://localhost:3000'
+  //리액트 서버
+  // const serverURL = 'http://localhost:3000'
+  // const serverURL = 'http://react-app:3000'
+  const serverURL = 'https://secretzoo.site'
   // cors 설정
   app.use(cors({
     origin: serverURL

@@ -29,8 +29,6 @@ public class QUser extends EntityPathBase<User> {
     //inherited
     public final DateTimePath<java.sql.Timestamp> lastModifiedDate = _super.lastModifiedDate;
 
-    public final NumberPath<Long> level = createNumber("level", Long.class);
-
     public final StringPath mainAchievement = createString("mainAchievement");
 
     public final StringPath name = createString("name");
@@ -38,8 +36,6 @@ public class QUser extends EntityPathBase<User> {
     public final StringPath nickname = createString("nickname");
 
     public final StringPath password = createString("password");
-
-    public final NumberPath<Long> point = createNumber("point", Long.class);
 
     public final StringPath profileNumber = createString("profileNumber");
 
