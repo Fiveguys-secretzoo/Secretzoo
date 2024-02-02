@@ -1,4 +1,4 @@
-package com.ssafy.fiveguys.game;
+package com.ssafy.fiveguys.game.common.config;
 
 
 import com.ssafy.fiveguys.game.player.entity.Player;
