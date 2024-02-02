@@ -1,5 +1,5 @@
-import React, {createContext}  from 'react';
-import {BrowserRouter, Route, Routes } from 'react-router-dom';
+import React, { createContext } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 // import './App.css';
 import io from 'socket.io-client';
 import { Provider } from './store/stores'
@@ -16,7 +16,6 @@ import MyRanking from './components/mypage/myRanking';
 import MyReward from './components/mypage/myReward';
 import Callback from './pages/callback';
 import Page404 from './pages/Page404';
-
 
 const socket = io('http://localhost:3001');
 export const SocketContext = createContext();
@@ -43,7 +42,7 @@ function App() {
                 <Route path='/lobby/myPage/myreward' element={<MyReward/>}/>
               </Route>
             </Route>
-            <Route path='/play' element={<Play/>}/> 
+            <Route path='/play' element={<Play />} />
           </Routes>
         </div>
       </SocketContext.Provider>
