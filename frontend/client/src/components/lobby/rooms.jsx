@@ -81,7 +81,7 @@ const Rooms = () => {
   const searchRoom = () => {
     let newRooms = {};
     Object.keys(rooms).forEach((key) => {
-      if (rooms[key].roomName.indexOf() > 0) {
+      if (rooms[key].roomName.indexOf(searchRoomName) > -1) {
         newRooms[key] = rooms[key];
       }
     })
@@ -109,7 +109,7 @@ const Rooms = () => {
               value={searchRoomName}
               onChange={(e) => setSearchRoomName(e.target.value)} />
             <Button color="gray"
-              type="submit" onClick={searchRoom}>검색</Button>
+              type="submit" onClick={() => searchRoom()}>검색</Button>
           </form>
         </div>
         <div className="flex space-x-2 justify-end ">
@@ -123,7 +123,7 @@ const Rooms = () => {
               <p>{rooms[key].roomName}</p>
               {/* <p>{rooms[key].players[0].playerName}</p> */}
               <p>{rooms[key].playerCount}/6</p>
-              <p>{rooms[key].status}대기중</p>
+              <p>{rooms[key].status}</p>
             </Card >
           ))}
         </div>

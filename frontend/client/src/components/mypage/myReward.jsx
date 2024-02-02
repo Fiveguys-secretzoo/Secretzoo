@@ -17,10 +17,15 @@ const MyReward = () => {
   console.log(payload);
 
   const getRewrds = (playerSequence) => {
-    axios.get(`https://secretzoo.site/api/rewards/total/101`)
+    const headers = {
+      'Authorization': sessionStorage.getItem('authorization')
+    };
+    axios.get('https://spring.secretzoo.site/api/users/user', { headers })
       .then(response => {
-        console.log(response);
-        setMyrewards(response.data);
+        axios.get(`https://spring.secretzoo.site/api/rewards/total/`+response.data.userSequence)
+        .then(response => {
+          setMyrewards(response.data);
+        });
       });
   };
   useEffect(() => {

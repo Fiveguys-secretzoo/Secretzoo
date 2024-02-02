@@ -1,11 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 body>iframe {
   display: none
 }
-
+@font-face{
+  font-family:'DNFBitBitv2';
+  font-style:normal;font-weight:400;src:url('//cdn.df.nexon.com/img/common/font/DNFBitBitv2.otf')format('opentype')}
 body {
   background-image: url('./assets/img/bg.png');
   background-size: cover;

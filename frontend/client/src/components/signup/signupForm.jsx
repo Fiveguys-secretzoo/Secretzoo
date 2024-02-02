@@ -9,14 +9,13 @@ const SignupForm = () => {
   const [pass, setPass] = useState("");
   const [passCheck, setPassCheck] = useState("");
   const [email, setEmail] = useState("");
-  const [emailCheck, setEmailCheck] = useState(false);
   const navigate = useNavigate();
   const requsetLogin = () => {
     if (!idCheck) {
       alert("id 중복체크하세요");
       return;
     }
-    axios.post('https://secretzoo.site/api/auth/signup',
+    axios.post('https://spring.secretzoo.site/api/auth/signup',
       {
         "userId": id,
         "password": pass,
@@ -35,7 +34,7 @@ const SignupForm = () => {
     const [checkIdInput, setCheckIdInput] = useState(id);
     const [idCheckState, setIdCheckState] = useState(false);
     const checkid = (id) => {
-      axios.post('https://secretzoo.site/api/auth/check/' + id)
+      axios.post('https://spring.secretzoo.site/api/auth/check/' + id)
         .then(Response => {
           alert(Response.data);
           setIdCheckState(true);
@@ -69,7 +68,33 @@ const SignupForm = () => {
       </Modal>
     )
   }
-
+  const [verificationCode, setVerificationCode] = useState('');
+  const [didEmailRequest, setDidEmailRequest] = useState(false);
+  const [emailCheckSate, setEmailCheckState] = useState(false);
+  const [openEmailCheck, setopenEmailCheck] = useState(false);
+  const requsetEmailCode = () => {
+    const data = {
+      "email" : email,
+    }
+    axios.post('https://spring.secretzoo.site/api/verify-email/send',data)
+    .then(Response => {
+      alert(Response.data);
+      setopenEmailCheck(true);
+      setDidEmailRequest(true);
+    })
+  }
+  const requsetEmailAuthorization = () =>{
+    const data = {
+      "email" : email,
+      "verificationCode" : verificationCode,
+    }
+    axios.post('https://spring.secretzoo.site/api/verify-email/check',data)
+    .then(Response => {
+      alert(Response.data);
+      setEmailCheckState(true);
+    })
+  }
+  
   return (
     <>
       <div className='container p-12 max-w-[35%] mx-auto py-12 flex flex-col items-center justify-center mt-5 bg-white shadow-lg rounded-xl'>
@@ -128,15 +153,32 @@ const SignupForm = () => {
             <div className='flex'>
               <TextInput
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {setEmail(e.target.value); setDidEmailRequest(false)}}
                 type="email"
                 placeholder="이메일"
                 required
+                disabled={emailCheckSate ? true : false}
                 className='flex-grow' />
-              <Button>인증</Button>
+              <Button 
+              disabled={emailCheckSate ? true : false}
+              onClick={() => requsetEmailCode()}>{didEmailRequest ? '재요청' : '인증번호 요청'}</Button>
             </div>
+            {openEmailCheck? (<div className='flex mt-2'>
+              <TextInput
+                value={verificationCode}
+                onChange={(e) => setVerificationCode(e.target.value)}
+                type="password"
+                placeholder="인증번호"
+                required
+                disabled={emailCheckSate ? true : false}
+                className='flex-grow' />
+              <Button
+              disabled={emailCheckSate ? true : false} 
+              onClick={() => requsetEmailAuthorization()}>{emailCheckSate ? '인증완료' : '인증'}</Button>
+            </div>) : null}
           </div>
-          <Button type="submit" onClick={() => (requsetLogin())}>회원가입</Button>
+          <Button
+           type="submit" onClick={() => (requsetLogin())}>회원가입</Button>
         </form>
       </div>
       <IdCheckModal></IdCheckModal>

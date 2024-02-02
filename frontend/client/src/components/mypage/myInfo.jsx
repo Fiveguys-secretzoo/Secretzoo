@@ -10,7 +10,7 @@ const MyInfo = () => {
     const headers = {
       'Authorization': sessionStorage.getItem('authorization')
     };
-    axios.get('https://secretzoo.site/api/users/user', { headers })
+    axios.get('https://spring.secretzoo.site/api/users/user', { headers })
       .then(response => {
         console.log(response.data)
         setUser(response.data)
@@ -24,21 +24,21 @@ const MyInfo = () => {
 
   axios.defaults.headers.common['Authorization'] = sessionStorage.getItem('authorization');
   const updateProfileImage = (number) => {
-    axios.put('https://secretzoo.site/api/users/profile-number', number)
+    axios.put('https://spring.secretzoo.site/api/users/profile-number', number)
       .then(response => {
         getUserInfo();
       });
   };
 
   const updateNickname = (nickname) => {
-    axios.put('https://secretzoo.site/api/users/nickname', nickname)
+    axios.put('https://spring.secretzoo.site/api/users/nickname', nickname)
       .then(response => {
         getUserInfo();
       });
   };
 
   const updateMainAchievement = (mainAchievement) => {
-    axios.put('https://secretzoo.site/api/users/main-achievement', mainAchievement)
+    axios.put('https://spring.secretzoo.site/api/users/main-achievement', mainAchievement)
       .then(response => {
         getUserInfo();
       });
@@ -46,8 +46,7 @@ const MyInfo = () => {
 
   const [passwordCheckState, setPasswordCheckState] = useState(false);
   const checkPassword = (password) => {
-    console.log("hi")
-    axios.post('https://secretzoo.site/api/users/password', password)
+    axios.post('https://spring.secretzoo.site/api/users/password', password)
       .then(response => {
         setOpenUpdatePasswordModal(true);
         setPasswordCheckState(true);
@@ -58,7 +57,7 @@ const MyInfo = () => {
 
   const updatePassword = (password) => {
     if (passwordCheckState) {
-      axios.put('https://secretzoo.site/api/users/password', password)
+      axios.put('https://spring.secretzoo.site/api/users/password', password)
         .then(response => {
           getUserInfo();
           alert('변경 선공')
@@ -67,12 +66,19 @@ const MyInfo = () => {
   };
 
   const [myRewards, setMyrewards] = useState(null);
-  const getRewrds = (playerSequence) => {
-    axios.get(`https://secretzoo.site/api/rewards/done/101`)
+  const getRewrds = () => {
+    const headers = {
+      'Authorization': sessionStorage.getItem('authorization')
+    };
+    axios.get('https://spring.secretzoo.site/api/users/user', { headers })
       .then(response => {
-        setMyrewards(response.data);
-        getUserInfo();
+        axios.get(`https://spring.secretzoo.site/api/rewards/done/`+response.data.userSequence)
+        .then(response => {
+          setMyrewards(response.data);
+          getUserInfo();
+        });
       });
+    
   };
 
   const [openProfileImageModal, setOpenProfileImageModal] = useState(false);
