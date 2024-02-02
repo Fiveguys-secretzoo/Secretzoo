@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/rank")
 @RequiredArgsConstructor
-@CrossOrigin("*")
+@CrossOrigin(origins = {"https://secretzoo.site","http://localhost:3000"}, exposedHeaders = "*")
 public class RankApiController {
 
     private final RankService rankService;
