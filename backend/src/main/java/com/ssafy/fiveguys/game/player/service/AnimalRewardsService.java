@@ -1,17 +1,20 @@
 package com.ssafy.fiveguys.game.player.service;
 
-import com.ssafy.fiveguys.game.player.entity.AnimalScore;
+import com.ssafy.fiveguys.game.player.entity.embeddedType.AnimalScore;
 import com.ssafy.fiveguys.game.player.entity.PlayerAnimal;
 import com.ssafy.fiveguys.game.player.entity.PlayerRewards;
 import com.ssafy.fiveguys.game.player.entity.Rewards;
+import com.ssafy.fiveguys.game.player.entity.RewardsKey;
 import com.ssafy.fiveguys.game.player.repository.PlayerRewardsRepository;
 import com.ssafy.fiveguys.game.player.repository.RewardsRepository;
+import jakarta.persistence.EntityManager;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -22,40 +25,58 @@ public class AnimalRewardsService {
     private final PlayerRewardsRepository playerRewardsRepository;
 
 
+    @Transactional
+    public void checkAnimal(PlayerAnimal playerAnimal) {
+
+        log.info("playerAnimal = {}", playerAnimal);
+        log.info("playerAnimal.getAnimalScore = {}", playerAnimal.getAnimalScore());
+        log.info("아직 달성하지 못한 playerRewards = {}",
+            playerRewardsRepository.findNotDoneRewardsByPlayerSequence(
+                playerAnimal.getPlayer().getPlayerSequence()));
+
+        Map<RewardsKey, Long> map = getAnimalRewardsMap(playerAnimal);
+
+        //animal rewards 리스트
+        List<Rewards> animalRewards = rewardsRepository.findByAnimal_animalId(
+            playerAnimal.getAnimal().getAnimalId());
+        log.info("tiger rewards = {}", animalRewards);
+        //달성하지 못한 animal rewards
+        List<PlayerRewards> notDoneRewardsByPlayerSequenceWithAnimalId = playerRewardsRepository.findNotDoneRewardsByPlayerSequenceWithAnimalId(
+            playerAnimal.getPlayer().getPlayerSequence(), playerAnimal.getAnimal().getAnimalId());
+
+        log.info("아직 달성하지 못한 animal playerRewards = {}", notDoneRewardsByPlayerSequenceWithAnimalId);
+        log.info("map ={}", map.toString());
+
+
+        for (PlayerRewards playerRewards : notDoneRewardsByPlayerSequenceWithAnimalId) {
+            RewardsKey rewardsKey = playerRewards.getRewards().getRewardsKey();
+            if (map.get(rewardsKey) >= playerRewards.getRewards().getRewardsValue()) {
+                playerRewards.setDone(true);
+                log.info("달성 : tiger rewards = {}", playerRewards.getRewards().getRewardsName());
+            }
+        }
+    }
+
 
     /**
      * player_animal 테이블의 tiger 데이터를 바탕으로 tiger 업적 중 에 달성한 것이 있는지 확인 하는 메서드
      * @param playerTiger
      */
+    @Transactional
     public void checkTiger(PlayerAnimal playerTiger) {
-
-        log.info("playerTiger = {}", playerTiger);
-        log.info("playerTiger.getAnimalScore = {}", playerTiger.getAnimalScore());
-        log.info("tiger 전체 rewards = {}",rewardsRepository.findByAnimalId(playerTiger.getAnimal().getAnimalId()));
-        log.info("아직 달성하지 못한 playerRewards = {}", playerRewardsRepository.findNotDoneRewardsByPlayerSequence(playerTiger.getPlayer().getPlayerSequence()));
-
-        Map<String, Long> map = getAnimalRewardsMap(playerTiger);
-
-        //tiger rewards 리스트
-        List<Rewards> animalRewards = rewardsRepository.findByAnimalId(
-            playerTiger.getAnimal().getAnimalId());
-
-        //달성하지 못한 cat rewards
+        Map<RewardsKey, Long> map = getAnimalRewardsMap(playerTiger);
+        //달성하지 못한 tiger rewards
         List<PlayerRewards> notDoneRewardsByPlayerSequenceWithAnimalId = playerRewardsRepository.findNotDoneRewardsByPlayerSequenceWithAnimalId(
             playerTiger.getPlayer().getPlayerSequence(), playerTiger.getAnimal().getAnimalId());
         log.info("아직 달성하지 못한 tiger playerRewards = {}", notDoneRewardsByPlayerSequenceWithAnimalId);
-
         log.info("map ={}", map.toString());
-        for (Rewards animalReward : animalRewards) {
-
-            String rewardsKey = animalReward.getRewardsKey();
-
-            //달성 조건 값 보다 더 큰 경우 player에 해당 업적 추가
-            if(map.get(rewardsKey) >= animalReward.getRewardsValue()) {
-                System.out.println("rewardsKey = 달성 " + rewardsKey);
+        for (PlayerRewards playerRewards : notDoneRewardsByPlayerSequenceWithAnimalId) {
+            RewardsKey rewardsKey = playerRewards.getRewards().getRewardsKey();
+            if (map.get(rewardsKey) >= playerRewards.getRewards().getRewardsValue()) {
+                playerRewards.setDone(true);
+                log.info("달성 : tiger rewards = {}", playerRewards.getRewards().getRewardsName());
             }
         }
-
     }
 
     /**
@@ -64,33 +85,20 @@ public class AnimalRewardsService {
      */
     public void checkCat(PlayerAnimal playerCat) {
 
-        log.info("playerCat = {}", playerCat);
-        log.info("playerCat.getAnimalScore = {}", playerCat.getAnimalScore());
-        log.info("cat 전체 rewards = {}",rewardsRepository.findByAnimalId(playerCat.getAnimal().getAnimalId()));
-        log.info("아직 달성하지 못한 playerRewards = {}", playerRewardsRepository.findNotDoneRewardsByPlayerSequence(playerCat.getPlayer().getPlayerSequence()));
-
-        Map<String, Long> map = getAnimalRewardsMap(playerCat);
-
-        //cat rewards 리스트
-        List<Rewards> animalRewards = rewardsRepository.findByAnimalId(
-            playerCat.getAnimal().getAnimalId());
-
+        Map<RewardsKey, Long> map = getAnimalRewardsMap(playerCat);
         //달성하지 못한 cat rewards
         List<PlayerRewards> notDoneRewardsByPlayerSequenceWithAnimalId = playerRewardsRepository.findNotDoneRewardsByPlayerSequenceWithAnimalId(
             playerCat.getPlayer().getPlayerSequence(), playerCat.getAnimal().getAnimalId());
         log.info("아직 달성하지 못한 cat playerRewards = {}", notDoneRewardsByPlayerSequenceWithAnimalId);
-
         log.info("map ={}", map.toString());
-        for (Rewards animalReward : animalRewards) {
 
-            String rewardsKey = animalReward.getRewardsKey();
-
-            //달성 조건 값 보다 더 큰 경우 player에 해당 업적 추가
-            if(map.get(rewardsKey) >= animalReward.getRewardsValue()) {
-                System.out.println("rewardsKey = 달성 " + rewardsKey);
+        for (PlayerRewards playerRewards : notDoneRewardsByPlayerSequenceWithAnimalId) {
+            RewardsKey rewardsKey = playerRewards.getRewards().getRewardsKey();
+            if (map.get(rewardsKey) >= playerRewards.getRewards().getRewardsValue()) {
+                playerRewards.setDone(true);
+                log.info("달성 : cat rewards = {}", playerRewards.getRewards().getRewardsName());
             }
         }
-
     }
 
 
@@ -100,30 +108,18 @@ public class AnimalRewardsService {
      */
     public void checkDog(PlayerAnimal playerDog) {
 
-        log.info("playerDog = {}", playerDog);
-        log.info("playerDog.getAnimalScore = {}", playerDog.getAnimalScore());
-        log.info("dog 전체 rewards = {}",rewardsRepository.findByAnimalId(playerDog.getAnimal().getAnimalId()));
-        log.info("아직 달성하지 못한 playerRewards = {}", playerRewardsRepository.findNotDoneRewardsByPlayerSequence(playerDog.getPlayer().getPlayerSequence()));
-
-        Map<String, Long> map = getAnimalRewardsMap(playerDog);
-
-        //dog rewards 리스트
-        List<Rewards> animalRewards = rewardsRepository.findByAnimalId(
-            playerDog.getAnimal().getAnimalId());
-
+        Map<RewardsKey, Long> map = getAnimalRewardsMap(playerDog);
         //달성하지 못한 dog rewards
         List<PlayerRewards> notDoneRewardsByPlayerSequenceWithAnimalId = playerRewardsRepository.findNotDoneRewardsByPlayerSequenceWithAnimalId(
             playerDog.getPlayer().getPlayerSequence(), playerDog.getAnimal().getAnimalId());
         log.info("아직 달성하지 못한 dog playerRewards = {}", notDoneRewardsByPlayerSequenceWithAnimalId);
-
         log.info("map ={}", map.toString());
-        for (Rewards animalReward : animalRewards) {
 
-            String rewardsKey = animalReward.getRewardsKey();
-
-            //달성 조건 값 보다 더 큰 경우 player에 해당 업적 추가
-            if(map.get(rewardsKey) >= animalReward.getRewardsValue()) {
-                System.out.println("rewardsKey = 달성 " + rewardsKey);
+        for (PlayerRewards playerRewards : notDoneRewardsByPlayerSequenceWithAnimalId) {
+            RewardsKey rewardsKey = playerRewards.getRewards().getRewardsKey();
+            if (map.get(rewardsKey) >= playerRewards.getRewards().getRewardsValue()) {
+                playerRewards.setDone(true);
+                log.info("달성 : dog rewards = {}", playerRewards.getRewards().getRewardsName());
             }
         }
 
@@ -136,33 +132,20 @@ public class AnimalRewardsService {
      */
     public void checkDeer(PlayerAnimal playerDeer) {
 
-        log.info("playerDeer = {}", playerDeer);
-        log.info("playerDeer.getAnimalScore = {}", playerDeer.getAnimalScore());
-        log.info("deer 전체 rewards = {}",rewardsRepository.findByAnimalId(playerDeer.getAnimal().getAnimalId()));
-        log.info("아직 달성하지 못한 playerRewards = {}", playerRewardsRepository.findNotDoneRewardsByPlayerSequence(playerDeer.getPlayer().getPlayerSequence()));
-
-        Map<String, Long> map = getAnimalRewardsMap(playerDeer);
-
-        //deer rewards 리스트
-        List<Rewards> animalRewards = rewardsRepository.findByAnimalId(
-            playerDeer.getAnimal().getAnimalId());
-
+        Map<RewardsKey, Long> map = getAnimalRewardsMap(playerDeer);
         //달성하지 못한 deer rewards
         List<PlayerRewards> notDoneRewardsByPlayerSequenceWithAnimalId = playerRewardsRepository.findNotDoneRewardsByPlayerSequenceWithAnimalId(
             playerDeer.getPlayer().getPlayerSequence(), playerDeer.getAnimal().getAnimalId());
         log.info("아직 달성하지 못한 deer playerRewards = {}", notDoneRewardsByPlayerSequenceWithAnimalId);
-
         log.info("map ={}", map.toString());
-        for (Rewards animalReward : animalRewards) {
 
-            String rewardsKey = animalReward.getRewardsKey();
-
-            //달성 조건 값 보다 더 큰 경우 player에 해당 업적 추가
-            if(map.get(rewardsKey) >= animalReward.getRewardsValue()) {
-                System.out.println("rewardsKey = 달성 " + rewardsKey);
+        for (PlayerRewards playerRewards : notDoneRewardsByPlayerSequenceWithAnimalId) {
+            RewardsKey rewardsKey = playerRewards.getRewards().getRewardsKey();
+            if (map.get(rewardsKey) >= playerRewards.getRewards().getRewardsValue()) {
+                playerRewards.setDone(true);
+                log.info("달성 : deer rewards = {}", playerRewards.getRewards().getRewardsName());
             }
         }
-
     }
 
     /**
@@ -171,33 +154,19 @@ public class AnimalRewardsService {
      */
     public void checkPig(PlayerAnimal playerPig) {
 
-        log.info("playerPig = {}", playerPig);
-        log.info("playerPig.getAnimalScore = {}", playerPig.getAnimalScore());
-        log.info("pig 전체 rewards = {}",rewardsRepository.findByAnimalId(playerPig.getAnimal().getAnimalId()));
-        log.info("아직 달성하지 못한 playerRewards = {}", playerRewardsRepository.findNotDoneRewardsByPlayerSequence(playerPig.getPlayer().getPlayerSequence()));
-
-        Map<String, Long> map = getAnimalRewardsMap(playerPig);
-
-        //pig rewards 리스트
-        List<Rewards> animalRewards = rewardsRepository.findByAnimalId(
-            playerPig.getAnimal().getAnimalId());
-
+        Map<RewardsKey, Long> map = getAnimalRewardsMap(playerPig);
         //달성하지 못한 pig rewards
         List<PlayerRewards> notDoneRewardsByPlayerSequenceWithAnimalId = playerRewardsRepository.findNotDoneRewardsByPlayerSequenceWithAnimalId(
             playerPig.getPlayer().getPlayerSequence(), playerPig.getAnimal().getAnimalId());
         log.info("아직 달성하지 못한 pig playerRewards = {}", notDoneRewardsByPlayerSequenceWithAnimalId);
-
         log.info("map ={}", map.toString());
-        for (Rewards animalReward : animalRewards) {
-
-            String rewardsKey = animalReward.getRewardsKey();
-
-            //달성 조건 값 보다 더 큰 경우 player에 해당 업적 추가
-            if(map.get(rewardsKey) >= animalReward.getRewardsValue()) {
-                System.out.println("rewardsKey = 달성 " + rewardsKey);
+        for (PlayerRewards playerRewards : notDoneRewardsByPlayerSequenceWithAnimalId) {
+            RewardsKey rewardsKey = playerRewards.getRewards().getRewardsKey();
+            if (map.get(rewardsKey) >= playerRewards.getRewards().getRewardsValue()) {
+                playerRewards.setDone(true);
+                log.info("달성 : pig rewards = {}", playerRewards.getRewards().getRewardsName());
             }
         }
-
     }
 
 
@@ -207,68 +176,44 @@ public class AnimalRewardsService {
      */
     public void checkFox(PlayerAnimal playerFox) {
 
-        log.info("playerFox = {}", playerFox);
-        log.info("playerFox.getAnimalScore = {}", playerFox.getAnimalScore());
-        log.info("fox 전체 rewards = {}",rewardsRepository.findByAnimalId(playerFox.getAnimal().getAnimalId()));
-        log.info("아직 달성하지 못한 playerRewards = {}", playerRewardsRepository.findNotDoneRewardsByPlayerSequence(playerFox.getPlayer().getPlayerSequence()));
-
-        Map<String, Long> map = getAnimalRewardsMap(playerFox);
-
-        //fox rewards 리스트
-        List<Rewards> animalRewards = rewardsRepository.findByAnimalId(
-            playerFox.getAnimal().getAnimalId());
-
+        Map<RewardsKey, Long> map = getAnimalRewardsMap(playerFox);
         //달성하지 못한 fox rewards
         List<PlayerRewards> notDoneRewardsByPlayerSequenceWithAnimalId = playerRewardsRepository.findNotDoneRewardsByPlayerSequenceWithAnimalId(
             playerFox.getPlayer().getPlayerSequence(), playerFox.getAnimal().getAnimalId());
         log.info("아직 달성하지 못한 fox playerRewards = {}", notDoneRewardsByPlayerSequenceWithAnimalId);
-
         log.info("map ={}", map.toString());
-        for (Rewards animalReward : animalRewards) {
-
-            String rewardsKey = animalReward.getRewardsKey();
-
-            //달성 조건 값 보다 더 큰 경우 player에 해당 업적 추가
-            if(map.get(rewardsKey) >= animalReward.getRewardsValue()) {
-                System.out.println("rewardsKey = 달성 " + rewardsKey);
+        for (PlayerRewards playerRewards : notDoneRewardsByPlayerSequenceWithAnimalId) {
+            RewardsKey rewardsKey = playerRewards.getRewards().getRewardsKey();
+            if (map.get(rewardsKey) >= playerRewards.getRewards().getRewardsValue()) {
+                playerRewards.setDone(true);
+                log.info("달성 : fox rewards = {}", playerRewards.getRewards().getRewardsName());
             }
         }
-
     }
 
     /**
      * player_animal 테이블의 sheep 데이터를 바탕으로 sheep 업적 중 에 달성한 것이 있는지 확인 하는 메서드
+     *
      * @param playerSheep
      */
     public void checkSheep(PlayerAnimal playerSheep) {
 
-        log.info("playerSheep = {}", playerSheep);
-        log.info("playerSheep.getAnimalScore = {}", playerSheep.getAnimalScore());
-        log.info("sheep 전체 rewards = {}",rewardsRepository.findByAnimalId(playerSheep.getAnimal().getAnimalId()));
-        log.info("아직 달성하지 못한 playerRewards = {}", playerRewardsRepository.findNotDoneRewardsByPlayerSequence(playerSheep.getPlayer().getPlayerSequence()));
-
-        Map<String, Long> map = getAnimalRewardsMap(playerSheep);
-
+        Map<RewardsKey, Long> map = getAnimalRewardsMap(playerSheep);
         //sheep rewards 리스트
-        List<Rewards> animalRewards = rewardsRepository.findByAnimalId(
+        List<Rewards> animalRewards = rewardsRepository.findByAnimal_animalId(
             playerSheep.getAnimal().getAnimalId());
-
         //달성하지 못한 sheep rewards
         List<PlayerRewards> notDoneRewardsByPlayerSequenceWithAnimalId = playerRewardsRepository.findNotDoneRewardsByPlayerSequenceWithAnimalId(
             playerSheep.getPlayer().getPlayerSequence(), playerSheep.getAnimal().getAnimalId());
         log.info("아직 달성하지 못한 sheep playerRewards = {}", notDoneRewardsByPlayerSequenceWithAnimalId);
-
         log.info("map ={}", map.toString());
-        for (Rewards animalReward : animalRewards) {
-
-            String rewardsKey = animalReward.getRewardsKey();
-
-            //달성 조건 값 보다 더 큰 경우 player에 해당 업적 추가
-            if(map.get(rewardsKey) >= animalReward.getRewardsValue()) {
-                System.out.println("rewardsKey = 달성 " + rewardsKey);
+        for (PlayerRewards playerRewards : notDoneRewardsByPlayerSequenceWithAnimalId) {
+            RewardsKey rewardsKey = playerRewards.getRewards().getRewardsKey();
+            if (map.get(rewardsKey) >= playerRewards.getRewards().getRewardsValue()) {
+                playerRewards.setDone(true);
+                log.info("달성 : sheep rewards = {}", playerRewards.getRewards().getRewardsName());
             }
         }
-
     }
 
     /**
@@ -277,58 +222,47 @@ public class AnimalRewardsService {
      */
     public void checkWhale(PlayerAnimal playerWhale) {
 
-        log.info("playerWhale = {}", playerWhale);
-        log.info("playerWhale.getAnimalScore = {}", playerWhale.getAnimalScore());
-        log.info("sheep 전체 rewards = {}",rewardsRepository.findByAnimalId(playerWhale.getAnimal().getAnimalId()));
-        log.info("아직 달성하지 못한 playerRewards = {}", playerRewardsRepository.findNotDoneRewardsByPlayerSequence(playerWhale.getPlayer().getPlayerSequence()));
-
-        Map<String, Long> map = getAnimalRewardsMap(playerWhale);
-
+        Map<RewardsKey, Long> map = getAnimalRewardsMap(playerWhale);
         //whale rewards 리스트
-        List<Rewards> animalRewards = rewardsRepository.findByAnimalId(
+        List<Rewards> animalRewards = rewardsRepository.findByAnimal_animalId(
             playerWhale.getAnimal().getAnimalId());
-
         //달성하지 못한 whale rewards
         List<PlayerRewards> notDoneRewardsByPlayerSequenceWithAnimalId = playerRewardsRepository.findNotDoneRewardsByPlayerSequenceWithAnimalId(
             playerWhale.getPlayer().getPlayerSequence(), playerWhale.getAnimal().getAnimalId());
         log.info("아직 달성하지 못한 sheep playerRewards = {}", notDoneRewardsByPlayerSequenceWithAnimalId);
-
         log.info("map ={}", map.toString());
-        for (Rewards animalReward : animalRewards) {
-
-            String rewardsKey = animalReward.getRewardsKey();
-
-            //달성 조건 값 보다 더 큰 경우 player에 해당 업적 추가
-            if(map.get(rewardsKey) >= animalReward.getRewardsValue()) {
-                System.out.println("rewardsKey = 달성 " + rewardsKey);
+        for (PlayerRewards playerRewards : notDoneRewardsByPlayerSequenceWithAnimalId) {
+            RewardsKey rewardsKey = playerRewards.getRewards().getRewardsKey();
+            if (map.get(rewardsKey) >= playerRewards.getRewards().getRewardsValue()) {
+                playerRewards.setDone(true);
+                log.info("달성 : whale rewards = {}", playerRewards.getRewards().getRewardsName());
             }
         }
-
     }
 
     /**
      * 업적 업데이트 때 활용하기 위한 map 자료 생성 메서드
+     *
      * @param playerAnimal
      * @return
      */
-    private static Map<String, Long> getAnimalRewardsMap(PlayerAnimal playerAnimal) {
+    private static Map<RewardsKey, Long> getAnimalRewardsMap(PlayerAnimal playerAnimal) {
         AnimalScore animalScore = playerAnimal.getAnimalScore();
-
-        Map<String, Long> map = new HashMap<>();
-        map.put("attackSuccess", animalScore.getAttackSuccess());
-        map.put("attackFail", animalScore.getAttackFail());
-        map.put("defenseSuccess", animalScore.getDefenseSuccess());
-        map.put("defenseFail", animalScore.getDefenseFail());
-        map.put("trust", animalScore.getTrust());
-        map.put("distrust", animalScore.getDistrust());
-        map.put("truth", animalScore.getTruth());
-        map.put("lie", animalScore.getLie());
+        Map<RewardsKey, Long> map = new HashMap<>();
+        map.put(RewardsKey.attackSuccess, animalScore.getAttackSuccess());
+        map.put(RewardsKey.attackFail, animalScore.getAttackFail());
+        map.put(RewardsKey.defenseSuccess, animalScore.getDefenseSuccess());
+        map.put(RewardsKey.defenseFail, animalScore.getDefenseFail());
+        map.put(RewardsKey.trust, animalScore.getTrust());
+        map.put(RewardsKey.distrust, animalScore.getDistrust());
+        map.put(RewardsKey.truth, animalScore.getTruth());
+        map.put(RewardsKey.lie, animalScore.getLie());
         return map;
     }
 
 
     /**
-     * player가 달성한 업젇 조회
+     * player가 달성한 업적 조회
      * @param userSequence
      * @return
      */
@@ -337,14 +271,28 @@ public class AnimalRewardsService {
     }
 
     /**
+     * player가 달성하지 못한 업적 조회
+     * @param userSequence
+     * @return
+     */
+    public List<PlayerRewards> getPlayerNotDoneRewards(Long userSequence) {
+        return playerRewardsRepository.findNotDoneRewardsByUserSequence(userSequence);
+    }
+
+    /**
      * player의 모든 업적 조회
      * @param userSequence
      * @return
      */
-
     public List<PlayerRewards> getPlayerAllRewards(Long userSequence) {
         return playerRewardsRepository.findRewardsByUserSequence(userSequence);
     }
+
+    /**
+     * rewardsId 달성한 player 수 조회
+     * @param rewardsId
+     * @return
+     */
 
     public int getDoneRewardsCount(String rewardsId) {
         return playerRewardsRepository.findDoneRewardsWithRewardsId(rewardsId);

@@ -1,9 +1,19 @@
 package com.ssafy.fiveguys.game.player.service;
 
 
-import com.ssafy.fiveguys.game.player.entity.LevelExp;
+import com.ssafy.fiveguys.game.player.dto.RankRequestDto;
+import com.ssafy.fiveguys.game.player.entity.PlayerRewards;
+import com.ssafy.fiveguys.game.player.entity.Rewards;
+import com.ssafy.fiveguys.game.player.entity.embeddedType.LevelExp;
 import com.ssafy.fiveguys.game.player.entity.Player;
+import com.ssafy.fiveguys.game.player.entity.embeddedType.RankingScore;
 import com.ssafy.fiveguys.game.player.repository.PlayerRepository;
+import com.ssafy.fiveguys.game.player.repository.PlayerRewardsRepository;
+import com.ssafy.fiveguys.game.player.repository.RewardsRepository;
+import com.ssafy.fiveguys.game.user.dto.Role;
+import com.ssafy.fiveguys.game.user.entity.User;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,60 +25,68 @@ import org.springframework.transaction.annotation.Transactional;
 public class PlayerService {
 
     private final PlayerRepository playerRepository;
+    private final PlayerRewardsRepository playerRewardsRepository;
+    private final RewardsRepository rewardsRepository;
 
 
+
+    /**
+     * userSequence 로 player 조회
+     * @param userSequence
+     * @return
+     */
     public Player getPlayerBySequence(Long userSequence) {
         return playerRepository.findByUser_UserSequence(userSequence);
 
     }
 
+    /**
+     * player 전체 수 조회
+     * @return
+     */
     public int playerTotalCount() {
         return (int) playerRepository.count();
     }
 
 
     /**
-     * pass 횟수 player 테이블에 저장
+     * player 점수, 경험치, 레벨 저장
      * @param userSequence
-     * @param pass
+     * @param rankRequestDto
      */
     @Transactional
-    public void savePassCount(Long userSequence, Long pass) {
-        Player player = playerRepository.findByUser_UserSequence(userSequence);
-        player.setTotalPass(player.getTotalPass() + pass);
-    }
-
-
-    @Transactional
-    public void saveExp(Long userSequence, long turn, int totalSuccess) {
+    public void savePlayer(Long userSequence, RankRequestDto rankRequestDto) {
 
         log.info("user seq = {}", userSequence);
-
-        //플에이어 경험지 계산
-        long exp = LevelExp.expCalculator(turn, totalSuccess);
-
-        //플레이어 조회
+        //pass count 저장
         Player player = playerRepository.findByUser_UserSequence(userSequence);
+        if(player == null) return;
 
+
+        player.setTotalPass(player.getTotalPass() + rankRequestDto.getPassCount());
+        //success 점수를 경험치로 저장
+        int totalSuccess = (int) (rankRequestDto.getAttackSuccess() + rankRequestDto.getDefenseSuccess());
+        //플에이어 경험지 계산
+        long exp = LevelExp.expCalculator(rankRequestDto.getPassCount(), totalSuccess);
         log.info("player curr exp = {}", player.getExp());
         log.info("player add exp = {}", exp);
-
         //경험치 업데이트
         player.setExp(exp + player.getExp());
-
         log.info("player new exp = {}", player.getExp());
-
         //레벨 업데이트
         this.updateLevel(userSequence, player.getExp());
     }
 
+    /**
+     * 레벨 업데이트
+     * @param userSequence
+     * @param exp
+     */
+    @Transactional
     public void updateLevel(Long userSequence, Long exp) {
 
         Player player = playerRepository.findByUser_UserSequence(userSequence);
-
         int playerLevel;
-
-
 
         // 레벨 로직 -> 현재 만렙 20
         if (exp < 100) playerLevel = 1;
@@ -96,8 +114,28 @@ public class PlayerService {
         log.info("user seq = {}", userSequence);
         log.info("player exp = {}", player.getExp());
         log.info("player level = {}", player.getPlayerLevel());
-
     }
 
 
+    /**
+     * user signup 하면 player 기본 데이터 튜플 생성
+     * @param user
+     */
+    public void createPlayer(User user) {
+        Player player = Player.builder()
+            .playerLevel(0)
+            .exp(0)
+            .user(user)
+            .rankingScore(new RankingScore(0.0, 0.0, 0.0))
+            .build();
+
+        playerRepository.save(player);
+
+        List<Rewards> allRewards = rewardsRepository.findAll();
+        List<PlayerRewards> playerRewards = allRewards.stream()
+            .map(rewards -> new PlayerRewards(player, rewards, false))
+            .collect(Collectors.toList());
+        player.setPlayerRewards(playerRewards);
+
+    }
 }

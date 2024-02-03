@@ -24,11 +24,11 @@ public class RankRequestDto {
     private long turn;
 
     //공격, 방어, 패스 지표
-    private Long attackAttempt;
-    private Long attackSuccess;
-    private Long defenseAttempt;
-    private Long defenseSuccess;
-    private Long passCount;
+    private long attackAttempt;
+    private long attackSuccess;
+    private long defenseAttempt;
+    private long defenseSuccess;
+    private long passCount;
 
 //    private Animal cat = new Cat();
 //    private Animal dog = new Dog();

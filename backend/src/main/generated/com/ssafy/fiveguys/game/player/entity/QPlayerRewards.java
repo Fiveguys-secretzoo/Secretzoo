@@ -57,7 +57,7 @@ public class QPlayerRewards extends EntityPathBase<PlayerRewards> {
     public QPlayerRewards(Class<? extends PlayerRewards> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.player = inits.isInitialized("player") ? new QPlayer(forProperty("player"), inits.get("player")) : null;
-        this.rewards = inits.isInitialized("rewards") ? new QRewards(forProperty("rewards")) : null;
+        this.rewards = inits.isInitialized("rewards") ? new QRewards(forProperty("rewards"), inits.get("rewards")) : null;
     }
 
 }

@@ -9,8 +9,6 @@ import org.springframework.data.repository.query.Param;
 public interface PlayerAnimalRepository extends JpaRepository<PlayerAnimal, Long> {
 
 
-    @Query(value = "SELECT * FROM player_animal WHERE player_sequence = ?", nativeQuery = true)
-    List<PlayerAnimal> findByPlayerSequence(Long playerSequence);
 
     //네이티브 쿼리
 //    @Query(value = "SELECT pa.player_animal_sequence, pa.attack_success, pa.animal_id,"
@@ -19,7 +17,7 @@ public interface PlayerAnimalRepository extends JpaRepository<PlayerAnimal, Long
 //        + " FROM player_animal pa INNER JOIN player p ON pa.player_sequence = p.player_sequence WHERE p.user_sequence = ?", nativeQuery = true)
 //    List<PlayerAnimal> findByUserSequence(Long userSequence);
 
-    @Query(value ="SELECT pa FROM PlayerAnimal pa JOIN FETCH pa.player p WHERE p.userSequence = :userSequence", nativeQuery = true)
+    @Query(value ="SELECT pa FROM PlayerAnimal pa JOIN FETCH pa.player p WHERE p.user.userSequence = :userSequence")
     List<PlayerAnimal> findByUserSequence(@Param("userSequence") Long userSequence);
 
     @Query(value = "SELECT * FROM player_animal WHERE player_sequence = ? AND animal_id = ?", nativeQuery = true)

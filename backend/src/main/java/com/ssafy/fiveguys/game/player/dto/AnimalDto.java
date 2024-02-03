@@ -21,7 +21,6 @@ import lombok.NoArgsConstructor;
 public class AnimalDto {
 
     private Long userSequence;
-    private String playerId;
     private Long round;
     private Long turn;
 

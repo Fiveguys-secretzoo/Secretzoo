@@ -2,8 +2,9 @@ package com.ssafy.fiveguys.game.player.service;
 
 
 import com.ssafy.fiveguys.game.player.entity.Player;
-import com.ssafy.fiveguys.game.player.entity.RankingScore;
+import com.ssafy.fiveguys.game.player.entity.embeddedType.RankingScore;
 import com.ssafy.fiveguys.game.player.repository.PlayerRepository;
+import jakarta.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,11 +27,13 @@ public class RankService {
     private final RedisTemplate<String, String> redisTemplate;
     private final PlayerRepository playerRepository;
 
+
     @Autowired
     public RankService(@Qualifier("rankingRedisTemplate") RedisTemplate<String, String> redisTemplate,
         PlayerRepository playerRepository) {
         this.redisTemplate = redisTemplate;
         this.playerRepository = playerRepository;
+
     }
 
     private final String attackRankKey = "rank:attack";
@@ -47,9 +50,9 @@ public class RankService {
      * redis 에 player 의 랭킹 점수 정보 저장
      * @param players
      */
+    @Transactional
     public void saveAll(List<Player> players) {
         for (Player player : players) {
-
             //각 플레이어의 공격, 방어, 패스 점수 redis 에 저장
             ZSetOperations<String, String> zSetForAttack = redisTemplate.opsForZSet();
             ZSetOperations<String, String> zSetForDefense = redisTemplate.opsForZSet();
@@ -67,10 +70,10 @@ public class RankService {
     public void saveRank(Long userSequence, RankingScore rankingScore) {
 
         //userSequence 에 해당하는 유저가 있는지 먼저 확인
+        //select 쿼리 1번
         Player findPlayer = playerRepository.findByUser_UserSequence(userSequence);
         //user 가 없으면 뒤에 로직 실행하지 않을 것임 -> 비회원들의 랭킹과 점수 저장 로직 실행 X
         if(findPlayer == null) return;
-
 
         //redis 에서 각 랭킹 정보 가져오기
         ZSetOperations<String, String> zSetForAttack = redisTemplate.opsForZSet();
@@ -90,7 +93,6 @@ public class RankService {
                 findPlayer.getRankingScore().getPassScore() + rankingScore.getPassScore()
             )
         );
-
     }
 
 
@@ -167,7 +169,8 @@ public class RankService {
     }
 
     /**
-     * 랭킹 정보를 주기적으로 갱신하는 스케줄링 메서드
+     * 랭킹 정보를 갱신하는 스케줄링 메서드
+     * Redis 랭킹 점수 정보와 DB의 랭킹 점수 정보 정합성을 맞추는 작업
      */
     @Transactional
     //@Scheduled(fixedRateString = "${rank.update.interval}") //interval 방식의 스케줄링
@@ -224,6 +227,4 @@ public class RankService {
         }
         log.info("redis 캐싱 랭킹 갱신 완료");
     }
-
-
 }

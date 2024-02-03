@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -47,27 +48,38 @@ public class RewardsApiController {
 //        return ResponseEntity.ok(" 성공적으로 저장되었습니다.");
 //    }
 
-    /**
-     * 플레이어의 게임 결과에서 리워드(업적) 정보를 저장
-     */
     @Operation(summary = "플레이어 업적 정보 저장 API")
     @PostMapping("/save")
     public ResponseEntity<String> saveRewards(@RequestBody AnimalDto animalDto) {
         log.info("animalDto = {}", animalDto);
         rewardsService.saveRewards(animalDto);
-        return ResponseEntity.status(HttpStatus.OK).body("업적 정보가 성공적으로 저장되었습니다.");
+        return ResponseEntity.status(HttpStatus.OK)
+            .header(HttpHeaders.CONTENT_TYPE, "text/plain; charset=utf-8")
+            .body("업적 정보가 성공적으로 저장되었습니다.");
     }
 
-    /**
-     * 플레이어의 완료 업적 정보 조회
-     */
     @Operation(summary = "플레이어 완료 업적 조회 API")
     @GetMapping("/done/{userSequence}")
-    public ApiResponse<?> getPlayerRewards(@PathVariable("userSequence") Long userSequence) {
+    public ApiResponse<?> getPlayerDoneRewards(@PathVariable("userSequence") Long userSequence) {
         List<PlayerRewards> playerDoneRewards = animalRewardsService.getPlayerDoneRewards(userSequence);
         int totalPlayerCount = playerService.playerTotalCount();
 
         List<RewardsDto> collect = playerDoneRewards.stream()
+            .map(m -> new RewardsDto(m.getPlayer().getPlayerSequence(), m.getRewards(),
+                m.getLastModifiedDate(), m.isDone(),
+                animalRewardsService.getDoneRewardsCount(m.getRewards().getRewardsId())))
+            .collect(Collectors.toList());
+
+        return new ApiResponse<>(collect.size(), collect, totalPlayerCount);
+    }
+
+    @Operation(summary = "플레이어 미완료 업적 조회 API")
+    @GetMapping("/not/done/{userSequence}")
+    public ApiResponse<?> getPlayerNotDoneRewards(@PathVariable("userSequence") Long userSequence) {
+        List<PlayerRewards> playerNotDoneRewards = animalRewardsService.getPlayerNotDoneRewards(userSequence);
+        int totalPlayerCount = playerService.playerTotalCount();
+
+        List<RewardsDto> collect = playerNotDoneRewards.stream()
             .map(m -> new RewardsDto(m.getPlayer().getPlayerSequence(), m.getRewards(),
                 m.getLastModifiedDate(), m.isDone(),
                 animalRewardsService.getDoneRewardsCount(m.getRewards().getRewardsId())))
@@ -84,7 +96,6 @@ public class RewardsApiController {
     public ApiResponse<?> getTotalPlayerRewards(@PathVariable("userSequence") Long userSequence) {
         List<PlayerRewards> playerDoneRewards = animalRewardsService.getPlayerAllRewards(userSequence);
         int totalPlayerCount = playerService.playerTotalCount();
-
 
         List<RewardsDto> collect = playerDoneRewards.stream()
             .map(m -> new RewardsDto(m.getPlayer().getPlayerSequence(), m.getRewards(),

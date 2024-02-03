@@ -1,4 +1,4 @@
-package com.ssafy.fiveguys.game.player.entity;
+package com.ssafy.fiveguys.game.player.entity.embeddedType;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -15,7 +15,7 @@ import com.querydsl.core.types.Path;
 @Generated("com.querydsl.codegen.DefaultEmbeddableSerializer")
 public class QAnimalScore extends BeanPath<AnimalScore> {
 
-    private static final long serialVersionUID = -2124296023L;
+    private static final long serialVersionUID = -953453607L;
 
     public static final QAnimalScore animalScore = new QAnimalScore("animalScore");
 

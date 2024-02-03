@@ -1,6 +1,7 @@
 package com.ssafy.fiveguys.game.player;
 
 import com.ssafy.fiveguys.game.player.aop.AspectPlayer;
+import com.ssafy.fiveguys.game.player.dto.RankRequestDto;
 import com.ssafy.fiveguys.game.player.repository.PlayerRepository;
 import com.ssafy.fiveguys.game.player.service.PlayerService;
 import com.ssafy.fiveguys.game.player.service.RankService;
@@ -44,7 +45,7 @@ public class AopTest {
 
     @Test
     void exception() {
-        Assertions.assertThatThrownBy(() -> playerService.saveExp(999L, 99, 99))
+        Assertions.assertThatThrownBy(() -> playerService.savePlayer(999L, new RankRequestDto(null, 1, 1,1,1, 1, 1, 1)))
             .isInstanceOf(NullPointerException.class);
     }
 

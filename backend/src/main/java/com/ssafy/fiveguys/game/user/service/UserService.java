@@ -1,5 +1,7 @@
 package com.ssafy.fiveguys.game.user.service;
 
+import com.ssafy.fiveguys.game.player.repository.PlayerRepository;
+import com.ssafy.fiveguys.game.player.service.PlayerService;
 import com.ssafy.fiveguys.game.user.dto.Role;
 import com.ssafy.fiveguys.game.user.dto.UserDto;
 import com.ssafy.fiveguys.game.user.dto.UserInfoDto;
@@ -29,6 +31,7 @@ public class UserService {
 
     private final UserRepositoy userRepositoy;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final PlayerService playerService;
 
     public void signUp(UserSignDto userSignDto) {
         User user = User.builder()
@@ -41,6 +44,8 @@ public class UserService {
             .build();
 
         userRepositoy.save(user);
+        playerService.createPlayer(user);
+
     }
 
     public void saveUser(UserDto userDto) {

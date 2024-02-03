@@ -1,4 +1,4 @@
-package com.ssafy.fiveguys.game.player.entity;
+package com.ssafy.fiveguys.game.player.entity.embeddedType;
 
 
 import jakarta.persistence.Embeddable;

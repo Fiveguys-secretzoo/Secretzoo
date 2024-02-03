@@ -12,9 +12,9 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
 
 
 
-    @QueryHints(value = @QueryHint(name = "org.hibernate.readOnly", value = "true"))
     Player findByUser_UserSequence(Long userSequence);
 
+//    @QueryHints(value = @QueryHint(name = "org.hibernate.readOnly", value = "true"))
     List<Player> findTop10ByOrderByRankingScoreAttackScoreDesc();
     List<Player> findTop10ByOrderByRankingScoreDefenseScoreDesc();
     List<Player> findTop10ByOrderByRankingScorePassScoreDesc();

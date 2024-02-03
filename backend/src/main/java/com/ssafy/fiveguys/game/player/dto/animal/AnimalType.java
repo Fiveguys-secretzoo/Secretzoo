@@ -1,7 +1,7 @@
 package com.ssafy.fiveguys.game.player.dto.animal;
 
 
-import com.ssafy.fiveguys.game.player.entity.AnimalScore;
+import com.ssafy.fiveguys.game.player.entity.embeddedType.AnimalScore;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;

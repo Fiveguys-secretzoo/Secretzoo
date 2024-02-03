@@ -1,4 +1,4 @@
-package com.ssafy.fiveguys.game.player.entity;
+package com.ssafy.fiveguys.game.player.entity.embeddedType;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -15,7 +15,7 @@ import com.querydsl.core.types.Path;
 @Generated("com.querydsl.codegen.DefaultEmbeddableSerializer")
 public class QRankingScore extends BeanPath<RankingScore> {
 
-    private static final long serialVersionUID = 83711913L;
+    private static final long serialVersionUID = 2020088441L;
 
     public static final QRankingScore rankingScore = new QRankingScore("rankingScore");
 

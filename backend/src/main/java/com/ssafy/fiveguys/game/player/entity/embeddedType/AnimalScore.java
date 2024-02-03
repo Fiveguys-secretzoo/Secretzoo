@@ -1,4 +1,4 @@
-package com.ssafy.fiveguys.game.player.entity;
+package com.ssafy.fiveguys.game.player.entity.embeddedType;
 
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
@@ -13,14 +13,14 @@ import lombok.NoArgsConstructor;
 public class AnimalScore {
 
 
-    private Long attackSuccess = 0L;
-    private Long attackFail = 0L;
-    private Long defenseSuccess = 0L;
-    private Long defenseFail = 0L;
-    private Long trust = 0L;
-    private Long distrust = 0L;
-    private Long truth = 0L;
-    private Long lie = 0L;
+    private long attackSuccess = 0L;
+    private long attackFail = 0L;
+    private long defenseSuccess = 0L;
+    private long defenseFail = 0L;
+    private long trust = 0L;
+    private long distrust = 0L;
+    private long truth = 0L;
+    private long lie = 0L;
 
     /**
      * AnimalScore sum 메서드

@@ -1,7 +1,7 @@
 package com.ssafy.fiveguys.game.player.dto;
 
 
-import com.ssafy.fiveguys.game.player.entity.RankingScore;
+import com.ssafy.fiveguys.game.player.entity.embeddedType.RankingScore;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,14 +12,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PlayerDto {
 
-    private Long playerSequence;
+    private Long userSequence;
 
-    private Long totalRound;
-    private Long totalTurn;
+    private long totalRound;
+    private long totalTurn;
 
     private RankingScore rankingScore;
 
-    private Long exp;
+    private long exp;
     private int level;
 
 
