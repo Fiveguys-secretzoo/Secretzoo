@@ -7,7 +7,6 @@ import com.ssafy.fiveguys.game.player.entity.Rewards;
 import com.ssafy.fiveguys.game.player.entity.RewardsKey;
 import com.ssafy.fiveguys.game.player.repository.PlayerRewardsRepository;
 import com.ssafy.fiveguys.game.player.repository.RewardsRepository;
-import jakarta.persistence.EntityManager;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,6 +69,10 @@ public class AnimalRewardsService {
             playerTiger.getPlayer().getPlayerSequence(), playerTiger.getAnimal().getAnimalId());
         log.info("아직 달성하지 못한 tiger playerRewards = {}", notDoneRewardsByPlayerSequenceWithAnimalId);
         log.info("map ={}", map.toString());
+
+        //달성하지 못한 업적이 없으면 return
+        if(notDoneRewardsByPlayerSequenceWithAnimalId.isEmpty()) return;
+
         for (PlayerRewards playerRewards : notDoneRewardsByPlayerSequenceWithAnimalId) {
             RewardsKey rewardsKey = playerRewards.getRewards().getRewardsKey();
             if (map.get(rewardsKey) >= playerRewards.getRewards().getRewardsValue()) {
@@ -91,6 +94,9 @@ public class AnimalRewardsService {
             playerCat.getPlayer().getPlayerSequence(), playerCat.getAnimal().getAnimalId());
         log.info("아직 달성하지 못한 cat playerRewards = {}", notDoneRewardsByPlayerSequenceWithAnimalId);
         log.info("map ={}", map.toString());
+
+        //달성하지 못한 업적이 없으면 return
+        if(notDoneRewardsByPlayerSequenceWithAnimalId.isEmpty()) return;
 
         for (PlayerRewards playerRewards : notDoneRewardsByPlayerSequenceWithAnimalId) {
             RewardsKey rewardsKey = playerRewards.getRewards().getRewardsKey();
@@ -114,6 +120,9 @@ public class AnimalRewardsService {
             playerDog.getPlayer().getPlayerSequence(), playerDog.getAnimal().getAnimalId());
         log.info("아직 달성하지 못한 dog playerRewards = {}", notDoneRewardsByPlayerSequenceWithAnimalId);
         log.info("map ={}", map.toString());
+
+        //달성하지 못한 업적이 없으면 return
+        if(notDoneRewardsByPlayerSequenceWithAnimalId.isEmpty()) return;
 
         for (PlayerRewards playerRewards : notDoneRewardsByPlayerSequenceWithAnimalId) {
             RewardsKey rewardsKey = playerRewards.getRewards().getRewardsKey();
@@ -139,6 +148,9 @@ public class AnimalRewardsService {
         log.info("아직 달성하지 못한 deer playerRewards = {}", notDoneRewardsByPlayerSequenceWithAnimalId);
         log.info("map ={}", map.toString());
 
+        //달성하지 못한 업적이 없으면 return
+        if(notDoneRewardsByPlayerSequenceWithAnimalId.isEmpty()) return;
+
         for (PlayerRewards playerRewards : notDoneRewardsByPlayerSequenceWithAnimalId) {
             RewardsKey rewardsKey = playerRewards.getRewards().getRewardsKey();
             if (map.get(rewardsKey) >= playerRewards.getRewards().getRewardsValue()) {
@@ -160,6 +172,10 @@ public class AnimalRewardsService {
             playerPig.getPlayer().getPlayerSequence(), playerPig.getAnimal().getAnimalId());
         log.info("아직 달성하지 못한 pig playerRewards = {}", notDoneRewardsByPlayerSequenceWithAnimalId);
         log.info("map ={}", map.toString());
+
+        //달성하지 못한 업적이 없으면 return
+        if(notDoneRewardsByPlayerSequenceWithAnimalId.isEmpty()) return;
+
         for (PlayerRewards playerRewards : notDoneRewardsByPlayerSequenceWithAnimalId) {
             RewardsKey rewardsKey = playerRewards.getRewards().getRewardsKey();
             if (map.get(rewardsKey) >= playerRewards.getRewards().getRewardsValue()) {
@@ -182,6 +198,10 @@ public class AnimalRewardsService {
             playerFox.getPlayer().getPlayerSequence(), playerFox.getAnimal().getAnimalId());
         log.info("아직 달성하지 못한 fox playerRewards = {}", notDoneRewardsByPlayerSequenceWithAnimalId);
         log.info("map ={}", map.toString());
+
+        //달성하지 못한 업적이 없으면 return
+        if(notDoneRewardsByPlayerSequenceWithAnimalId.isEmpty()) return;
+
         for (PlayerRewards playerRewards : notDoneRewardsByPlayerSequenceWithAnimalId) {
             RewardsKey rewardsKey = playerRewards.getRewards().getRewardsKey();
             if (map.get(rewardsKey) >= playerRewards.getRewards().getRewardsValue()) {
@@ -207,6 +227,10 @@ public class AnimalRewardsService {
             playerSheep.getPlayer().getPlayerSequence(), playerSheep.getAnimal().getAnimalId());
         log.info("아직 달성하지 못한 sheep playerRewards = {}", notDoneRewardsByPlayerSequenceWithAnimalId);
         log.info("map ={}", map.toString());
+
+        //달성하지 못한 업적이 없으면 return
+        if(notDoneRewardsByPlayerSequenceWithAnimalId.isEmpty()) return;
+
         for (PlayerRewards playerRewards : notDoneRewardsByPlayerSequenceWithAnimalId) {
             RewardsKey rewardsKey = playerRewards.getRewards().getRewardsKey();
             if (map.get(rewardsKey) >= playerRewards.getRewards().getRewardsValue()) {
@@ -231,6 +255,10 @@ public class AnimalRewardsService {
             playerWhale.getPlayer().getPlayerSequence(), playerWhale.getAnimal().getAnimalId());
         log.info("아직 달성하지 못한 sheep playerRewards = {}", notDoneRewardsByPlayerSequenceWithAnimalId);
         log.info("map ={}", map.toString());
+
+        //달성하지 못한 업적이 없으면 return
+        if(notDoneRewardsByPlayerSequenceWithAnimalId.isEmpty()) return;
+
         for (PlayerRewards playerRewards : notDoneRewardsByPlayerSequenceWithAnimalId) {
             RewardsKey rewardsKey = playerRewards.getRewards().getRewardsKey();
             if (map.get(rewardsKey) >= playerRewards.getRewards().getRewardsValue()) {
@@ -295,6 +323,6 @@ public class AnimalRewardsService {
      */
 
     public int getDoneRewardsCount(String rewardsId) {
-        return playerRewardsRepository.findDoneRewardsWithRewardsId(rewardsId);
+        return playerRewardsRepository.countDoneRewardsWithRewardsId(rewardsId);
     }
 }

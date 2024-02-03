@@ -1,4 +1,4 @@
-package com.ssafy.fiveguys.game.player;
+package com.ssafy.fiveguys.game.animal;
 
 
 

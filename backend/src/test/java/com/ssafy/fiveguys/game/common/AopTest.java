@@ -1,4 +1,4 @@
-package com.ssafy.fiveguys.game.player;
+package com.ssafy.fiveguys.game.common;
 
 import com.ssafy.fiveguys.game.player.aop.AspectPlayer;
 import com.ssafy.fiveguys.game.player.dto.RankRequestDto;
