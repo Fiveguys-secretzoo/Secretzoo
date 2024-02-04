@@ -1,13 +1,18 @@
 package com.ssafy.fiveguys.game.player.service;
 
 
+import com.ssafy.fiveguys.game.player.dto.RankResponseDto;
 import com.ssafy.fiveguys.game.player.entity.Player;
 import com.ssafy.fiveguys.game.player.entity.embeddedType.RankingScore;
 import com.ssafy.fiveguys.game.player.repository.PlayerRepository;
-import jakarta.persistence.EntityManager;
+import com.ssafy.fiveguys.game.user.entity.User;
+import com.ssafy.fiveguys.game.user.repository.UserRepositoy;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.PriorityQueue;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +31,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class RankService {
     private final RedisTemplate<String, String> redisTemplate;
     private final PlayerRepository playerRepository;
+    private final UserRepositoy userRepositoy;
 
 
     @Autowired
     public RankService(@Qualifier("rankingRedisTemplate") RedisTemplate<String, String> redisTemplate,
-        PlayerRepository playerRepository) {
+        PlayerRepository playerRepository, UserRepositoy userRepositoy) {
         this.redisTemplate = redisTemplate;
         this.playerRepository = playerRepository;
+        this.userRepositoy = userRepositoy;
 
     }
 
@@ -97,74 +104,88 @@ public class RankService {
 
 
     /**
-     * player 전체 랭킹 조회 메서드
+     * player 전체 랭킹 조회 메서드 (from DB)
      * @param keywords
      * @return
      */
-    public List<Player> getTotalRanking(String keywords) {
+    public List<RankResponseDto> getTotalRanking(String keywords) {
         return switch (keywords) {
-            case "attack" -> playerRepository.findTop10ByOrderByRankingScoreAttackScoreDesc();
-            case "defense" -> playerRepository.findTop10ByOrderByRankingScoreDefenseScoreDesc();
-            case "pass" -> playerRepository.findTop10ByOrderByRankingScorePassScoreDesc();
+            case "attack" -> {
+                List<Player> playerOfAttack = playerRepository.findTop10ByOrderByRankingScoreAttackScoreDesc();
+                yield playerOfAttack.stream()
+                    .map(player -> {
+                        User user = userRepositoy.findByUserSequence(
+                            player.getUser().getUserSequence());
+                        return new RankResponseDto(user.getUserSequence(), user.getNickname(),
+                            player.getRankingScore().getAttackScore(), player.getPlayerLevel(),
+                            player.getExp());
+                    })
+                    .toList();
+            }
+            case "defense" -> {
+                List<Player> playerOfDefense = playerRepository.findTop10ByOrderByRankingScoreDefenseScoreDesc();
+                yield playerOfDefense.stream()
+                    .map(player -> {
+                        User user = userRepositoy.findByUserSequence(
+                            player.getUser().getUserSequence());
+                        return new RankResponseDto(user.getUserSequence(), user.getNickname(),
+                            player.getRankingScore().getAttackScore(), player.getPlayerLevel(),
+                            player.getExp());
+                    })
+                    .toList();
+            }
+            case "pass" -> {
+                List<Player> playerOfPass = playerRepository.findTop10ByOrderByRankingScorePassScoreDesc();
+                yield playerOfPass.stream()
+                    .map(player -> {
+                        User user = userRepositoy.findByUserSequence(
+                            player.getUser().getUserSequence());
+                        return new RankResponseDto(user.getUserSequence(), user.getNickname(),
+                            player.getRankingScore().getAttackScore(), player.getPlayerLevel(),
+                            player.getExp());
+                    })
+                    .toList();
+            }
             default -> new ArrayList<>();
         };
     }
 
     /**
-     * attack 랭킹 정보를 redis 에서 조회 (상위 10명 반환)
+     * 랭킹 정보를 redis 에서 조회 (상위 10명 반환)
      */
-    public Set<TypedTuple<String>> getTopRankingsOfAttack() {
+    public List<RankResponseDto> getRanking(String rankKey) {
         ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
-        // 상위 10명의 랭킹을 조회하며, 점수가 높은 순으로 반환
-        return zSetOperations.reverseRangeWithScores(attackRankKey, 0, maxRankingCount - 1);
-    }
-    /**
-     * defense 랭킹 정보를 redis 에서 조회 (상위 10명 반환)
-     */
-    public Set<TypedTuple<String>> getTopRankingsOfDefense() {
-        ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
-        return zSetOperations.reverseRangeWithScores(defenseRankKey, 0, maxRankingCount - 1);
-    }
-    /**
-     * pass 랭킹 정보를 redis 에서 조회 (상위 N명 반환)
-     */
-    public Set<TypedTuple<String>> getTopRankingsOfPass() {
-        ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
-        return zSetOperations.reverseRangeWithScores(passRankKey, 0, maxRankingCount - 1);
+        Set<ZSetOperations.TypedTuple<String>> top10 = zSetOperations.reverseRangeWithScores(rankKey, 0, maxRankingCount - 1);
+        assert top10 != null;
+        //score -> level -> exp -> userSequence 순으로 내림차순 정렬(동점자 처리)
+        Comparator<RankResponseDto> rankComparator = Comparator
+            .comparingDouble(RankResponseDto::getScore)
+            .thenComparingInt(RankResponseDto::getLevel)
+            .thenComparingLong(RankResponseDto::getExp)
+            .thenComparingLong(RankResponseDto::getUserSequence)
+            .reversed();
+        // 우선순위 큐 초기화
+        PriorityQueue<RankResponseDto> priorityQueue = new PriorityQueue<>(rankComparator);
+        // attackTop10을 우선순위 큐에 추가
+        priorityQueue.addAll(top10.stream()
+            .map(this::getExtraPlayerInfo)
+            .toList());
+        List<RankResponseDto> list = new ArrayList<>();
+        // 큐에서 꺼내서 list 에 담고 return
+        while (!priorityQueue.isEmpty()) list.add(priorityQueue.poll());
+        return list;
     }
 
     /**
-     * userSequence attack 랭킹 정보 조회
+     * userSequence 랭킹 정보 조회
      */
-    public int getPlayerRankingOfAttack(Long userSequence) {
+    public int getPlayerRanking(Long userSequence, String rankKey) {
         ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
         // userSequence 가 null 인 경우 기본값으로 Optional.ofNullable 을 사용하여 0으로 설정
         int userRank = Math.toIntExact(Optional.ofNullable(String.valueOf(userSequence))
-            .map(seq -> zSetOperations.reverseRank(attackRankKey, seq))
+            .map(seq -> zSetOperations.reverseRank(rankKey, seq))
             .orElse(-1L));
         //redis 자료의 인덱스가 0부터 시작하므로 1을 더해 실제 랭킹을 표시
-        return userRank+1;
-    }
-
-    /**
-     * userSequence defense 랭킹 정보 조회
-     */
-    public int getPlayerRankingOfDefense(Long userSequence) {
-        ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
-        int userRank = Math.toIntExact(Optional.ofNullable(String.valueOf(userSequence))
-            .map(seq -> zSetOperations.reverseRank(defenseRankKey, seq))
-            .orElse(-1L));
-        return userRank+1;
-    }
-
-    /**
-     * userSequence pass 랭킹 정보 조회
-     */
-    public int getPlayerRankingOfPass(Long userSequence) {
-        ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
-        int userRank = Math.toIntExact(Optional.ofNullable(String.valueOf(userSequence))
-            .map(seq -> zSetOperations.reverseRank(passRankKey, seq))
-            .orElse(-1L));
         return userRank+1;
     }
 
@@ -226,5 +247,19 @@ public class RankService {
             zSetOperations.add(passRankKey, String.valueOf(player.getUser().getUserSequence()), player.getRankingScore().getPassScore());
         }
         log.info("redis 캐싱 랭킹 갱신 완료");
+    }
+
+
+    /**
+     * player 추가 정보 추출 메서드
+     *
+     * @param key
+     * @return
+     */
+    private RankResponseDto getExtraPlayerInfo(TypedTuple<String> key) {
+        User user = userRepositoy.findByUserSequence(
+            Long.parseLong(Objects.requireNonNull(key.getValue())));
+        return new RankResponseDto(Long.parseLong(key.getValue()), user.getNickname(),
+            key.getScore(), user.getPlayer().getPlayerLevel(), user.getPlayer().getExp());
     }
 }

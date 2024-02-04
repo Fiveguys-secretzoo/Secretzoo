@@ -9,4 +9,7 @@ public class RankResponseDto {
     private Long userSequence;
     private String nickname;
     private Double score;
+
+    private int level;
+    private long exp;
 }
