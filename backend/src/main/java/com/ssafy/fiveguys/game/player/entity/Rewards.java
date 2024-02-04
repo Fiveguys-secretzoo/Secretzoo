@@ -1,7 +1,6 @@
 package com.ssafy.fiveguys.game.player.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ssafy.fiveguys.game.player.entity.base.BaseTimeEntity;
+import com.ssafy.fiveguys.game.common.entity.BaseTimeEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -11,7 +10,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
@@ -33,7 +31,6 @@ public class Rewards extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "animal_id")
-    @JsonIgnore
     private Animal animal;
 
     private String rewardsName;

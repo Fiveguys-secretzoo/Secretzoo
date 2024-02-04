@@ -34,13 +34,13 @@ public class UserDto {
                 .email(user.getEmail())
                 .name(user.getName())
                 .nickname(user.getNickname())
-                .mainAchievement(user.getMainAchievement())
+                .mainAchievement(user.getMainReward())
                 .role(user.getRole())
                 .profileNumber(user.getProfileNumber())
                 .provider(user.getProvider())
                 .providerId(user.getProviderId())
                 .refreshToken(user.getRefreshToken())
-                .creationDate(user.getCreationDate())
+                .creationDate(user.getCreatedDate())
                 .lastModifiedDate(user.getLastModifiedDate())
                 .build();
     }

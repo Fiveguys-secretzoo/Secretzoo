@@ -25,14 +25,14 @@ public class QUser extends EntityPathBase<User> {
     public final com.ssafy.fiveguys.game.common.entity.QBaseTimeEntity _super = new com.ssafy.fiveguys.game.common.entity.QBaseTimeEntity(this);
 
     //inherited
-    public final DateTimePath<java.sql.Timestamp> creationDate = _super.creationDate;
+    public final DateTimePath<java.sql.Timestamp> createdDate = _super.createdDate;
 
     public final StringPath email = createString("email");
 
     //inherited
     public final DateTimePath<java.sql.Timestamp> lastModifiedDate = _super.lastModifiedDate;
 
-    public final StringPath mainAchievement = createString("mainAchievement");
+    public final StringPath mainReward = createString("mainReward");
 
     public final StringPath name = createString("name");
 

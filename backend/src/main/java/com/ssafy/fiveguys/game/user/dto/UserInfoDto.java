@@ -33,7 +33,7 @@ public class UserInfoDto {
                 .email(user.getEmail())
                 .name(user.getName())
                 .nickname(user.getNickname())
-                .mainAchievement(user.getMainAchievement())
+                .mainAchievement(user.getMainReward())
                 .profileNumber(user.getProfileNumber())
                 .build();
     }

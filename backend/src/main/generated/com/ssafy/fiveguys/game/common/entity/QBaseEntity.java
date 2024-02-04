@@ -1,4 +1,4 @@
-package com.ssafy.fiveguys.game.player.entity.base;
+package com.ssafy.fiveguys.game.common.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -15,7 +15,7 @@ import com.querydsl.core.types.Path;
 @Generated("com.querydsl.codegen.DefaultSupertypeSerializer")
 public class QBaseEntity extends EntityPathBase<BaseEntity> {
 
-    private static final long serialVersionUID = 352278212L;
+    private static final long serialVersionUID = -1697578613L;
 
     public static final QBaseEntity baseEntity = new QBaseEntity("baseEntity");
 
@@ -24,12 +24,12 @@ public class QBaseEntity extends EntityPathBase<BaseEntity> {
     public final StringPath createdBy = createString("createdBy");
 
     //inherited
-    public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
+    public final DateTimePath<java.sql.Timestamp> createdDate = _super.createdDate;
 
     public final StringPath lastModifiedBy = createString("lastModifiedBy");
 
     //inherited
-    public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
+    public final DateTimePath<java.sql.Timestamp> lastModifiedDate = _super.lastModifiedDate;
 
     public QBaseEntity(String variable) {
         super(BaseEntity.class, forVariable(variable));

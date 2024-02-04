@@ -40,8 +40,8 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false)
     private String nickname;
 
-    @Column(name = "main_achievement")
-    private String mainAchievement;
+    @Column(name = "main_reward")
+    private String mainReward;
 
     @Enumerated(EnumType.STRING)
     @Builder.Default
@@ -79,7 +79,7 @@ public class User extends BaseTimeEntity {
                 .email(userDto.getEmail())
                 .name(userDto.getName())
                 .nickname(userDto.getNickname())
-                .mainAchievement(userDto.getMainAchievement())
+                .mainReward(userDto.getMainAchievement())
                 .role(userDto.getRole())
                 .profileNumber(userDto.getProfileNumber())
                 .provider(userDto.getProvider())

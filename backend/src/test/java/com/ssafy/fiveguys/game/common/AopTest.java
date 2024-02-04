@@ -1,7 +1,7 @@
 package com.ssafy.fiveguys.game.common;
 
 import com.ssafy.fiveguys.game.player.aop.AspectPlayer;
-import com.ssafy.fiveguys.game.player.dto.RankRequestDto;
+import com.ssafy.fiveguys.game.player.dto.rank.RankRequestDto;
 import com.ssafy.fiveguys.game.player.repository.PlayerRepository;
 import com.ssafy.fiveguys.game.player.service.PlayerService;
 import com.ssafy.fiveguys.game.player.service.RankService;

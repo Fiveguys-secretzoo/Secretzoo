@@ -1,8 +1,7 @@
 package com.ssafy.fiveguys.game.player.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ssafy.fiveguys.game.player.entity.base.BaseTimeEntity;
+import com.ssafy.fiveguys.game.common.entity.BaseTimeEntity;
 import com.ssafy.fiveguys.game.player.entity.embeddedType.AnimalScore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

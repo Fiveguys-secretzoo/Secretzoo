@@ -1,4 +1,4 @@
-package com.ssafy.fiveguys.game.player.dto;
+package com.ssafy.fiveguys.game.player.dto.rank;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

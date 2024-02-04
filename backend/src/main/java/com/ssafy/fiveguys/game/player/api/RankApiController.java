@@ -1,8 +1,8 @@
 package com.ssafy.fiveguys.game.player.api;
 
-import com.ssafy.fiveguys.game.player.dto.RankRequestDto;
-import com.ssafy.fiveguys.game.player.dto.TotalRankDto;
-import com.ssafy.fiveguys.game.player.dto.RankResponseDto;
+import com.ssafy.fiveguys.game.player.dto.rank.RankRequestDto;
+import com.ssafy.fiveguys.game.player.dto.rank.TotalRankDto;
+import com.ssafy.fiveguys.game.player.dto.rank.RankResponseDto;
 import com.ssafy.fiveguys.game.player.dto.api.ApiResponse;
 import com.ssafy.fiveguys.game.player.entity.embeddedType.AnimalScore;
 import com.ssafy.fiveguys.game.player.entity.Player;

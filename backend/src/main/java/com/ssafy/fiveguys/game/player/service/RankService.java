@@ -1,7 +1,7 @@
 package com.ssafy.fiveguys.game.player.service;
 
 
-import com.ssafy.fiveguys.game.player.dto.RankResponseDto;
+import com.ssafy.fiveguys.game.player.dto.rank.RankResponseDto;
 import com.ssafy.fiveguys.game.player.entity.Player;
 import com.ssafy.fiveguys.game.player.entity.embeddedType.RankingScore;
 import com.ssafy.fiveguys.game.player.exception.UserException;

@@ -1,6 +1,6 @@
 package com.ssafy.fiveguys.game.player.entity;
 
-import com.ssafy.fiveguys.game.player.entity.base.BaseTimeEntity;
+import com.ssafy.fiveguys.game.common.entity.BaseTimeEntity;
 import com.ssafy.fiveguys.game.player.entity.embeddedType.RankingScore;
 import com.ssafy.fiveguys.game.user.entity.User;
 import jakarta.persistence.CascadeType;

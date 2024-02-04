@@ -1,4 +1,4 @@
-package com.ssafy.fiveguys.game.player.dto;
+package com.ssafy.fiveguys.game.player.dto.animal;
 
 
 import com.ssafy.fiveguys.game.player.dto.animal.AnimalType;

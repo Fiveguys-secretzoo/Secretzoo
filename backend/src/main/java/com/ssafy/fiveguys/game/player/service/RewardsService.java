@@ -1,8 +1,7 @@
 package com.ssafy.fiveguys.game.player.service;
 
 
-import com.ssafy.fiveguys.game.player.dto.AnimalDto;
-import com.ssafy.fiveguys.game.player.dto.animal.AnimalType;
+import com.ssafy.fiveguys.game.player.dto.animal.AnimalDto;
 import com.ssafy.fiveguys.game.player.entity.Animal;
 import com.ssafy.fiveguys.game.player.entity.embeddedType.AnimalScore;
 import com.ssafy.fiveguys.game.player.entity.Player;
@@ -12,7 +11,6 @@ import com.ssafy.fiveguys.game.player.repository.PlayerAnimalRepository;
 import com.ssafy.fiveguys.game.player.repository.PlayerRepository;
 import jakarta.persistence.EntityManager;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

@@ -22,15 +22,15 @@ public class QPlayer extends EntityPathBase<Player> {
 
     public static final QPlayer player = new QPlayer("player");
 
-    public final com.ssafy.fiveguys.game.player.entity.base.QBaseTimeEntity _super = new com.ssafy.fiveguys.game.player.entity.base.QBaseTimeEntity(this);
+    public final com.ssafy.fiveguys.game.common.entity.QBaseTimeEntity _super = new com.ssafy.fiveguys.game.common.entity.QBaseTimeEntity(this);
 
     //inherited
-    public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
+    public final DateTimePath<java.sql.Timestamp> createdDate = _super.createdDate;
 
     public final NumberPath<Long> exp = createNumber("exp", Long.class);
 
     //inherited
-    public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
+    public final DateTimePath<java.sql.Timestamp> lastModifiedDate = _super.lastModifiedDate;
 
     public final NumberPath<Integer> playerLevel = createNumber("playerLevel", Integer.class);
 

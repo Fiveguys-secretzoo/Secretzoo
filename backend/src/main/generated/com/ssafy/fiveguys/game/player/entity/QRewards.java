@@ -22,15 +22,15 @@ public class QRewards extends EntityPathBase<Rewards> {
 
     public static final QRewards rewards = new QRewards("rewards");
 
-    public final com.ssafy.fiveguys.game.player.entity.base.QBaseTimeEntity _super = new com.ssafy.fiveguys.game.player.entity.base.QBaseTimeEntity(this);
+    public final com.ssafy.fiveguys.game.common.entity.QBaseTimeEntity _super = new com.ssafy.fiveguys.game.common.entity.QBaseTimeEntity(this);
 
     public final QAnimal animal;
 
     //inherited
-    public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
+    public final DateTimePath<java.sql.Timestamp> createdDate = _super.createdDate;
 
     //inherited
-    public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
+    public final DateTimePath<java.sql.Timestamp> lastModifiedDate = _super.lastModifiedDate;
 
     public final ListPath<PlayerRewards, QPlayerRewards> playerRewards = this.<PlayerRewards, QPlayerRewards>createList("playerRewards", PlayerRewards.class, QPlayerRewards.class, PathInits.DIRECT2);
 

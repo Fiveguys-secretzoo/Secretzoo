@@ -16,7 +16,7 @@ VALUES (101, 'test1@test.com', '이상혁', 'FAKER', '$2a$10$GwlIO8E9M0WdZuRskEB
 (102, 'test2@test.com', '김중광', '미칠광 가운데중', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '37', 'test2'),
 (103, 'test3@test.com', '구마적', '구마유시', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '38', 'test3'),
 (104, 'test4@test.com', '김김김', 'kim kim', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '39', 'test4'),
-(105, 'test5@test.com', '이상혁', 'hide on bush', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', '40','USER', 'test5'),
+(105, 'test5@test.com', '이상혁', 'hide on bush', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W','USER', '40', 'test5'),
 (106, 'test6@test.com', '정지훈', 'chovy', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '41','test6'),
 (107, 'test7@test.com', '김기인', 'kiin', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '42','test7'),
 (108, 'test8@test.com', '곰돌이', '곰돌이 푸우', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '43', 'test8'),

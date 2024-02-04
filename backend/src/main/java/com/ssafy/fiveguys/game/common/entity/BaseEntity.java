@@ -1,4 +1,4 @@
-package com.ssafy.fiveguys.game.player.entity.base;
+package com.ssafy.fiveguys.game.common.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
@@ -11,7 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
 @Getter
-public class BaseEntity extends BaseTimeEntity{
+public class BaseEntity extends BaseTimeEntity {
 
 
     //생성자는 수정되면 안되기 때문에 updatable = false 설정

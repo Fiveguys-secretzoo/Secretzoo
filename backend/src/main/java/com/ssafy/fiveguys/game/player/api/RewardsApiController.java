@@ -1,6 +1,6 @@
 package com.ssafy.fiveguys.game.player.api;
 
-import com.ssafy.fiveguys.game.player.dto.AnimalDto;
+import com.ssafy.fiveguys.game.player.dto.animal.AnimalDto;
 import com.ssafy.fiveguys.game.player.dto.RewardsDto;
 import com.ssafy.fiveguys.game.player.dto.api.ApiResponse;
 import com.ssafy.fiveguys.game.player.entity.Player;
