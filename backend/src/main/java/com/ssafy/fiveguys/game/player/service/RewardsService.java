@@ -59,6 +59,8 @@ public class RewardsService {
 
         //플레이어
         Player player = playerRepository.findByUser_UserSequence(animalDto.getUserSequence());
+        //플레이어가 null -> 비회원 -> 업적 관련 저장 로직 불필요
+        if(player == null) return;
         //turn 과 round 누적 업데이트
         //update 쿼리 1번
         player.setTotalRound(player.getTotalRound() + animalDto.getRound());

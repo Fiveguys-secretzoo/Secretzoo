@@ -3,12 +3,16 @@ package com.ssafy.fiveguys.game.player.api;
 import com.ssafy.fiveguys.game.player.dto.AnimalDto;
 import com.ssafy.fiveguys.game.player.dto.RewardsDto;
 import com.ssafy.fiveguys.game.player.dto.api.ApiResponse;
+import com.ssafy.fiveguys.game.player.entity.Player;
 import com.ssafy.fiveguys.game.player.entity.PlayerRewards;
+import com.ssafy.fiveguys.game.player.exception.UserException;
 import com.ssafy.fiveguys.game.player.service.AnimalRewardsService;
 import com.ssafy.fiveguys.game.player.service.PlayerService;
 import com.ssafy.fiveguys.game.player.service.RewardsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -55,15 +59,18 @@ public class RewardsApiController {
         rewardsService.saveRewards(animalDto);
         return ResponseEntity.status(HttpStatus.OK)
             .header(HttpHeaders.CONTENT_TYPE, "text/plain; charset=utf-8")
+            .header(HttpHeaders.DATE, String.valueOf(ZonedDateTime.now(ZoneId.of("Asia/Seoul"))))
             .body("업적 정보가 성공적으로 저장되었습니다.");
     }
 
     @Operation(summary = "플레이어 완료 업적 조회 API")
     @GetMapping("/done/{userSequence}")
     public ApiResponse<?> getPlayerDoneRewards(@PathVariable("userSequence") Long userSequence) {
+
+        Player player = playerService.getPlayerByUserSequence(userSequence);
+        if(player == null) throw new UserException();
         List<PlayerRewards> playerDoneRewards = animalRewardsService.getPlayerDoneRewards(userSequence);
         int totalPlayerCount = playerService.playerTotalCount();
-
         List<RewardsDto> collect = playerDoneRewards.stream()
             .map(m -> new RewardsDto(m.getPlayer().getPlayerSequence(), m.getRewards(),
                 m.getLastModifiedDate(), m.isDone(),
@@ -76,9 +83,11 @@ public class RewardsApiController {
     @Operation(summary = "플레이어 미완료 업적 조회 API")
     @GetMapping("/not/done/{userSequence}")
     public ApiResponse<?> getPlayerNotDoneRewards(@PathVariable("userSequence") Long userSequence) {
+
+        Player player = playerService.getPlayerByUserSequence(userSequence);
+        if(player == null) throw new UserException();
         List<PlayerRewards> playerNotDoneRewards = animalRewardsService.getPlayerNotDoneRewards(userSequence);
         int totalPlayerCount = playerService.playerTotalCount();
-
         List<RewardsDto> collect = playerNotDoneRewards.stream()
             .map(m -> new RewardsDto(m.getPlayer().getPlayerSequence(), m.getRewards(),
                 m.getLastModifiedDate(), m.isDone(),
@@ -94,9 +103,11 @@ public class RewardsApiController {
     @Operation(summary = "플레이어 모든 업적 조회 API")
     @GetMapping("/total/{userSequence}")
     public ApiResponse<?> getTotalPlayerRewards(@PathVariable("userSequence") Long userSequence) {
+
+        Player player = playerService.getPlayerByUserSequence(userSequence);
+        if(player == null) throw new UserException();
         List<PlayerRewards> playerDoneRewards = animalRewardsService.getPlayerAllRewards(userSequence);
         int totalPlayerCount = playerService.playerTotalCount();
-
         List<RewardsDto> collect = playerDoneRewards.stream()
             .map(m -> new RewardsDto(m.getPlayer().getPlayerSequence(), m.getRewards(),
                 m.getLastModifiedDate(), m.isDone(),
@@ -105,6 +116,4 @@ public class RewardsApiController {
 
         return new ApiResponse<>(collect.size(), collect, totalPlayerCount);
     }
-
-
 }

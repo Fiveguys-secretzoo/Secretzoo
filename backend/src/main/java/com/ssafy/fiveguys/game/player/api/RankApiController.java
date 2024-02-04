@@ -11,17 +11,16 @@ import com.ssafy.fiveguys.game.player.exception.UserException;
 import com.ssafy.fiveguys.game.player.service.PlayerService;
 import com.ssafy.fiveguys.game.player.service.RankService;
 import com.ssafy.fiveguys.game.player.service.RewardsService;
-import com.ssafy.fiveguys.game.user.entity.User;
 import com.ssafy.fiveguys.game.user.repository.UserRepositoy;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.ZSetOperations.TypedTuple;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,6 +49,8 @@ public class RankApiController {
     private final String attackRankKey = "rank:attack";
     private final String defenseRankKey = "rank:defense";
     private final String passRankKey = "rank:pass";
+
+
     /**
      * 사용자의 게임 결과에서 랭킹 정보를 저장
      */
@@ -73,6 +74,7 @@ public class RankApiController {
         playerService.savePlayer(rankRequestDto.getUserSequence(), rankRequestDto);
         return ResponseEntity.status(HttpStatus.OK)
             .header(HttpHeaders.CONTENT_TYPE, "text/plain; charset=utf-8")
+            .header(HttpHeaders.DATE, String.valueOf(ZonedDateTime.now(ZoneId.of("Asia/Seoul"))))
             .body("랭킹 정보가 성공적으로 저장되었습니다.");
     }
 
@@ -185,8 +187,8 @@ public class RankApiController {
         int defense = rankService.getPlayerRanking(userSequence, defenseRankKey);
         int pass = rankService.getPlayerRanking(userSequence, passRankKey);
 
-        Player player = playerService.getPlayerBySequence(userSequence);
-        if(player == null) throw new UserException("해당 하는 유저가 존재하지 않습니다");
+        Player player = playerService.getPlayerByUserSequence(userSequence);
+        if(player == null) throw new UserException();
         AnimalScore totalAnimalScore = rewardsService.getTotalAnimalScore(userSequence);
         TotalRankDto totalRankDto = new TotalRankDto(attack, defense, pass, player.getTotalPass(),
             totalAnimalScore);
@@ -194,16 +196,4 @@ public class RankApiController {
         return new ApiResponse<>(3, totalRankDto, totalPlayerCount);
     }
 
-    /**
-     * player 추가 정보 추출 메서드
-     *
-     * @param key
-     * @return
-     */
-    private RankResponseDto getExtraPlayerInfo(TypedTuple<String> key) {
-        User user = userRepositoy.findByUserSequence(
-            Long.parseLong(Objects.requireNonNull(key.getValue())));
-        return new RankResponseDto(Long.parseLong(key.getValue()), user.getNickname(),
-            key.getScore(), user.getPlayer().getPlayerLevel(), user.getPlayer().getExp());
-    }
 }

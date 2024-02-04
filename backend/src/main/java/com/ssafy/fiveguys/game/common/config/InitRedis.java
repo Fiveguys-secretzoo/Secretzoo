@@ -23,11 +23,10 @@ public class InitRedis {
     private final RankService rankService;
     private final RedisTemplate<String, String> redisTemplate;
     private final EntityManager em;
-    //    private final RedisRepository redisRepository;
-//    private final LettuceConnectionFactory lettuceConnectionFactory;
-    private String attackRankKey = "rank:attack";
-    private String defenseRankKey = "rank:defense";
-    private String passRankKey = "rank:pass";
+
+    private final String attackRankKey = "rank:attack";
+    private final String defenseRankKey = "rank:defense";
+    private final String passRankKey = "rank:pass";
     @PostConstruct
     public void init() {
         log.info("서버 시작 후 DB init 작업");

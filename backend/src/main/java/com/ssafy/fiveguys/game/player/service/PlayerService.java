@@ -10,7 +10,6 @@ import com.ssafy.fiveguys.game.player.entity.embeddedType.RankingScore;
 import com.ssafy.fiveguys.game.player.repository.PlayerRepository;
 import com.ssafy.fiveguys.game.player.repository.PlayerRewardsRepository;
 import com.ssafy.fiveguys.game.player.repository.RewardsRepository;
-import com.ssafy.fiveguys.game.user.dto.Role;
 import com.ssafy.fiveguys.game.user.entity.User;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,7 +34,7 @@ public class PlayerService {
      * @param userSequence
      * @return
      */
-    public Player getPlayerBySequence(Long userSequence) {
+    public Player getPlayerByUserSequence(Long userSequence) {
         return playerRepository.findByUser_UserSequence(userSequence);
 
     }
