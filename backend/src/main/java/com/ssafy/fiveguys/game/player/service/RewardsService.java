@@ -2,6 +2,7 @@ package com.ssafy.fiveguys.game.player.service;
 
 
 import com.ssafy.fiveguys.game.player.dto.AnimalDto;
+import com.ssafy.fiveguys.game.player.dto.animal.AnimalType;
 import com.ssafy.fiveguys.game.player.entity.Animal;
 import com.ssafy.fiveguys.game.player.entity.embeddedType.AnimalScore;
 import com.ssafy.fiveguys.game.player.entity.Player;
@@ -11,6 +12,7 @@ import com.ssafy.fiveguys.game.player.repository.PlayerAnimalRepository;
 import com.ssafy.fiveguys.game.player.repository.PlayerRepository;
 import jakarta.persistence.EntityManager;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,29 +30,19 @@ public class RewardsService {
     private final AnimalRewardsService animalRewardsService;
 
     /**
-     * GameResultDto 로 받았을 때 처리할 방안 생각하기 위해 주석으로 남겨두겠음
+     * 한번에 처리할 방안 생각하기 위해 주석으로 남겨두겠음
      */
 //    @Transactional
-//    public void saveRewardsTest(RankRequestDto gameResult) {
-//
+//    public void saveRewardsTest(AnimalDto animalDto) {
 //        //플레이어 찾기
 //        //select player 쿼리 1번
-//        Player findByPlayer = playerRepository.findByPlayerSequence(gameResult.getUserSequence());
-//
+//        Player findByPlayer = playerRepository.findByUser_UserSequence(animalDto.getUserSequence());
 //        //turn 과 round 누적 업데이트
 //        //update 쿼리 1번
-//        findByPlayer.setTotalRound(findByPlayer.getTotalRound() + gameResult.getRound());
-//        findByPlayer.setTotalTurn(findByPlayer.getTotalTurn() + gameResult.getTurn());
+//        findByPlayer.setTotalRound(findByPlayer.getTotalRound() + animalDto.getRound());
+//        findByPlayer.setTotalTurn(findByPlayer.getTotalTurn() + animalDto.getTurn());
+//        System.out.println("animalDto = " + animalDto);
 //
-//        System.out.println("gameResult = " + gameResult);
-//        ConcurrentHashMap<String, AnimalType> map = new ConcurrentHashMap<>();
-//
-//
-//        System.out.println("map = " + map);
-//
-//        for (String key : map.keySet()) {
-//            PlayerAnimal playerAnimal = playerAnimalRepository.findByPlayerSequenceAndAnimalId(findByPlayer.getPlayerSequence(), key);
-//        }
 //    }
     @Transactional
     public void saveRewards(AnimalDto animalDto) {

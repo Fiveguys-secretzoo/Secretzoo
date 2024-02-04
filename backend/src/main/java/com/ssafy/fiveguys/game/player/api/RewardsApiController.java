@@ -56,6 +56,7 @@ public class RewardsApiController {
     @PostMapping("/save")
     public ResponseEntity<String> saveRewards(@RequestBody AnimalDto animalDto) {
         log.info("animalDto = {}", animalDto);
+//        rewardsService.saveRewards(animalDto);
         rewardsService.saveRewards(animalDto);
         return ResponseEntity.status(HttpStatus.OK)
             .header(HttpHeaders.CONTENT_TYPE, "text/plain; charset=utf-8")
