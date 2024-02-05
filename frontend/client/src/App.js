@@ -16,6 +16,7 @@ import MyRanking from './components/mypage/myRanking';
 import MyReward from './components/mypage/myReward';
 import Callback from './pages/callback';
 import Page404 from './pages/Page404';
+import SearchPlayer from './pages/searchPlayer';
 
 const socket = io('http://localhost:3001');
 export const SocketContext = createContext();
@@ -36,6 +37,7 @@ function App() {
             <Route path='/lobby' element={<Lobby />}>
               <Route index element={<Rooms />} />
               <Route path='/lobby/ranking' element={<Ranking />} />
+              <Route path='/lobby/searchPlayer' element={<SearchPlayer/>}></Route>
               <Route path='/lobby/myPage' element={<MyPage />}>
                 <Route index element={<MyInfo />} />
                 <Route path='/lobby/myPage/myranking' element={<MyRanking />} />

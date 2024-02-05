@@ -51,8 +51,8 @@ const Ranking = () => {
 
   return (
     <>
-      <div>
-        <nav className='p-4 text-center rounded shadow-md'>
+      <div className="">
+        <nav className="p-4 text-center rounded shadow-md">
           <h2>랭킹보기</h2>
           <div className="flex space-x-2 justify-center">
             <button className='px-6 mt-4 rounded-md hover:bg-gray-200'

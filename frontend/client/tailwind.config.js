@@ -10,6 +10,9 @@ module.exports = {
         'DNFBitBitv2':['DNFBitBitv2']
       }
     },
+    backgroundImage: {
+      "rankingbackground" : 'url("./assets/img/rankingbackground.png")',
+    },
   },
   plugins: [
     require('flowbite/plugin'),
