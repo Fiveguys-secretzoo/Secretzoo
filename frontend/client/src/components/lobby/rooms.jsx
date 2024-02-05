@@ -25,6 +25,7 @@ const Rooms = () => {
     socket.emit('createRoom', roomName, sessionStorage.getItem('userName'), (callback) => {
       if (callback) {
         alert("생성 완료! 게임으로 이동합니다.");
+        sessionStorage.setItem("roomName",roomName);
         navigate("/play");
       } else {
         setOpenModal(false);
@@ -38,6 +39,7 @@ const Rooms = () => {
     socket.emit('enterRoom', name, sessionStorage.getItem('userName'), (callback) => {
       if (callback) {
         alert("입장")
+        sessionStorage.setItem("roomName",name);
         navigate("/play");
       } else {
         alert("방이 가득찼습니다. 다른 방을 이용해주세요")
