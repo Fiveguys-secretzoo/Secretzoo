@@ -157,7 +157,7 @@ const playSocketMethods = () => {
       rooms[room].onBoard.from = rooms[room].onBoard.to;
       rooms[room].onBoard.nowTurn = rooms[room].onBoard.from;
       rooms[room].onBoard.to = -1;
-      io.to(room).emit('cardPass', );
+      io.to(room).emit('cardPass',);
       callback(rooms[room].onBoard.card);
     })
   }
@@ -186,6 +186,14 @@ const playSocketMethods = () => {
       let result = checkCardReveal(rooms, room, answer);
       io.to(room).emit('cardReveal', result);
     })
+  }
+
+  const addPenalty = (card, result) => {
+    if (result) {
+      
+    } else {
+      
+    }
   }
 
   return {

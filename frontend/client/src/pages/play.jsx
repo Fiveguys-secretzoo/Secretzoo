@@ -70,10 +70,16 @@ const Play = () => {
   }
 
   const dragStart = (event, item) => {
-    if (!(playState === 1 || playState === 4) || !isMyTurn) {
+    if (playState !== 1 || !isMyTurn) {
       event.preventDefault();
     }
     dispatch(changeCardStatus({ 'from': pid, 'card': item }));
+  }
+
+  const dragBluffStart = (event, item) => {
+    if (playState !== 4 || !isMyTurn) {
+      event.preventDefault();
+    }
   }
 
   // 화면 가리는 창 띄우기 , children에 띄우고 싶은 요소 정의하면 ok.
@@ -394,11 +400,11 @@ const Play = () => {
               </div>
             </SelectScreen>
           }
-          {/* 넘기기 */}
+          {/* 넘기기 턴 */}
           {
             playState === 4 && isMyTurn &&
             <div
-              onDragStart={() => dragStart()}
+              onDragStart={(event) => dragBluffStart(event, bCard)}
               draggable={isMyTurn}
               className="w-[8em] h-[13em] ml-[-4em] hover:scale(1.3) hover:-translate-y-20 hover:rotate-[20deg] hover:z-50 transition-transform duration-300 "
             >
@@ -413,7 +419,7 @@ const Play = () => {
 
             <SelectScreen>
               <div
-                onDragStart={() => dragStart()}
+                onDragStart={(event) => dragBluffStart(event, bCard)}
                 draggable={isMyTurn}
                 className="w-[8em] h-[13em] ml-[-4em] hover:scale(1.3) hover:-translate-y-20 hover:rotate-[20deg] hover:z-50 transition-transform duration-300 "
               >

@@ -20,7 +20,7 @@ export const playSlice = createSlice({
       "to": '',
       "cardBluff": '',
       "card": '',
-      "availablePlayer": [],
+      "turnedPlayer": [],
     }
   }, //TODO : change initialState
   reducers: {
@@ -41,7 +41,7 @@ export const playSlice = createSlice({
       });
       console.log(state.roomName);
     },
-    
+
     initCardInfo: (state, action) => {
       state.card = [...action.payload];
     },
@@ -113,6 +113,14 @@ export const playSlice = createSlice({
       state.onBoard.to = '';
       state.onBoard.cardBluff = -1;
       state.onBoard.card = -1;
+    },
+
+    initAvailablePlayer: (state, action) => {
+      state.onBoard.availablePlayer = [];
+    },
+
+    addAvailablePlayer: (state, action) => {
+      state.onBoard.availablePlayer = [...state.onBoard.availablePlayer, action.payload]
     }
 
 
