@@ -73,7 +73,7 @@ public class RewardsApiController {
         List<PlayerRewards> playerDoneRewards = animalRewardsService.getPlayerDoneRewards(userSequence);
         int totalPlayerCount = playerService.playerTotalCount();
         List<RewardsDto> collect = playerDoneRewards.stream()
-            .map(m -> new RewardsDto(m.getPlayer().getPlayerSequence(), m.getRewards(),
+            .map(m -> new RewardsDto(m.getPlayer().getPlayerSequence(), userSequence, m.getRewards(),
                 m.getLastModifiedDate(), m.isDone(),
                 animalRewardsService.getDoneRewardsCount(m.getRewards().getRewardsId())))
             .collect(Collectors.toList());
@@ -90,7 +90,7 @@ public class RewardsApiController {
         List<PlayerRewards> playerNotDoneRewards = animalRewardsService.getPlayerNotDoneRewards(userSequence);
         int totalPlayerCount = playerService.playerTotalCount();
         List<RewardsDto> collect = playerNotDoneRewards.stream()
-            .map(m -> new RewardsDto(m.getPlayer().getPlayerSequence(), m.getRewards(),
+            .map(m -> new RewardsDto(m.getPlayer().getPlayerSequence(), userSequence, m.getRewards(),
                 m.getLastModifiedDate(), m.isDone(),
                 animalRewardsService.getDoneRewardsCount(m.getRewards().getRewardsId())))
             .collect(Collectors.toList());
@@ -110,7 +110,7 @@ public class RewardsApiController {
         List<PlayerRewards> playerDoneRewards = animalRewardsService.getPlayerAllRewards(userSequence);
         int totalPlayerCount = playerService.playerTotalCount();
         List<RewardsDto> collect = playerDoneRewards.stream()
-            .map(m -> new RewardsDto(m.getPlayer().getPlayerSequence(), m.getRewards(),
+            .map(m -> new RewardsDto(m.getPlayer().getPlayerSequence(), userSequence, m.getRewards(),
                 m.getLastModifiedDate(), m.isDone(),
                 animalRewardsService.getDoneRewardsCount(m.getRewards().getRewardsId())))
             .collect(Collectors.toList());

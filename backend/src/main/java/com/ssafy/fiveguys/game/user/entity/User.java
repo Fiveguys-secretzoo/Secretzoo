@@ -79,7 +79,7 @@ public class User extends BaseTimeEntity {
                 .email(userDto.getEmail())
                 .name(userDto.getName())
                 .nickname(userDto.getNickname())
-                .mainReward(userDto.getMainAchievement())
+                .mainReward(userDto.getMainReward())
                 .role(userDto.getRole())
                 .profileNumber(userDto.getProfileNumber())
                 .provider(userDto.getProvider())
