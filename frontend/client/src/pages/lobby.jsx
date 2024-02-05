@@ -18,7 +18,7 @@ const Lobby = () => {
 
   return (
     <>
-      <div className='flex flex-row items-center justify-center h-screen'>
+      <div className='flex flex-row items-center justify-center h-screen w-screen'>
         <div className='flex flex-col min-h-[90%] min-w-[20em] p-4 mx-4 bg-white rounded-md '>
           <Profile></Profile>
           <Navbar></Navbar>

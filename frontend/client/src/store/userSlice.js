@@ -8,15 +8,24 @@ export const getUserInfo = createAsyncThunk(
   async (_, thunkAPI) => {
     axios.defaults.headers.common['Authorization'] = sessionStorage.getItem('authorization');
     try {
-      const response = await axios.get('https://spring.secretzoo.site/api/users/user');
-      const data = response.data;
+      const response1 = await axios.get('https://spring.secretzoo.site/api/users/user');
+      const data1 = response1.data;
+      const response2 = await axios.get('https://spring.secretzoo.site/api/player/'+ data1.userSequence);
+      const data2 = response2.data;
+      console.log(data2)
       const userData = {
-        "name" : data.name,
-        "nickname": data.nickname,
-        "userSequence": data.userSequence,
-        "profileNumber": data.profileNumber,
-        "email" : data.email,
+        "name" : data1.name,
+        "nickname": data1.nickname,
+        "userSequence": data1.userSequence,
+        "profileNumber": data1.profileNumber,
+        "mainReward" : data1.mainReward,
+        "email" : data1.email,
+        "level" : data2.data.currentLevel,
+        "exp" : data2.data.currentExp,
+        "nextExp" : data2.data.nextExp,
+        "prevExp" : data2.data.prevExp,
       };
+      
       return userData
 
     } catch (error) {
@@ -50,11 +59,11 @@ export const axiosUpdateNickname = createAsyncThunk(
 );
 
 export const axiosUpdateMainAchievement = createAsyncThunk(
-  'user/axiosUpdateNickname',
+  'user/axiosUpdateMainAchievement',
   async (mainAchievement, { dispatch, rejectWithValue }) => {
     try {
       await axios.put('https://spring.secretzoo.site/api/users/main-achievement', mainAchievement,);
-      dispatch(getUserInfo());
+      dispatch(getUserInfo()) 
     } catch (error) {
       return rejectWithValue(error.response.data);
     }

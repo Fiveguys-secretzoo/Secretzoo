@@ -40,6 +40,7 @@ const Ranking = () => {
   // 처음에 공격랭킹 가져오기
   useEffect(() => {
     getAttack();
+    console.log(ranking);
   }, [])
 
   useEffect(() => {
@@ -51,9 +52,8 @@ const Ranking = () => {
 
   return (
     <>
-      <div className="">
-        <nav className="p-4 text-center rounded shadow-md">
-          <h2>랭킹보기</h2>
+      <div className="p-4 bg-cover bg-[#514844] rounded">
+        <nav className="p-4 text-center rounded shadow-md bg-ranking-banner ">
           <div className="flex space-x-2 justify-center">
             <button className='px-6 mt-4 rounded-md hover:bg-gray-200'
               onClick={getAttack}>공격</button>
@@ -63,12 +63,15 @@ const Ranking = () => {
               onClick={getPass}>패스</button>
           </div>
         </nav>
+        <div className='w-[518px] h-[240px] bg-ranking-123 bg-contain bg-no-repeat mx-auto'>
+          <div></div>
+        </div>
         {
-          ranking.map((item, index) => (
-            <div className={`p-2 my-2 border-1 rounded transition-opacity duration-1000  ${isLoaded ? 'rotate-y' : ''} shadow`}
+          ranking.slice(3).map((item, index) => (
+            <div className={`p-1 my-2 w-[518px] mx-auto border-1 rounded transition-opacity duration-1000  ${isLoaded ? 'rotate-y' : ''} shadow bg-ranking-bar bg-contain text-[#bda68e] text-[1em]`}
               style={{
                 animationDelay: `${index * 0.1}s` // 0.1초 단위로 각 아이템의 지연 시간 증가
-              }}>{index + 1}위 : {item.nickname} 점수 : {item.score}</div>
+              }}>{index + 4}위 : {item.nickname} 점수 : {item.score}</div>
           ))
         }
       </div>

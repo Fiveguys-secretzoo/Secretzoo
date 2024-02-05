@@ -200,7 +200,7 @@ const MyInfo = () => {
           >변경</button>
         </div>
         <div className='flex items-center justify-end'>
-          <p>업적 : {user.mainAchievement}</p>
+          <p>업적 : {user.mainReward}</p>
           <button className='m-2 p-2 bg-blue-500 rounded'
             onClick={() => setOpenRewardsModal(true)}>변경</button>
         </div>

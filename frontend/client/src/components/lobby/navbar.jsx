@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Sidebar, Button  } from 'flowbite-react';
 import { IoGameController, IoTrophy  } from 'react-icons/io5';
 import { HiUser } from 'react-icons/hi'
+import { IoMdSearch } from "react-icons/io";
 import NoLogin from "../login/noLogin";
 
 const Navbar = () => {
@@ -42,7 +43,7 @@ const Navbar = () => {
             <CustomSidebar to='/lobby/mypage' icon={HiUser}>
               내 정보
             </CustomSidebar>
-            <CustomSidebar to='/lobby/searchPlayer' icon={HiUser}>
+            <CustomSidebar to='/lobby/searchPlayer' icon={IoMdSearch}>
               플레이어 검색
             </CustomSidebar>
           </Sidebar.ItemGroup>
