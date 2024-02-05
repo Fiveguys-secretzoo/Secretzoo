@@ -7,16 +7,21 @@ import { motion, useDragControls } from 'framer-motion';
 import { Spinner, Button } from 'flowbite-react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  addPlayer,
-  removePlayer,
   initRoomInfo,
   initCardInfo,
+  addPlayer,
+  removePlayer,
   changePlayState,
-  changeCardStatus,
+  changeAdmin,
   changeNowTurn,
+  removeCardFromHand,
+  changeCardStatus,
   changeCardDrag,
   changeCardDrop,
   changeCardBluff,
+  changeInitOnBoardCard,
+  initAvailablePlayer,
+  addAvailablePlayer,
 } from '../store/playSlice'
 
 import PlayerView from '../components/play/playerView'
@@ -80,6 +85,7 @@ const Play = () => {
     if (playState !== 4 || !isMyTurn) {
       event.preventDefault();
     }
+    dispatch(changeCardStatus({ 'from': pid, 'card': item }));
   }
 
   // 화면 가리는 창 띄우기 , children에 띄우고 싶은 요소 정의하면 ok.
@@ -139,13 +145,16 @@ const Play = () => {
     console.log(`card Passed!`);
     socket.emit('cardPass', roomName, (result) => {
       console.log(`[cardPass] ${result}`)
+      setIsMyTurn(true);
     });
   }
 
   // 카드 정답 맞추기
   const cardAnswerHandler = (answer) => {
     console.log(`card Answered!`);
-    socket.emit('cardReveal', roomName, answer) // 0 is trust, 2 is distrust
+    socket.emit('cardReveal', roomName, (answer) => {
+      dispatch(changeCardStatus({}))
+    }) // 0 is trust, 2 is distrust
   }
 
   // 방을 나간다. 나는 나간다.
@@ -169,6 +178,7 @@ const Play = () => {
   // socket.io drag handle
   const cardDropResponseHandler = (from, to) => {
     console.log(`[cardDrop] [${from}] to [${to}]`);
+
     dispatch(changePlayState(2));
     dispatch(changeNowTurn(from));
     dispatch(changeCardDrop({ from: from, to: to }))
@@ -188,20 +198,38 @@ const Play = () => {
     }
     dispatch(changeCardBluff(bCard));
   }
-  const cardPassResponseHandler = () => {
+
+  // socket.io handle Pass Res
+  const cardPassResponseHandler = (from, nowTurnPlayer) => {
     console.log(`card Pass Response!`)
     dispatch(changePlayState(4))
-    if (nowTurn === pid) {
+    dispatch(changeNowTurn(nowTurnPlayer));
+    dispatch(changeCardStatus({ 'from': from, 'card': card }));
+    if (nowTurnPlayer === pid) {
       setIsMyTurn(true);
     } else {
       setIsMyTurn(false);
     }
-    console.log(`[cardPass] draggable [${((playState === 1 || playState === 4) && isMyTurn)}]`)
+    console.log(`[cardpass] ${playState}, ${isMyTurn}`)
+    console.log(`[cardPass] draggable [${(playState === 4 && isMyTurn)}]`)
   }
+
   const cardRevealResponseHandler = (result) => {
     setGameResult(result);
     dispatch(changePlayState(5));
     console.log(`card Answer Response!`);
+  }
+
+
+  // socket.io 페널티 추가 handler
+  const penaltyAddResponseHandler = () => {
+
+    // 패널티 점수 체크
+  }
+
+  // socket.io 게임 종료 handler 
+  const gameEndResponseHandler = (loserPid) => {
+
   }
 
 
@@ -220,6 +248,8 @@ const Play = () => {
     socket.on("cardBluffSelect", cardBluffResponseHandler);
     socket.on("cardPass", cardPassResponseHandler);
     socket.on("cardReveal", cardRevealResponseHandler);
+    socket.on("penaltyAdd", penaltyAddResponseHandler);
+    socket.on("gameEnd", gameEndResponseHandler);
   }
   // 게임 종료 시 사용
   // playState 0 으로 정의 
@@ -273,10 +303,18 @@ const Play = () => {
   }, []);
 
 
+  // playState 추적 
   useEffect(() => {
     console.log(`playState : ${playState}`);
+    if (playState === 1) {
+      socket.emit("isGameEnd", roomName, (loserPid) => {
+
+      })
+    }
   }, [playState]);
 
+
+  //nowTurn, adminPlayer 추적
   useEffect(() => {
     if (nowTurn === pid) {
       setIsMyTurn(true);
@@ -400,26 +438,29 @@ const Play = () => {
               </div>
             </SelectScreen>
           }
-          {/* 넘기기 턴 */}
+          {/* 넘기기 턴 (내턴, 카드)*/}
           {
             playState === 4 && isMyTurn &&
-            <div
-              onDragStart={(event) => dragBluffStart(event, bCard)}
-              draggable={isMyTurn}
-              className="w-[8em] h-[13em] ml-[-4em] hover:scale(1.3) hover:-translate-y-20 hover:rotate-[20deg] hover:z-50 transition-transform duration-300 "
-            >
-              <img src={imageRoute(64)} alt="" />
-            </div>
+            <SelectScreen>
+              <div
+                onDragStart={(event) => dragBluffStart(event, 64 + bCard)}
+                draggable={isMyTurn}
+                className="w-[8em] h-[13em] ml-[-4em] hover:scale(1.3) hover:-translate-y-20 hover:rotate-[20deg] hover:z-50 transition-transform duration-300 "
+              >
+                <img src={imageRoute(64)} alt="" />
+              </div>
+
+            </SelectScreen>
           }
 
 
-          {/* 넘기는 턴에 카드 부분  */}
+          {/* 넘기는 턴 (내턴 아님, 카드) */}
           {
             playState === 4 && !isMyTurn &&
 
             <SelectScreen>
               <div
-                onDragStart={(event) => dragBluffStart(event, bCard)}
+                onDragStart={(event) => dragBluffStart(event, 64 + bCard)}
                 draggable={isMyTurn}
                 className="w-[8em] h-[13em] ml-[-4em] hover:scale(1.3) hover:-translate-y-20 hover:rotate-[20deg] hover:z-50 transition-transform duration-300 "
               >

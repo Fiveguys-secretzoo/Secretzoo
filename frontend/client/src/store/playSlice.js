@@ -85,6 +85,13 @@ export const playSlice = createSlice({
       state.nowTurn = action.payload;
     },
 
+    removeCardFromHand: (state, action) => {
+      console.log(`removed card ${action.payload.card} from ${action.payload.pid}`);
+      state.players[state.players.indexOf(action.payload.pid)].hand
+        = state.players[state.players.indexOf(action.payload.pid)].hand
+          .filter((e) => e !== action.payload.card)
+    },
+
     changeCardStatus: (state, action) => {
       console.log(`change card drag to store [${action.payload.from}] [${action.payload.card}]`);
       state.onBoard.from = action.payload.from;
@@ -138,9 +145,14 @@ export const {
   changePlayState,
   changeAdmin,
   changeNowTurn,
+  removeCardFromHand,
   changeCardStatus,
   changeCardDrag,
   changeCardDrop,
   changeCardBluff,
+  changeInitOnBoardCard,
+  initAvailablePlayer,
+  addAvailablePlayer,
+
 } = playSlice.actions;
 export default playSlice.reducer;

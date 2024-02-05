@@ -26,6 +26,7 @@ const PlayerContainer = () => {
   const dropHandler = (e, pid) => {
     e.preventDefault();
 
+    // bluff 아닐 때
     if (dragItem < 64) {
       if (turnedPlayer.includes(pid)) {
         console.log(`Cannot drop on Player ${pid}`);
@@ -38,7 +39,7 @@ const PlayerContainer = () => {
       socket.emit("cardDrop", dragFrom, pid, dragItem);
       dispatch(changePlayState(2));
     }
-    else {
+    else { // bluff 턴일 때
       if (turnedPlayer.includes(pid)) {
         console.log(`Cannot drop on Player ${pid}`);
         return;
@@ -51,10 +52,6 @@ const PlayerContainer = () => {
       dispatch(changePlayState(2));
     }
   };
-
-  const responseHandler = () => {
-
-  }
 
   return {
     dragEnterHandler,
