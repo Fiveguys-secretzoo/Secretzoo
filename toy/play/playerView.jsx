@@ -2,16 +2,20 @@ import { Card } from 'flowbite-react'
 import PlayerContainer from './playerContainer';
 import App from "./openvidu/App.js";
 import React, { useEffect } from 'react';
-const PlayerView = ({ pid, key, pn = "SomethingWrong", activate = false }) => {
+const PlayerView = ({ pid, key, pn = "SomethingSomething", activate = false }) => {
 
   const playerContainer = PlayerContainer();
   const { dragOver, dragEnterHandler, dropHandler } = playerContainer;
-
-  // TODO 위에 올렸을 때 가능하냐 안하냐에 따라서 효과를 다르게 주는 것...!!
-
+  // useEffect(() => {
+    
+  //   if(pid===sessionStorage.getItem('userName')){
+  //     // App.joinSession(); // App 컴포넌트의 인스턴스 생성
+  //   }
+  //   return () => App.leaveSession(); // 컴포넌트가 언마운트될 때 leaveSession 호출 (옵션)
+  // }, []);
   return (
     <>
-      <div className="bg-white rounded w-[30%] m-2"
+      <Card className="max-w-sm"
         key={key}
         onDragEnter={(e) => dragEnterHandler(e, pid)}
         onDragOver={(e) => dragOver(e, pid)}
@@ -22,7 +26,7 @@ const PlayerView = ({ pid, key, pn = "SomethingWrong", activate = false }) => {
         </p>
         {(pid === sessionStorage.getItem('userName'))
         &&<App />}
-      </div>
+      </Card>
     </>
   );
 }
