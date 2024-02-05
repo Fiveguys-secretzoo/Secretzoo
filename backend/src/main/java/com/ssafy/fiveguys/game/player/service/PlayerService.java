@@ -2,6 +2,8 @@ package com.ssafy.fiveguys.game.player.service;
 
 
 import com.ssafy.fiveguys.game.player.dto.player.PlayerDto;
+import com.ssafy.fiveguys.game.player.dto.player.PlayerResult;
+import com.ssafy.fiveguys.game.player.dto.player.PlayerSearchResult;
 import com.ssafy.fiveguys.game.player.dto.rank.RankRequestDto;
 import com.ssafy.fiveguys.game.player.dto.player.PlayerSearch;
 import com.ssafy.fiveguys.game.player.entity.PlayerRewards;
@@ -67,8 +69,8 @@ public class PlayerService {
      *
      * @return
      */
-    public List<PlayerDto> getAllPlayer() {
-        List<Player> playerList = playerRepository.findAll();
+    public List<PlayerDto> getAllPlayer(Pageable pageable) {
+        List<Player> playerList = playerRepositoryImpl.findAll(pageable);
         return playerList.stream()
             .map(player -> new PlayerDto(
                 player.getUser().getUserSequence(), player.getUser().getUserId(),
@@ -84,17 +86,18 @@ public class PlayerService {
      *
      * @return
      */
-    public List<PlayerDto> getAllPlayer(PlayerSearch playerSearch, Pageable pageable) {
+    public PlayerResult getAllPlayer(PlayerSearch playerSearch, Pageable pageable) {
         log.info("playerSearch={}", playerSearch);
-        List<Player> playerList = playerRepositoryImpl.findAll(playerSearch, pageable);
-        return playerList.stream()
+        PlayerSearchResult playerSearchResult = playerRepositoryImpl.findAll(playerSearch, pageable);
+        List<PlayerDto> list = playerSearchResult.getPlayers().stream()
             .map(player -> new PlayerDto(
                 player.getUser().getUserSequence(), player.getUser().getUserId(),
                 player.getUser().getName(),
-                player.getUser().getNickname(),player.getUser().getProfileNumber(),
-                player.getUser().getMainReward(),player.getTotalRound(), player.getTotalTurn(),
-                player.getRankingScore(), player.getExp(), player.getPlayerLevel())
-            ).toList();
+                player.getUser().getNickname(), player.getUser().getProfileNumber(),
+                player.getUser().getMainReward(), player.getTotalRound(), player.getTotalTurn(),
+                player.getRankingScore(), player.getExp(), player.getPlayerLevel())).toList();
+
+        return new PlayerResult(list, playerSearchResult.getTotalCount());
     }
 
     /**

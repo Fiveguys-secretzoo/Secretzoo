@@ -3,6 +3,7 @@ package com.ssafy.fiveguys.game.player.api;
 
 import com.ssafy.fiveguys.game.player.dto.player.PlayerDto;
 import com.ssafy.fiveguys.game.player.dto.api.ApiResponse;
+import com.ssafy.fiveguys.game.player.dto.player.PlayerResult;
 import com.ssafy.fiveguys.game.player.dto.player.PlayerSearch;
 import com.ssafy.fiveguys.game.player.service.PlayerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -48,8 +49,8 @@ public class PlayerApiController {
 
     @Operation(summary = "전체 플레이어 정보 조회 API")
     @GetMapping("/players")
-    public ApiResponse<?> getAllPlayerInfo() {
-        List<PlayerDto> playerList = playerService.getAllPlayer();
+    public ApiResponse<?> getAllPlayerInfo(Pageable pageable) {
+        List<PlayerDto> playerList = playerService.getAllPlayer(pageable);
         if (playerList.isEmpty()) {
             return null;
         }
@@ -62,12 +63,11 @@ public class PlayerApiController {
     public ApiResponse<?> SearchPlayerInfo(
         @ModelAttribute("playerSearch") PlayerSearch playerSearch, Pageable pageable) {
         log.info("controller : playerSearch={}", playerSearch);
-        List<PlayerDto> playerList = playerService.getAllPlayer(playerSearch, pageable);
-        if (playerList.isEmpty()) {
+        PlayerResult playerList = playerService.getAllPlayer(playerSearch, pageable);
+        if (playerList.getPlayers().isEmpty()) {
             return null;
         }
-        int totalPlayerCount = playerService.playerTotalCount();
-        return new ApiResponse<>(playerList.size(), playerList, totalPlayerCount);
+        return new ApiResponse<>(playerList.getPlayers().size(), playerList.getPlayers(), playerList.getTotalCount());
     }
 
 }
