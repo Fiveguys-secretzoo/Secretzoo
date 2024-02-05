@@ -22,7 +22,7 @@ public class UserInfoDto {
                 .email(userDto.getEmail())
                 .name(userDto.getName())
                 .nickname(userDto.getNickname())
-                .mainAchievement(userDto.getMainAchievement())
+                .mainAchievement(userDto.getMainReward())
                 .profileNumber(userDto.getProfileNumber())
                 .build();
     }
