@@ -56,7 +56,8 @@ public class PlayerService {
         return new PlayerDto(
             player.getUser().getUserSequence(), player.getUser().getUserId(),
             player.getUser().getName(),
-            player.getUser().getNickname(), player.getUser().getMainReward(),
+            player.getUser().getNickname(), player.getUser().getProfileNumber(),
+            player.getUser().getMainReward(),
             player.getTotalRound(), player.getTotalTurn(),
             player.getRankingScore(), player.getExp(), player.getPlayerLevel());
     }
@@ -72,8 +73,8 @@ public class PlayerService {
             .map(player -> new PlayerDto(
                 player.getUser().getUserSequence(), player.getUser().getUserId(),
                 player.getUser().getName(),
-                player.getUser().getNickname(), player.getUser().getMainReward(),
-                player.getTotalRound(), player.getTotalTurn(),
+                player.getUser().getNickname(),player.getUser().getProfileNumber(),
+                player.getUser().getMainReward(),player.getTotalRound(), player.getTotalTurn(),
                 player.getRankingScore(), player.getExp(), player.getPlayerLevel())
             ).toList();
     }
@@ -90,8 +91,8 @@ public class PlayerService {
             .map(player -> new PlayerDto(
                 player.getUser().getUserSequence(), player.getUser().getUserId(),
                 player.getUser().getName(),
-                player.getUser().getNickname(), player.getUser().getMainReward(),
-                player.getTotalRound(), player.getTotalTurn(),
+                player.getUser().getNickname(),player.getUser().getProfileNumber(),
+                player.getUser().getMainReward(),player.getTotalRound(), player.getTotalTurn(),
                 player.getRankingScore(), player.getExp(), player.getPlayerLevel())
             ).toList();
     }
