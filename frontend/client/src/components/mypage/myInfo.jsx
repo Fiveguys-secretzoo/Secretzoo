@@ -1,47 +1,32 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUserInfo, axiosUpdateProfileImage, axiosUpdateNickname, axiosUpdateMainAchievement } from '../../store/userSlice';
 import axios from 'axios';
 import { Button, TextInput, Modal, Label, Card } from 'flowbite-react';
+import Swal from 'sweetalert2';
 
 
 const MyInfo = () => {
 
-  const [user, setUser] = useState(null);
-  const getUserInfo = () => {
-    const headers = {
-      'Authorization': sessionStorage.getItem('authorization')
-    };
-    axios.get('https://spring.secretzoo.site/api/users/user', { headers })
-      .then(response => {
-        console.log(response.data)
-        setUser(response.data)
-      });
-  }
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.user.userInfo);
 
   useEffect(() => {
     getRewrds();
-    getUserInfo();
-  }, [])
+    dispatch(getUserInfo());
+  }, [dispatch])
 
-  axios.defaults.headers.common['Authorization'] = sessionStorage.getItem('authorization');
   const updateProfileImage = (number) => {
-    axios.put('https://spring.secretzoo.site/api/users/profile-number', number)
-      .then(response => {
-        getUserInfo();
-      });
+    dispatch(axiosUpdateProfileImage(number));
   };
 
   const updateNickname = (nickname) => {
-    axios.put('https://spring.secretzoo.site/api/users/nickname', nickname)
-      .then(response => {
-        getUserInfo();
-      });
+    dispatch(axiosUpdateNickname(nickname));
   };
 
   const updateMainAchievement = (mainAchievement) => {
-    axios.put('https://spring.secretzoo.site/api/users/main-achievement', mainAchievement)
-      .then(response => {
-        getUserInfo();
-      });
+    dispatch(axiosUpdateMainAchievement(mainAchievement));
   };
 
   const [passwordCheckState, setPasswordCheckState] = useState(false);
@@ -51,7 +36,10 @@ const MyInfo = () => {
         setOpenUpdatePasswordModal(true);
         setPasswordCheckState(true);
       }).catch(e => {
-        alert('비밀번호가 옳지 않습니다.');
+        Swal.fire({
+          "text" : '비밀번호가 옳지 않습니다.',
+          "confirmButtonColor" : '#3085d6'
+        });
       });
   };
 
@@ -59,8 +47,11 @@ const MyInfo = () => {
     if (passwordCheckState) {
       axios.put('https://spring.secretzoo.site/api/users/password', password)
         .then(response => {
+          Swal.fire({
+            "text" : '변경 선공',
+            "confirmButtonColor" : '#3085d6'
+          });
           getUserInfo();
-          alert('변경 선공')
         });
     }
   };
@@ -86,13 +77,13 @@ const MyInfo = () => {
     const imageNumbers = Array.from({ length: 74 - 38 + 1 }, (_, i) => i + 38);
     return (
       <Modal show={openProfileImageModal} size="2xl" onClose={() => setOpenProfileImageModal(false)}>
-        <Modal.Body className='flex flex-wrap'>
+        <Modal.Body className='flex flex-wrap justify-around'>
           {imageNumbers.map((number) => (
             <img
               key={number}
               src={require(`../../assets//img/profile/Untitled ${number}.png`)}
               alt={`프로필 이미지 ${number}`}
-              className="w-32 rounded-full"
+              className="w-28 m-2 rounded-full hover:cursor-pointer border-2 hover:border-blue-500"
               onClick={() => { updateProfileImage(number); setOpenProfileImageModal(false) }}
             />
           ))}

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { Button, Label, TextInput, Modal } from 'flowbite-react';
+import Swal from 'sweetalert2';
 
 const SignupForm = () => {
   const [name, setName] = useState("");
@@ -12,7 +13,24 @@ const SignupForm = () => {
   const navigate = useNavigate();
   const requsetLogin = () => {
     if (!idCheck) {
-      alert("id 중복체크하세요");
+      Swal.fire({
+        "text" : 'id 중복체크하세요.',
+        "confirmButtonColor" : '#3085d6'
+      });
+      return;
+    }
+    if (pass != passCheck) {
+      Swal.fire({
+        "text" : '비밀번호가 잃치하지 않습니다.',
+        "confirmButtonColor" : '#3085d6'
+      });
+      return;
+    }
+    if (!emailCheckSate) {
+      Swal.fire({
+        "text" : '아직 이메일 인증이 되지 않았습니다.',
+        "confirmButtonColor" : '#3085d6'
+      });
       return;
     }
     axios.post('https://spring.secretzoo.site/api/auth/signup',
@@ -25,7 +43,7 @@ const SignupForm = () => {
       }
     ).then((Response) => {
       console.log(Response.data);
-      navigate('/lobby')
+      navigate('/')
     })
   }
   const [idCheck, setIdCheck] = useState(false);
@@ -36,12 +54,18 @@ const SignupForm = () => {
     const checkid = (id) => {
       axios.post('https://spring.secretzoo.site/api/auth/check/' + id)
         .then(Response => {
-          alert(Response.data);
+          Swal.fire({
+            "text" : Response.data,
+            "confirmButtonColor" : '#3085d6'
+          });
           setIdCheckState(true);
         }
         )
         .catch(e => {
-          alert('중복입니다.')
+          Swal.fire({
+            "text" : '중복입니다.',
+            "confirmButtonColor" : '#3085d6'
+          });
         }
         )
     };
@@ -57,7 +81,10 @@ const SignupForm = () => {
             if (idCheckState) {
               setOpenIdCheckModal(false); setId(checkIdInput); setIdCheck(true);
             } else {
-              alert('중복체크하세요');
+              Swal.fire({
+                "text" : '중복체크하세요.',
+                "confirmButtonColor" : '#3085d6'
+              });
             }
           }}
           >사용</Button>
@@ -78,7 +105,10 @@ const SignupForm = () => {
     }
     axios.post('https://spring.secretzoo.site/api/verify-email/send',data)
     .then(Response => {
-      alert(Response.data);
+      Swal.fire({
+        "text" : Response.data,
+        "confirmButtonColor" : '#3085d6'
+      });
       setopenEmailCheck(true);
       setDidEmailRequest(true);
     })
@@ -90,7 +120,10 @@ const SignupForm = () => {
     }
     axios.post('https://spring.secretzoo.site/api/verify-email/check',data)
     .then(Response => {
-      alert(Response.data);
+      Swal.fire({
+        "text" : Response.data,
+        "confirmButtonColor" : '#3085d6'
+      });
       setEmailCheckState(true);
     })
   }
