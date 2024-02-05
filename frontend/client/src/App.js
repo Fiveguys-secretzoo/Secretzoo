@@ -18,8 +18,8 @@ import Callback from './pages/callback';
 import Page404 from './pages/Page404';
 
 //노드 서버
-// const socket = io('http://localhost:3001');
-const socket = io('https://secretzoo.site');
+const socket = io('http://node-server:3000');
+// const socket = io('https://secretzoo.site');
 export const SocketContext = createContext();
 
 
