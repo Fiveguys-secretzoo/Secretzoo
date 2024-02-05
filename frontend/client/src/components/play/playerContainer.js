@@ -8,6 +8,7 @@ const PlayerContainer = () => {
   const dragItem = useSelector(state => state.plays.onBoard.card)
   const dragFrom = useSelector(state => state.plays.onBoard.from)
   const dragTo = useSelector(state => state.plays.onBoard.to)
+  const turnedPlayer = useSelector(state => state.plays.turnedPlayer);
   const dispatch = useDispatch();
   // 플레이어 위에 드래그가 올라갔을 때 socket.io 로 emit
   const dragEnterHandler = (e, pid) => {
@@ -23,6 +24,13 @@ const PlayerContainer = () => {
   // 플레이어 위에 드롭 했을 때 socket.io 로 emit
   const dropHandler = (e, pid) => {
     e.preventDefault();
+
+    if (turnedPlayer.includes(pid)) {
+      console.log(`Cannot drop on Player ${pid}`);
+      return;
+    }
+
+
     dispatch(changeCardDrop({ from: dragFrom, to: pid }))
     console.log(`[dropHandler] [${dragItem}] drop [${dragTo}], pid : [${pid}]`);
     alert(dragItem + " drop " + e.target.textContent);
