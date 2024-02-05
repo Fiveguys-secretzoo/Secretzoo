@@ -40,9 +40,7 @@ async function main() {
     passingTurnSelect,
   } = playMethods;
 
-  const handleException = (socket) => {
 
-  }
   const serverURL = 'http://localhost:3000'
   // cors 설정
   app.use(cors({
@@ -63,6 +61,13 @@ async function main() {
   });
 
   const rooms = {}
+
+  const handleException = (io, err, message) => {
+    console.log(err);
+    console.log(message);
+    io.emit("serverClosed", "err");
+    process.exit(1);
+  }
   /* Socket 연결 후 부분 */
   io.on('connection', async (socket) => {
     let disconnectedTimeout;
@@ -92,24 +97,14 @@ async function main() {
 
 
     process.on('uncaughtException', (err) => {
-      console.log(err);
-      console.log("서버, 죽음의 메아리 발동");
-      io.emit("serverClosed", "err");
-      process.exit(1);
+      handleException(io, err, "서버, 에러로 인한 죽음의 메아리 발동 ")
     })
     process.on('exit', (err) => {
-      console.log(err);
-      console.log("서버, 죽음의 메아리 발동");
-      io.emit("serverClosed", "close");
-      process.exit(1);
+      handleException(io, err, "서버, 죽음의 메아리 발동 ")
     })
     process.on('SIGINT', (err) => {
-      console.log(err);
-      console.log("서버, 죽음의 메아리 발동");
-      io.emit("serverClosed", "close");
-      process.exit(1);
+      handleException(io, err, "서버, 죽음의 메아리 명령어 발동 ")
     })
-
   });
 
   server.listen(3001, () => {
