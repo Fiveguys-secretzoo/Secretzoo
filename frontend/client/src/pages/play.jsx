@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { SocketContext } from '../App';
 import { useNavigate } from "react-router-dom";
 import '../style/play.css';
+import { motion, useDragControls } from 'framer-motion';
 import { Spinner, Button } from 'flowbite-react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -68,7 +69,10 @@ const Play = () => {
     return require(`../assets/img/card/0${Math.floor(i / 8)}/00${i % 8}.png`);
   }
 
-  const dragStart = (item) => {
+  const dragStart = (event, item) => {
+    if (!(playState === 1 || playState === 4) || !isMyTurn) {
+      event.preventDefault();
+    }
     dispatch(changeCardStatus({ 'from': pid, 'card': item }));
   }
 
@@ -89,50 +93,8 @@ const Play = () => {
     )
   }
 
-  // socket.io drag handle
-  const cardDragResponseHandler = (from, to) => {
-    console.log(`[cardDrag] [${from}] to [${to}]`);
-    dispatch(changeCardDrag({ from: from, to: to }))
-  };
-  // socket.io drag handle
-  const cardDropResponseHandler = (from, to) => {
-    console.log(`[cardDrop] [${from}] to [${to}]`);
-    dispatch(changePlayState(2));
-    dispatch(changeNowTurn(from));
-    dispatch(changeCardDrop({ from: from, to: to }))
-    console.log(`[cardDrop] nowTurn : ${nowTurn} / pid : ${pid}`);
-    console.log(`[cardDrop] playState is ${playState} / isMyTurn : ${isMyTurn}`)
-  };
 
-  // socket.io handleBluff Response
-  const cardBluffResponseHandler = (from, to, bCard) => {
-    console.log(`card Bluffed [${from}] to [${to}] by [${bCard}]`);
-    dispatch(changePlayState(3));
-    dispatch(changeNowTurn(to));
-    if (nowTurn === pid) {
-      setIsMyTurn(true);
-    } else {
-      setIsMyTurn(false);
-    }
-    dispatch(changeCardBluff(bCard));
-  }
 
-  const cardAnswerResponseHandler = (result) => {
-    setGameResult(result);
-    dispatch(changePlayState(5));
-    console.log(`card Answer Response!`);
-  }
-
-  const cardPassResponseHandler = () => {
-    console.log(`card Pass Response!`)
-    dispatch(changePlayState(4))
-    if (nowTurn === pid) {
-      setIsMyTurn(true);
-    } else {
-      setIsMyTurn(false);
-    }
-    console.log(`[cardPass] draggable [${((playState === 1 || playState === 4) && isMyTurn)}]`)
-  }
 
   // player enter socket event handle
   const playerEnterHandler = (player) => {
@@ -192,6 +154,51 @@ const Play = () => {
     setMessages((msgs) => [...msgs, msg]);
   };
 
+
+  // socket.io drag handle
+  const cardDragResponseHandler = (from, to) => {
+    console.log(`[cardDrag] [${from}] to [${to}]`);
+    dispatch(changeCardDrag({ from: from, to: to }))
+  };
+  // socket.io drag handle
+  const cardDropResponseHandler = (from, to) => {
+    console.log(`[cardDrop] [${from}] to [${to}]`);
+    dispatch(changePlayState(2));
+    dispatch(changeNowTurn(from));
+    dispatch(changeCardDrop({ from: from, to: to }))
+    console.log(`[cardDrop] nowTurn : ${nowTurn} / pid : ${pid}`);
+    console.log(`[cardDrop] playState is ${playState} / isMyTurn : ${isMyTurn}`)
+  };
+
+  // socket.io handleBluff Response
+  const cardBluffResponseHandler = (from, to, bCard) => {
+    console.log(`card Bluffed [${from}] to [${to}] by [${bCard}]`);
+    dispatch(changePlayState(3));
+    dispatch(changeNowTurn(to));
+    if (nowTurn === pid) {
+      setIsMyTurn(true);
+    } else {
+      setIsMyTurn(false);
+    }
+    dispatch(changeCardBluff(bCard));
+  }
+  const cardPassResponseHandler = () => {
+    console.log(`card Pass Response!`)
+    dispatch(changePlayState(4))
+    if (nowTurn === pid) {
+      setIsMyTurn(true);
+    } else {
+      setIsMyTurn(false);
+    }
+    console.log(`[cardPass] draggable [${((playState === 1 || playState === 4) && isMyTurn)}]`)
+  }
+  const cardRevealResponseHandler = (result) => {
+    setGameResult(result);
+    dispatch(changePlayState(5));
+    console.log(`card Answer Response!`);
+  }
+
+
   // 게임 시작 버튼을 눌렀을 때 작동하는 함수, 여러가지 socket을 on 처리 시킨다.
   const gameStart = (cards, firstPlayer) => {
 
@@ -206,12 +213,13 @@ const Play = () => {
     socket.on("cardDrop", cardDropResponseHandler);
     socket.on("cardBluffSelect", cardBluffResponseHandler);
     socket.on("cardPass", cardPassResponseHandler);
-    socket.on("cardAnswer", cardAnswerResponseHandler);
+    socket.on("cardReveal", cardRevealResponseHandler);
   }
   // 게임 종료 시 사용
   // playState 0 으로 정의 
-  const gameEnd = () => {
-    dispatch(changePlayState(0));
+  const thisTurnEnd = () => {
+    socket.emit('')
+    dispatch(changePlayState(1));
   }
 
   // game Info 변경 시 사용
@@ -418,13 +426,15 @@ const Play = () => {
           {
             playState === 5 &&
             <SelectScreen>
-              <div hidden={!gameResult}>
-                <h3>플레이어가 정답을 맞췄습니다.</h3>
+              <div className="overlay">
+                <div hidden={!gameResult}>
+                  <h3>플레이어가 정답을 맞췄습니다.</h3>
+                </div>
+                <div hidden={gameResult}>
+                  <h3>플레이어가 정답을 틀렸습니다.</h3>
+                </div>
+                <Button onClick={() => { thisTurnEnd() }}></Button>
               </div>
-              <div hidden={gameResult}>
-                <h3>플레이어가 정답을 틀렸습니다.</h3>
-              </div>
-              <Button onClick={dispatch(changePlayState(1))}></Button>
             </SelectScreen>
           }
           {/* 플레이어 표현 부분 */}
@@ -439,14 +449,16 @@ const Play = () => {
             {cards &&
               cards.map((i, index) => (
                 <div
-                  onDragStart={() => dragStart(i)}
+                  onDragStart={(e) => dragStart(e, i)}
                   key={index}
-                  draggable={((playState === 1 || playState === 4) && isMyTurn)}
-                  className="w-[8em] h-[13em] ml-[-4em] hover:scale(1.3) hover:-translate-y-20 hover:rotate-[20deg] hover:z-50 transition-transform duration-300 "
-                  style={{ zIndex: cards.length - index }}
+                  // draggable={((playState === 1 || playState === 4) && isMyTurn)}
+                  draggable
+
+                  className="w-[8em] h-[13em] ml-[-4em] hover:scale(1.3) hover:-translate-y-20 hover:rotate-[20deg] hover:z-50 transition-transform duration-300"
+                  style={{ zIndex: cards.length - index, userSelect: false, }}
                 >
                   {/* <img key={index} className="" src={require(`../assets/img/card/0${Math.floor(i / 8)}/00${i % 8}.png`)} alt="" /> */}
-                  <img key={index} className="" src={images[i]} alt="" />
+                  <img key={index} className="rounded-md" src={images[i]} alt="" />
                 </div>
               ))}
 
@@ -471,7 +483,7 @@ const Play = () => {
           </div>
 
         </div>
-      </div>
+      </div >
     </>
   );
 };

@@ -10,6 +10,7 @@ const NoLogin = () => {
     if (name.length > 0) {
       sessionStorage.setItem('noLogin', true);
       sessionStorage.setItem('userNickname', name);
+      sessionStorage.setItem('userName', name + "123");
       navigate("/lobby");
     } else {
       alert('닉네임은 필수입니다.')

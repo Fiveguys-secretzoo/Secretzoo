@@ -16,7 +16,7 @@ import MyRanking from './components/mypage/myRanking';
 import MyReward from './components/mypage/myReward';
 import Callback from './pages/callback';
 import Page404 from './pages/Page404';
-
+import Test from './pages/test'
 const socket = io('http://localhost:3001');
 export const SocketContext = createContext();
 
@@ -43,6 +43,7 @@ function App() {
               </Route>
             </Route>
             <Route path='/play' element={<Play />} />
+            <Route path='/test' element={<Test />} />
           </Routes>
         </div>
       </SocketContext.Provider>

@@ -153,21 +153,26 @@ const playSocketMethods = () => {
   const passingTurnStart = (socket, io, rooms) => {
     socket.on('cardPass', (room, callback) => {
       rooms[room].onBoard.status = 4;
-      io.to(room).emit('cardPass',);
+      rooms[room].onBoard.turnedPlayer.push(rooms[room].onBoard.from);
+      rooms[room].onBoard.from = rooms[room].onBoard.to;
+      rooms[room].onBoard.nowTurn = rooms[room].onBoard.from;
+      rooms[room].onBoard.to = -1;
+      io.to(room).emit('cardPass', );
       callback(rooms[room].onBoard.card);
     })
   }
 
-
-  // 주는 턴에서 선택하는 경우!
-  const givingTurnSelect = (socket, io, rooms) => {
+  const passingTurnSelect = (socket, io, rooms) => {
 
   }
 
   const checkCardReveal = (rooms, room, answer) => {
-    let card = rooms[room].onBoard.card;
-    let bCard = rooms[room].onBoard.bCard;
-    let isSame = (card / 8) === bCard; http://localhost:3000/static/media/000.7debb096620a360bdc0f.png
+    let card, bCard;
+    if (rooms && rooms[room] && rooms[room].onBoard) {
+      card = rooms[room].onBoard.card;
+      bCard = rooms[room].onBoard.cardBluff;
+    }
+    let isSame = Math.floor(card / 8) === bCard;
     if ((answer === 0 && isSame) || (answer === 1 && !isSame))
       return true;
     else
@@ -176,14 +181,10 @@ const playSocketMethods = () => {
 
   const cardReveal = (socket, io, rooms) => {
     socket.on('cardReveal', (room, answer) => {
-
-      io.to(room).emit('cardReveal', checkCardReveal(rooms, room, answer));
-    })
-  }
-
-  const passingTurnSelect = (socket, io, rooms) => {
-    socket.on('cardPass', () => {
-
+      rooms[room].onBoard.status = 5;
+      console.log(`##### [cardReveal] room : [${room}] answer : [${answer}]`)
+      let result = checkCardReveal(rooms, room, answer);
+      io.to(room).emit('cardReveal', result);
     })
   }
 
@@ -194,7 +195,6 @@ const playSocketMethods = () => {
     cardDrop,
     cardBluffSelect,
     passingTurnStart,
-    givingTurnSelect,
     cardReveal,
     passingTurnSelect,
   }
