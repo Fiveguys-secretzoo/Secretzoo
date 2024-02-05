@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"https://secretzoo.site","http://localhost:3000"}, exposedHeaders = "*")
+@CrossOrigin(origins = {"https://secretzoo.site", "http://localhost:3000"}, exposedHeaders = "*")
 @RequestMapping("/verify-email")
 @Tag(name = "MailController", description = "이메일 인증 서비스 컨트롤러")
 public class MailController {
@@ -30,12 +30,15 @@ public class MailController {
     private final MailService mailService;
     private final RedisService redisService;
 
-    @Operation(summary = "이메일 인증 API")
+    @Operation(summary = "이메일 인증 및 유효성 검사 API")
     @PostMapping("/send")
     public ResponseEntity<?> sendVerificationCode(@RequestBody @Valid EmailRequestDto emailDto)
         throws MessagingException {
-        mailService.sendEmail(emailDto.getEmail());
-        return ResponseEntity.status(HttpStatus.OK).body("인증 메일이 발송되었습니다.");
+        if (mailService.isDuplicateEmail(emailDto.getEmail())) {
+            mailService.sendEmail(emailDto.getEmail());
+            return ResponseEntity.status(HttpStatus.OK).body("인증 메일이 발송되었습니다.");
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 가입되어 있는 이메일입니다.");
     }
 
     @Operation(summary = "인증 코드 확인 API")

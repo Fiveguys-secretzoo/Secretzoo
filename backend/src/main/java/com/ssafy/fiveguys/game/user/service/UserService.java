@@ -59,6 +59,11 @@ public class UserService {
         return UserDto.getUser(user);
     }
 
+    public boolean verifyEmail(String email) {
+        Optional<User> optionalUser = userRepositoy.findByEmail(email);
+        return optionalUser.isPresent();
+    }
+
     public void deleteRefreshToken(String userId) {
         User user = userRepositoy.findByUserId(userId).orElse(null);
         if (user != null) {

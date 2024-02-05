@@ -11,4 +11,6 @@ public interface UserRepositoy extends JpaRepository<User, Long> {
     User findByUserSequence(Long userSequence);
     Optional<User> findByProviderAndProviderId(String provider, String providerId);
     void deleteByUserId(String userId);
+
+    Optional<User> findByEmail(String email);
 }
