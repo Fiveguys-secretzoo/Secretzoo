@@ -37,7 +37,7 @@ public class MailService {
         String title = "SecretZoo 회원가입 인증 이메일 입니다.";
         String content = "SecretZoo 서비스를 이용해 주셔서 진심으로 감사합니다." + //html 형식으로 작성 !
             "<br><br>" +
-            "인증 번호는 <strong>" + verificationCode + "</string>입니다." +
+            "인증 번호는 <strong>" + verificationCode + "</strong>입니다." +
             "<br>" +
             "유효시간은 <strong style=\"color: red\">10분</strong> 입니다."; //이메일 내용 삽입
         MimeMessage message = javaMailSender.createMimeMessage();
