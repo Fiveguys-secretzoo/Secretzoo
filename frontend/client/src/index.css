@@ -1,11 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 body>iframe {
   display: none
 }
-
+@font-face{
+  font-family:'DNFBitBitv2';
+  font-style:normal;font-weight:400;src:url('//cdn.df.nexon.com/img/common/font/DNFBitBitv2.otf')format('opentype')}
 body {
   background-image: url('./assets/img/bg.png');
   background-size: cover;
@@ -35,3 +36,18 @@ code {
 .rotate-y {
   animation: rotateY 0.5s ease-out forwards;
 }
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: lightgray; 
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: black;
+  border-radius: 6px;
+  border: 3px solid lightgray;
+}
+

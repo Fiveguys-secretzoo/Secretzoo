@@ -42,6 +42,9 @@ const Navbar = () => {
             <CustomSidebar to='/lobby/mypage' icon={HiUser}>
               내 정보
             </CustomSidebar>
+            <CustomSidebar to='/lobby/searchPlayer' icon={HiUser}>
+              플레이어 검색
+            </CustomSidebar>
           </Sidebar.ItemGroup>
         </Sidebar.Items>
       </Sidebar>
