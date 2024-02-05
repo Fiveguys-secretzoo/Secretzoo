@@ -1,6 +1,7 @@
 package com.ssafy.fiveguys.game.player.api;
 
 
+import com.ssafy.fiveguys.game.player.dto.player.PlayerDetailDto;
 import com.ssafy.fiveguys.game.player.dto.player.PlayerDto;
 import com.ssafy.fiveguys.game.player.dto.api.ApiResponse;
 import com.ssafy.fiveguys.game.player.dto.player.PlayerResult;
@@ -43,7 +44,7 @@ public class PlayerApiController {
 //            return null;
 //        }
         int totalPlayerCount = playerService.playerTotalCount();
-        PlayerDto playerDto = playerService.getPlayer(userSequence);
+        PlayerDetailDto playerDto = playerService.getPlayer(userSequence);
         return new ApiResponse<>(1, playerDto, totalPlayerCount);
     }
 

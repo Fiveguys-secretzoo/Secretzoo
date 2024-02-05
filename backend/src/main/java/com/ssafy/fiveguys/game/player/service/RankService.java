@@ -118,7 +118,7 @@ public class RankService {
                         User user = userRepositoy.findByUserSequence(
                             player.getUser().getUserSequence());
                         return new RankResponseDto(user.getUserSequence(), user.getNickname(),
-                            player.getRankingScore().getAttackScore(), player.getPlayerLevel(),
+                            player.getRankingScore().getAttackScore(), player.getPlayerLevel().getLevel(),
                             player.getExp());
                     })
                     .toList();
@@ -130,7 +130,7 @@ public class RankService {
                         User user = userRepositoy.findByUserSequence(
                             player.getUser().getUserSequence());
                         return new RankResponseDto(user.getUserSequence(), user.getNickname(),
-                            player.getRankingScore().getAttackScore(), player.getPlayerLevel(),
+                            player.getRankingScore().getAttackScore(), player.getPlayerLevel().getLevel(),
                             player.getExp());
                     })
                     .toList();
@@ -142,7 +142,7 @@ public class RankService {
                         User user = userRepositoy.findByUserSequence(
                             player.getUser().getUserSequence());
                         return new RankResponseDto(user.getUserSequence(), user.getNickname(),
-                            player.getRankingScore().getAttackScore(), player.getPlayerLevel(),
+                            player.getRankingScore().getAttackScore(), player.getPlayerLevel().getLevel(),
                             player.getExp());
                     })
                     .toList();
@@ -262,6 +262,6 @@ public class RankService {
         User user = userRepositoy.findByUserSequence(
             Long.parseLong(Objects.requireNonNull(key.getValue())));
         return new RankResponseDto(Long.parseLong(key.getValue()), user.getNickname(),
-            key.getScore(), user.getPlayer().getPlayerLevel(), user.getPlayer().getExp());
+            key.getScore(), user.getPlayer().getPlayerLevel().getLevel(), user.getPlayer().getExp());
     }
 }

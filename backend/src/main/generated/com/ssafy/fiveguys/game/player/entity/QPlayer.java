@@ -32,7 +32,7 @@ public class QPlayer extends EntityPathBase<Player> {
     //inherited
     public final DateTimePath<java.sql.Timestamp> lastModifiedDate = _super.lastModifiedDate;
 
-    public final NumberPath<Integer> playerLevel = createNumber("playerLevel", Integer.class);
+    public final QPlayerLevel playerLevel;
 
     public final ListPath<PlayerRewards, QPlayerRewards> playerRewards = this.<PlayerRewards, QPlayerRewards>createList("playerRewards", PlayerRewards.class, QPlayerRewards.class, PathInits.DIRECT2);
 
@@ -66,6 +66,7 @@ public class QPlayer extends EntityPathBase<Player> {
 
     public QPlayer(Class<? extends Player> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
+        this.playerLevel = inits.isInitialized("playerLevel") ? new QPlayerLevel(forProperty("playerLevel")) : null;
         this.rankingScore = inits.isInitialized("rankingScore") ? new com.ssafy.fiveguys.game.player.entity.embeddedType.QRankingScore(forProperty("rankingScore")) : null;
         this.user = inits.isInitialized("user") ? new com.ssafy.fiveguys.game.user.entity.QUser(forProperty("user"), inits.get("user")) : null;
     }
