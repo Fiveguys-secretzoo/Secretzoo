@@ -83,20 +83,6 @@ const Play = () => {
     return require(`../assets/img/card/0${Math.floor(i / 8)}/00${i % 8}.png`);
   }
 
-  const dragStart = (event, item) => {
-    if (playState !== 1 || !isMyTurn) {
-      event.preventDefault();
-    }
-    dispatch(changeCardStatus({ 'from': pid, 'card': item }));
-  }
-
-  const dragBluffStart = (event, item) => {
-    if (playState !== 4 || !isMyTurn) {
-      event.preventDefault();
-    }
-    dispatch(changeCardStatus({ 'from': pid, 'card': item }));
-  }
-
   // 화면 가리는 창 띄우기 , children에 띄우고 싶은 요소 정의하면 ok.
   const SelectScreen = ({ children }) => {
     const el = document.createElement('div');
@@ -114,9 +100,6 @@ const Play = () => {
     )
   }
 
-
-
-
   // player enter socket event handle
   const playerEnterHandler = (player) => {
     console.log(`##### player entered...`);
@@ -129,9 +112,7 @@ const Play = () => {
     dispatch(removePlayer(player));
   }
 
-
   // 플레이어가 속일 동물 종류를 선택 시
-
 
   // 방을 나간다. 나는 나간다.
   const leaveRoom = () => {
@@ -214,7 +195,6 @@ const Play = () => {
 
   }
 
-
   // 게임 시작 버튼을 눌렀을 때 작동하는  함수, 여러가지 socket을 on 처리 시킨다.
   const gameStart = (cards, firstPlayer) => {
     console.log("##### Game Started !");
@@ -280,7 +260,6 @@ const Play = () => {
       socket.off('gameStart', gameStart);
     };
   }, []);
-
 
   // playState 추적 
   useEffect(() => {
