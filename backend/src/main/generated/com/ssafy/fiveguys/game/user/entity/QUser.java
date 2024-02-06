@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -17,21 +18,21 @@ public class QUser extends EntityPathBase<User> {
 
     private static final long serialVersionUID = 709901858L;
 
+    private static final PathInits INITS = PathInits.DIRECT2;
+
     public static final QUser user = new QUser("user");
 
     public final com.ssafy.fiveguys.game.common.entity.QBaseTimeEntity _super = new com.ssafy.fiveguys.game.common.entity.QBaseTimeEntity(this);
 
     //inherited
-    public final DateTimePath<java.sql.Timestamp> creationDate = _super.creationDate;
+    public final DateTimePath<java.sql.Timestamp> createdDate = _super.createdDate;
 
     public final StringPath email = createString("email");
 
     //inherited
     public final DateTimePath<java.sql.Timestamp> lastModifiedDate = _super.lastModifiedDate;
 
-    public final NumberPath<Long> level = createNumber("level", Long.class);
-
-    public final StringPath mainAchievement = createString("mainAchievement");
+    public final StringPath mainReward = createString("mainReward");
 
     public final StringPath name = createString("name");
 
@@ -39,7 +40,7 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath password = createString("password");
 
-    public final NumberPath<Long> point = createNumber("point", Long.class);
+    public final com.ssafy.fiveguys.game.player.entity.QPlayer player;
 
     public final StringPath profileNumber = createString("profileNumber");
 
@@ -56,15 +57,24 @@ public class QUser extends EntityPathBase<User> {
     public final NumberPath<Long> userSequence = createNumber("userSequence", Long.class);
 
     public QUser(String variable) {
-        super(User.class, forVariable(variable));
+        this(User.class, forVariable(variable), INITS);
     }
 
     public QUser(Path<? extends User> path) {
-        super(path.getType(), path.getMetadata());
+        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
     public QUser(PathMetadata metadata) {
-        super(User.class, metadata);
+        this(metadata, PathInits.getFor(metadata, INITS));
+    }
+
+    public QUser(PathMetadata metadata, PathInits inits) {
+        this(User.class, metadata, inits);
+    }
+
+    public QUser(Class<? extends User> type, PathMetadata metadata, PathInits inits) {
+        super(type, metadata, inits);
+        this.player = inits.isInitialized("player") ? new com.ssafy.fiveguys.game.player.entity.QPlayer(forProperty("player"), inits.get("player")) : null;
     }
 
 }

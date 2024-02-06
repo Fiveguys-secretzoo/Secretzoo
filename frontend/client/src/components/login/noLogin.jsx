@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Label, TextInput } from 'flowbite-react';
+import Swal from 'sweetalert2';
 
 const NoLogin = () => {
   const [name, setName] = useState("");
@@ -13,7 +14,10 @@ const NoLogin = () => {
       sessionStorage.setItem('userName', name + "123");
       navigate("/lobby");
     } else {
-      alert('닉네임은 필수입니다.')
+      Swal.fire({
+        "text" : '닉네임은 필수입니다.',
+        "confirmButtonColor" : '#3085d6'
+      });
     }
   };
 

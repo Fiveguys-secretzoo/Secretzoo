@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { SocketContext } from "../../App";
 import { useNavigate } from "react-router-dom";
 import { Button, TextInput, Modal, Label, Card } from 'flowbite-react';
+import Swal from 'sweetalert2';
 
 const Rooms = () => {
   const navigate = useNavigate();
@@ -29,7 +30,10 @@ const Rooms = () => {
         navigate("/play");
       } else {
         setOpenModal(false);
-        alert("이미 있는 방제입니다. 다른방제를 선택해주세요");
+        Swal.fire({
+          "text" : '이미 있는 방제입니다. 다른방제를 선택해주세요',
+          "confirmButtonColor" : '#3085d6'
+        });
       }
     });
   }
@@ -38,17 +42,30 @@ const Rooms = () => {
   const enterRoom = (name) => {
     socket.emit('enterRoom', name, sessionStorage.getItem('userName'), (callback) => {
       if (callback) {
+<<<<<<< HEAD
+        Swal.fire({
+          "text" : '입장',
+          "confirmButtonColor" : '#3085d6'
+        });
+=======
         alert("입장")
         sessionStorage.setItem("roomName",name);
+>>>>>>> 9ea6a720f7e052f67f8c9cbb9bfd1b7848e5e235
         navigate("/play");
       } else {
-        alert("방이 가득찼습니다. 다른 방을 이용해주세요")
+        Swal.fire({
+          "text" : '방이 가득찼습니다. 다른 방을 이용해주세요.',
+          "confirmButtonColor" : '#3085d6'
+        });
       }
     });
   }
 
   // 필터 
   const filterPlaying = () => {
+    socket.emit('requestRoomsInfo', (roomsInfo) => {
+      setRooms(roomsInfo);
+    });
     let newRooms = {};
     Object.keys(rooms).forEach((key) => {
       if (rooms[key].status === 'playing') {
@@ -59,6 +76,9 @@ const Rooms = () => {
   }
 
   const filterWait = () => {
+    socket.emit('requestRoomsInfo', (roomsInfo) => {
+      setRooms(roomsInfo);
+    });
     let newRooms = {};
     Object.keys(rooms).forEach((key) => {
       if (rooms[key].status === 'wait') {
@@ -69,6 +89,9 @@ const Rooms = () => {
   }
 
   const filterFull = () => {
+    socket.emit('requestRoomsInfo', (roomsInfo) => {
+      setRooms(roomsInfo);
+    });
     let newRooms = {};
     Object.keys(rooms).forEach((key) => {
       if (rooms[key].playerCount === 6) {
@@ -81,9 +104,12 @@ const Rooms = () => {
   // 검색
   const [searchRoomName, setSearchRoomName] = useState();
   const searchRoom = () => {
+    socket.emit('requestRoomsInfo', (roomsInfo) => {
+      setRooms(roomsInfo);
+    });
     let newRooms = {};
     Object.keys(rooms).forEach((key) => {
-      if (rooms[key].roomName.indexOf() > 0) {
+      if (rooms[key].roomName.indexOf(searchRoomName) > -1) {
         newRooms[key] = rooms[key];
       }
     })
@@ -111,21 +137,21 @@ const Rooms = () => {
               value={searchRoomName}
               onChange={(e) => setSearchRoomName(e.target.value)} />
             <Button color="gray"
-              type="submit" onClick={searchRoom}>검색</Button>
+              type="submit" onClick={() => searchRoom()}>검색</Button>
           </form>
         </div>
         <div className="flex space-x-2 justify-end ">
           <Button color="gray"
             onClick={() => setOpenModal(true)}>방만들기</Button>
         </div>
-        <div className="flex flex-wrap  my-2 border-2 overflow-y-auto h-max-[30em] justify-start">
+        <div className="flex flex-wrap  my-2 border-2 overflow-y-auto h-[30em] w-[40em] content-start">
           {Object.keys(rooms).map((key) => (
-            <Card href="#" className="w-[47%] m-2"
+            <Card href="#" className="w-[47%] h-[30%] m-2"
               onClick={(e) => { e.preventDefault(); enterRoom(rooms[key].roomName) }}>
               <p>{rooms[key].roomName}</p>
               {/* <p>{rooms[key].players[0].playerName}</p> */}
               <p>{rooms[key].playerCount}/6</p>
-              <p>{rooms[key].status}대기중</p>
+              <p>{rooms[key].status}</p>
             </Card >
           ))}
         </div>

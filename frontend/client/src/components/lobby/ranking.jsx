@@ -9,7 +9,7 @@ const Ranking = () => {
   // 공격랭킹 가져오기
   const getAttack = () => {
     changeTab();
-    axios.get('https://secretzoo.site/api/rank/attack').then((Response) => {
+    axios.get('https://spring.secretzoo.site/api/rank/attack').then((Response) => {
       setRanking(Response.data.data);
     });
   }
@@ -17,7 +17,7 @@ const Ranking = () => {
   // 수비랭킹 가져오기
   const getDefense = () => {
     changeTab();
-    axios.get('https://secretzoo.site/api/rank/defense').then((Response) => {
+    axios.get('https://spring.secretzoo.site/api/rank/defense').then((Response) => {
       setRanking(Response.data.data);
     });
   }
@@ -25,7 +25,7 @@ const Ranking = () => {
   // 패스랭킹 가져오기
   const getPass = () => {
     changeTab();
-    axios.get('https://secretzoo.site/api/rank/pass').then((Response) => {
+    axios.get('https://spring.secretzoo.site/api/rank/pass').then((Response) => {
       setRanking(Response.data.data);
     });
   }
@@ -51,8 +51,8 @@ const Ranking = () => {
 
   return (
     <>
-      <div>
-        <nav className='p-4 text-center rounded shadow-md'>
+      <div className="">
+        <nav className="p-4 text-center rounded shadow-md">
           <h2>랭킹보기</h2>
           <div className="flex space-x-2 justify-center">
             <button className='px-6 mt-4 rounded-md hover:bg-gray-200'

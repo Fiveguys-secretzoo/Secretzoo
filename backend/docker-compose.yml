@@ -6,23 +6,29 @@ services:
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --default-authentication-plugin=mysql_native_password
     container_name: mysql
     environment:
-      MYSQL_ROOT_PASSWORD: ssafy
+      MYSQL_ROOT_PASSWORD: zoo1qsecret2wguys3efive4r!
       MYSQL_DATABASE: secretzoo
       MYSQL_ROOT_HOST: '%'
       MYSQL_USER: fiveguys
       MYSQL_PASSWORD: zoo1qsecret2wguys3efive4r!
       TZ: 'Asia/Seoul'
     ports:
-      - "3307:3306"
+      - "3306:3306"
+    volumes:
+      - "/home/ubuntu/db/mysql_vol:/var/lib/mysql"
+    
     networks:
       - docker_nat
 
-  redis:
+  redis1:
     image: redis:latest
-    container_name: redis
-    hostname: redis
-    ports:
-      - 6379:6379
+    container_name: redis1
+    hostname: redis1
+    volumes:
+      - /home/ubuntu/db/redis1_vol:/data
+      - /home/ubuntu/db/redis1_vol/redis1.conf:/etc/redis/redis.conf
+    # ports:
+    #   - 6379:6379
     extra_hosts:
       - host.docker.internal:host-gateway
     networks:
@@ -32,8 +38,11 @@ services:
     image: redis:latest
     container_name: redis2
     hostname: redis2
-    ports:
-      - 6380:6379
+    volumes:
+      - /home/ubuntu/db/redis2_vol:/data
+      - /home/ubuntu/db/redis2_vol/redis2.conf:/etc/redis/redis.conf
+    # ports:
+    #   - 6380:6379
     extra_hosts:
       - host.docker.internal:host-gateway
     networks:
@@ -45,21 +54,21 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-     - 8080:8080
+    # ports:
+    #  - 8080:8080
     networks:
       - docker_nat
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3307/secretzoo?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&useLegacyDatetimeCode=false
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/secretzoo?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&useLegacyDatetimeCode=false
       SPRING_DATASOURCE_USERNAME: "root"
-      SPRING_DATASOURCE_PASSWORD: "ssafy"
-      SPRING_REDIS_HOST: redis
+      SPRING_DATASOURCE_PASSWORD: "zoo1qsecret2wguys3efive4r!"
+      SPRING_REDIS_HOST: redis1
       SPRING_REDIS_PORT: 6379
       SPRING_REDIS_HOST2: redis2
-      SPRING_REDIS_PORT2: 6380
+      SPRING_REDIS_PORT2: 6379
     depends_on:
       - mysql
-      - redis
+      - redis1
       - redis2
 networks:
   docker_nat:
