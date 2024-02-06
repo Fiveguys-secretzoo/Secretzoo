@@ -33,6 +33,8 @@ import DropSelectMyTurn from '../components/play/dropSelectMyTurn';
 import DropSelectNotTurn from '../components/play/dropSelectNotTurn';
 import AnswerSelectMyTurn from '../components/play/answerSelectMyTurn';
 import AnswerSelectNotTurn from '../components/play/answerSelectMyTurn copy';
+import PassTurnCardView from '../components/play/passTurnCardView';
+import AnswerRevealView from '../components/play/answerRevealView';
 
 
 
@@ -224,10 +226,7 @@ const Play = () => {
   }
   // 게임 종료 시 사용
   // playState 1 으로 정의 
-  const thisTurnEnd = () => {
-    socket.emit('')
-    dispatch(changePlayState(1));
-  }
+
 
   // game Info 변경 시 사용
   const gameInfoHandler = (game) => {
@@ -405,17 +404,18 @@ const Play = () => {
               </AnswerSelectNotTurn>
             </SelectScreen>
           }
-          {/* 넘기기 턴 (내턴, 카드)*/}
+          { //TODO 뒷면 동물 카드로 대체 필요
+            /* 넘기기 턴 (내턴, 카드)*/}
           {
             playState === 4 && isMyTurn &&
             <SelectScreen>
-              <div
-                onDragStart={(event) => dragBluffStart(event, 64 + bCard)}
-                draggable={isMyTurn}
-                className="w-[8em] h-[13em] ml-[-4em] hover:scale(1.3) hover:-translate-y-20 hover:rotate-[20deg] hover:z-50 transition-transform duration-300 "
-              >
-                <img src={imageRoute(64)} alt="" />
-              </div>
+              <PassTurnCardView
+                bCard={bCard}
+                isMyTurn={isMyTurn}
+                img={images[64]}
+                pid={pid}
+                playState={playState}
+              ></PassTurnCardView>
             </SelectScreen>
           }
 
@@ -425,38 +425,28 @@ const Play = () => {
             playState === 4 && !isMyTurn &&
 
             <SelectScreen>
-              <div
-                onDragStart={(event) => dragBluffStart(event, 64 + bCard)}
-                draggable={isMyTurn}
-                className="w-[8em] h-[13em] ml-[-4em] hover:scale(1.3) hover:-translate-y-20 hover:rotate-[20deg] hover:z-50 transition-transform duration-300 "
-              >
-                <img src={imageRoute(64)} alt="" />
-              </div>
+              <PassTurnCardView
+                bCard={bCard}
+                isMyTurn={isMyTurn}
+                img={images[64]}
+                pid={pid}
+                playState={playState}
+              ></PassTurnCardView>
             </SelectScreen>
           }
           {/* 게임결과 */}
           {
             playState === 5 &&
             <SelectScreen>
-              <div className="overlay">
-                <div hidden={!gameResult}>
-                  <h3>플레이어가 정답을 맞췄습니다.</h3>
-                </div>
-                <div hidden={gameResult}>
-                  <h3>플레이어가 정답을 틀렸습니다.</h3>
-                </div>
-                <Button onClick={() => { thisTurnEnd() }}></Button>
-              </div>
+              <AnswerRevealView gameResult={gameResult}>
+              </AnswerRevealView>
             </SelectScreen>
           }
           {/* 게임결과 */}
           {
             playState === 6 &&
             <SelectScreen>
-              <div className="overlay">
-                <h1>이것은 일단 통계회면이라고 할 수 있는데 통계 화면이 아닌걸로 할 수 있어요 무슨 소리냐구요? 나도 잘 몰라요</h1><br />
-                <Button onClick={() => { dispatch(changePlayState(0)); }}></Button>
-              </div>
+              <gameResultView></gameResultView>
             </SelectScreen>
           }
           {/* 플레이어 표현 부분 */}

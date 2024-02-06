@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Button } from 'flowbite-react';
 import { changePlayState } from '../../store/playSlice'
 import { SocketContext } from '../App';

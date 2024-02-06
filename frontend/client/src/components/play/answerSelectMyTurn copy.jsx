@@ -1,8 +1,4 @@
-import { useContext } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Spinner } from 'flowbite-react';
-import { changePlayState } from '../../store/playSlice'
-import { SocketContext } from '../App';
 
 const AnswerSelectNotTurn = (p1, p2, animal) => {
 
