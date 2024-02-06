@@ -103,11 +103,13 @@ const playSocketMethods = () => {
       console.log("##### card Dragged and Dropped")
       // io.to(rooms[socket.room].players[k].socketId).emit('cardDrop', from, to);
       let room;
+      let pid;
       let roomsKeys = Object.keys(rooms);
       for (let roomName of roomsKeys) {
         for (let player of rooms[roomName].players) {
           if (player.socketId === socket.id) {
             room = roomName;
+            pid = player.playerId;
             break;
           }
         }
@@ -115,8 +117,15 @@ const playSocketMethods = () => {
       console.log(room);
       console.log(rooms);
       if (card < 64) {
+        for (let k = 0; k < rooms[roomName].players.length; k++) {
+          if (rooms[roomName].players[k].playerId === pid) {
+            room[roomName].players[k].hand
+              = room[roomName].players[k].hand.filter((e) => e !== card);
+          }
+        }
         rooms[room].onBoard.card = card;
       }
+
       rooms[room].onBoard.status = 1;
       rooms[room].onBoard.from = from;
       rooms[room].onBoard.to = to;

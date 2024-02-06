@@ -108,6 +108,8 @@ export const playSlice = createSlice({
       console.log(`[cardDrop] changed / from : [${action.payload.from}] to : [${action.payload.to}]`)
       state.onBoard.from = action.payload.from;
       state.onBoard.to = action.payload.to;
+
+
     },
 
     changeCardBluff: (state, action) => {
@@ -139,7 +141,12 @@ export const playSlice = createSlice({
         }
       }
       state.players[playerIdx].penalty[action.payload.penalty]++;
-    }
+    },
+
+    dropCard: (state, action) => {
+      let filtered = state.players[action.payload.pid].card.filter((e) => e !== action.payload.card);
+      state.players[action.payload.pid].card = filtered;
+    },
 
 
 
@@ -164,6 +171,7 @@ export const {
   changeInitOnBoardCard,
   initTurnedPlayer,
   addTurnedPlayer,
+  dropCard,
 
 } = playSlice.actions;
 export default playSlice.reducer;

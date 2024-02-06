@@ -22,9 +22,12 @@ import {
   changeInitOnBoardCard,
   initTurnedPlayer,
   addTurnedPlayer,
+  dropCard,
 } from '../store/playSlice'
 
 import PlayerView from '../components/play/playerView'
+import CardView from '../components/play/cardView'
+
 const Play = () => {
   const socket = useContext(SocketContext);
   const dragItem = useRef();
@@ -518,19 +521,19 @@ const Play = () => {
             {/* 카드 표현 부분 */}
             {cards &&
               cards.map((i, index) => (
-                <div
-                  onDragStart={(e) => dragStart(e, i)}
+                <CardView
                   key={index}
-                  // draggable={((playState === 1 || playState === 4) && isMyTurn)}
-                  draggable
-
-                  className="w-[8em] h-[13em] ml-[-4em] hover:scale(1.3) hover:-translate-y-20 hover:rotate-[20deg] hover:z-50 transition-transform duration-300"
-                  style={{ zIndex: cards.length - index, userSelect: false, }}
-                >
-                  {/* <img key={index} className="" src={require(`../assets/img/card/0${Math.floor(i / 8)}/00${i % 8}.png`)} alt="" /> */}
-                  <img key={index} className="rounded-md" src={images[i]} alt="" />
-                </div>
-              ))}
+                  src={images[i]}
+                  index={index}
+                  card={i}
+                  cardlength={cards.length}
+                  isMyTurn={isMyTurn}
+                  playState={playState}
+                  pid={pid} >
+                </CardView>
+                , {}
+              ))
+            }
 
 
             <h1>Chat Application</h1>

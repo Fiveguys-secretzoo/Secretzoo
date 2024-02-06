@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { SocketContext } from '../../App';
 import { useDispatch, useSelector } from 'react-redux';
-import { changePlayState, changeCardDrop, changeCardDrag } from '../../store/playSlice'
+import { changePlayState, changeCardDrop, changeCardDrag, dropCard } from '../../store/playSlice'
 
 const PlayerContainer = () => {
   const socket = useContext(SocketContext);
@@ -36,6 +36,7 @@ const PlayerContainer = () => {
       dispatch(changeCardDrop({ from: dragFrom, to: pid }));
       console.log(`[dropHandler] [${dragItem}] drop [${dragTo}], pid : [${pid}]`);
       alert(dragItem + " drop " + e.target.textContent);
+      dropCard({ 'pid': pid, 'card': dragItem })
       socket.emit("cardDrop", dragFrom, pid, dragItem);
       dispatch(changePlayState(2));
     }

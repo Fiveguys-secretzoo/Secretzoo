@@ -35,63 +35,61 @@ const App = () => {
         const OV = new OpenVidu();
 
         const mySession = OV.initSession();
-        
+
         mySession.on('streamCreated', (event) => {
             const subscriber = mySession.subscribe(event.stream, undefined);
             setSubscribers((prevSubscribers) => [...prevSubscribers, subscriber]);
         });
-        
+
         mySession.on('streamDestroyed', (event) => {
             deleteSubscriber(event.stream.streamManager);
         });
-        
+
         mySession.on('exception', (exception) => {
             console.warn(exception);
         });
-        
+
         try {
             const token = await getToken(sessionStorage.getItem('roomName'));
             setMyUserName(sessionStorage.getItem('userName'));
-            
+
             mySession.connect(token, { clientData: myUserName })
-            .then(async () => {
-                let newPublisher = await OV.initPublisherAsync(undefined, {
-                    audioSource: undefined,
-                    videoSource: undefined,
-                    publishAudio: true,
-                    publishVideo: true,
-                    resolution: '640x480',
-                    frameRate: 30,
-                    insertMode: 'APPEND',
-                    mirror: false,
+                .then(async () => {
+                    let newPublisher = await OV.initPublisherAsync(undefined, {
+                        audioSource: undefined,
+                        videoSource: undefined,
+                        publishAudio: true,
+                        publishVideo: true,
+                        resolution: '640x480',
+                        frameRate: 30,
+                        insertMode: 'APPEND',
+                        mirror: false,
+                    });
+
+                    await mySession.publish(newPublisher);
+
+                    setPublisher(newPublisher);
+                })
+                .catch((error) => {
+                    console.log('There was an error connecting to the session:', error.code, error.message);
                 });
-                
-                await mySession.publish(newPublisher);
-                
-                setPublisher(newPublisher);
-            })
-            .catch((error) => {
-                console.log('There was an error connecting to the session:', error.code, error.message);
-            });
         } catch (error) {
             console.error(error);
         }
         session.current = mySession;
         console.log(session);
     };
-    
+
     const leaveSession = () => {
         const mySession = session.current;
         sessionStorage.removeItem('roomName');
         if (mySession) {
             mySession.disconnect();
         }
-        
-        session.current=undefined;
+
+        session.current = undefined;
         setSubscribers([]);
-        setMySessionId('');
         setMyUserName(sessionStorage.getItem('userName'));
-        setMainStreamManager(undefined);
         setPublisher(undefined);
     };
 
@@ -122,7 +120,7 @@ const App = () => {
                     <div className="stream-container col-md-6 col-xs-6">
                         <UserVideoComponent streamManager={publisher} />
                     </div>
-                    
+
                 ) : null}
             </div>
             <div className="video-container">
