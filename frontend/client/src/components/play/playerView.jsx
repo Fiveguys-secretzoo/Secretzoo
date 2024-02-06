@@ -1,6 +1,7 @@
 import { Card } from 'flowbite-react'
 import PlayerContainer from './playerContainer';
-
+import App from "./openvidu/App.js";
+import React, { useEffect } from 'react'; 
 
 const PlayerView = ({ pid, key, pn = "SomethingWrong", activate = false }) => {
 
@@ -20,6 +21,9 @@ const PlayerView = ({ pid, key, pn = "SomethingWrong", activate = false }) => {
         <p className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
           {pid}
         </p>
+        {(pid === sessionStorage.getItem('userName'))&&
+        <App pid={pid}/>
+         } 
       </div>
     </>
   );
