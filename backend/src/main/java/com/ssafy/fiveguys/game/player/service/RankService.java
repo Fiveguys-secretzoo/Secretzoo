@@ -195,20 +195,13 @@ public class RankService {
     private RankSimpleDto getRankSimpleDto(String rankKey, int userRank, Player player) {
         if(userRank == -1) throw new UserException();
         //redis 자료의 인덱스가 0부터 시작하므로 1을 더해 실제 랭킹을 표시
-        double score;
-        switch (rankKey) {
-            case attackRankKey :
-                score = player.getRankingScore().getAttackScore();
-            case defenseRankKey :
-                score = player.getRankingScore().getDefenseScore();
-            case passRankKey :
-                score = player.getRankingScore().getPassScore();
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + rankKey);
-        }
-
-        return new RankSimpleDto(userRank + 1, score);
+        double score = switch (rankKey) {
+            case attackRankKey -> player.getRankingScore().getAttackScore();
+            case defenseRankKey -> player.getRankingScore().getDefenseScore();
+            case passRankKey -> player.getRankingScore().getPassScore();
+            default -> 0;
+        };
+        return new RankSimpleDto(userRank, score);
     }
 
     /**
