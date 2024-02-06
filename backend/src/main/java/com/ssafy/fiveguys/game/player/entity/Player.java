@@ -55,7 +55,7 @@ public class Player extends BaseTimeEntity {
     @Column(name = "exp")
     private long exp;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "player_level")
     private PlayerLevel playerLevel;
 
