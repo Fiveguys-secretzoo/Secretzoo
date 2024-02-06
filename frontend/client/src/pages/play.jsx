@@ -2,9 +2,9 @@ import React, { useState, useEffect, useContext, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import { SocketContext } from '../App';
 import { useNavigate } from "react-router-dom";
-import '../style/play.css';
 import { motion, useDragControls } from 'framer-motion';
 import { Spinner, Button } from 'flowbite-react';
+
 import { useSelector, useDispatch } from 'react-redux';
 import {
   initRoomInfo,
@@ -27,6 +27,14 @@ import {
 
 import PlayerView from '../components/play/playerView'
 import CardView from '../components/play/cardView'
+
+import '../style/play.css';
+import DropSelectMyTurn from '../components/play/dropSelectMyTurn';
+import DropSelectNotTurn from '../components/play/dropSelectNotTurn';
+import AnswerSelectMyTurn from '../components/play/answerSelectMyTurn';
+import AnswerSelectNotTurn from '../components/play/answerSelectMyTurn copy';
+
+
 
 const Play = () => {
   const socket = useContext(SocketContext);
@@ -52,16 +60,11 @@ const Play = () => {
   const [input, setInput] = useState('');
   const [isMyTurn, setIsMyTurn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [thisTurnPlayer, setThisTurnPlayer] = useState('');
-  const [cardDrag, setCardDrag] = useState({ 'from': -1, 'to': -1, 'card': -1 });
-  const [cardDrop, setCardDrop] = useState({ 'from': -1, 'to': -1, 'card': -1 });
-  const [playersId, setPlayersId] = useState(['', '', '', '', '', '']);
   const [cards, setCards] = useState([0, 1, 2, 3]); // 손에 들고 있는 카드 관리
   const [isRight, setIsRight] = useState(false);
   const [gameResult, setGameResult] = useState(false);
   // 0 대기 1 시작 2 카드 드롭 후 동물 선택 3 동물 선택 후 방어 턴 4 넘기는 턴 드래그 5 넘기는 턴 동물 선택 6 결과 확인
   const [images, setImages] = useState([]);
-
 
   const animalList = [
     '호랑이',
@@ -126,38 +129,7 @@ const Play = () => {
 
 
   // 플레이어가 속일 동물 종류를 선택 시
-  const cardBluffHandler = (value) => {
-    dispatch(changePlayState(3));
-    console.log(`[cardBluff] value [${value}]`)
-    socket.emit("cardBluffSelect", value);
-  };
 
-  // 공격당한 플레이어의 선택지 발생 시 
-  const handleAnswer = (val, pid) => {
-    console.log(`Answer : ${val}`);
-    if (val === 1) {
-      cardPassHandler();
-      dispatch(changePlayState(4));
-    } else {
-      cardAnswerHandler(val);
-      dispatch(changePlayState(5));
-    }
-  }
-
-  // 카드 패스 선택시
-  const cardPassHandler = () => {
-    console.log(`card Passed!`);
-    socket.emit('cardPass', roomName, (result) => {
-      console.log(`[cardPass] ${result}`)
-      setIsMyTurn(true);
-    });
-  }
-
-  // 카드 정답 맞추기
-  const cardAnswerHandler = (answer) => {
-    console.log(`card Answered!`);
-    socket.emit('cardReveal', roomName, answer);
-  }
 
   // 방을 나간다. 나는 나간다.
   const leaveRoom = () => {
@@ -334,7 +306,6 @@ const Play = () => {
     if (nowTurn === pid) {
       setIsMyTurn(true);
     }
-    setThisTurnPlayer(roomInfo.nowTurn);
     if (adminPlayer === pid) {
       setIsAdmin(true);
     }
@@ -394,64 +365,44 @@ const Play = () => {
         <div className='w-screen h-[60%] flex flex-wrap justify-between'>
           {/* 내 턴 아닐 때 드래그 공유 */}
 
-
           {/* 내 턴일 때 드롭 시 버튼 */}
           {
             playState === 2 && isMyTurn &&
+
             <SelectScreen>
-              <div className="overlay">{
-                animalList.map((value, index) => (
-
-                  <Button
-                    className=""
-                    key={index}
-                    onClick={() => { cardBluffHandler(index) }}
-                  >
-                    {value}
-                  </Button>
-
-                ))
-              }
-              </div>
+              <DropSelectMyTurn
+                animalList={animalList}
+              >
+              </DropSelectMyTurn>
             </SelectScreen>
           }
           {/* 내 턴이 아닐 때 관전 */}
           {
             playState === 2 && !isMyTurn &&
             <SelectScreen>
-              <div className="overlay">
-                <h2>다른 플레이어가 선택 중 입니다...!</h2>
-                <Spinner aria-label="Success spinner" size="xl" />
-              </div>
+              <DropSelectNotTurn></DropSelectNotTurn>
             </SelectScreen>
           }
           {/* 방어 시도 ...! */}
           {
             playState === 3 && isMyTurn &&
             <SelectScreen>
-              <div className="overlay">
-                <Button onClick={() => handleAnswer(0)}>
-                  맞다
-                </Button>
-                <Button onClick={() => handleAnswer(1)}>
-                  패스
-                </Button>
-                <Button onClick={() => handleAnswer(2)} >
-                  아니다
-                </Button>
-              </div>
+              <AnswerSelectMyTurn
+                roomName={roomName}
+                setIsMyTurn={setIsMyTurn}
+              ></AnswerSelectMyTurn>
             </SelectScreen>
           }
           {/* 방어 시도 관전 */}
           {
             playState === 3 && !isMyTurn &&
             <SelectScreen>
-              <div className="overlay">
-
-                <h3>A 플레이어가 B 플레이어에게 말했습니다.</h3>
-                <h2>이거 <strong> {animalList[bCard]} </strong> 야.</h2>
-                <Spinner aria-label="Success spinner" size="xl" />
-              </div>
+              <AnswerSelectNotTurn
+                p1="playerFrom"
+                p2="playerTo"
+                animal={animalList[bCard]}
+              >
+              </AnswerSelectNotTurn>
             </SelectScreen>
           }
           {/* 넘기기 턴 (내턴, 카드)*/}
@@ -465,7 +416,6 @@ const Play = () => {
               >
                 <img src={imageRoute(64)} alt="" />
               </div>
-
             </SelectScreen>
           }
 
@@ -482,7 +432,6 @@ const Play = () => {
               >
                 <img src={imageRoute(64)} alt="" />
               </div>
-
             </SelectScreen>
           }
           {/* 게임결과 */}
