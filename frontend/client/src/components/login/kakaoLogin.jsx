@@ -3,7 +3,7 @@ import axios from 'axios';
 import kakaoLoginImg from '../../assets/img/login/kakaoLoginImg.png';
 
 const requsetKakaoLogin = () => {
-  window.location.href = 'https://spring.secretzoo.site/api/oauth2/authorization/kakao';
+  window.location.href = 'https://spring.secretzoo.site/oauth2/authorization/kakao';
 }
 
 const KakaoLogin = () => {
