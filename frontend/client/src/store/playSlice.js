@@ -122,12 +122,23 @@ export const playSlice = createSlice({
       state.onBoard.card = -1;
     },
 
-    initAvailablePlayer: (state, action) => {
-      state.onBoard.availablePlayer = [];
+    initTurnedPlayer: (state, action) => {
+      state.onBoard.turnedPlayer = [];
     },
 
-    addAvailablePlayer: (state, action) => {
-      state.onBoard.availablePlayer = [...state.onBoard.availablePlayer, action.payload]
+    addTurnedPlayer: (state, action) => {
+      state.onBoard.turnedPlayer = [...state.onBoard.turnedPlayer, action.payload]
+    },
+
+    addPenalty: (state, action) => {
+      let playerIdx;
+      for (let k = 0; k < state.players.length; k++) {
+        if (state.players[k].playerId === action.payload.pid) {
+          playerIdx = k;
+          break;
+        }
+      }
+      state.players[playerIdx].penalty[action.payload.penalty]++;
     }
 
 
@@ -151,8 +162,8 @@ export const {
   changeCardDrop,
   changeCardBluff,
   changeInitOnBoardCard,
-  initAvailablePlayer,
-  addAvailablePlayer,
+  initTurnedPlayer,
+  addTurnedPlayer,
 
 } = playSlice.actions;
 export default playSlice.reducer;

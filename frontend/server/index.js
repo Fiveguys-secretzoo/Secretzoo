@@ -38,6 +38,7 @@ async function main() {
     cardReveal,
     passingTurnStart,
     passingTurnSelect,
+    checkLoser,
   } = playMethods;
 
 
@@ -90,6 +91,7 @@ async function main() {
     cardBluffSelect(socket, io, rooms);
     passingTurnStart(socket, io, rooms);
     cardReveal(socket, io, rooms);
+    checkLoser(socket, io, rooms);
 
     // test codes
     testRoomsInfo(socket, io, rooms);

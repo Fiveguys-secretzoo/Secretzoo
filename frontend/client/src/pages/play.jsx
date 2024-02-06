@@ -20,8 +20,8 @@ import {
   changeCardDrop,
   changeCardBluff,
   changeInitOnBoardCard,
-  initAvailablePlayer,
-  addAvailablePlayer,
+  initTurnedPlayer,
+  addTurnedPlayer,
 } from '../store/playSlice'
 
 import PlayerView from '../components/play/playerView'
@@ -54,21 +54,22 @@ const Play = () => {
   const [cardDrop, setCardDrop] = useState({ 'from': -1, 'to': -1, 'card': -1 });
   const [playersId, setPlayersId] = useState(['', '', '', '', '', '']);
   const [cards, setCards] = useState([0, 1, 2, 3]); // 손에 들고 있는 카드 관리
+  const [isRight, setIsRight] = useState(false);
   const [gameResult, setGameResult] = useState(false);
   // 0 대기 1 시작 2 카드 드롭 후 동물 선택 3 동물 선택 후 방어 턴 4 넘기는 턴 드래그 5 넘기는 턴 동물 선택 6 결과 확인
   const [images, setImages] = useState([]);
 
 
-  const animalList = {
-    '호랑이': 0,
-    '고양이': 1,
-    '강아지': 2,
-    '고라니': 3,
-    '돼지': 4,
-    '여우': 5,
-    '양': 6,
-    '고래': 7,
-  }
+  const animalList = [
+    '호랑이',
+    '고양이',
+    '강아지',
+    '고라니',
+    '돼지',
+    '여우',
+    '양',
+    '고래',
+  ];
 
   const imageRoute = (i) => {
     return require(`../assets/img/card/0${Math.floor(i / 8)}/00${i % 8}.png`);
@@ -152,9 +153,7 @@ const Play = () => {
   // 카드 정답 맞추기
   const cardAnswerHandler = (answer) => {
     console.log(`card Answered!`);
-    socket.emit('cardReveal', roomName, (answer) => {
-      dispatch(changeCardStatus({}))
-    }) // 0 is trust, 2 is distrust
+    socket.emit('cardReveal', roomName, answer);
   }
 
   // 방을 나간다. 나는 나간다.
@@ -214,15 +213,21 @@ const Play = () => {
     console.log(`[cardPass] draggable [${(playState === 4 && isMyTurn)}]`)
   }
 
-  const cardRevealResponseHandler = (result) => {
+  const cardRevealResponseHandler = (result, nowTurnPlayer) => {
     setGameResult(result);
     dispatch(changePlayState(5));
+    dispatch(changeNowTurn(nowTurnPlayer))
+    if (nowTurnPlayer === pid) {
+      setIsMyTurn(true);
+    } else {
+      setIsMyTurn(false);
+    }
     console.log(`card Answer Response!`);
   }
 
 
   // socket.io 페널티 추가 handler
-  const penaltyAddResponseHandler = () => {
+  const penaltyAddResponseHandler = (pid, penalty) => {
 
     // 패널티 점수 체크
   }
@@ -233,26 +238,17 @@ const Play = () => {
   }
 
 
-  // 게임 시작 버튼을 눌렀을 때 작동하는 함수, 여러가지 socket을 on 처리 시킨다.
+  // 게임 시작 버튼을 눌렀을 때 작동하는  함수, 여러가지 socket을 on 처리 시킨다.
   const gameStart = (cards, firstPlayer) => {
-
     console.log("##### Game Started !");
     setCards(cards);
     dispatch(changePlayState(1));
     console.log("##### Card Set");
     console.log(cards);
     console.log(images);
-
-    socket.on("cardDrag", cardDragResponseHandler);
-    socket.on("cardDrop", cardDropResponseHandler);
-    socket.on("cardBluffSelect", cardBluffResponseHandler);
-    socket.on("cardPass", cardPassResponseHandler);
-    socket.on("cardReveal", cardRevealResponseHandler);
-    socket.on("penaltyAdd", penaltyAddResponseHandler);
-    socket.on("gameEnd", gameEndResponseHandler);
   }
   // 게임 종료 시 사용
-  // playState 0 으로 정의 
+  // playState 1 으로 정의 
   const thisTurnEnd = () => {
     socket.emit('')
     dispatch(changePlayState(1));
@@ -295,6 +291,15 @@ const Play = () => {
     //   console.log(rooms);
     // })
 
+
+    socket.on("cardDrag", cardDragResponseHandler);
+    socket.on("cardDrop", cardDropResponseHandler);
+    socket.on("cardBluffSelect", cardBluffResponseHandler);
+    socket.on("cardPass", cardPassResponseHandler);
+    socket.on("cardReveal", cardRevealResponseHandler);
+    socket.on("penaltyAdd", penaltyAddResponseHandler);
+    socket.on("gameEnd", gameEndResponseHandler);
+
     return () => {
       socket.off('gameInfo', gameInfoHandler);
       socket.off('chatMessage', messageHandler);
@@ -305,12 +310,19 @@ const Play = () => {
 
   // playState 추적 
   useEffect(() => {
-    console.log(`playState : ${playState}`);
+    console.log(`check playState : ${playState}`);
     if (playState === 1) {
-      socket.emit("isGameEnd", roomName, (loserPid) => {
+      socket.emit("isTurnEnd", roomName, (loserPid) => {
+        if (loserPid !== false) {
 
+          alert(`Loser is ${loserPid}`);
+          dispatch(initTurnedPlayer());
+          dispatch(changePlayState(6));
+        }
       })
+      dispatch(addTurnedPlayer(fromP));
     }
+
   }, [playState]);
 
 
@@ -384,18 +396,19 @@ const Play = () => {
           {
             playState === 2 && isMyTurn &&
             <SelectScreen>
-              <div className="overlay">
-                {Object.entries(animalList).map(([key, value]) =>
-                (
+              <div className="overlay">{
+                animalList.map((value, index) => (
+
                   <Button
                     className=""
-                    key={value}
-                    onClick={() => { cardBluffHandler(value) }}
+                    key={index}
+                    onClick={() => { cardBluffHandler(index) }}
                   >
-                    {key}
+                    {value}
                   </Button>
-                )
-                )}
+
+                ))
+              }
               </div>
             </SelectScreen>
           }
@@ -433,7 +446,7 @@ const Play = () => {
               <div className="overlay">
 
                 <h3>A 플레이어가 B 플레이어에게 말했습니다.</h3>
-                <h2>이거 <strong>알락꼬리마도요</strong>야.</h2>
+                <h2>이거 <strong> {animalList[bCard]} </strong> 야.</h2>
                 <Spinner aria-label="Success spinner" size="xl" />
               </div>
             </SelectScreen>
@@ -481,6 +494,16 @@ const Play = () => {
                   <h3>플레이어가 정답을 틀렸습니다.</h3>
                 </div>
                 <Button onClick={() => { thisTurnEnd() }}></Button>
+              </div>
+            </SelectScreen>
+          }
+          {/* 게임결과 */}
+          {
+            playState === 6 &&
+            <SelectScreen>
+              <div className="overlay">
+                <h1>이것은 일단 통계회면이라고 할 수 있는데 통계 화면이 아닌걸로 할 수 있어요 무슨 소리냐구요? 나도 잘 몰라요</h1><br />
+                <Button onClick={() => { dispatch(changePlayState(0)); }}></Button>
               </div>
             </SelectScreen>
           }
