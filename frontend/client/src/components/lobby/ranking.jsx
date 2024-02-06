@@ -7,7 +7,6 @@ const Ranking = () => {
   const [ranking, setRanking] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [myRank, setMyRank] = useState(null);
-  const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user.userInfo);
 
