@@ -16,53 +16,53 @@ const SignupForm = () => {
     return regex.test(password);
   };
   const requsetLogin = () => {
-    // if (!idCheck) {
-    //   Swal.fire({
-    //     "text" : 'id 중복체크하세요.',
-    //     "confirmButtonColor" : '#3085d6'
-    //   });
-    //   return;
-    // }
-    // if(!validatePassword(pass)){
-    //   Swal.fire({
-    //     "text" : '비밀번호가 너무 약합니다',
-    //     "confirmButtonColor" : '#3085d6'
-    //   });
-    //   return;
-    // }
-    // if (pass != passCheck) {
-    //   Swal.fire({
-    //     "text" : '비밀번호가 잃치하지 않습니다.',
-    //     "confirmButtonColor" : '#3085d6'
-    //   });
-    //   return;
-    // }
-    // if(name.length <= 0){
-    //   Swal.fire({
-    //     "text" : '이름을 입력해주세요',
-    //     "confirmButtonColor" : '#3085d6'
-    //   });
-    //   return;
-    // }
-    // if (!emailCheckSate) {
-    //   Swal.fire({
-    //     "text" : '아직 이메일 인증이 되지 않았습니다.',
-    //     "confirmButtonColor" : '#3085d6'
-    //   });
-    //   return;
-    // }
-    // axios.post('https://spring.secretzoo.site/auth/signup',
-    //   {
-    //     "userId": id,
-    //     "password": pass,
-    //     "name": name,
-    //     "email": email,
-    //     "nickname": "임시닉네임",
-    //   }
-    // ).then((Response) => {
-    //   console.log(Response.data);
-    // })
-    navigate('/')
+    if (!idCheck) {
+      Swal.fire({
+        "text" : 'id 중복체크하세요.',
+        "confirmButtonColor" : '#3085d6'
+      });
+      return;
+    }
+    if(!validatePassword(pass)){
+      Swal.fire({
+        "text" : '비밀번호가 너무 약합니다',
+        "confirmButtonColor" : '#3085d6'
+      });
+      return;
+    }
+    if (pass != passCheck) {
+      Swal.fire({
+        "text" : '비밀번호가 잃치하지 않습니다.',
+        "confirmButtonColor" : '#3085d6'
+      });
+      return;
+    }
+    if(name.length <= 0){
+      Swal.fire({
+        "text" : '이름을 입력해주세요',
+        "confirmButtonColor" : '#3085d6'
+      });
+      return;
+    }
+    if (!emailCheckSate) {
+      Swal.fire({
+        "text" : '아직 이메일 인증이 되지 않았습니다.',
+        "confirmButtonColor" : '#3085d6'
+      });
+      return;
+    }
+    axios.post('https://spring.secretzoo.site/auth/signup',
+      {
+        "userId": id,
+        "password": pass,
+        "name": name,
+        "email": email,
+        "nickname": "임시닉네임",
+      }
+    ).then((Response) => {
+      console.log(Response.data);
+      navigate('/');
+    })
   }
   const [idCheck, setIdCheck] = useState(false);
   const [openIdCheckModal, setOpenIdCheckModal] = useState(false);
@@ -197,7 +197,6 @@ const SignupForm = () => {
                   onChange={(e) => setId(e.target.value)}
                   type="text"
                   placeholder="아이디"
-                  required
                   disabled={idCheck ? true : false}
                   className='flex-grow' />
                 <Button onClick={() => setOpenIdCheckModal(true)}>중복확인</Button>
@@ -211,7 +210,7 @@ const SignupForm = () => {
                 value={pass}
                 onChange={(e) => setPass(e.target.value)}
                 type="password"
-                placeholder="비밀번호" required />
+                placeholder="비밀번호" />
                 <p className='text-[12px] text-gray-400 mt-2'>영문자,숫자를 포함한 8자 이상</p>
             </div>
             <div>
@@ -222,7 +221,7 @@ const SignupForm = () => {
                 value={passCheck}
                 onChange={(e) => setPassCheck(e.target.value)}
                 type="password"
-                placeholder="비밀번호 확인" required />
+                placeholder="비밀번호 확인" />
             </div>
             <div>
               <div className="mb-2 block">
@@ -232,7 +231,7 @@ const SignupForm = () => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 type="text"
-                placeholder="이름" required />
+                placeholder="이름"  />
             </div>
             <div>
               <div className="mb-2 block">
@@ -244,7 +243,6 @@ const SignupForm = () => {
                   onChange={(e) => {setEmail(e.target.value); setDidEmailRequest(false)}}
                   type="email"
                   placeholder="이메일"
-                  required
                   disabled={emailCheckSate ? true : false}
                   className='flex-grow' />
                 <Button 
@@ -266,7 +264,7 @@ const SignupForm = () => {
               </div>) : null}
             </div>
             <Button
-            type="submit" onClick={() => (requsetLogin())}>회원가입</Button>
+            type="submit" onClick={(e) => {e.preventDefault(); requsetLogin();}}>회원가입</Button>
           </form>
         </div>
         <IdCheckModal></IdCheckModal>
