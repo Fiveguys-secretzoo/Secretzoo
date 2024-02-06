@@ -264,6 +264,13 @@ public class RankService {
         log.info("redis 캐싱 랭킹 갱신 완료");
     }
 
+    public void addNewPlayerRanking(Player player){
+        ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
+        zSetOperations.add(attackRankKey, String.valueOf(player.getUser().getUserSequence()), 0.0);
+        zSetOperations.add(defenseRankKey, String.valueOf(player.getUser().getUserSequence()), 0.0);
+        zSetOperations.add(passRankKey, String.valueOf(player.getUser().getUserSequence()), 0.0);
+    }
+
 
     /**
      * player 추가 정보 추출 메서드

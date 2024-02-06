@@ -36,6 +36,7 @@ public class PlayerService {
     private final RewardsRepository rewardsRepository;
     private final PlayerRepositoryImpl playerRepositoryImpl;
     private final PlayerLevelService levelService;
+    private final RankService rankService;
     private final PlayerLevelRepository playerLevelRepository;
 
     /**
@@ -177,6 +178,8 @@ public class PlayerService {
             .map(rewards -> new PlayerRewards(player, rewards, false))
             .collect(Collectors.toList());
         player.setPlayerRewards(playerRewards);
+        //레디스 랭킹에 새로운 유저 정보 초기화
+        rankService.addNewPlayerRanking(player);
 
     }
 
