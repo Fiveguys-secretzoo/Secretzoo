@@ -1,15 +1,12 @@
 package com.ssafy.fiveguys.game.user.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.fiveguys.game.user.handler.JwtAccessDeniedHandler;
 import com.ssafy.fiveguys.game.user.jwt.JwtAuthenticationEntryPoint;
 import com.ssafy.fiveguys.game.user.jwt.JwtTokenProvider;
 import com.ssafy.fiveguys.game.user.filter.JwtAuthenticationFilter;
 import com.ssafy.fiveguys.game.user.handler.OAuth2LoginFailureHandler;
 import com.ssafy.fiveguys.game.user.handler.OAuth2LoginSuccessHandler;
-import com.ssafy.fiveguys.game.user.repository.UserRepositoy;
 import com.ssafy.fiveguys.game.user.service.security.CustomOAuth2UserService;
-import com.ssafy.fiveguys.game.user.service.security.GameUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +17,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -46,7 +42,7 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring()
-            .requestMatchers("/auth/**") // '인증','인가' 서비스 적용x
+            .requestMatchers("/auth/**","/verify-email/**") // '인증','인가' 서비스 적용x
             .requestMatchers(swaggerURL)
             .requestMatchers(PathRequest.toStaticResources().atCommonLocations()); // 정적 리소스들
     }
@@ -75,7 +71,8 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/", "/css/**", "/images/**", "/js/**", "/favicon.ico", "/error")
                 .permitAll() // '인증' 무시
-                .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/auth/**","/verify-email/**","/users/**").permitAll()
+                .requestMatchers("/rewards/**").permitAll()
                 .requestMatchers(swaggerURL).permitAll()
                 .anyRequest().permitAll());
                // .anyRequest().authenticated());

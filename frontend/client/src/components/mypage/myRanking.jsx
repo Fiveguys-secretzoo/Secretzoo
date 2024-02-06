@@ -4,11 +4,16 @@ import axios from 'axios';
 
 const MyRanking = () => {
   const [myRanking, setMyRanking] = useState(null)
-  const getRanking = (playerSequence) => {
-    axios.get(`https://secretzoo.site/api/rank/total/101`)
+  const getRanking = () => {
+    const headers = {
+      'Authorization': sessionStorage.getItem('authorization')
+    };
+    axios.get('https://spring.secretzoo.site/api/users/user', { headers })
       .then(response => {
-        console.log(response.data);
-        setMyRanking(response.data);
+        axios.get(`https://spring.secretzoo.site/api/rank/total/`+response.data.userSequence)
+        .then(response => {
+          setMyRanking(response.data);
+        });
       });
   };
   useEffect(() => {
