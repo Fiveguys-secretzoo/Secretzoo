@@ -20,7 +20,8 @@ const Ranking = () => {
       if(user.userSequence){
         axios.get('https://spring.secretzoo.site/rank/attack/'+user.userSequence)
         .then(Response => {
-          setMyRank(Response.data);
+          setMyRank(Response);
+          console(Response.data);
         })
       }
     });
@@ -75,11 +76,7 @@ const Ranking = () => {
       setIsLoaded(true);
     }, 500);
   }, [])
-  if(!myRank){
-    return(
-      <div>is Loading...</div>
-    )
-  }
+  
   return (
     <>
       <div className="p-4 rounded">

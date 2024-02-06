@@ -34,12 +34,12 @@ const  SearchPlayerDetail = () => {
         <p>레벨 : {searchedUserInfo.data.level}</p>
         <p>업적 : {searchedUserInfo.data.mainReward}</p>
         <p>이름 : {searchedUserInfo.data.name}</p>
-        <p>공격점수 : {searchedUserInfo.data.rankingScore.attackScore}</p>
-        <p>공격 랭킹 : {searchedUserRank.data.attackRank}</p>
-        <p>수비점수 : {searchedUserInfo.data.rankingScore.defenseScore}</p>
-        <p>수비 랭킹 : {searchedUserRank.data.defenseRank}</p>
-        <p>패스점수 : {searchedUserInfo.data.rankingScore.passScore}</p>
-        <p>패스 랭킹: {searchedUserRank.data.passRank}</p>
+        <p>공격점수 : {searchedUserRank.data.attackRank.score}</p>
+        <p>공격 랭킹 : {searchedUserRank.data.attackRank.rank}</p>
+        <p>수비점수 : {searchedUserRank.data.defenseRank.score}</p>
+        <p>수비 랭킹 : {searchedUserRank.data.defenseRank.rank}</p>
+        <p>패스점수 : {searchedUserRank.data.passRank.score}</p>
+        <p>패스 랭킹: {searchedUserRank.data.passRank.rank}</p>
         <p>총 라운드 : {searchedUserInfo.data.totalRound}</p>
         <p>총 턴 : {searchedUserInfo.data.totalTurn}</p>
 

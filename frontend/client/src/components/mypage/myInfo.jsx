@@ -164,9 +164,9 @@ const MyInfo = () => {
       <Modal show={openUpdatePasswordModal} size="md" onClose={() => setOpenUpdatePasswordModal(false)}>
         <Modal.Body>
           <Label>바꿀 비밀번호</Label>
-          <TextInput value={changePassword} onChange={(e) => setChangePassword(e.target.value)}></TextInput>
+          <TextInput value={changePassword} onChange={(e) => setChangePassword(e.target.value)} type='password'></TextInput>
           <Label>비밀번호 확인</Label>
-          <TextInput value={changePasswordCheck} onChange={(e) => setChangePasswordCheck(e.target.value)}></TextInput>
+          <TextInput value={changePasswordCheck} onChange={(e) => setChangePasswordCheck(e.target.value)} type='password'></TextInput>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={() => { updatePassword(changePassword); setOpenUpdatePasswordModal(false) }}>수정</Button>
