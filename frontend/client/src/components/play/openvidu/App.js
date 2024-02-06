@@ -89,9 +89,9 @@ const App = () => {
         
         session.current=undefined;
         setSubscribers([]);
-        setMySessionId('');
+        // setMySessionId('');
         setMyUserName(sessionStorage.getItem('userName'));
-        setMainStreamManager(undefined);
+        // setMainStreamManager(undefined);
         setPublisher(undefined);
     };
 

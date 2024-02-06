@@ -16,8 +16,11 @@ import MyRanking from "./components/mypage/myRanking";
 import MyReward from "./components/mypage/myReward";
 import Callback from "./pages/callback";
 import Page404 from "./pages/Page404";
-import Test from "./pages/test";
+import SearchPlayer from "./pages/searchPlayer";
+
+//노드 서버
 const socket = io("http://localhost:3001");
+//const socket = io('https://secretzoo.site');
 export const SocketContext = createContext();
 
 function App() {
@@ -46,7 +49,6 @@ function App() {
               </Route>
             </Route>
             <Route path="/play" element={<Play />} />
-            <Route path="/test" element={<Test />} />
           </Routes>
         </div>
       </SocketContext.Provider>
