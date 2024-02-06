@@ -31,7 +31,7 @@ const MyInfo = () => {
 
   const [passwordCheckState, setPasswordCheckState] = useState(false);
   const checkPassword = (password) => {
-    axios.post('https://spring.secretzoo.site/api/users/password', password)
+    axios.post('https://spring.secretzoo.site/users/password', password)
       .then(response => {
         setOpenUpdatePasswordModal(true);
         setPasswordCheckState(true);
@@ -45,7 +45,7 @@ const MyInfo = () => {
 
   const updatePassword = (password) => {
     if (passwordCheckState) {
-      axios.put('https://spring.secretzoo.site/api/users/password', password)
+      axios.put('https://spring.secretzoo.site/users/password', password)
         .then(response => {
           Swal.fire({
             "text" : '변경 선공',
@@ -61,9 +61,9 @@ const MyInfo = () => {
     const headers = {
       'Authorization': sessionStorage.getItem('authorization')
     };
-    axios.get('https://spring.secretzoo.site/api/users/user', { headers })
+    axios.get('https://spring.secretzoo.site/users/user', { headers })
       .then(response => {
-        axios.get(`https://spring.secretzoo.site/api/rewards/done/`+response.data.userSequence)
+        axios.get(`https://spring.secretzoo.site/rewards/done/`+response.data.userSequence)
         .then(response => {
           setMyrewards(response.data);
           getUserInfo();

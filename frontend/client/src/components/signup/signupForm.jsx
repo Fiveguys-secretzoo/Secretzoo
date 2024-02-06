@@ -51,7 +51,7 @@ const SignupForm = () => {
       });
       return;
     }
-    axios.post('https://spring.secretzoo.site/api/auth/signup',
+    axios.post('https://spring.secretzoo.site/auth/signup',
       {
         "userId": id,
         "password": pass,
@@ -70,7 +70,7 @@ const SignupForm = () => {
     const [checkIdInput, setCheckIdInput] = useState(id);
     const [idCheckState, setIdCheckState] = useState(false);
     const checkid = (id) => {
-      axios.post('https://spring.secretzoo.site/api/auth/check/' + id)
+      axios.post('https://spring.secretzoo.site/auth/check/' + id)
         .then(Response => {
           Swal.fire({
             "text" : Response.data,
@@ -122,7 +122,7 @@ const SignupForm = () => {
     const data = {
       "email" : email,
     }
-    axios.post('https://spring.secretzoo.site/api/verify-email/send',data)
+    axios.post('https://spring.secretzoo.site/verify-email/send',data)
     .then(Response => {
       Swal.fire({
         "text" : Response.data,
@@ -158,7 +158,7 @@ const SignupForm = () => {
       "email" : email,
       "verificationCode" : verificationCode,
     }
-    axios.post('https://spring.secretzoo.site/api/verify-email/check',data)
+    axios.post('https://spring.secretzoo.site/verify-email/check',data)
     .then(Response => {
       Swal.fire({
         "text" : Response.data,

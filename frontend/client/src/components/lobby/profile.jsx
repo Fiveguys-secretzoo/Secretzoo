@@ -19,6 +19,7 @@ const Profile = () => {
         "nickname": sessionStorage.getItem('userNickname'),
         "mainReward": '로그인 하세요',
         "profileNumber": '000',
+        "level" : '0',
       });
       dispatch(setNoLoginUserInfo(noLoginUser));
     } else {
@@ -26,7 +27,7 @@ const Profile = () => {
     }
   }, [dispatch])
 
-  if (isLoading || !user) {
+  if (!user) {
     return <div>Loading...</div>;
   }
 
@@ -46,10 +47,13 @@ const Profile = () => {
             <p>{'레벨'+user.level}</p>
           </div>
         </div>
-        <div className='exp'>
-          <Label className='text-[0.7em]' value={'다음 레벨까지 남은 경험치 '+(user.nextExp-user.exp)+'('+(user.exp-user.prevExp)/(user.nextExp-user.prevExp)*100+')%'} />
-          <Progress progress={(user.exp-user.prevExp)/(user.nextExp-user.prevExp)*100} />
-        </div>
+        {
+          sessionStorage.getItem('noLogin') ? (<div></div>) :
+          (<div className='exp'>
+            <Label className='text-[0.7em]' value={'다음 레벨까지 남은 경험치 '+(user.nextExp-user.exp)+'('+(user.exp-user.prevExp)/(user.nextExp-user.prevExp)*100+')%'} />
+            <Progress progress={(user.exp-user.prevExp)/(user.nextExp-user.prevExp)*100} />
+          </div>)
+        }
       </Card>
     </>
   );

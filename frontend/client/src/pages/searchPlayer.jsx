@@ -29,7 +29,7 @@ const SearchPlayer = () => {
       "page" : page-1,
       "size" : 4,
     }
-    axios.get('https://spring.secretzoo.site/api/players/search',{params : param})
+    axios.get('https://spring.secretzoo.site/players/search',{params : param})
     .then((Response) => {
       setSearchResult(Response.data);
       console.log(Response.data)
