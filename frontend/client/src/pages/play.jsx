@@ -32,7 +32,7 @@ import '../style/play.css';
 import DropSelectMyTurn from '../components/play/dropSelectMyTurn';
 import DropSelectNotTurn from '../components/play/dropSelectNotTurn';
 import AnswerSelectMyTurn from '../components/play/answerSelectMyTurn';
-import AnswerSelectNotTurn from '../components/play/answerSelectMyTurn copy';
+import AnswerSelectNotTurn from '../components/play/answerSelectNotTurn';
 import PassTurnCardView from '../components/play/passTurnCardView';
 import AnswerRevealView from '../components/play/answerRevealView';
 
@@ -382,7 +382,7 @@ const Play = () => {
               <DropSelectNotTurn></DropSelectNotTurn>
             </SelectScreen>
           }
-          {/* 방어 시도 ...! */}
+          {/* 방어 시도  */}
           {
             playState === 3 && isMyTurn &&
             <SelectScreen>
@@ -454,7 +454,6 @@ const Play = () => {
             playerSlot(playerList)
           }
           {/* <img className="" src={require(`../assets/img/card/00/000.png`)} alt="" /> */}
-
           <div className='flex absolute left-[35%] bottom-[100px]'>
 
             {/* 카드 표현 부분 */}
@@ -470,7 +469,6 @@ const Play = () => {
                   playState={playState}
                   pid={pid} >
                 </CardView>
-                , {}
               ))
             }
 
@@ -495,7 +493,7 @@ const Play = () => {
           </div>
 
         </div>
-      </div >
+      </div>
     </>
   );
 };

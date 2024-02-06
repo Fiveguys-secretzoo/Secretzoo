@@ -1,6 +1,6 @@
 import { Spinner } from 'flowbite-react';
 
-const AnswerSelectNotTurn = (p1, p2, animal) => {
+const AnswerSelectNotTurn = ({ p1, p2, animal }) => {
 
   return (
     <>

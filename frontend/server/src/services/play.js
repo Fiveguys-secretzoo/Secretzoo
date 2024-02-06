@@ -117,10 +117,10 @@ const playSocketMethods = () => {
       console.log(room);
       console.log(rooms);
       if (card < 64) {
-        for (let k = 0; k < rooms[roomName].players.length; k++) {
-          if (rooms[roomName].players[k].playerId === pid) {
-            room[roomName].players[k].hand
-              = room[roomName].players[k].hand.filter((e) => e !== card);
+        for (let k = 0; k < rooms[room].players.length; k++) {
+          if (rooms[room].players[k].playerId === pid) {
+            rooms[room].players[k].hand
+              = rooms[room].players[k].hand.filter((e) => e !== card);
           }
         }
         rooms[room].onBoard.card = card;

@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { useDispatch, } from 'react-redux';
 import { changeCardStatus } from '../../store/playSlice'
-import { SocketContext } from '../App';
+import { SocketContext } from '../../App';
 
 const PassTurnCardView = ({ bCard, isMyTurn, img, pid, playState }) => {
 

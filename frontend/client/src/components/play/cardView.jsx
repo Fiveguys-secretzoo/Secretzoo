@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux'
-import { changeCardStatus } from '../store/playSlice'
+import { changeCardStatus } from '../../store/playSlice'
 
 const CardView = ({ key, src, index, card, cardlength, isMyTurn, playState, pid }) => {
   const dispatch = useDispatch();
