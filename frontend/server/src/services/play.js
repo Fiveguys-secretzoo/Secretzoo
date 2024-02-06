@@ -112,10 +112,14 @@ const playSocketMethods = () => {
           }
         }
       }
+      console.log(room);
+      console.log(rooms);
+      if (card < 64) {
+        rooms[room].onBoard.card = card;
+      }
       rooms[room].onBoard.status = 1;
       rooms[room].onBoard.from = from;
       rooms[room].onBoard.to = to;
-      rooms[room].onBoard.card = card;
       console.log(`##### send card Dropped Data to [${room}], [${from}] => [${to}] a [${card}]`)
       io.to(room).emit('cardDrop', from, to);
     })
@@ -148,7 +152,6 @@ const playSocketMethods = () => {
     })
   }
 
-
   // 패스 선택시 
   const passingTurnStart = (socket, io, rooms) => {
     socket.on('cardPass', (room, callback) => {
@@ -157,7 +160,7 @@ const playSocketMethods = () => {
       rooms[room].onBoard.from = rooms[room].onBoard.to;
       rooms[room].onBoard.nowTurn = rooms[room].onBoard.from;
       rooms[room].onBoard.to = -1;
-      io.to(room).emit('cardPass',);
+      io.to(room).emit('cardPass', from, nowTurnPlayer);
       callback(rooms[room].onBoard.card);
     })
   }
@@ -166,34 +169,66 @@ const playSocketMethods = () => {
 
   }
 
+  const cardReveal = (socket, io, rooms) => {
+    socket.on('cardReveal', (room, answer) => {
+      rooms[room].onBoard.status = 1;
+      console.log(`##### [cardReveal] room : [${room}] answer : [${answer}]`)
+      let result = checkCardReveal(rooms, room, answer);
+      console.log(`##### [cardReveal] result ${result}`)
+      console.log(result);
+      addPenalty(io, rooms, room, result.nowTurn);
+      io.to(room).emit('cardReveal', result.ans, result.nowTurn);
+    })
+  }
+
   const checkCardReveal = (rooms, room, answer) => {
     let card, bCard;
     if (rooms && rooms[room] && rooms[room].onBoard) {
       card = rooms[room].onBoard.card;
       bCard = rooms[room].onBoard.cardBluff;
     }
-    let isSame = Math.floor(card / 8) === bCard;
-    if ((answer === 0 && isSame) || (answer === 1 && !isSame))
-      return true;
-    else
-      return false;
-  }
-
-  const cardReveal = (socket, io, rooms) => {
-    socket.on('cardReveal', (room, answer) => {
-      rooms[room].onBoard.status = 5;
-      console.log(`##### [cardReveal] room : [${room}] answer : [${answer}]`)
-      let result = checkCardReveal(rooms, room, answer);
-      io.to(room).emit('cardReveal', result);
-    })
-  }
-
-  const addPenalty = (card, result) => {
-    if (result) {
-      
-    } else {
-      
+    let isSame = (Math.floor(card / 8) === bCard);
+    let nowTurnPlayer;
+    if ((answer === 0 && isSame) || (answer === 2 && !isSame)) {
+      nowTurnPlayer = rooms[room].onBoard.from;
+      return { 'ans': true, 'nowTurn': nowTurnPlayer };
     }
+    else {
+      nowTurnPlayer = rooms[room].onBoard.to;
+      rooms[room].onBoard.from = rooms[room].onBoard.to;
+      rooms[room].nowTurn = rooms[room].onBoard.to;
+      return { 'ans': false, 'nowTurn': nowTurnPlayer };
+    }
+  }
+
+  const addPenalty = (io, rooms, room, nowTurnPlayer) => {
+    //player Idx 찾기 
+    let playerIdx;
+    for (let i = 0; i < rooms[room].players.length; i++) {
+      if (rooms[room].players[i].playerId === nowTurnPlayer) {
+        playerIdx = i;
+        break;
+      }
+    }
+    console.log(`##### playerIdx : ${playerIdx} / nowTurnPlayer : ${nowTurnPlayer}`);
+
+    // playerIdx에 지금 카드 패널티로 추가
+    rooms[room].players[playerIdx].penalty[Math.floor(rooms[room].onBoard.card / 8)]++;
+    io.to(room).emit('penaltyAdd', nowTurnPlayer, Math.floor(rooms[room].onBoard.card / 8));
+  }
+
+  const checkLoser = (socket, io, rooms) => {
+    socket.on("isTurnEnd", (room, callback) => {
+      for (let i = 0; i < rooms[room].players.length; i++) {
+        for (let k = 0; k < 8; k++) {
+          if (rooms[room].players[i].penalty[k] === 4) {
+            callback(rooms[room].players[i].playerId);
+            return;
+          }
+        }
+      }
+      callback(false);
+    });
   }
 
   return {
@@ -205,6 +240,7 @@ const playSocketMethods = () => {
     passingTurnStart,
     cardReveal,
     passingTurnSelect,
+    checkLoser,
   }
 }
 
