@@ -1,17 +1,29 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Label, TextInput } from 'flowbite-react';
+import { useDispatch} from 'react-redux';
+import { setNoLoginUserInfo } from '../../store/userSlice';
+import { v4 as uuidv4 } from 'uuid';
 import Swal from 'sweetalert2';
 
 const NoLogin = () => {
   const [name, setName] = useState("");
   const navigate = useNavigate();
-
+  
+  const dispatch = useDispatch();
   const saveName = () => {
     if (name.length > 0) {
       sessionStorage.setItem('noLogin', true);
       sessionStorage.setItem('userNickname', name);
-      sessionStorage.setItem('userName', name + "123");
+      const noLoginUser = ({
+        "name": 'noLoginUser',
+        "nickname": sessionStorage.getItem('userNickname'),
+        "mainReward": '로그인 하세요',
+        "profileNumber": '000',
+        "level" : '0',
+        "userSequence" : uuidv4(),
+      });
+      dispatch(setNoLoginUserInfo(noLoginUser));
       navigate("/lobby");
     } else {
       Swal.fire({

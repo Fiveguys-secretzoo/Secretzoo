@@ -454,46 +454,49 @@ const Play = () => {
             playerSlot(playerList)
           }
           {/* <img className="" src={require(`../assets/img/card/00/000.png`)} alt="" /> */}
-          <div className='flex absolute left-[35%] bottom-[100px]'>
+
+          <div className='flex absolute left-[35%] w-screen bottom-[100px]'>
 
             {/* 카드 표현 부분 */}
-            {cards &&
-              cards.map((i, index) => (
-                <CardView
-                  key={index}
-                  src={images[i]}
-                  index={index}
-                  card={i}
-                  cardlength={cards.length}
-                  isMyTurn={isMyTurn}
-                  playState={playState}
-                  pid={pid} >
-                </CardView>
-              ))
-            }
+            <div className='flex max-w-[35%] max-h-[10em]'>
+              {cards &&
+                cards.map((i, index) => (
+                  <CardView
+                    key={index}
+                    src={images[i]}
+                    index={index}
+                    card={i}
+                    cardlength={cards.length}
+                    isMyTurn={isMyTurn}
+                    playState={playState}
+                    pid={pid} >
+                  </CardView>
+                ))
+              }
 
 
-            <h1>Chat Application</h1>
-            <div className="message-list">
-              {messages.map((msg, index) => (
-                <div key={index} className="message">{msg}</div>
-              ))}
+              <h1>Chat Application</h1>
+              <div className="message-list">
+                {messages.map((msg, index) => (
+                  <div key={index} className="message">{msg}</div>
+                ))}
+              </div>
+              <div className="message-input">
+                <input
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder="Type a message..."
+                />
+                <Button onClick={/*sendMessage*/() => { console.log(roomInfo) }}>Send</Button>
+              </div>
+              <Button className={(playState === 0) ? '' : 'hidden'} disabled={!isAdmin} color="success" onClick={start}>start</Button>
+              <Button color="success" onClick={leaveRoom}>난 나갈거다.</Button>
             </div>
-            <div className="message-input">
-              <input
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Type a message..."
-              />
-              <Button onClick={/*sendMessage*/() => { console.log(roomInfo) }}>Send</Button>
-            </div>
-            <Button className={(playState === 0) ? '' : 'hidden'} disabled={!isAdmin} color="success" onClick={start}>start</Button>
-            <Button color="success" onClick={leaveRoom}>난 나갈거다.</Button>
           </div>
-
         </div>
       </div>
+
     </>
   );
 };

@@ -20,9 +20,9 @@ const MyReward = () => {
     const headers = {
       'Authorization': sessionStorage.getItem('authorization')
     };
-    axios.get('https://spring.secretzoo.site/api/users/user', { headers })
+    axios.get('https://spring.secretzoo.site/users/user', { headers })
       .then(response => {
-        axios.get(`https://spring.secretzoo.site/api/rewards/total/`+response.data.userSequence)
+        axios.get(`https://spring.secretzoo.site/rewards/total/`+response.data.userSequence)
         .then(response => {
           setMyrewards(response.data);
         });

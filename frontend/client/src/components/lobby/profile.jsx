@@ -14,19 +14,12 @@ const Profile = () => {
 
   useEffect(() => {
     if (sessionStorage.getItem('noLogin')) {
-      const noLoginUser = ({
-        "name": 'noLoginUser',
-        "nickname": sessionStorage.getItem('userNickname'),
-        "mainAchievement": '로그인 하세요',
-        "profileNumber": '000',
-      });
-      dispatch(setNoLoginUserInfo(noLoginUser));
     } else {
       dispatch(getUserInfo());
     }
   }, [dispatch])
 
-  if (isLoading || !user) {
+  if (!user) {
     return <div>Loading...</div>;
   }
 
@@ -42,14 +35,17 @@ const Profile = () => {
           <div className='flex-grow text-center'>
             <p>{user.name}</p>
             <b>{user.nickname}</b>
-            <p>{user.mainAchievement}</p>
-            <p>{user.email}</p>
+            <p>{user.mainReward}</p>
+            <p>{'레벨'+user.level}</p>
           </div>
         </div>
-        <div className='exp'>
-          <Label value='레벨 12' />
-          <Progress progress={45} />
-        </div>
+        {
+          sessionStorage.getItem('noLogin') ? (<div></div>) :
+          (<div className='exp'>
+            <Label className='text-[0.7em]' value={'다음 레벨까지 남은 경험치 '+(user.nextExp-user.exp)+'('+(user.exp-user.prevExp)/(user.nextExp-user.prevExp)*100+')%'} />
+            <Progress progress={(user.exp-user.prevExp)/(user.nextExp-user.prevExp)*100} />
+          </div>)
+        }
       </Card>
     </>
   );

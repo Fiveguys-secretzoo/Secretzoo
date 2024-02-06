@@ -4,19 +4,20 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import io from "socket.io-client";
 import { Provider } from "./store/stores";
 
-import Lobby from "./pages/lobby";
-import Login from "./pages/login";
-import Play from "./pages/play";
-import Signup from "./pages/signup";
-import Rooms from "./components/lobby/rooms";
-import Ranking from "./components/lobby/ranking";
-import MyPage from "./components/lobby/myPage";
-import MyInfo from "./components/mypage/myInfo";
-import MyRanking from "./components/mypage/myRanking";
-import MyReward from "./components/mypage/myReward";
-import Callback from "./pages/callback";
-import Page404 from "./pages/Page404";
-import SearchPlayer from "./pages/searchPlayer";
+import Lobby from './pages/lobby'
+import Login from './pages/login'
+import Play from './pages/play'
+import Signup from './pages/signup';
+import Rooms from './components/lobby/rooms';
+import Ranking from './components/lobby/ranking';
+import MyPage from './components/lobby/myPage';
+import MyInfo from './components/mypage/myInfo';
+import MyRanking from './components/mypage/myRanking';
+import MyReward from './components/mypage/myReward';
+import Callback from './pages/callback';
+import Page404 from './pages/Page404';
+import SearchPlayer from './pages/searchPlayer';
+import SearchPlayerDetail from './pages/searchPlayerDetail';
 
 //노드 서버
 const socket = io("http://localhost:3001");
@@ -37,12 +38,10 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/lobby" element={<Lobby />}>
               <Route index element={<Rooms />} />
-              <Route path="/lobby/ranking" element={<Ranking />} />
-              <Route
-                path="/lobby/searchPlayer"
-                element={<SearchPlayer />}
-              ></Route>
-              <Route path="/lobby/myPage" element={<MyPage />}>
+              <Route path='/lobby/ranking' element={<Ranking />} />
+              <Route path='/lobby/searchPlayer' element={<SearchPlayer/>}/>
+              <Route path='/lobby/searchPlayer/:userSequence' element={<SearchPlayerDetail/>}/>
+              <Route path='/lobby/myPage' element={<MyPage />}>
                 <Route index element={<MyInfo />} />
                 <Route path="/lobby/myPage/myranking" element={<MyRanking />} />
                 <Route path="/lobby/myPage/myreward" element={<MyReward />} />

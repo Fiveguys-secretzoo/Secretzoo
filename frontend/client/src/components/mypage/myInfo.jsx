@@ -31,7 +31,7 @@ const MyInfo = () => {
 
   const [passwordCheckState, setPasswordCheckState] = useState(false);
   const checkPassword = (password) => {
-    axios.post('https://spring.secretzoo.site/api/users/password', password)
+    axios.post('https://spring.secretzoo.site/users/password', password)
       .then(response => {
         setOpenUpdatePasswordModal(true);
         setPasswordCheckState(true);
@@ -45,7 +45,7 @@ const MyInfo = () => {
 
   const updatePassword = (password) => {
     if (passwordCheckState) {
-      axios.put('https://spring.secretzoo.site/api/users/password', password)
+      axios.put('https://spring.secretzoo.site/users/password', password)
         .then(response => {
           Swal.fire({
             "text" : '변경 선공',
@@ -61,9 +61,9 @@ const MyInfo = () => {
     const headers = {
       'Authorization': sessionStorage.getItem('authorization')
     };
-    axios.get('https://spring.secretzoo.site/api/users/user', { headers })
+    axios.get('https://spring.secretzoo.site/users/user', { headers })
       .then(response => {
-        axios.get(`https://spring.secretzoo.site/api/rewards/done/`+response.data.userSequence)
+        axios.get(`https://spring.secretzoo.site/rewards/done/`+response.data.userSequence)
         .then(response => {
           setMyrewards(response.data);
           getUserInfo();
@@ -164,9 +164,9 @@ const MyInfo = () => {
       <Modal show={openUpdatePasswordModal} size="md" onClose={() => setOpenUpdatePasswordModal(false)}>
         <Modal.Body>
           <Label>바꿀 비밀번호</Label>
-          <TextInput value={changePassword} onChange={(e) => setChangePassword(e.target.value)}></TextInput>
+          <TextInput value={changePassword} onChange={(e) => setChangePassword(e.target.value)} type='password'></TextInput>
           <Label>비밀번호 확인</Label>
-          <TextInput value={changePasswordCheck} onChange={(e) => setChangePasswordCheck(e.target.value)}></TextInput>
+          <TextInput value={changePasswordCheck} onChange={(e) => setChangePasswordCheck(e.target.value)} type='password'></TextInput>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={() => { updatePassword(changePassword); setOpenUpdatePasswordModal(false) }}>수정</Button>
@@ -200,7 +200,7 @@ const MyInfo = () => {
           >변경</button>
         </div>
         <div className='flex items-center justify-end'>
-          <p>업적 : {user.mainAchievement}</p>
+          <p>업적 : {user.mainReward}</p>
           <button className='m-2 p-2 bg-blue-500 rounded'
             onClick={() => setOpenRewardsModal(true)}>변경</button>
         </div>

@@ -25,7 +25,7 @@ const LoginForm = () => {
       return;
     }
 
-    axios.post('https://spring.secretzoo.site/api/auth/login',
+    axios.post('https://spring.secretzoo.site/auth/login',
       {
         "userId": id,
         "password": pass,
@@ -50,7 +50,7 @@ const LoginForm = () => {
 
   return (
     <>
-      <form className="flex max-w-md flex-col gap-4">
+      <form className="flex max-w-md flex-col gap-4 space-y-5">
         <div>
           <div className="mb-2 block">
             <Label value="아이디" />
