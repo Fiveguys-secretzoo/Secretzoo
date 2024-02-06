@@ -16,53 +16,53 @@ const SignupForm = () => {
     return regex.test(password);
   };
   const requsetLogin = () => {
-    if (!idCheck) {
-      Swal.fire({
-        "text" : 'id 중복체크하세요.',
-        "confirmButtonColor" : '#3085d6'
-      });
-      return;
-    }
-    if(!validatePassword(pass)){
-      Swal.fire({
-        "text" : '비밀번호가 너무 약합니다',
-        "confirmButtonColor" : '#3085d6'
-      });
-      return;
-    }
-    if (pass != passCheck) {
-      Swal.fire({
-        "text" : '비밀번호가 잃치하지 않습니다.',
-        "confirmButtonColor" : '#3085d6'
-      });
-      return;
-    }
-    if(name.length <= 0){
-      Swal.fire({
-        "text" : '이름을 입력해주세요',
-        "confirmButtonColor" : '#3085d6'
-      });
-      return;
-    }
-    if (!emailCheckSate) {
-      Swal.fire({
-        "text" : '아직 이메일 인증이 되지 않았습니다.',
-        "confirmButtonColor" : '#3085d6'
-      });
-      return;
-    }
-    axios.post('https://spring.secretzoo.site/auth/signup',
-      {
-        "userId": id,
-        "password": pass,
-        "name": name,
-        "email": email,
-        "nickname": "임시닉네임",
-      }
-    ).then((Response) => {
-      console.log(Response.data);
-      navigate('/')
-    })
+    // if (!idCheck) {
+    //   Swal.fire({
+    //     "text" : 'id 중복체크하세요.',
+    //     "confirmButtonColor" : '#3085d6'
+    //   });
+    //   return;
+    // }
+    // if(!validatePassword(pass)){
+    //   Swal.fire({
+    //     "text" : '비밀번호가 너무 약합니다',
+    //     "confirmButtonColor" : '#3085d6'
+    //   });
+    //   return;
+    // }
+    // if (pass != passCheck) {
+    //   Swal.fire({
+    //     "text" : '비밀번호가 잃치하지 않습니다.',
+    //     "confirmButtonColor" : '#3085d6'
+    //   });
+    //   return;
+    // }
+    // if(name.length <= 0){
+    //   Swal.fire({
+    //     "text" : '이름을 입력해주세요',
+    //     "confirmButtonColor" : '#3085d6'
+    //   });
+    //   return;
+    // }
+    // if (!emailCheckSate) {
+    //   Swal.fire({
+    //     "text" : '아직 이메일 인증이 되지 않았습니다.',
+    //     "confirmButtonColor" : '#3085d6'
+    //   });
+    //   return;
+    // }
+    // axios.post('https://spring.secretzoo.site/auth/signup',
+    //   {
+    //     "userId": id,
+    //     "password": pass,
+    //     "name": name,
+    //     "email": email,
+    //     "nickname": "임시닉네임",
+    //   }
+    // ).then((Response) => {
+    //   console.log(Response.data);
+    // })
+    navigate('/')
   }
   const [idCheck, setIdCheck] = useState(false);
   const [openIdCheckModal, setOpenIdCheckModal] = useState(false);
