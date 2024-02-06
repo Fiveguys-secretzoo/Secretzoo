@@ -47,7 +47,7 @@ const Play = () => {
   const [cardDrag, setCardDrag] = useState({ 'from': -1, 'to': -1, 'card': -1 });
   const [cardDrop, setCardDrop] = useState({ 'from': -1, 'to': -1, 'card': -1 });
   const [playersId, setPlayersId] = useState(['', '', '', '', '', '']);
-  const [cards, setCards] = useState([0, 1, 2, 3]); // 손에 들고 있는 카드 관리
+  const [cards, setCards] = useState([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ]); // 손에 들고 있는 카드 관리
   const [gameResult, setGameResult] = useState(false);
   // 0 대기 1 시작 2 카드 드롭 후 동물 선택 3 동물 선택 후 방어 턴 4 넘기는 턴 드래그 5 넘기는 턴 동물 선택 6 결과 확인
   const [images, setImages] = useState([]);
@@ -433,9 +433,10 @@ const Play = () => {
           }
           {/* <img className="" src={require(`../assets/img/card/00/000.png`)} alt="" /> */}
 
-          <div className='flex absolute left-[35%] bottom-[100px]'>
+          <div className='flex absolute left-[35%] w-screen bottom-[100px]'>
 
             {/* 카드 표현 부분 */}
+            <div className='flex max-w-[35%] max-h-[10em]'>
             {cards &&
               cards.map((i, index) => (
                 <div
@@ -449,6 +450,7 @@ const Play = () => {
                   <img key={index} className="" src={images[i]} alt="" />
                 </div>
               ))}
+            </div>
 
 
             <h1>Chat Application</h1>
