@@ -61,56 +61,57 @@ const Rooms = () => {
   // 필터 
   const filterPlaying = () => {
     socket.emit('requestRoomsInfo', (roomsInfo) => {
-      setRooms(roomsInfo);
+      let newRooms = {};
+      Object.keys(roomsInfo).forEach((key) => {
+        if (roomsInfo[key].status === 'playing') {
+          newRooms[key] = roomsInfo[key];
+        }
+      });
+      setRooms(newRooms);
     });
-    let newRooms = {};
-    Object.keys(rooms).forEach((key) => {
-      if (rooms[key].status === 'playing') {
-        newRooms[key] = rooms[key];
-      }
-    })
-    setRooms(newRooms);
   }
 
   const filterWait = () => {
     socket.emit('requestRoomsInfo', (roomsInfo) => {
-      setRooms(roomsInfo);
+      let newRooms = {};
+      Object.keys(roomsInfo).forEach((key) => {
+        if (roomsInfo[key].status === 'wait') {
+          newRooms[key] = roomsInfo[key];
+        }
+      });
+      setRooms(newRooms);
     });
-    let newRooms = {};
-    Object.keys(rooms).forEach((key) => {
-      if (rooms[key].status === 'wait') {
-        newRooms[key] = rooms[key];
-      }
-    })
-    setRooms(newRooms);
   }
 
   const filterFull = () => {
     socket.emit('requestRoomsInfo', (roomsInfo) => {
-      setRooms(roomsInfo);
+      let newRooms = {};
+      Object.keys(roomsInfo).forEach((key) => {
+        if (roomsInfo[key].playerCount === 6) {
+          newRooms[key] = roomsInfo[key];
+        }
+      });
+      setRooms(newRooms);
     });
-    let newRooms = {};
-    Object.keys(rooms).forEach((key) => {
-      if (rooms[key].playerCount === 6) {
-        newRooms[key] = rooms[key];
-      }
-    })
-    setRooms(newRooms);
   }
 
   // 검색
   const [searchRoomName, setSearchRoomName] = useState();
   const searchRoom = () => {
     socket.emit('requestRoomsInfo', (roomsInfo) => {
-      setRooms(roomsInfo);
-    });
-    let newRooms = {};
-    Object.keys(rooms).forEach((key) => {
-      if (rooms[key].roomName.indexOf(searchRoomName) > -1) {
-        newRooms[key] = rooms[key];
+      if(searchRoomName.length === 0){
+        setRooms(roomsInfo);
+        return;
       }
-    })
+      let newRooms = {};
+      Object.keys(roomsInfo).forEach((key) => {
+        if (roomsInfo[key].roomName.indexOf(searchRoomName) > -1) {
+          newRooms[key] = roomsInfo[key];
+        }
+      });
     setRooms(newRooms);
+    });
+    
   }
 
   const [openModal, setOpenModal] = useState(false);
@@ -145,10 +146,10 @@ const Rooms = () => {
           {Object.keys(rooms).map((key) => (
             <Card href="#" className="w-[47%] h-[30%] m-2"
               onClick={(e) => { e.preventDefault(); enterRoom(rooms[key].roomName) }}>
-              <p>{rooms[key].roomName}</p>
+              <p className='truncate text-sm'>{rooms[key].roomName}</p>
               {/* <p>{rooms[key].players[0].playerName}</p> */}
-              <p>{rooms[key].playerCount}/6</p>
-              <p>{rooms[key].status}</p>
+              <p className="text-sm">{rooms[key].playerCount}/6</p>
+              <p className="text-sm">{rooms[key].status}</p>
             </Card >
           ))}
         </div>
