@@ -2,6 +2,7 @@ package com.ssafy.fiveguys.game.player.service;
 
 
 import com.ssafy.fiveguys.game.player.dto.rank.RankResponseDto;
+import com.ssafy.fiveguys.game.player.dto.rank.RankSimpleDto;
 import com.ssafy.fiveguys.game.player.entity.Player;
 import com.ssafy.fiveguys.game.player.entity.embeddedType.RankingScore;
 import com.ssafy.fiveguys.game.player.exception.UserException;
@@ -156,7 +157,7 @@ public class RankService {
      */
     public List<RankResponseDto> getRanking(String rankKey) {
         ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
-        Set<ZSetOperations.TypedTuple<String>> top10 = zSetOperations.reverseRangeWithScores(rankKey, 0, maxRankingCount - 1);
+        Set<TypedTuple<String>> top10 = zSetOperations.reverseRangeWithScores(rankKey, 0, maxRankingCount - 1);
         assert top10 != null;
         //score -> level -> exp -> userSequence 순으로 내림차순 정렬(동점자 처리)
         Comparator<RankResponseDto> rankComparator = Comparator
@@ -180,15 +181,34 @@ public class RankService {
     /**
      * userSequence 랭킹 정보 조회
      */
-    public int getPlayerRanking(Long userSequence, String rankKey) {
+    public RankSimpleDto getPlayerRanking(Long userSequence, String rankKey) {
         ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
+        Player player = playerRepository.findByUser_UserSequence(userSequence);
         // userSequence 가 null 인 경우 기본값으로 Optional.ofNullable 을 사용하여 0으로 설정
         int userRank = Math.toIntExact(Optional.ofNullable(String.valueOf(userSequence))
             .map(seq -> zSetOperations.reverseRank(rankKey, seq))
             .orElse(-1L));
+
+        return getRankSimpleDto(rankKey, userRank, player);
+    }
+
+    private RankSimpleDto getRankSimpleDto(String rankKey, int userRank, Player player) {
         if(userRank == -1) throw new UserException();
         //redis 자료의 인덱스가 0부터 시작하므로 1을 더해 실제 랭킹을 표시
-        return userRank+1;
+        double score;
+        switch (rankKey) {
+            case attackRankKey :
+                score = player.getRankingScore().getAttackScore();
+            case defenseRankKey :
+                score = player.getRankingScore().getDefenseScore();
+            case passRankKey :
+                score = player.getRankingScore().getPassScore();
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + rankKey);
+        }
+
+        return new RankSimpleDto(userRank + 1, score);
     }
 
     /**
