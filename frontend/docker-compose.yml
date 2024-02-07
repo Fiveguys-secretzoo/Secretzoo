@@ -6,7 +6,8 @@ services:
       context: ./client
       dockerfile: Dockerfile
     container_name: react-app
-    network_mode: host
+    expose:
+      - 3000
     # ports:
     #  - "3000:3000"
     #volumes:
@@ -15,23 +16,22 @@ services:
     #  - /usr/src/app:/usr/share/nginx/html
     environment:
       - WDS_SOCKET_PROT=0
-      - REACT_APP_SOCKET_SERVER_URL=ws://node-server:3000
-    # networks:
-    #   - docker_nat
+      - REACT_APP_SOCKET_SERVER_URL=ws://node-server:3001
+    networks:
+      - docker_nat
 
   node-server:
       build:
         context: ./server
         dockerfile: Dockerfile # Node.js 서버를 위한 Dockerfile
       container_name: node-server
-      network_mode: host
       # ports:
       # - "3001:3001" # Node.js 서버 포트 설정
       expose:
-        - 3000
+        - 3001
       restart: always
-      # networks:
-      #   - docker_nat
+      networks:
+        - docker_nat
 
   # signal-server:
   #   build:
