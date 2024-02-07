@@ -11,40 +11,44 @@ const { animals,
 const playSocketMethods = () => {
 
   // 방에 처음 입장할 때 실행하게 되는 함수
-  const getRoomInfoForGame = (rooms, roomName, pid, socket) => {
+  const getRoomInfoForGame = (socket, rooms, roomName, psq) => {
     let extractedData = {};
-
     let roomInfo = rooms[roomName];
 
-    console.log(`##### rooms[roomName] : ${rooms[roomName]}, and roomName : ${roomName}`)
+    console.log(`##### [getRoomInfoForGame] roomName `);
     extractedData = {
-      'roomId': roomInfo['roomId'],
-      'roomName': roomInfo['roomName'],
-      'roomAddress': roomInfo['roomAddress'],
+      'rid': roomInfo['rid'],
+      'rnm': roomInfo['rnm'],
+      'radr': roomInfo['radr'],
       'status': roomInfo['status'],
-      'createdDate': roomInfo['createdDate'],
-      'playerCount': roomInfo['playerCount'],
+      'cdt': roomInfo['cdt'],
+      'pc': roomInfo['pc'],
       // socket 방에 추가적으로 플레이어의 정보를 넘길 시 여기에 넘겨야 한다.
-      'players': roomInfo['players'].map(player => ({
-        'playerId': player['playerId'],
-        'playerName': player['Name'],
-        'penalty': [...player['penalty']],
-      })),
-      'adminPlayer': roomInfo['adminPlayer'],
-      'nowTurn': roomInfo['nowTurn'],
-      'onBoard': { ...roomInfo['onBoard'] },
+      'ps': 
+      Object.keys(roomInfo.ps).reduce((acc, id) => {
+        const player = roomInfo.ps[id];
+        acc[id] = {
+          'psq': player['psq'],
+          'pnn': player['pnn'],
+          'pen': [...player['pen']],
+        };
+        return acc;
+      }, {}),
+      'adm': roomInfo['adm'],
+      'nt': roomInfo['nt'],
+      'game': { ...roomInfo['game'] },
     };
 
-    console.log(`##### status ${extractedData.onBoard.status}`);
-    if (extractedData.onBoard.status !== 0) {
-      console.log("entered socket emit sendCArdInfo");
+    console.log(`##### [getRoomInfoForGame] status ${extractedData.game.state}`);
+    if (extractedData.game.state !== 0) {
+      console.log("##### [getRoomInfoForGame] entered socket emit sendCardInfo");
       let hand;
-      for (let player of roomInfo['players']) {
-        console.log(player)
-        if (player.playerId === pid) {
-          console.log("##### player hand is down below")
-          console.log(player.hand);
-          hand = player.hand
+      for (let playerSequenceNumber in roomInfo['ps']) {
+        console.log(playerSequenceNumber)
+        if (playerSequenceNumber === psq) {
+          console.log("##### [getRoomInfoForGame] player hand is down below")
+          console.log(roomInfo.ps[playerSequenceNumber].hand);
+          hand = roomInfo.ps[playerSequenceNumber].hand;
         }
       }
       socket.emit('sendCardInfo', hand)
@@ -54,44 +58,17 @@ const playSocketMethods = () => {
 
   /* 방 정보 전달, 보통 방 입장 시 초기에 혹은 Game 중간에 들어올 때 사용 */
   const sendGameInfo = async (socket, io, rooms) => {
-    socket.on('requestGameInfo', (callback) => {
-      let pid;
-      let room;
-      let roomsKeys = Object.keys(rooms);
-      // pid 가 들어간 방 정보 찾기
-
-      for (let roomName of roomsKeys) {
-        for (let player of rooms[roomName].players) {
-          if (player.socketId === socket.id) {
-            room = roomName;
-            pid = player.playerId;
-            break;
-          }
-        }
-      }
-      callback(getRoomInfoForGame(rooms, room, pid, socket));
-      console.log(`##### Callback Game Info to Room ${room}`);
+    socket.on('requestGameInfo', (roomName, playerSequenceNumber, callback) => {
+      callback(getRoomInfoForGame(socket, rooms, roomName, playerSequenceNumber));
+      console.log(`##### [sendGameInfo] Callback Game Info to Room ${roomName}`);
     });
   }
 
   // 카드 드래그한 정보를 받고 같은 정보를 다른 모든 socket room 참여자 들에게 뿌린다.
   const cardDrag = (socket, io, rooms) => {
-    socket.on('cardDrag', (from, to) => {
-      console.log("##### card Dragged and Entered...")
-      let room;
-      let roomsKeys = Object.keys(rooms);
-      // pid 가 들어간 방 정보 찾기
-      for (let roomName of roomsKeys) {
-        for (let player of rooms[roomName].players) {
-          if (player.socketId === socket.id) {
-            room = roomName;
-            break;
-          }
-        }
-      }
-
+    socket.on('cardDrag', (roomName, from, to) => {
+      console.log("##### [cardDrag] card Dragged and Entered...")
       // io.to(rooms[socket.room].players[k].socketId).emit('cardDrag', from, to);
-
       console.log(`##### send card Dragged Data to ${room}`)
       io.to(room).emit('cardDrag', from, to);
     })
