@@ -3,7 +3,7 @@ import PlayerContainer from './playerContainer';
 import App from "./openvidu/App.js";
 import React, { useEffect } from 'react';
 
-const PlayerView = ({ pid, key, pn = "SomethingWrong", activate = false }) => {
+const PlayerView = ({ roomName, psq, key, pn = "SomethingWrong", activate = false }) => {
 
   const playerContainer = PlayerContainer();
   const { dragOver, dragEnterHandler, dropHandler } = playerContainer;
@@ -14,15 +14,15 @@ const PlayerView = ({ pid, key, pn = "SomethingWrong", activate = false }) => {
     <>
       <div className="bg-white rounded w-[30%] m-2"
         key={key}
-        onDragEnter={(e) => dragEnterHandler(e, pid)}
-        onDragOver={(e) => dragOver(e, pid)}
-        onDrop={(e) => dropHandler(e, pid)}
+        onDragEnter={(e) => dragEnterHandler(e, psq)}
+        onDragOver={(e) => dragOver(e, psq)}
+        onDrop={(e) => dropHandler(e, psq)}
       >
         <p className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-          {pid}
+          {psq}
         </p>
-        {(pid === sessionStorage.getItem('userName')) &&
-          <App pid={pid} />
+        {(psq === sessionStorage.getItem('userName')) &&
+          <App psq={psq} />
         }
       </div>
     </>

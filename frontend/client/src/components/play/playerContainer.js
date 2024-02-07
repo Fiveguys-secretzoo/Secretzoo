@@ -5,51 +5,51 @@ import { changePlayState, changeCardDrop, changeCardDrag, dropCard } from '../..
 
 const PlayerContainer = () => {
   const socket = useContext(SocketContext);
-  const dragItem = useSelector(state => state.plays.onBoard.card)
-  const dragFrom = useSelector(state => state.plays.onBoard.from)
-  const dragTo = useSelector(state => state.plays.onBoard.to)
-  const turnedPlayer = useSelector(state => state.plays.onBoard.turnedPlayer);
+  const dragItem = useSelector(state => state.plays.game.card)
+  const dragFrom = useSelector(state => state.plays.game.from)
+  const dragTo = useSelector(state => state.plays.game.to)
+  const turnedPlayer = useSelector(state => state.plays.game.turnedPlayer);
   const dispatch = useDispatch();
 
   // 플레이어 위에 드래그가 올라갔을 때 socket.io 로 emit
-  const dragEnterHandler = (e, pid) => {
+  const dragEnterHandler = (e, psq) => {
     console.log(dragItem + " hover " + e.target.textContent);
     socket.emit("cardDrag", dragFrom, dragTo);
   };
 
   // 드래그 Over 기본 Event
-  const dragOver = (e, pid) => {
+  const dragOver = (e, psq) => {
     e.preventDefault();
   }
 
   // 플레이어 위에 드롭 했을 때 socket.io 로 emit
-  const dropHandler = (e, pid) => {
+  const dropHandler = (e, psq) => {
     e.preventDefault();
 
     // bluff 아닐 때
     if (dragItem < 64) {
-      if (turnedPlayer.includes(pid)) {
-        console.log(`Cannot drop on Player ${pid}`);
+      if (turnedPlayer.includes(psq)) {
+        console.log(`Cannot drop on Player ${psq}`);
         return;
       }
 
-      dispatch(changeCardDrop({ from: dragFrom, to: pid }));
-      console.log(`[dropHandler] [${dragItem}] drop [${dragTo}], pid : [${pid}]`);
+      dispatch(changeCardDrop({ from: dragFrom, to: psq }));
+      console.log(`[dropHandler] [${dragItem}] drop [${dragTo}], psq : [${psq}]`);
       alert(dragItem + " drop " + e.target.textContent);
-      dropCard({ 'pid': pid, 'card': dragItem })
-      socket.emit("cardDrop", dragFrom, pid, dragItem);
+      dropCard({ 'psq': psq, 'card': dragItem });
+      socket.emit("cardDrop", roomName, playerSequenceNumber, dragFrom, psq, dragItem);
       dispatch(changePlayState(2));
     }
     else { // bluff 턴일 때
-      if (turnedPlayer.includes(pid)) {
-        console.log(`Cannot drop on Player ${pid}`);
+      if (turnedPlayer.includes(psq)) {
+        console.log(`Cannot drop on Player ${psq}`);
         return;
       }
 
-      dispatch(changeCardDrop({ from: dragFrom, to: pid }));
-      console.log(`[dropHandler/Bluff] [${dragItem}] drop [${dragTo}], pid : [${pid}]`)
+      dispatch(changeCardDrop({ from: dragFrom, to: psq }));
+      console.log(`[dropHandler/Bluff] [${dragItem}] drop [${dragTo}], psq : [${psq}]`)
       alert(`${dragItem} drop to ${e.target.textContent}`);
-      socket.emit("cardDrop", dragFrom, pid, dragItem);
+      socket.emit("cardDrop", dragFrom, psq, dragItem);
       dispatch(changePlayState(2));
     }
   };

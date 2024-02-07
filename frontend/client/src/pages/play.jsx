@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { SocketContext } from '../App';
 import { useNavigate } from "react-router-dom";
 import { motion, useDragControls } from 'framer-motion';
-import { Spinner, Button } from 'flowbite-react';
+import { Button } from 'flowbite-react';
 
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -19,7 +19,7 @@ import {
   changeCardDrag,
   changeCardDrop,
   changeCardBluff,
-  changeInitOnBoardCard,
+  changeInitgameCard,
   initTurnedPlayer,
   addTurnedPlayer,
   dropCard,
@@ -41,20 +41,20 @@ import AnswerRevealView from '../components/play/answerRevealView';
 const Play = () => {
   const socket = useContext(SocketContext);
   const dragItem = useRef();
-  const pid = sessionStorage.getItem("userName");
   const navigate = useNavigate();
 
+  const playerSequence = useSelector(state => state.userInfo.userSequence);
   // redux related const.
   const roomInfo = useSelector(state => state.plays);
-  const playState = useSelector(state => state.plays.onBoard.status);
+  const playState = useSelector(state => state.plays.game.status);
   const playerList = useSelector(state => state.plays.players);
   const adminPlayer = useSelector(state => state.plays.adminPlayer);
   const nowTurn = useSelector(state => state.plays.nowTurn);
   const roomName = useSelector(state => state.plays.roomName);
-  const fromP = useSelector(state => state.plays.onBoard.from);
-  const toP = useSelector(state => state.plays.onBoard.to);
-  const card = useSelector(state => state.plays.onBoard.card);
-  const bCard = useSelector(state => state.plays.onBoard.cardBluff);
+  const fromP = useSelector(state => state.plays.game.from);
+  const toP = useSelector(state => state.plays.game.to);
+  const card = useSelector(state => state.plays.game.card);
+  const bCard = useSelector(state => state.plays.game.cardBluff);
 
   const dispatch = useDispatch();
 
@@ -116,7 +116,7 @@ const Play = () => {
 
   // 방을 나간다. 나는 나간다.
   const leaveRoom = () => {
-    socket.emit("leaveRoom", roomName, pid);
+    socket.emit("leaveRoom", roomName, playerSequence);
     navigate('/lobby')
   }
 
@@ -139,7 +139,7 @@ const Play = () => {
     dispatch(changePlayState(2));
     dispatch(changeNowTurn(from));
     dispatch(changeCardDrop({ from: from, to: to }))
-    console.log(`[cardDrop] nowTurn : ${nowTurn} / pid : ${pid}`);
+    console.log(`[cardDrop] nowTurn : ${nowTurn} / pid : ${playerSequence}`);
     console.log(`[cardDrop] playState is ${playState} / isMyTurn : ${isMyTurn}`)
   };
 
@@ -148,7 +148,7 @@ const Play = () => {
     console.log(`card Bluffed [${from}] to [${to}] by [${bCard}]`);
     dispatch(changePlayState(3));
     dispatch(changeNowTurn(to));
-    if (nowTurn === pid) {
+    if (nowTurn === playerSequence) {
       setIsMyTurn(true);
     } else {
       setIsMyTurn(false);
@@ -162,7 +162,7 @@ const Play = () => {
     dispatch(changePlayState(4))
     dispatch(changeNowTurn(nowTurnPlayer));
     dispatch(changeCardStatus({ 'from': from, 'card': card }));
-    if (nowTurnPlayer === pid) {
+    if (nowTurnPlayer === playerSequence) {
       setIsMyTurn(true);
     } else {
       setIsMyTurn(false);
@@ -175,7 +175,7 @@ const Play = () => {
     setGameResult(result);
     dispatch(changePlayState(5));
     dispatch(changeNowTurn(nowTurnPlayer))
-    if (nowTurnPlayer === pid) {
+    if (nowTurnPlayer === playerSequence) {
       setIsMyTurn(true);
     } else {
       setIsMyTurn(false);
@@ -232,7 +232,7 @@ const Play = () => {
     });
 
     // Reconnection 확인용
-    socket.emit('checkReconnection', pid);
+    socket.emit('checkReconnection', playerSequence);
     // 게임 방의 초기 정보 확인 후 가져옴
     socket.emit('requestGameInfo', gameInfoHandler);
     socket.on('sendCardInfo', cardInfoHandler);
@@ -265,10 +265,10 @@ const Play = () => {
   useEffect(() => {
     console.log(`check playState : ${playState}`);
     if (playState === 1) {
-      socket.emit("isTurnEnd", roomName, (loserPid) => {
-        if (loserPid !== false) {
+      socket.emit("isTurnEnd", roomName, (loserPsn) => {
+        if (loserPsn !== false) {
 
-          alert(`Loser is ${loserPid}`);
+          alert(`Loser is ${loserPsn}`);
           dispatch(initTurnedPlayer());
           dispatch(changePlayState(6));
         }
@@ -280,10 +280,10 @@ const Play = () => {
 
   //nowTurn, adminPlayer 추적
   useEffect(() => {
-    if (nowTurn === pid) {
+    if (nowTurn === playerSequence) {
       setIsMyTurn(true);
     }
-    if (adminPlayer === pid) {
+    if (adminPlayer === playerSequence) {
       setIsAdmin(true);
     }
     console.log(`isMyTurn : ${isAdmin}`);
@@ -317,16 +317,16 @@ const Play = () => {
   const playerSlot = (playerArr) => {
     const slotArr = [];
     for (let k = 0; k < 5; k++) {
-      let playerId = "", playerName = "";
+      let psn = "", playerName = "";
       let activate = false;
       if (playerArr[k] != null || playerArr[k] !== undefined) {
-        playerId = playerArr[k].playerId;
+        psn = playerArr[k].playerId;
         playerName = playerArr[k].playerName;
         activate = true;
       }
       slotArr.push(
         <PlayerView
-          pid={playerId}
+          pid={psn}
           key={k}
           pn={playerName}
           activate={activate}>
@@ -391,7 +391,7 @@ const Play = () => {
                 bCard={bCard}
                 isMyTurn={isMyTurn}
                 img={images[64]}
-                pid={pid}
+                pid={playerSequence}
                 playState={playState}
               ></PassTurnCardView>
             </SelectScreen>
@@ -407,7 +407,7 @@ const Play = () => {
                 bCard={bCard}
                 isMyTurn={isMyTurn}
                 img={images[64]}
-                pid={pid}
+                pid={playerSequence}
                 playState={playState}
               ></PassTurnCardView>
             </SelectScreen>
@@ -447,7 +447,7 @@ const Play = () => {
                     cardlength={cards.length}
                     isMyTurn={isMyTurn}
                     playState={playState}
-                    pid={pid} >
+                    pid={playerSequence} >
                   </CardView>
                 ))
               }

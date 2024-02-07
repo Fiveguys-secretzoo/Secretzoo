@@ -29,9 +29,9 @@ const AnswerSelectMyTurn = ({ roomName, setIsMyTurn }) => {
     });
   }
 
-  // 카드 정답 맞추기
+  // 카드 정답 맞추기 
   const cardAnswerHandler = (answer) => {
-    console.log(`card Answered!`);
+    console.log(`[cardAnswer] card Answered!`);
     socket.emit('cardReveal', roomName, answer);
   }
 
