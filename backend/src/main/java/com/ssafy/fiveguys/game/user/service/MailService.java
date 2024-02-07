@@ -1,6 +1,7 @@
 package com.ssafy.fiveguys.game.user.service;
 
 import com.ssafy.fiveguys.game.user.entity.EmailVerification;
+import com.ssafy.fiveguys.game.user.entity.User;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.internet.MimeMessage.RecipientType;
@@ -20,6 +21,7 @@ public class MailService {
 
     private final JavaMailSender javaMailSender;
     private final RedisService redisService;
+    private final UserService userService;
 
     public String generateRandomNumber() {
         String randomNumber = "";
@@ -35,9 +37,9 @@ public class MailService {
         String title = "SecretZoo 회원가입 인증 이메일 입니다.";
         String content = "SecretZoo 서비스를 이용해 주셔서 진심으로 감사합니다." + //html 형식으로 작성 !
             "<br><br>" +
-            "인증 번호는 " + verificationCode + "입니다." +
+            "인증 번호는 <strong>" + verificationCode + "</strong>입니다." +
             "<br>" +
-            "인증번호를 제대로 입력해주세요"; //이메일 내용 삽입
+            "유효시간은 <strong style=\"color: red\">10분</strong> 입니다."; //이메일 내용 삽입
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message, false, "UTF-8");
         mimeMessageHelper.setTo(email);
@@ -56,5 +58,9 @@ public class MailService {
         String verificationCodeInRedis = redisService.getVerificationCode(
             emailVerification.getEmail());
         return requestVerificationCode.equals(verificationCodeInRedis);
+    }
+
+    public boolean isDuplicateEmail(String email) {
+        return !userService.verifyEmail(email);
     }
 }

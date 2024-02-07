@@ -1,7 +1,7 @@
 package com.ssafy.fiveguys.game.player;
 
 
-import com.ssafy.fiveguys.game.player.entity.RankingScore;
+import com.ssafy.fiveguys.game.player.entity.embeddedType.RankingScore;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

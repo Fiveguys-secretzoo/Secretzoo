@@ -1,12 +1,14 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Sidebar } from 'flowbite-react';
-import { IoGameController, IoTrophy } from 'react-icons/io5';
+import { Sidebar, Button  } from 'flowbite-react';
+import { IoGameController, IoTrophy  } from 'react-icons/io5';
 import { HiUser } from 'react-icons/hi'
+import { IoMdSearch } from "react-icons/io";
+import NoLogin from "../login/noLogin";
 
 const Navbar = () => {
-  const CustomSidebar = ({ icon: Icon, children, to }) => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const CustomSidebar = ({icon : Icon, children, to}) => {
 
     const link = () => {
       navigate(to);
@@ -22,6 +24,11 @@ const Navbar = () => {
     )
   };
 
+  const logout = () => {
+    sessionStorage.clear();
+    navigate('/');
+  }
+
   return (
     <>
       <Sidebar aria-label="Default sidebar example" className="w-full">
@@ -36,9 +43,13 @@ const Navbar = () => {
             <CustomSidebar to='/lobby/mypage' icon={HiUser}>
               내 정보
             </CustomSidebar>
+            <CustomSidebar to='/lobby/searchPlayer' icon={IoMdSearch}>
+              플레이어 검색
+            </CustomSidebar>
           </Sidebar.ItemGroup>
         </Sidebar.Items>
       </Sidebar>
+      <Button color='warning' onClick={() => logout()}>{sessionStorage.getItem('noLogin')? '나가기':'로그아웃'}</Button>
     </>
   );
 };

@@ -1,5 +1,6 @@
 package com.ssafy.fiveguys.game.user.service;
 
+import com.ssafy.fiveguys.game.player.service.PlayerService;
 import com.ssafy.fiveguys.game.user.dto.Role;
 import com.ssafy.fiveguys.game.user.dto.UserDto;
 import com.ssafy.fiveguys.game.user.dto.UserInfoDto;
@@ -8,18 +9,15 @@ import com.ssafy.fiveguys.game.user.entity.User;
 import com.ssafy.fiveguys.game.user.exception.PasswordException;
 import com.ssafy.fiveguys.game.user.exception.UserIdNotFoundException;
 import com.ssafy.fiveguys.game.user.repository.UserRepositoy;
-import jakarta.persistence.criteria.CriteriaBuilder.In;
 import jakarta.transaction.Transactional;
 
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import javax.swing.text.html.Option;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -29,6 +27,7 @@ public class UserService {
 
     private final UserRepositoy userRepositoy;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final PlayerService playerService;
 
     public void signUp(UserSignDto userSignDto) {
         User user = User.builder()
@@ -41,6 +40,8 @@ public class UserService {
             .build();
 
         userRepositoy.save(user);
+        playerService.createPlayer(user);
+
     }
 
     public void saveUser(UserDto userDto) {
@@ -52,6 +53,11 @@ public class UserService {
         User user = userRepositoy.findByUserId(userId).orElseThrow(
             () -> new NoSuchElementException("user does not exist."));
         return UserDto.getUser(user);
+    }
+
+    public boolean verifyEmail(String email) {
+        Optional<User> optionalUser = userRepositoy.findByEmail(email);
+        return optionalUser.isPresent();
     }
 
     public void deleteRefreshToken(String userId) {
@@ -70,7 +76,7 @@ public class UserService {
             UserDto userDto = UserDto.getUser(user);
             userDto.setName(userDto.getName());
             userDto.setNickname(userDto.getNickname());
-            userDto.setMainAchievement(userDto.getMainAchievement());
+            userDto.setMainReward(userDto.getMainReward());
             userDto.setProfileNumber(userDto.getProfileNumber());
             user = User.getUserDto(userDto);
             userRepositoy.save(user);
@@ -128,7 +134,7 @@ public class UserService {
         User user = userRepositoy.findByUserId(userId).orElse(null);
         if (user != null) {
             UserDto userDto = UserDto.getUser(user);
-            userDto.setMainAchievement(mainAcheiveMent);
+            userDto.setMainReward(mainAcheiveMent);
             User updatedUser = User.getUserDto(userDto);
             userRepositoy.save(updatedUser);
         } else {
