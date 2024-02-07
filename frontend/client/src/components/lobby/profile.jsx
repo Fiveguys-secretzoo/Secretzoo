@@ -10,7 +10,6 @@ const Profile = () => {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user.userInfo);
-  const isLoading = useSelector((state) => state.user.status);
 
   useEffect(() => {
     if (sessionStorage.getItem('noLogin')) {

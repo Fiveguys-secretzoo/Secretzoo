@@ -1,9 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Progress } from 'flowbite-react';
+import { useSelector, useDispatch } from 'react-redux';
+import { getUserInfo, setNoLoginUserInfo, } from '../../store/userSlice';
+
 
 
 const MyReward = () => {
+  const user = useSelector((state) => state.user.userInfo);
+  const dispatch = useDispatch();
+ 
+
   const [myRewards, setMyrewards] = useState(null);
   axios.defaults.headers.common['Authorization'] = sessionStorage.getItem('authorization');
 
@@ -16,21 +23,15 @@ const MyReward = () => {
 
   console.log(payload);
 
-  const getRewrds = (playerSequence) => {
-    const headers = {
-      'Authorization': sessionStorage.getItem('authorization')
-    };
-    axios.get('https://spring.secretzoo.site/users/user', { headers })
-      .then(response => {
-        axios.get(`https://spring.secretzoo.site/rewards/total/`+response.data.userSequence)
-        .then(response => {
-          setMyrewards(response.data);
-        });
-      });
+  const getRewards = async () => {
+    axios.get(`https://spring.secretzoo.site/rewards/total/`+user.userSequence)
+    .then(response => {
+      setMyrewards(response.data);
+    });
   };
   useEffect(() => {
-    getRewrds();
-  }, []);
+    getRewards();
+  }, [user]);
 
   if (!myRewards) {
     return <div>Loading...</div>;
