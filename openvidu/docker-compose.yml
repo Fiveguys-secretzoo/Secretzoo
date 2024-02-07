@@ -1,3 +1,23 @@
+# version: '3'
+
+# services:
+#   openvidu-app:
+#     container_name: openvidu-app
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     # ports:
+#     #  - 8080:8080
+#     expose:
+#       - 5000
+#     networks:
+#       - docker_nat
+# networks:
+#   docker_nat:
+#     external: true
+
+
+
 version: '3'
 
 services:
@@ -6,15 +26,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    # ports:
-    #  - 8080:8080
-    expose:
-      - 5000
+    environment:
+      - SERVER_PORT=5442
+      - OPENVIDU_URL=http://localhost:5443
+      - OPENVIDU_SECRET=${OPENVIDU_SECRET}
     networks:
       - docker_nat
-#    environment:
-#      OPENVIDU_URL:
-#      OPENVISU_SECRET:
 networks:
   docker_nat:
     external: true
+
