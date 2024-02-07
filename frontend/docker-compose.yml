@@ -36,12 +36,12 @@ services:
       context: ./signaling
       dockerfile: Dockerfile # 시그널링 서버를 위한 Dockerfile
     container_name: signal-server
-    ports:
-    - "5000:5000"
+    # ports:
+    # - "5000:5000"
     expose:
       - 5000
-    # networks:
-    #   - docker_nat
+    networks:
+      - docker_nat
 networks:
   docker_nat:
     external: true
