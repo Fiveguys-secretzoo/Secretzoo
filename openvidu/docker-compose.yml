@@ -3,7 +3,6 @@ version: '3'
 services:
   openvidu-app:
     container_name: openvidu-app
-    network_mode: host
     build:
       context: .
       dockerfile: Dockerfile
