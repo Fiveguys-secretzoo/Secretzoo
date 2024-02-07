@@ -1,25 +1,29 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-body>iframe {
-  display: none
+body > iframe {
+  display: none;
 }
-@font-face{
-  font-family:'DNFBitBitv2';
-  font-style:normal;font-weight:400;src:url('//cdn.df.nexon.com/img/common/font/DNFBitBitv2.otf')format('opentype')}
+@font-face {
+  font-family: "DNFBitBitv2";
+  font-style: normal;
+  font-weight: 400;
+  src: url("//cdn.df.nexon.com/img/common/font/DNFBitBitv2.otf")
+    format("opentype");
+}
 body {
-  background-image: url('./assets/img/bg.png');
+  background-image: url("./assets/img/3.png");
   background-size: cover;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
@@ -42,7 +46,7 @@ code {
 }
 
 ::-webkit-scrollbar-track {
-  background: lightgray; 
+  background: lightgray;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -50,4 +54,3 @@ code {
   border-radius: 6px;
   border: 3px solid lightgray;
 }
-

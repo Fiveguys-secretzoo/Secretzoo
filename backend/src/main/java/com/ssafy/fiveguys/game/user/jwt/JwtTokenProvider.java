@@ -87,7 +87,6 @@ public class JwtTokenProvider {
                         .map(SimpleGrantedAuthority::new)
                         .toList();
         UserDetails principal = new User(claims.getSubject(), "", authorities);
-        System.out.println("JwtTokenProvider.getAuthentication - finish");
         return new UsernamePasswordAuthenticationToken(principal, "", principal.getAuthorities());
     }
 

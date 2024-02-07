@@ -1,15 +1,14 @@
-import { createServer } from 'node:http';
-import { join } from 'node:path';
-import { Server } from 'socket.io';
-import cors from 'cors';
-import { Socket } from 'node:dgram';
-import express from 'express';
+import { createServer } from "node:http";
+import { join } from "node:path";
+import { Server } from "socket.io";
+import cors from "cors";
+import { Socket } from "node:dgram";
+import express from "express";
 
-import roomSocketMethods from './src/services/room.js';
-import playSocketMethods from './src/services/play.js';
+import roomSocketMethods from "./src/services/room.js";
+import playSocketMethods from "./src/services/play.js";
 
 //TODO Node.js 에서 Spring으로 보낼 때의 인증(IP 체크!)
-
 
 async function main() {
   const app = express();
@@ -38,19 +37,20 @@ async function main() {
     cardReveal,
     passingTurnStart,
     passingTurnSelect,
+    checkLoser,
   } = playMethods;
 
-  const handleException = (socket) => {
-
-  }
+  const handleException = (socket) => {};
   //리액트 서버
-  // const serverURL = 'http://localhost:3000'
+  const serverURL = "http://localhost:3000";
   // const serverURL = 'http://react-app:3000'
-  const serverURL = 'https://secretzoo.site'
+  //const serverURL = 'https://secretzoo.site'
   // cors 설정
-  app.use(cors({
-    origin: serverURL
-  }));
+  app.use(
+    cors({
+      origin: serverURL,
+    })
+  );
 
   const server = createServer(app);
   const io = new Server(server, {
@@ -61,16 +61,15 @@ async function main() {
     connectionStateRecovery: {},
     cors: {
       origin: serverURL,
-      methods: ["GET", "POST"]
-    }
+      methods: ["GET", "POST"],
+    },
   });
 
-  const rooms = {}
+  const rooms = {};
   /* Socket 연결 후 부분 */
-  io.on('connection', async (socket) => {
+  io.on("connection", async (socket) => {
     let disconnectedTimeout;
     console.log(`##### connection added, socket.id : ${socket.id}`);
-
 
     // room listening
     sendRoomInfo(socket, io, rooms);
@@ -81,44 +80,42 @@ async function main() {
     checkReconnection(socket, io, rooms);
     leaveRoom(socket, io, rooms);
 
-    // game listening 
+    // game listening
     sendGameInfo(socket, io, rooms);
     cardDrag(socket, io, rooms);
     cardDrop(socket, io, rooms);
     cardBluffSelect(socket, io, rooms);
     passingTurnStart(socket, io, rooms);
     cardReveal(socket, io, rooms);
+    checkLoser(socket, io, rooms);
 
     // test codes
     testRoomsInfo(socket, io, rooms);
     disconnected(socket, io, rooms);
 
-
-    process.on('uncaughtException', (err) => {
+    process.on("uncaughtException", (err) => {
       console.log(err);
       console.log("서버, 죽음의 메아리 발동");
       io.emit("serverClosed", "err");
       process.exit(1);
-    })
-    process.on('exit', (err) => {
+    });
+    process.on("exit", (err) => {
       console.log(err);
       console.log("서버, 죽음의 메아리 발동");
       io.emit("serverClosed", "close");
       process.exit(1);
-    })
-    process.on('SIGINT', (err) => {
+    });
+    process.on("SIGINT", (err) => {
       console.log(err);
       console.log("서버, 죽음의 메아리 발동");
       io.emit("serverClosed", "close");
       process.exit(1);
-    })
-
+    });
   });
 
-  server.listen(3000, () => {
-    console.log('server running at http://localhost:3000');
+  server.listen(3001, () => {
+    console.log("server running at http://localhost:3001");
   });
 }
 
 main();
-
