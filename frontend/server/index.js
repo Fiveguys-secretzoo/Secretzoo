@@ -113,8 +113,8 @@ async function main() {
     });
   });
 
-  server.listen(3000, () => {
-    console.log("server running at http://localhost:3000");
+  server.listen(3001, () => {
+    console.log("server running at http://localhost:3001");
   });
 }
 
