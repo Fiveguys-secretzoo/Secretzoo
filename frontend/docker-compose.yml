@@ -44,6 +44,6 @@ services:
   #     - 5000
   #   networks:
   #     - docker_nat
-# networks:
-#   docker_nat:
-#     external: true
+networks:
+  docker_nat:
+    external: true
