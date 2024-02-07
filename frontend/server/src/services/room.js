@@ -23,7 +23,8 @@ const {
  * @returns 
  */
 const shuffleArray = (rooms, roomName) => {
-  let array = rooms[roomName].card
+  rooms[roomName].card = Array.from({ length: 64 }, (_, i) => i);
+  let array = rooms[roomName].card;
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
@@ -171,15 +172,16 @@ const roomSocketMethods = () => {
       if (Object.keys(rooms).includes(room)) {
         callback(false);
       } else {
-        addRoom(rooms, room, pid, socket.id);
-        console.log(`##### player [${socket.id}], make room ${room}`)
-
         // 기존방 나가기
         for (let nowRoom of socket.rooms) {
           if (nowRoom !== socket.id) {
             socket.leave(nowRoom);
+            delete rooms[nowRoom];
           }
         }
+
+        addRoom(rooms, room, pid, socket.id);
+        console.log(`##### player [${socket.id}], make room ${room}`)
 
         // 입력받은 방 들어가기
         socket.join(room);

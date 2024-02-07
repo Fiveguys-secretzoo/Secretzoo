@@ -14,14 +14,6 @@ const Profile = () => {
 
   useEffect(() => {
     if (sessionStorage.getItem('noLogin')) {
-      const noLoginUser = ({
-        "name": 'noLoginUser',
-        "nickname": sessionStorage.getItem('userNickname'),
-        "mainReward": '로그인 하세요',
-        "profileNumber": '000',
-        "level" : '0',
-      });
-      dispatch(setNoLoginUserInfo(noLoginUser));
     } else {
       dispatch(getUserInfo());
     }

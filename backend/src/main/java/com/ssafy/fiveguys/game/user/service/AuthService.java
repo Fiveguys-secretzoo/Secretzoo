@@ -9,7 +9,6 @@ import com.ssafy.fiveguys.game.user.dto.JwtTokenDto;
 import com.ssafy.fiveguys.game.user.dto.UserDto;
 import com.ssafy.fiveguys.game.user.exception.PasswordException;
 import com.ssafy.fiveguys.game.user.exception.UserIdNotFoundException;
-import com.ssafy.fiveguys.game.user.repository.RedisRepository;
 import com.ssafy.fiveguys.game.user.repository.UserRepositoy;
 import jakarta.transaction.Transactional;
 
@@ -62,7 +61,6 @@ public class AuthService {
         RefreshToken refreshToken = RefreshToken.builder()
             .userId(authentication.getName())
             .refreshToken(tokenSet.getRefreshToken())
-            .expirationTime(60 * 24L) // 1일
             .build();
 
         redisService.saveRefreshToken(refreshToken.getUserId(), refreshToken.getRefreshToken());
@@ -134,5 +132,6 @@ public class AuthService {
         Optional<User> optionalUser = userRepositoy.findByUserId(userId);
         return optionalUser.isPresent();
     }
+
 }
 

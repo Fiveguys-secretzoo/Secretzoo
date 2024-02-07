@@ -7,7 +7,6 @@ const Ranking = () => {
   const [ranking, setRanking] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [myRank, setMyRank] = useState(null);
-  const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user.userInfo);
 
@@ -20,8 +19,7 @@ const Ranking = () => {
       if(user.userSequence){
         axios.get('https://spring.secretzoo.site/rank/attack/'+user.userSequence)
         .then(Response => {
-          setMyRank(Response);
-          console(Response.data);
+          setMyRank(Response.data);
         })
       }
     });
@@ -76,7 +74,9 @@ const Ranking = () => {
       setIsLoaded(true);
     }, 500);
   }, [])
-  
+  if(!myRank && !sessionStorage.getItem('noLogin')){
+    return(<div>isLoading...</div>)
+  }
   return (
     <>
       <div className="p-4 rounded">

@@ -1,5 +1,6 @@
 package com.ssafy.fiveguys.game.user.controller;
 
+import com.ssafy.fiveguys.game.user.dto.EmailRequestDto;
 import com.ssafy.fiveguys.game.user.dto.JwtTokenDto;
 import com.ssafy.fiveguys.game.user.dto.LoginRequestDto;
 import com.ssafy.fiveguys.game.user.dto.UserDto;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000", exposedHeaders = "*")
+@CrossOrigin(origins = {"https://secretzoo.site","http://localhost:3000"}, exposedHeaders = "*")
 @RequestMapping("/auth")
 @Tag(name = "AuthController", description = "사용자(회원, 비회원)가 이용할 수 있는 서비스")
 public class AuthController {
@@ -75,7 +76,6 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.OK).body("Logout Success");
     }
 
-    //닉네임변경, 업적변경, 프로필변경, 비밀변호변경
     @Operation(summary = "아이디 중복체크 API")
     @PostMapping("/check/{userId}")
     public ResponseEntity<?> checkUserId(@PathVariable String userId) {
@@ -84,7 +84,4 @@ public class AuthController {
         }
         return ResponseEntity.status(HttpStatus.OK).body("사용 가능한 아이디입니다.");
     }
-
-
-
 }
