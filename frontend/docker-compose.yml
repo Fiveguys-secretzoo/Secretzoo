@@ -17,6 +17,7 @@ services:
     environment:
       - WDS_SOCKET_PROT=0
       - REACT_APP_SOCKET_SERVER_URL=ws://node-server:3001
+      - APPLICATION_SERVER_URL=http://openvidu-app:5000
     networks:
       - docker_nat
 

@@ -11,11 +11,11 @@ services:
     #  - 8080:8080
     expose:
       - 5000
-    # networks:
-    #   - docker_nat
+    networks:
+      - docker_nat
 #    environment:
 #      OPENVIDU_URL:
 #      OPENVISU_SECRET:
-# networks:
-#   docker_nat:
-#     external: true
+networks:
+  docker_nat:
+    external: true
