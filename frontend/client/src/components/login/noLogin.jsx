@@ -15,15 +15,7 @@ const NoLogin = () => {
     if (name.length > 0) {
       sessionStorage.setItem('noLogin', true);
       sessionStorage.setItem('userNickname', name);
-      const noLoginUser = ({
-        "name": 'noLoginUser',
-        "nickname": sessionStorage.getItem('userNickname'),
-        "mainReward": '로그인 하세요',
-        "profileNumber": '000',
-        "level" : '0',
-        "userSequence" : uuidv4(),
-      });
-      dispatch(setNoLoginUserInfo(noLoginUser));
+      dispatch(setNoLoginUserInfo());
       navigate("/lobby");
     } else {
       Swal.fire({

@@ -65,15 +65,8 @@ const Ranking = () => {
   // 처음에 공격랭킹 가져오기
   useEffect(() => {
     getAttack();
-    console.log(ranking);
-  }, [])
-
-  useEffect(() => {
-    getAttack();
-    setTimeout(() => {
-      setIsLoaded(true);
-    }, 500);
-  }, [])
+  }, [user])
+  
   if(!myRank && !sessionStorage.getItem('noLogin')){
     return(<div>isLoading...</div>)
   }
