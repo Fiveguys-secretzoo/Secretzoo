@@ -48,7 +48,7 @@ const addRoom = (rooms, roomName, playerSequenceNumber, socketId, playerNickName
 
   rooms[roomName] = JSON.parse(JSON.stringify(roomInfo)); // 깊은 복사로 수정 완료
   rooms[roomName].roomName = roomName;
-  rooms[roomName].ps[playerSequenceNumber] = { ...Player(playerSequenceNumber, socketId, playerNicmName) };
+  rooms[roomName].ps[playerSequenceNumber] = { ...Player(playerSequenceNumber, socketId, playerNickName) };
   rooms[roomName].adm = playerSequenceNumber;
   console.log(`##### [addRoom] player ${playerSequenceNumber} socket ${socketId} playerNN ${playerNickName} created Room ${roomName}`);
   /*TODO - send room data to backend server!!! */
@@ -63,16 +63,16 @@ const addPlayer = (io, socket, rooms, roomName, playerSequenceNumber, socketId, 
   let isFirst = true;
   console.log(rooms[roomName]);
   // 이미 방에 들어가 있는지 체크 
-  
+
   for (let player in rooms[roomName].ps) {
     if (player === playerSequenceNumber) {
       isFirst = false;
       break;
     }
   }
-  
+
   if (isFirst) {
-    let newPlayer = {...Player(playerSequence, socketId, playerNickName)}
+    let newPlayer = { ...Player(playerSequence, socketId, playerNickName) }
     let playerData = {
       'psq': newPlayer.psq,
       'pn': newPlayer.pn,
@@ -86,7 +86,7 @@ const addPlayer = (io, socket, rooms, roomName, playerSequenceNumber, socketId, 
   }
   console.log(`##### [addPlayer] p : ${playerSequenceNumber} s : ${socketId} pn : ${playerNickName} 
       entered Room ${roomName}`);
-  
+
   /*TODO - send room data and player data to backend server */
 
 }
@@ -168,7 +168,7 @@ const roomSocketMethods = () => {
 
         // 입력받은 방 들어가기
         socket.join(room);
-        rooms[room].nt = pid;
+        rooms[room].nt = psq;
         callback(true);
       }
     });
@@ -189,9 +189,9 @@ const roomSocketMethods = () => {
           }
         }
 
-        for( let rn in rooms){
-          for(let p in rooms[rn].ps){
-            if(p === psq){
+        for (let rn in rooms) {
+          for (let p in rooms[rn].ps) {
+            if (p === psq) {
               removePlayer(io, socket, rooms, rn, psq);
             }
           }
@@ -202,7 +202,7 @@ const roomSocketMethods = () => {
 
         // console.log(io.of('/').adapter.rooms);
         socket.emit('updateRoom', rooms);
-        addPlayer(io, socket, rooms, room, pid, socket.id, pnn)
+        addPlayer(io, socket, rooms, room, psq, socket.id, pnn)
         callback(true)
         console.log(`##### [enterRoom] player ${socket.id} join room : ${room}`);
       }

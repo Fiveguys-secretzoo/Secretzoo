@@ -278,7 +278,6 @@ const Play = () => {
 
   }, [playState]);
 
-
   //nowTurn, adminPlayer 추적
   useEffect(() => {
     if (nowTurn === pid) {
@@ -471,8 +470,8 @@ const Play = () => {
                 <Button onClick={/*sendMessage*/() => { console.log(roomInfo) }}>Send</Button>
               </div>
             </div>
-              <Button className={(playState === 0) ? '' : 'hidden'} disabled={!isAdmin} color="success" onClick={start}>start</Button>
-              <Button color="success" onClick={leaveRoom}>난 나갈거다.</Button>
+            <Button className={(playState === 0) ? '' : 'hidden'} disabled={!isAdmin} color="success" onClick={start}>start</Button>
+            <Button color="success" onClick={leaveRoom}>난 나갈거다.</Button>
           </div>
         </div>
       </div>
