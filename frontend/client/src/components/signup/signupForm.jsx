@@ -168,7 +168,7 @@ const SignupForm = () => {
     }).catch(error => {
       if (error.response) {
         Swal.fire({
-          "text" : error.response.data,
+          "text" : "인증코드가 옳바르지 않습니다.",
           "confirmButtonColor" : '#3085d6'
         });
       } else if (error.request) {

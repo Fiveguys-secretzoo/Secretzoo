@@ -29,7 +29,6 @@ export const getUserInfo = createAsyncThunk(
       return userData
 
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data);
     }
   }
 );
@@ -41,7 +40,6 @@ export const axiosUpdateProfileImage = createAsyncThunk(
       await axios.put('https://spring.secretzoo.site/users/profile-number', number,);
       dispatch(getUserInfo());
     } catch (error) {
-      return rejectWithValue(error.response.data);
     }
   }
 );
@@ -65,7 +63,6 @@ export const axiosUpdateMainAchievement = createAsyncThunk(
       await axios.put('https://spring.secretzoo.site/users/main-achievement', mainAchievement,);
       dispatch(getUserInfo()) 
     } catch (error) {
-      return rejectWithValue(error.response.data);
     }
   }
 );
