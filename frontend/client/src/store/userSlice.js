@@ -25,6 +25,7 @@ export const getUserInfo = createAsyncThunk(
         "nextExp" : data2.data.nextExp,
         "prevExp" : data2.data.prevExp,
       };
+      sessionStorage.setItem('userName',data1.userId);
       
       return userData
 
