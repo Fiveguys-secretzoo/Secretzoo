@@ -434,10 +434,10 @@ const Play = () => {
           }
           {/* <img className="" src={require(`../assets/img/card/00/000.png`)} alt="" /> */}
 
-          <div className='flex absolute left-[35%] w-screen bottom-[100px]'>
+          <div className='flex absolute left-[35%] w-[65%] bottom-[100px]'>
 
             {/* 카드 표현 부분 */}
-            <div className='flex max-w-[35%] max-h-[10em]'>
+            <div className='flex max-w-[55%] max-h-[10em]'>
               {cards &&
                 cards.map((i, index) => (
                   <CardView
@@ -452,8 +452,9 @@ const Play = () => {
                   </CardView>
                 ))
               }
+            </div>
 
-
+            <div className='flex flex-col'>
               <h1>Chat Application</h1>
               <div className="message-list">
                 {messages.map((msg, index) => (
@@ -469,9 +470,9 @@ const Play = () => {
                 />
                 <Button onClick={/*sendMessage*/() => { console.log(roomInfo) }}>Send</Button>
               </div>
+            </div>
               <Button className={(playState === 0) ? '' : 'hidden'} disabled={!isAdmin} color="success" onClick={start}>start</Button>
               <Button color="success" onClick={leaveRoom}>난 나갈거다.</Button>
-            </div>
           </div>
         </div>
       </div>

@@ -20,7 +20,7 @@ const Rooms = () => {
   }, []);
 
   // 방제목
-  const [roomName, setRoomName] = useState(sessionStorage.getItem('userName') + "의 게임방");
+  const [roomName, setRoomName] = useState('');
   // 방만들기
   const createRoom = () => {
     socket.emit('createRoom', roomName, sessionStorage.getItem('userName'), (callback) => {

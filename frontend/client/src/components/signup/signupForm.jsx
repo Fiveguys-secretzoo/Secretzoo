@@ -122,8 +122,19 @@ const SignupForm = () => {
     const data = {
       "email" : email,
     }
+
+    Swal.fire({
+      title: '처리 중입니다...',
+      text: '잠시만 기다려 주세요.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+  
     axios.post('https://spring.secretzoo.site/verify-email/send',data)
     .then(Response => {
+      Swal.close();
       Swal.fire({
         "text" : Response.data,
         "confirmButtonColor" : '#3085d6'
@@ -131,6 +142,7 @@ const SignupForm = () => {
       setopenEmailCheck(true);
       setDidEmailRequest(true);
     }).catch(error => {
+      Swal.close();
       if (error.response) {
         const statusCode = error.response.status;
 
