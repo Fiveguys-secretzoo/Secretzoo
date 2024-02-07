@@ -1,25 +1,21 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
 
-
 const MyRanking = () => {
+  const user = useSelector((state) => state.user.userInfo);
+  
   const [myRanking, setMyRanking] = useState(null)
-  const getRanking = () => {
-    const headers = {
-      'Authorization': sessionStorage.getItem('authorization')
-    };
-    axios.get('https://spring.secretzoo.site/users/user', { headers })
-      .then(response => {
-        axios.get(`https://spring.secretzoo.site/rank/total/`+response.data.userSequence)
-        .then(response => {
-          console.log(response.data);
-          setMyRanking(response.data);
-        });
-      });
+  const getRanking = async () => {
+    axios.get(`https://spring.secretzoo.site/rank/total/`+user.userSequence)
+    .then(response => {
+      console.log(response.data);
+      setMyRanking(response.data);
+    });
   };
   useEffect(() => {
     getRanking();
-  }, []);
+  }, [user]);
   if (!myRanking) {
     return <div>Loading...</div>;
   }

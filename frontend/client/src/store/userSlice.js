@@ -1,16 +1,49 @@
 import React from 'react';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import Swal from 'sweetalert2';
+import { v4 as uuidv4 } from 'uuid';
 
-axios.defaults.headers.common['Authorization'] = sessionStorage.getItem('authorization');
+const axiosInstance = axios.create();
+
+axiosInstance.interceptors.request.use(config => {
+  const authorization = sessionStorage.getItem('authorization');
+  config.headers.Authorization = authorization ? authorization : '';
+  return config;
+});
+
+axiosInstance.interceptors.response.use(response => {
+  return response;
+}, async (error) => {
+  const originalRequest = error.config;
+  if (error.response.status === 401 && !originalRequest._retry) {
+    originalRequest._retry = true;
+    const refresh_Token = sessionStorage.getItem('refresh_token');
+    const access_token = sessionStorage.getItem('authorization');
+    try {
+      const response = await axiosInstance.post('https://spring.secretzoo.site/auth/token/refresh', {} ,{
+        headers: {
+          "access_token" : access_token,
+          "refresh_token" : refresh_Token,
+        }
+      });
+      sessionStorage.setItem('authorization', 'Bearer ' + response.data.access_token);
+      sessionStorage.setItem('refresh_token', response.data.refresh_token);
+      axiosInstance.defaults.headers.common['Authorization'] = sessionStorage.getItem('authorization');
+      return axiosInstance(originalRequest);
+    } catch (refreshError) {
+    }
+  }
+  return Promise.reject(error);
+});
+
 export const getUserInfo = createAsyncThunk(
   'user/getUserInfo',
   async (_, thunkAPI) => {
-    axios.defaults.headers.common['Authorization'] = sessionStorage.getItem('authorization');
     try {
-      const response1 = await axios.get('https://spring.secretzoo.site/users/user');
+      const response1 = await axiosInstance.get('https://spring.secretzoo.site/users/user');
       const data1 = response1.data;
-      const response2 = await axios.get('https://spring.secretzoo.site/player/'+ data1.userSequence);
+      const response2 = await axiosInstance.get('https://spring.secretzoo.site/player/'+ data1.userSequence);
       const data2 = response2.data;
       console.log(data2)
       const userData = {
@@ -37,7 +70,7 @@ export const axiosUpdateProfileImage = createAsyncThunk(
   'user/axiosUpdateProfileImage',
   async (number, { dispatch, rejectWithValue }) => {
     try {
-      await axios.put('https://spring.secretzoo.site/users/profile-number', number,);
+      await axiosInstance.put('https://spring.secretzoo.site/users/profile-number', number,);
       dispatch(getUserInfo());
     } catch (error) {
     }
@@ -48,7 +81,7 @@ export const axiosUpdateNickname = createAsyncThunk(
   'user/axiosUpdateNickname',
   async (nickname, { dispatch, rejectWithValue }) => {
     try {
-      await axios.put('https://spring.secretzoo.site/users/nickname', nickname,);
+      await axiosInstance.put('https://spring.secretzoo.site/users/nickname', nickname,);
       dispatch(getUserInfo());
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -60,9 +93,30 @@ export const axiosUpdateMainAchievement = createAsyncThunk(
   'user/axiosUpdateMainAchievement',
   async (mainAchievement, { dispatch, rejectWithValue }) => {
     try {
-      await axios.put('https://spring.secretzoo.site/users/main-achievement', mainAchievement,);
+      await axiosInstance.put('https://spring.secretzoo.site/users/main-achievement', mainAchievement,);
       dispatch(getUserInfo()) 
     } catch (error) {
+    }
+  }
+);
+export const axiosCheckPassword = createAsyncThunk(
+  'user/axiosCheckPassword',
+  async (password) => {
+    try {
+      await axiosInstance.post('https://spring.secretzoo.site/users/password', password);
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+export const axiosUpdatePassword = createAsyncThunk(
+  'user/axiosUpdatePassword',
+  async (password) => {
+    try {
+      axiosInstance.put('https://spring.secretzoo.site/users/password', password)
+    } catch (error) {
+     throw error;
     }
   }
 );
@@ -75,9 +129,16 @@ const userSlice = createSlice({
     error: null
   },
   reducers: {
-    setNoLoginUserInfo(state, action) {
-      state.userInfo = action.payload;
-      state.isLoading = true;
+    setNoLoginUserInfo(state) {
+      state.userInfo = {
+        name: 'noLoginUser',
+        nickname: 'Guest',
+        mainReward: '로그인 하세요',
+        profileNumber: '000',
+        level: '0',
+        userSequence: uuidv4(),
+      };
+      state.isLoading = false;
     },
   },
   extraReducers: (builder) => {
