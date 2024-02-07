@@ -6,6 +6,8 @@ services:
       context: ./client
       dockerfile: Dockerfile
     container_name: react-app
+    expose:
+      - 3000
     # ports:
     #  - "3000:3000"
     #volumes:
@@ -14,7 +16,8 @@ services:
     #  - /usr/src/app:/usr/share/nginx/html
     environment:
       - WDS_SOCKET_PROT=0
-      - REACT_APP_SOCKET_SERVER_URL=ws://node-server:3000
+      - REACT_APP_SOCKET_SERVER_URL=ws://node-server:3001
+      - APPLICATION_SERVER_URL=http://openvidu-app:5000
     networks:
       - docker_nat
 
@@ -26,22 +29,22 @@ services:
       # ports:
       # - "3001:3001" # Node.js 서버 포트 설정
       expose:
-        - 3000
+        - 3001
       restart: always
       networks:
         - docker_nat
 
-  signal-server:
-    build:
-      context: ./signaling
-      dockerfile: Dockerfile # 시그널링 서버를 위한 Dockerfile
-    container_name: signal-server
-    # ports:
-    # - "5000:5000"
-    expose:
-      - 5000
-    networks:
-      - docker_nat
+  # signal-server:
+  #   build:
+  #     context: ./signaling
+  #     dockerfile: Dockerfile # 시그널링 서버를 위한 Dockerfile
+  #   container_name: signal-server
+  #   # ports:
+  #   # - "5000:5000"
+  #   expose:
+  #     - 5000
+  #   networks:
+  #     - docker_nat
 networks:
   docker_nat:
     external: true
