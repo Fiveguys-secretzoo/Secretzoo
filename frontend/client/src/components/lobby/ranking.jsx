@@ -17,7 +17,7 @@ const Ranking = () => {
     .then(Response => {
       setRanking(Response.data.data);
       if(user.userSequence){
-        axios.get('https://spring.secretzoo.site/rank/attack/'+user.userSequence)
+        axios.get('https://spring.secretzoo.site/rank/attack/' + user.userSequence)
         .then(Response => {
           setMyRank(Response.data);
         })
@@ -32,7 +32,7 @@ const Ranking = () => {
     .then(Response => {
       setRanking(Response.data.data);
       if(user.userSequence){
-        axios.get('https://spring.secretzoo.site/rank/defense/'+user.userSequence)
+        axios.get('https://spring.secretzoo.site/rank/defense/'+ user.userSequence)
         .then(Response => {
           setMyRank(Response.data);
         })
@@ -47,7 +47,7 @@ const Ranking = () => {
     .then(Response => {
       setRanking(Response.data.data);
       if(user.userSequence){
-        axios.get('https://spring.secretzoo.site/rank/pass/'+user.userSequence)
+        axios.get('https://spring.secretzoo.site/rank/pass/'+ user.userSequence)
         .then(Response => {
           setMyRank(Response.data);
         })

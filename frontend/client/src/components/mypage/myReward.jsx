@@ -24,7 +24,7 @@ const MyReward = () => {
   console.log(payload);
 
   const getRewards = async () => {
-    axios.get(`https://spring.secretzoo.site/rewards/total/`+user.userSequence)
+    axios.get(`https://spring.secretzoo.site/rewards/total/`+ user.userSequence)
     .then(response => {
       setMyrewards(response.data);
     });
