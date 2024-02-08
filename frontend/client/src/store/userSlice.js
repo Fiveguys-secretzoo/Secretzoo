@@ -1,7 +1,6 @@
 import React from 'react';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import Swal from 'sweetalert2';
 import { v4 as uuidv4 } from 'uuid';
 
 const axiosInstance = axios.create();
@@ -132,7 +131,7 @@ const userSlice = createSlice({
     setNoLoginUserInfo(state) {
       state.userInfo = {
         name: 'noLoginUser',
-        nickname: 'Guest',
+        nickname: sessionStorage.getItem('userNickname'),
         mainReward: '로그인 하세요',
         profileNumber: '000',
         level: '0',
