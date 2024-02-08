@@ -1,3 +1,9 @@
+// import React, { useState, useEffect, useRef } from 'react';
+import { OpenVidu } from 'openvidu-browser';
+import axios from 'axios';
+import './openvidu/App.css';
+import UserVideoComponent from './openvidu/UserVideoComponent';
+// openvidu react import 끝
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import { SocketContext } from '../App';
@@ -24,8 +30,10 @@ import {
   addTurnedPlayer,
   dropCard,
 } from '../store/playSlice'
+import PlayerContainer from '../components/play/playerContainer';//추가
+// import PlayerView from '../components/play/playerView'//직접 추가했음
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'https://openvidu.secretzoo.site/';
 
-import PlayerView from '../components/play/playerView'
 import CardView from '../components/play/cardView'
 
 import '../style/play.css';
@@ -78,6 +86,33 @@ const Play = () => {
     '양',
     '고래',
   ];
+
+  const PlayerView = ({ pid, key, pn = "SomethingWrong", activate = false,aaa }) => {
+
+    const playerContainer = PlayerContainer();
+    const { dragOver, dragEnterHandler, dropHandler } = playerContainer;
+  
+    // TODO 위에 올렸을 때 가능하냐 안하냐에 따라서 효과를 다르게 주는 것...!!
+  
+    return (
+      <>
+        <div className="bg-white rounded w-[30%] m-2"
+          key={key}
+          onDragEnter={(e) => dragEnterHandler(e, pid)}
+          onDragOver={(e) => dragOver(e, pid)}
+          onDrop={(e) => dropHandler(e, pid)}
+        >
+          <p className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+            {pid}
+          </p>
+          {aaa}
+          {/* {(pid === sessionStorage.getItem('userName'))&&
+          <App pid={pid}/>
+           }  */}
+        </div>
+      </>
+    );
+  }
 
   const imageRoute = (i) => {
     return require(`../assets/img/card/0${Math.floor(i / 8)}/00${i % 8}.png`);
@@ -315,8 +350,10 @@ const Play = () => {
     socket.emit('start');
   }
 
+  const aaa = useRef(undefined);
   const playerSlot = (playerArr) => {
     const slotArr = [];
+    // const aaa = undefined;
     for (let k = 0; k < 5; k++) {
       let playerId = "", playerName = "";
       let activate = false;
@@ -324,18 +361,162 @@ const Play = () => {
         playerId = playerArr[k].playerId;
         playerName = playerArr[k].playerName;
         activate = true;
+        if(k==0){
+          aaa.current = <UserVideoComponent streamManager={publisher} />
+        }
+        else{
+          aaa.current = <UserVideoComponent streamManager={subscribers[k-1]} />
+        }
+      }
+      else{
+        aaa.current=undefined;
       }
       slotArr.push(
         <PlayerView
-          pid={playerId}
-          key={k}
-          pn={playerName}
-          activate={activate}>
+        pid={playerId}
+        key={k}
+        pn={playerName}
+        activate={activate}
+        aaa={aaa.current}>
         </PlayerView>
       )
     }
+    App();
     return slotArr;
   }
+
+  const [myUserName, setMyUserName] = useState(sessionStorage.getItem('userName'));
+  const [publisher, setPublisher] = useState(undefined);
+  const [subscribers, setSubscribers] = useState([]);
+  const session = useRef(undefined);
+  const App = () => {
+      useEffect(() => {
+        console.log('$$$$$$$$$$$$$$$$$$$$$$$4');
+          window.addEventListener('beforeunload', onbeforeunload);
+          joinSession();
+          return () => {
+              window.removeEventListener('beforeunload', onbeforeunload);
+              leaveSession();
+          };
+      }, []);
+
+      const onbeforeunload = () => {
+          leaveSession();
+      };
+
+      const deleteSubscriber = (streamManager) => {
+          setSubscribers((prevSubscribers) => prevSubscribers.filter((sub) => sub !== streamManager));
+      };
+
+      const joinSession = async () => {
+          const OV = new OpenVidu();
+
+          const mySession = OV.initSession();
+          
+          mySession.on('streamCreated', (event) => {
+              const subscriber = mySession.subscribe(event.stream, undefined);
+              setSubscribers((prevSubscribers) => [...prevSubscribers, subscriber]);
+          });
+          
+          mySession.on('streamDestroyed', (event) => {
+              deleteSubscriber(event.stream.streamManager);
+          });
+          
+          mySession.on('exception', (exception) => {
+              console.warn(exception);
+          });
+          
+          try {
+              const token = await getToken(sessionStorage.getItem('roomName'));
+              setMyUserName(sessionStorage.getItem('userName'));
+              
+              mySession.connect(token, { clientData: myUserName })
+              .then(async () => {
+                  let newPublisher = await OV.initPublisherAsync(undefined, {
+                      audioSource: undefined,
+                      videoSource: undefined,
+                      publishAudio: true,
+                      publishVideo: true,
+                      resolution: '600x480',
+                      frameRate: 30,
+                      insertMode: 'APPEND',
+                      mirror: false,
+                  });
+                  
+                  await mySession.publish(newPublisher);
+                  
+                  setPublisher(newPublisher);
+                  console.log(session);
+                  
+                  console.log(publisher);
+              })
+              .catch((error) => {
+                  console.log('There was an error connecting to the session:', error.code, error.message);
+              });
+          } catch (error) {
+              console.error(error);
+          }
+          session.current = mySession;
+      };
+      
+      const leaveSession = () => {
+          const mySession = session.current;
+          sessionStorage.removeItem('roomName');
+          if (mySession) {
+              mySession.disconnect();
+          }
+          
+          session.current=undefined;
+          setSubscribers([]);
+          // setMySessionId('');
+          setMyUserName(sessionStorage.getItem('userName'));
+          // setMainStreamManager(undefined);
+          setPublisher(undefined);
+      };
+
+      const getToken = async (sid) => {
+          const safeid = encodeURIComponent(sid).replace(/[%]/g, '');
+          const sessionId = await createSession(safeid);
+          return await createToken(sessionId);
+      };
+
+      const createSession = async (sessionId) => {
+          const response = await axios.post(APPLICATION_SERVER_URL + 'api/sessions', { customSessionId: sessionId }, {
+              headers: { 'Content-Type': 'application/json' },
+          });
+          return response.data;
+      };
+
+      const createToken = async (sessionId) => {
+          const response = await axios.post(APPLICATION_SERVER_URL + 'api/sessions/' + sessionId + '/connections', {}, {
+              headers: { 'Content-Type': 'application/json' },
+          });
+          return response.data;
+      };
+
+      // return (
+      //     <div className="container">
+      //         <div id="video-container" className="col-md-6">
+      //             {publisher !== undefined ? (
+      //                 <div className="stream-container col-md-6 col-xs-6">
+      //                     <UserVideoComponent streamManager={publisher} />
+      //                 </div>
+                      
+      //             ) : null}
+      //         </div>
+      //         <div className="sub-container">
+      //             {subscribers.map((sub, i) => (
+      //                 <div key={sub.id} className="stream-container col-md-6 col-xs-6">
+      //                     <span>{sub.id}</span>
+      //                     <UserVideoComponent streamManager={sub} />
+      //                 </div>
+      //             ))}
+      //         </div>
+      //     </div>
+      // );
+  };
+
+
 
   return (
     <>
