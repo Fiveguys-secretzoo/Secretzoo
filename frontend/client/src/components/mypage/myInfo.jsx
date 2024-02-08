@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUserInfo, axiosUpdateProfileImage, axiosUpdateNickname, axiosUpdateMainAchievement } from '../../store/userSlice';
+import { getUserInfo, axiosUpdateProfileImage, axiosUpdateNickname, axiosUpdateMainAchievement, axiosCheckPassword, axiosUpdatePassword } from '../../store/userSlice';
 import axios from 'axios';
 import { Button, TextInput, Modal, Label, Card } from 'flowbite-react';
 import Swal from 'sweetalert2';
@@ -13,9 +13,8 @@ const MyInfo = () => {
   const user = useSelector((state) => state.user.userInfo);
 
   useEffect(() => {
-    getRewrds();
-    dispatch(getUserInfo());
-  }, [dispatch])
+    getRewards();
+  }, [user])
 
   const updateProfileImage = (number) => {
     dispatch(axiosUpdateProfileImage(number));
@@ -30,46 +29,49 @@ const MyInfo = () => {
   };
 
   const [passwordCheckState, setPasswordCheckState] = useState(false);
-  const checkPassword = (password) => {
-    axios.post('https://spring.secretzoo.site/users/password', password)
-      .then(response => {
-        setOpenUpdatePasswordModal(true);
-        setPasswordCheckState(true);
-      }).catch(e => {
-        Swal.fire({
-          "text" : '비밀번호가 옳지 않습니다.',
-          "confirmButtonColor" : '#3085d6'
-        });
+  const checkPassword = async (password) => {
+    try { 
+      const actionResult = await dispatch(axiosCheckPassword(password));
+      if (actionResult.error) {
+        throw new Error(actionResult.error.message);
+      }
+      setOpenUpdatePasswordModal(true);
+      setPasswordCheckState(true);
+    } catch (error) { 
+      Swal.fire({
+        "text" : '비밀번호가 옳지 않습니다.',
+        "confirmButtonColor" : '#3085d6'
       });
+    }
   };
 
-  const updatePassword = (password) => {
+  const updatePassword = async (password, passwordCheck) => {
+    if (password!==passwordCheck) {
+      Swal.fire({
+        "text" : '비밀번호가 일치하지 않습니다.',
+        "confirmButtonColor" : '#3085d6'
+      });
+      return;
+    }
     if (passwordCheckState) {
-      axios.put('https://spring.secretzoo.site/users/password', password)
-        .then(response => {
-          Swal.fire({
-            "text" : '변경 선공',
-            "confirmButtonColor" : '#3085d6'
-          });
-          getUserInfo();
-        });
+        try { 
+        const actionResult = await dispatch(axiosUpdatePassword(password));
+        if (actionResult.error) {
+          throw new Error(actionResult.error.message);
+        }
+        setOpenUpdatePasswordModal(false);
+      } catch (error) {
+
+      }
     }
   };
 
   const [myRewards, setMyrewards] = useState(null);
-  const getRewrds = () => {
-    const headers = {
-      'Authorization': sessionStorage.getItem('authorization')
-    };
-    axios.get('https://spring.secretzoo.site/users/user', { headers })
-      .then(response => {
-        axios.get(`https://spring.secretzoo.site/rewards/done/`+response.data.userSequence)
-        .then(response => {
-          setMyrewards(response.data);
-          getUserInfo();
-        });
-      });
-    
+  const getRewards = async () => {
+    axios.get(`https://spring.secretzoo.site/rewards/done/`+user.userSequence)
+    .then(response => {
+      setMyrewards(response.data);
+    });
   };
 
   const [openProfileImageModal, setOpenProfileImageModal] = useState(false);
@@ -169,7 +171,7 @@ const MyInfo = () => {
           <TextInput value={changePasswordCheck} onChange={(e) => setChangePasswordCheck(e.target.value)} type='password'></TextInput>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={() => { updatePassword(changePassword); setOpenUpdatePasswordModal(false) }}>수정</Button>
+          <Button onClick={() => updatePassword(changePassword, changePasswordCheck) }>수정</Button>
           <Button color="gray" onClick={() => { setOpenUpdatePasswordModal(false); setPasswordCheckState(false) }}>
             취소
           </Button>

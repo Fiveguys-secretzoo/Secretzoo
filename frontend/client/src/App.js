@@ -1,8 +1,10 @@
-import React, { createContext } from "react";
+import React, { createContext, useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 // import './App.css';
 import io from "socket.io-client";
-import { Provider } from "./store/stores";
+import { getUserInfo, setNoLoginUserInfo } from './store/userSlice';
+import { useDispatch } from 'react-redux';
+
 
 import Lobby from './pages/lobby'
 import Login from './pages/login'
@@ -26,7 +28,21 @@ export const SocketContext = createContext();
 
 function App() {
   console.error = (error) => error.apply;
+  const dispatch = useDispatch();
 
+  useEffect(() => {
+    const loadData = async () => {
+      const authorization = localStorage.getItem('authorization');
+      if (authorization) {
+        dispatch(getUserInfo);
+      }
+      if(sessionStorage.getItem('noLogin')){
+        dispatch(setNoLoginUserInfo);
+      }
+    };
+
+    loadData();
+  }, [dispatch]);
   return (
     <BrowserRouter>
       <SocketContext.Provider value={socket}>
