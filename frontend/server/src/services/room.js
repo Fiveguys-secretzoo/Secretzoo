@@ -77,12 +77,22 @@ const addPlayer = (io, socket, rooms, roomName, playerSequenceNumber, socketId, 
       'psq': newPlayer.psq,
       'pn': newPlayer.pn,
     }
-    console.log("##### [addPlayer] player Enter Message emitted");
-    for (let k = 0; k < rooms[roomName].players.length; k++) {
-      io.to(roomName).emit('playerEnter', playerData)
-    }
     rooms[roomName].playerCount++;
     rooms[roomName].ps[playerSequenceNumber] = { ...newPlayer };
+
+    console.log("##### [addPlayer] player Enter Message emitted");
+    let playersData = Object.keys(rooms[roomName].ps).reduce((acc, id) => {
+        const player = rooms[roomName].ps[id];
+        acc[id] = {
+          'pid': player.psq.pid,
+          'pn': player.psq.pn
+        };
+        return acc;
+    }, {});
+    
+    for (let k = 0; k < rooms[roomName].players.length; k++) {
+      io.to(roomName).emit('playerEnter', playersData)
+    }
   }
   console.log(`##### [addPlayer] p : ${playerSequenceNumber} s : ${socketId} pn : ${playerNickName} 
       entered Room ${roomName}`);
@@ -142,7 +152,7 @@ const roomSocketMethods = () => {
 
   /* 방 정보 전달 / 로비에서 사용 */
   const sendRoomInfo = async (socket, io, rooms) => {
-    socket.on('requestRoomsInfo', (callback) => {
+    socket.on('RoomsInfo', (callback) => {
       console.log("##### [sendRoomInfo] callback roomsInfo");
       // roomName, roomId, playerCount, roomAdmin, roomStatus 전달
       callback(getRoomInfoForLobby(rooms));
@@ -211,7 +221,7 @@ const roomSocketMethods = () => {
 
   // 방 퇴장
   const leaveRoom = async (socket, io, rooms) => {
-    socket.on('leaveRoom', (room, psq, callback) => {
+    socket.on('leaveRoom', (room, psq) => {
       console.log(`##### [leaveRoom] leave Room, ${room} and ${psq}`)
       removePlayer(socket, io, rooms, room, psq);
       socket.leave(room);
@@ -229,7 +239,7 @@ const roomSocketMethods = () => {
         for (let room in rooms) {
           for (let p in rooms[room].ps) {
             if (p === psq) {
-              rooms[room].p.sid = socket.id;
+              rooms[room].ps[p].sid = socket.id;
               socket.join(room);
               break;
             }
@@ -263,9 +273,9 @@ const roomSocketMethods = () => {
       shuffleArray(rooms, roomName);
       console.log('##### [cardShare] Shuffle End')
 
-      rooms[roomName].game.status = 1;
+      rooms[roomName].game.state = 1;
       for (let psq in rooms[roomName].ps) {
-        io.to(rooms[roomName].players[psq].socketId).emit('gameStart', rooms[roomName].players[psq].hand)
+        io.to(rooms[roomName].ps[psq].sid).emit('gameStart', rooms[roomName].game.state, rooms[roomName].ps[psq].hand)
       }
       console.log(`##### [cardShare] card ended : ${rooms}`);
     });

@@ -10,7 +10,7 @@ const AnswerSelectMyTurn = ({ roomName, setIsMyTurn }) => {
   const dispatch = useDispatch();
   // 공격당한 플레이어의 선택지 발생 시 
   const handleAnswer = (val) => {
-    console.log(`Answer : ${val}`);
+    console.log(`[AnswerSelect] Answer : ${val}`);
     if (val === 1) {
       cardPassHandler();
       dispatch(changePlayState(4));
@@ -22,7 +22,7 @@ const AnswerSelectMyTurn = ({ roomName, setIsMyTurn }) => {
 
   // 카드 패스 선택시
   const cardPassHandler = () => {
-    console.log(`card Passed!`);
+    console.log(`[cardPass] card Passed!`);
     socket.emit('cardPass', roomName, (result) => {
       console.log(`[cardPass] ${result}`)
       setIsMyTurn(true);

@@ -10,6 +10,8 @@ const PlayerContainer = () => {
   const dragTo = useSelector(state => state.plays.game.to)
   const turnedPlayer = useSelector(state => state.plays.game.turnedPlayer);
   const dispatch = useDispatch();
+  const playerSequenceNumber = useSelector(state => state.userInfo.userSequence);
+  const roomName = useSelector(state => state.plays.roomName);
 
   // 플레이어 위에 드래그가 올라갔을 때 socket.io 로 emit
   const dragEnterHandler = (e, psq) => {

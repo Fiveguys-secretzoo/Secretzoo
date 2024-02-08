@@ -119,14 +119,14 @@ const playSocketMethods = () => {
 
   // 패스 선택시 
   const passingTurnStart = (socket, io, rooms) => {
-    socket.on('cardPass', (room, callback) => {
-      rooms[room].game.state = 4;
-      rooms[room].game.tp.push(rooms[room].game.from);
-      rooms[room].game.from = rooms[room].game.to;
-      rooms[room].game.nt = rooms[room].game.from;
-      rooms[room].game.to = -1;
-      io.to(room).emit('cardPass', rooms[room].game.state, tp, from, to, nowTurnPlayer);
-      callback(rooms[room].game.c);
+    socket.on('cardPass', (roomName, callback) => {
+      rooms[roomName].game.state = 4;
+      rooms[roomName].game.tp.push(rooms[roomName].game.from);
+      rooms[roomName].game.from = rooms[roomName].game.to;
+      rooms[roomName].game.nt = rooms[roomName].game.from;
+      rooms[roomName].game.to = '';
+      io.to(roomName).emit('cardPass', rooms[roomName].game.state, rooms[roomName].game.tp,  rooms[roomName].game.from,  rooms[roomName].game.to,  rooms[roomName].game.nt);
+      callback(rooms[roomName].game.c);
     })
   }
 
@@ -136,7 +136,7 @@ const playSocketMethods = () => {
 
   const cardReveal = (socket, io, rooms) => {
     socket.on('cardReveal', (roomName, answer) => {
-      rooms[roomName].game.state = 1;
+      rooms[roomName].game.state = 1; // 여기서는 1로 기록하지만 클라이언트는 5로 기록(결과 화면을 위함)
       console.log(`##### [cardReveal] room : [${roomName}] answer : [${answer}]`)
       let result = checkCardReveal(rooms, roomName, answer);
       console.log(`##### [cardReveal] result ${result}`)
@@ -176,11 +176,11 @@ const playSocketMethods = () => {
   }
 
   const checkLoser = (socket, io, rooms) => {
-    socket.on("isTurnEnd", (room, callback) => {
-      for (let player in rooms[room].ps) {
+    socket.on("isTurnEnd", (roomName, callback) => {
+      for (let player in rooms[roomName].ps) {
         for (let k = 0; k < 8; k++) {
-          if (rooms[room].ps[player].p[k] === 4) {
-            callback(rooms[room].ps[i].psq);
+          if (rooms[roomName].ps[player].p[k] === 4) {
+            callback(rooms[roomName].ps[i].psq);
             return;
           }
         }

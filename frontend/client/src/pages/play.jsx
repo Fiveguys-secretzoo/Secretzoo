@@ -9,8 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   initRoomInfo,
   initCardInfo,
-  addPlayer,
-  removePlayer,
+  modifyPlayers,
   changePlayState,
   changeAdmin,
   changeNowTurn,
@@ -21,7 +20,7 @@ import {
   changeCardBluff,
   changeInitgameCard,
   initTurnedPlayer,
-  addTurnedPlayer,
+  changeTurnedPlayer,
   dropCard,
 } from '../store/playSlice'
 
@@ -101,15 +100,16 @@ const Play = () => {
   }
 
   // player enter socket event handle
-  const playerEnterHandler = (player) => {
+  const playerEnterHandler = (players) => {
     console.log(`##### player entered...`);
-    console.log(player);
-    dispatch(addPlayer(player));
+    console.log(players);
+    dispatch(modifyPlayers(players));
   }
 
   // player leave socket event handle
-  const playerLeaveHandler = (player) => {
-    dispatch(removePlayer(player));
+  const playerLeaveHandler = (players) => {
+    console.log(`##### player leaved...`);
+    dispatch(modifyPlayers(players));
   }
 
   // 플레이어가 속일 동물 종류를 선택 시
@@ -133,33 +133,33 @@ const Play = () => {
     dispatch(changeCardDrag({ from: from, to: to }))
   };
   // socket.io drag handle
-  const cardDropResponseHandler = (from, to) => {
+  const cardDropResponseHandler = (state, from, to) => {
     console.log(`[cardDrop] [${from}] to [${to}]`);
-
-    dispatch(changePlayState(2));
-    dispatch(changeNowTurn(from));
+    dispatch(changePlayState(state));
     dispatch(changeCardDrop({ from: from, to: to }))
-    console.log(`[cardDrop] nowTurn : ${nowTurn} / pid : ${playerSequence}`);
+    console.log(`[cardDrop] nowTurn : ${nowTurn} / psq : ${playerSequence}`);
     console.log(`[cardDrop] playState is ${playState} / isMyTurn : ${isMyTurn}`)
   };
 
   // socket.io handleBluff Response
-  const cardBluffResponseHandler = (from, to, bCard) => {
+  const cardBluffResponseHandler = (state, turnedPlayer, from, to, bCard) => {
     console.log(`card Bluffed [${from}] to [${to}] by [${bCard}]`);
-    dispatch(changePlayState(3));
-    dispatch(changeNowTurn(to));
-    if (nowTurn === playerSequence) {
+    if (to === playerSequence) {
       setIsMyTurn(true);
     } else {
       setIsMyTurn(false);
     }
+
+    dispatch(changePlayState(state));
+    dispatch(changeNowTurn(to));
+    dispatch(changeTurnedPlayer(turnedPlayer));
     dispatch(changeCardBluff(bCard));
   }
 
   // socket.io handle Pass Res
-  const cardPassResponseHandler = (from, nowTurnPlayer) => {
-    console.log(`card Pass Response!`)
-    dispatch(changePlayState(4))
+  const cardPassResponseHandler = (state, turnedPlayer, from, to, nowTurnPlayer) => {
+    console.log(`##### [cardPass] card Pass Response!`)
+    dispatch(changePlayState(state))
     dispatch(changeNowTurn(nowTurnPlayer));
     dispatch(changeCardStatus({ 'from': from, 'card': card }));
     if (nowTurnPlayer === playerSequence) {
@@ -171,38 +171,37 @@ const Play = () => {
     console.log(`[cardPass] draggable [${(playState === 4 && isMyTurn)}]`)
   }
 
-  const cardRevealResponseHandler = (result, nowTurnPlayer) => {
-    setGameResult(result);
-    dispatch(changePlayState(5));
-    dispatch(changeNowTurn(nowTurnPlayer))
+  const cardRevealResponseHandler = (state, card, ans,  nowTurnPlayer) => {
     if (nowTurnPlayer === playerSequence) {
       setIsMyTurn(true);
     } else {
       setIsMyTurn(false);
     }
+    dispatch(changePlayState(5)); // state 5
+    setGameResult(ans);
+    dispatch(changeNowTurn(nowTurnPlayer))
     console.log(`card Answer Response!`);
   }
 
 
   // socket.io 페널티 추가 handler
-  const penaltyAddResponseHandler = (pid, penalty) => {
-
+  const penaltyAddResponseHandler = (psq, penalty) => {
+    dispatch()
     // 패널티 점수 체크
   }
 
   // socket.io 게임 종료 handler 
-  const gameEndResponseHandler = (loserPid) => {
+  const gameEndResponseHandler = (loserpsq) => {
 
   }
 
   // 게임 시작 버튼을 눌렀을 때 작동하는  함수, 여러가지 socket을 on 처리 시킨다.
-  const gameStart = (cards, firstPlayer) => {
-    console.log("##### Game Started !");
+  const gameStart = (state, cards) => {
+    console.log("##### Game Started ! #####");
     setCards(cards);
-    dispatch(changePlayState(1));
-    console.log("##### Card Set");
+    dispatch(changePlayState(state));
+    console.log("##### [gameStart] Card Set");
     console.log(cards);
-    console.log(images);
   }
   // 게임 종료 시 사용
   // playState 1 으로 정의 
@@ -210,16 +209,13 @@ const Play = () => {
 
   // game Info 변경 시 사용
   const gameInfoHandler = (game) => {
-    console.log("this comes when the game info is change");
+    console.log("##### [gameInfoHandler] game info arrived");
     console.log(game);
     dispatch(initRoomInfo(game));
   }
 
   const cardInfoHandler = (cards) => {
-    try { setCards([...cards]) }
-    catch (e) {
-
-    }
+    setCards([...cards])
   }
 
   /* 이벤트 수신, 방 입장 시 실행 */
@@ -235,10 +231,16 @@ const Play = () => {
     socket.emit('checkReconnection', playerSequence);
     // 게임 방의 초기 정보 확인 후 가져옴
     socket.emit('requestGameInfo', gameInfoHandler);
+
+    // 내 카드 정보 받기 
     socket.on('sendCardInfo', cardInfoHandler);
+
     socket.on('chatMessage', messageHandler);
+
     socket.on('gameStart', gameStart);
+
     socket.on('playerEnter', playerEnterHandler);
+
     socket.on('playerLeave', playerLeaveHandler);
     //test, and get the every room info
     // socket.emit('testRoomsInfo', (rooms) => {
@@ -247,11 +249,17 @@ const Play = () => {
 
 
     socket.on("cardDrag", cardDragResponseHandler);
+
     socket.on("cardDrop", cardDropResponseHandler);
+
     socket.on("cardBluffSelect", cardBluffResponseHandler);
+
     socket.on("cardPass", cardPassResponseHandler);
+
     socket.on("cardReveal", cardRevealResponseHandler);
+
     socket.on("penaltyAdd", penaltyAddResponseHandler);
+
     socket.on("gameEnd", gameEndResponseHandler);
 
     return () => {
@@ -265,10 +273,9 @@ const Play = () => {
   useEffect(() => {
     console.log(`check playState : ${playState}`);
     if (playState === 1) {
-      socket.emit("isTurnEnd", roomName, (loserPsn) => {
-        if (loserPsn !== false) {
-
-          alert(`Loser is ${loserPsn}`);
+      socket.emit("isTurnEnd", roomName, (loserpsq) => {
+        if (loserpsq !== false) {
+          alert(`Loser is ${loserpsq}`);
           dispatch(initTurnedPlayer());
           dispatch(changePlayState(6));
         }
@@ -305,28 +312,28 @@ const Play = () => {
 
 
   const sendMessage = () => {
-    socket.emit('chat message', input, localStorage.getItem('userName'));
+    socket.emit('chat message', input, localStorage.getItem(''));
     setInput('');
   };
 
   // 게임시작 이벤트 호출
   const start = () => {
-    socket.emit('start');
+    socket.emit('start', roomName);
   }
 
   const playerSlot = (playerArr) => {
     const slotArr = [];
     for (let k = 0; k < 5; k++) {
-      let psn = "", playerName = "";
+      let psq = "", playerName = "";
       let activate = false;
       if (playerArr[k] != null || playerArr[k] !== undefined) {
-        psn = playerArr[k].playerId;
+        psq = playerArr[k].playerId;
         playerName = playerArr[k].playerName;
         activate = true;
       }
       slotArr.push(
         <PlayerView
-          pid={psn}
+          psq={psq}
           key={k}
           pn={playerName}
           activate={activate}>
@@ -391,7 +398,7 @@ const Play = () => {
                 bCard={bCard}
                 isMyTurn={isMyTurn}
                 img={images[64]}
-                pid={playerSequence}
+                psq={playerSequence}
                 playState={playState}
               ></PassTurnCardView>
             </SelectScreen>
@@ -407,7 +414,7 @@ const Play = () => {
                 bCard={bCard}
                 isMyTurn={isMyTurn}
                 img={images[64]}
-                pid={playerSequence}
+                psq={playerSequence}
                 playState={playState}
               ></PassTurnCardView>
             </SelectScreen>
@@ -447,7 +454,7 @@ const Play = () => {
                     cardlength={cards.length}
                     isMyTurn={isMyTurn}
                     playState={playState}
-                    pid={playerSequence} >
+                    psq={playerSequence} >
                   </CardView>
                 ))
               }
