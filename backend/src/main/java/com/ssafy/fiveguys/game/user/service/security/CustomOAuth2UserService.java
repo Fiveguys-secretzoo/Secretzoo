@@ -56,9 +56,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .provider(oauth2UserInfo.getProvider())
                 .providerId(oauth2UserInfo.getProviderId())
                 .build();
-            playerService.createPlayer(user);
         }
         userRepositoy.save(user);
+        playerService.createPlayer(user);
         return new GameUserDetails(user, oAuth2User.getAttributes());
     }
 
