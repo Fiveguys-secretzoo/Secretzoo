@@ -1,6 +1,8 @@
 package com.ssafy.fiveguys.game.player.api;
 
+import com.ssafy.fiveguys.game.player.dto.api.ApiSimpleResponse;
 import com.ssafy.fiveguys.game.player.dto.rank.RankRequestDto;
+import com.ssafy.fiveguys.game.player.dto.rank.RankSimpleDto;
 import com.ssafy.fiveguys.game.player.dto.rank.TotalRankDto;
 import com.ssafy.fiveguys.game.player.dto.rank.RankResponseDto;
 import com.ssafy.fiveguys.game.player.dto.api.ApiResponse;
@@ -158,8 +160,9 @@ public class RankApiController {
      */
     @Operation(summary = "유저 공격 랭킹 조회 API")
     @GetMapping("/attack/{userSequence}")
-    public int getPlayerRankingOfAttack(@PathVariable("userSequence") Long userSequence) {
-        return rankService.getPlayerRanking(userSequence, attackRankKey);
+    public ApiSimpleResponse<?> getPlayerRankingOfAttack(@PathVariable("userSequence") Long userSequence) {
+        RankSimpleDto rankSimple = rankService.getPlayerRanking(userSequence, attackRankKey);
+        return new ApiSimpleResponse<>(1, rankSimple);
     }
 
     /**
@@ -167,8 +170,9 @@ public class RankApiController {
      */
     @Operation(summary = "유저 방어 랭킹 조회 API")
     @GetMapping("/defense/{userSequence}")
-    public int getPlayerRankingOfDefense(@PathVariable("userSequence") Long userSequence) {
-        return rankService.getPlayerRanking(userSequence, defenseRankKey);
+    public ApiSimpleResponse<?> getPlayerRankingOfDefense(@PathVariable("userSequence") Long userSequence) {
+        RankSimpleDto rankSimple = rankService.getPlayerRanking(userSequence, defenseRankKey);
+        return new ApiSimpleResponse<>(1, rankSimple);
     }
 
     /**
@@ -176,16 +180,17 @@ public class RankApiController {
      */
     @Operation(summary = "유저 패스 랭킹 조회 API")
     @GetMapping("/pass/{userSequence}")
-    public int getPlayerRankingOfPass(@PathVariable("userSequence") Long userSequence) {
-        return rankService.getPlayerRanking(userSequence, passRankKey);
+    public ApiSimpleResponse<?> getPlayerRankingOfPass(@PathVariable("userSequence") Long userSequence) {
+        RankSimpleDto rankSimple = rankService.getPlayerRanking(userSequence, passRankKey);
+        return new ApiSimpleResponse<>(1, rankSimple);
     }
 
     @GetMapping("/total/{userSequence}")
     public ApiResponse<?> getPlayerTotalRanking(@PathVariable("userSequence") Long userSequence) {
 
-        int attack = rankService.getPlayerRanking(userSequence, attackRankKey);
-        int defense = rankService.getPlayerRanking(userSequence, defenseRankKey);
-        int pass = rankService.getPlayerRanking(userSequence, passRankKey);
+        RankSimpleDto attack = rankService.getPlayerRanking(userSequence, attackRankKey);
+        RankSimpleDto defense = rankService.getPlayerRanking(userSequence, defenseRankKey);
+        RankSimpleDto pass = rankService.getPlayerRanking(userSequence, passRankKey);
 
         Player player = playerService.getPlayerByUserSequence(userSequence);
         if(player == null) throw new UserNotFoundException();

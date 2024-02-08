@@ -38,10 +38,6 @@ public class AopTest {
         System.out.println("playerTotalCount = " + playerTotalCount);
     }
 
-    @Test
-    void success2() {
-        rankService.getTopRankingsOfAttack();
-    }
 
     @Test
     void exception() {
