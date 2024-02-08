@@ -38,7 +38,9 @@ public class UserService {
             .build();
 
         userRepositoy.save(user);
-     //   playerService.createPlayer(user);
+        User findUser = userRepositoy.findByUserId(user.getUserId())
+            .orElseThrow(UserNotFoundException::new);
+        playerService.createPlayer(findUser);
 
     }
 
@@ -95,32 +97,32 @@ public class UserService {
     public void changePassword(String userId, String password) {
         User user = userRepositoy.findByUserId(userId).orElseThrow(
             UserNotFoundException::new);
-            UserDto userDto = UserDto.getUser(user);
-            userDto.setPassword(passwordEncoder.encode(password));
-            userRepositoy.save(User.getUserDto(userDto));
+        UserDto userDto = UserDto.getUser(user);
+        userDto.setPassword(passwordEncoder.encode(password));
+        userRepositoy.save(User.getUserDto(userDto));
     }
 
     public void changeProfileNumber(String userId, String profileNumber) {
         User user = userRepositoy.findByUserId(userId).orElseThrow(
             UserNotFoundException::new);
-            UserDto userDto = UserDto.getUser(user);
-            userDto.setProfileNumber(profileNumber);
-            userRepositoy.save(User.getUserDto(userDto));
+        UserDto userDto = UserDto.getUser(user);
+        userDto.setProfileNumber(profileNumber);
+        userRepositoy.save(User.getUserDto(userDto));
     }
 
     public void changeMainAchievement(String userId, String mainAcheiveMent) {
         User user = userRepositoy.findByUserId(userId).orElseThrow(
             UserNotFoundException::new);
-            UserDto userDto = UserDto.getUser(user);
-            userDto.setMainReward(mainAcheiveMent);
-            userRepositoy.save(User.getUserDto(userDto));
+        UserDto userDto = UserDto.getUser(user);
+        userDto.setMainReward(mainAcheiveMent);
+        userRepositoy.save(User.getUserDto(userDto));
     }
 
     public void changeNickname(String userId, String nickname) {
         User user = userRepositoy.findByUserId(userId).orElseThrow(
             UserNotFoundException::new);
-            UserDto userDto = UserDto.getUser(user);
-            userDto.setNickname(nickname);
-            userRepositoy.save(User.getUserDto(userDto));
+        UserDto userDto = UserDto.getUser(user);
+        userDto.setNickname(nickname);
+        userRepositoy.save(User.getUserDto(userDto));
     }
 }
