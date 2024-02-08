@@ -34,7 +34,6 @@ public class InitRedis {
         redisTemplate.delete(attackRankKey);
         redisTemplate.delete(defenseRankKey);
         redisTemplate.delete(passRankKey);
-
         //DB 에서 player 데이터 가져오기
         List<Player> players = playerRepository.findAll();
 
