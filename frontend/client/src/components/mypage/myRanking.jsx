@@ -7,7 +7,7 @@ const MyRanking = () => {
   
   const [myRanking, setMyRanking] = useState(null)
   const getRanking = async () => {
-    axios.get(`https://spring.secretzoo.site/rank/total/`+user.userSequence)
+    axios.get(`https://spring.secretzoo.site/rank/total/`+ user.userSequence)
     .then(response => {
       console.log(response.data);
       setMyRanking(response.data);

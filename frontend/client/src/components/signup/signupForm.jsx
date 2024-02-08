@@ -73,7 +73,7 @@ const SignupForm = () => {
       axios.post('https://spring.secretzoo.site/auth/check/' + id)
         .then(Response => {
           Swal.fire({
-            "text" : Response.data,
+            "text" : '사용가능한 아이디입니다.',
             "confirmButtonColor" : '#3085d6'
           });
           setIdCheckState(true);
@@ -136,7 +136,7 @@ const SignupForm = () => {
     .then(Response => {
       Swal.close();
       Swal.fire({
-        "text" : Response.data,
+        "text" : '인증코드를 성공적으로 보냈습니다.',
         "confirmButtonColor" : '#3085d6'
       })
       setopenEmailCheck(true);
@@ -173,7 +173,7 @@ const SignupForm = () => {
     axios.post('https://spring.secretzoo.site/verify-email/check',data)
     .then(Response => {
       Swal.fire({
-        "text" : Response.data,
+        "text" : '인증코드가 일치합니다.',
         "confirmButtonColor" : '#3085d6'
       });
       setEmailCheckState(true);

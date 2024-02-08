@@ -14,7 +14,7 @@ const MyInfo = () => {
 
   useEffect(() => {
     getRewards();
-  }, [user])
+  }, [])
 
   const updateProfileImage = (number) => {
     dispatch(axiosUpdateProfileImage(number));
@@ -68,7 +68,7 @@ const MyInfo = () => {
 
   const [myRewards, setMyrewards] = useState(null);
   const getRewards = async () => {
-    axios.get(`https://spring.secretzoo.site/rewards/done/`+user.userSequence)
+    axios.get(`https://spring.secretzoo.site/rewards/done/`+ user.userSequence)
     .then(response => {
       setMyrewards(response.data);
     });
