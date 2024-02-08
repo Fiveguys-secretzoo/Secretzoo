@@ -11,11 +11,11 @@ import com.ssafy.fiveguys.game.player.entity.Rewards;
 import com.ssafy.fiveguys.game.player.entity.embeddedType.LevelExp;
 import com.ssafy.fiveguys.game.player.entity.Player;
 import com.ssafy.fiveguys.game.player.entity.embeddedType.RankingScore;
-import com.ssafy.fiveguys.game.player.exception.UserException;
 import com.ssafy.fiveguys.game.player.repository.PlayerRepository;
 import com.ssafy.fiveguys.game.player.repository.PlayerRepositoryImpl;
 import com.ssafy.fiveguys.game.player.repository.RewardsRepository;
 import com.ssafy.fiveguys.game.user.entity.User;
+import com.ssafy.fiveguys.game.user.exception.UserNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -53,7 +53,7 @@ public class PlayerService {
     public PlayerDto getPlayer(Long userSequence) {
         Player player = playerRepository.findByUser_UserSequence(userSequence);
         if (player == null) {
-            throw new UserException();
+            throw new UserNotFoundException();
         }
         return new PlayerDto(
             player.getUser().getUserSequence(), player.getUser().getUserId(),

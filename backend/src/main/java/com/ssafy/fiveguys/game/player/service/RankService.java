@@ -4,9 +4,9 @@ package com.ssafy.fiveguys.game.player.service;
 import com.ssafy.fiveguys.game.player.dto.rank.RankResponseDto;
 import com.ssafy.fiveguys.game.player.entity.Player;
 import com.ssafy.fiveguys.game.player.entity.embeddedType.RankingScore;
-import com.ssafy.fiveguys.game.player.exception.UserException;
 import com.ssafy.fiveguys.game.player.repository.PlayerRepository;
 import com.ssafy.fiveguys.game.user.entity.User;
+import com.ssafy.fiveguys.game.user.exception.UserNotFoundException;
 import com.ssafy.fiveguys.game.user.repository.UserRepositoy;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -186,7 +186,7 @@ public class RankService {
         int userRank = Math.toIntExact(Optional.ofNullable(String.valueOf(userSequence))
             .map(seq -> zSetOperations.reverseRank(rankKey, seq))
             .orElse(-1L));
-        if(userRank == -1) throw new UserException();
+        if(userRank == -1) throw new UserNotFoundException();
         //redis 자료의 인덱스가 0부터 시작하므로 1을 더해 실제 랭킹을 표시
         return userRank+1;
     }

@@ -7,10 +7,10 @@ import com.ssafy.fiveguys.game.player.dto.api.ApiResponse;
 import com.ssafy.fiveguys.game.player.entity.embeddedType.AnimalScore;
 import com.ssafy.fiveguys.game.player.entity.Player;
 import com.ssafy.fiveguys.game.player.entity.embeddedType.RankingScore;
-import com.ssafy.fiveguys.game.player.exception.UserException;
 import com.ssafy.fiveguys.game.player.service.PlayerService;
 import com.ssafy.fiveguys.game.player.service.RankService;
 import com.ssafy.fiveguys.game.player.service.RewardsService;
+import com.ssafy.fiveguys.game.user.exception.UserNotFoundException;
 import com.ssafy.fiveguys.game.user.repository.UserRepositoy;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -188,7 +188,7 @@ public class RankApiController {
         int pass = rankService.getPlayerRanking(userSequence, passRankKey);
 
         Player player = playerService.getPlayerByUserSequence(userSequence);
-        if(player == null) throw new UserException();
+        if(player == null) throw new UserNotFoundException();
         AnimalScore totalAnimalScore = rewardsService.getTotalAnimalScore(userSequence);
         TotalRankDto totalRankDto = new TotalRankDto(attack, defense, pass, player.getTotalPass(),
             totalAnimalScore);

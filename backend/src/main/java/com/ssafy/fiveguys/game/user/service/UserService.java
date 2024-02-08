@@ -7,11 +7,9 @@ import com.ssafy.fiveguys.game.user.dto.UserInfoDto;
 import com.ssafy.fiveguys.game.user.dto.UserSignDto;
 import com.ssafy.fiveguys.game.user.entity.User;
 import com.ssafy.fiveguys.game.user.exception.PasswordException;
-import com.ssafy.fiveguys.game.user.exception.UserIdNotFoundException;
+import com.ssafy.fiveguys.game.user.exception.UserNotFoundException;
 import com.ssafy.fiveguys.game.user.repository.UserRepositoy;
 import jakarta.transaction.Transactional;
-
-import java.util.NoSuchElementException;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -51,7 +49,7 @@ public class UserService {
 
     public UserDto findUserById(String userId) {
         User user = userRepositoy.findByUserId(userId).orElseThrow(
-            () -> new NoSuchElementException("user does not exist."));
+            UserNotFoundException::new);
         return UserDto.getUser(user);
     }
 
@@ -61,96 +59,68 @@ public class UserService {
     }
 
     public void deleteRefreshToken(String userId) {
-        User user = userRepositoy.findByUserId(userId).orElse(null);
-        if (user != null) {
-            UserDto userDto = UserDto.getUser(user);
-            userDto.setRefreshToken(null);
-            user = User.getUserDto(userDto);
-            userRepositoy.save(user);
-        }
+        User user = userRepositoy.findByUserId(userId).orElseThrow(
+            UserNotFoundException::new);
+        UserDto userDto = UserDto.getUser(user);
+        userDto.setRefreshToken(null);
+        userRepositoy.save(User.getUserDto(userDto));
     }
 
     public void updateUser(UserInfoDto userInfoDto) {
-        User user = userRepositoy.findByUserId(userInfoDto.getUserId()).orElse(null);
-        if (user != null) {
-            UserDto userDto = UserDto.getUser(user);
-            userDto.setName(userDto.getName());
-            userDto.setNickname(userDto.getNickname());
-            userDto.setMainReward(userDto.getMainReward());
-            userDto.setProfileNumber(userDto.getProfileNumber());
-            user = User.getUserDto(userDto);
-            userRepositoy.save(user);
-        }
-
+        User user = userRepositoy.findByUserId(userInfoDto.getUserId()).orElseThrow(
+            UserNotFoundException::new);
+        UserDto userDto = UserDto.getUser(user);
+        userDto.setName(userDto.getName());
+        userDto.setNickname(userDto.getNickname());
+        userDto.setMainReward(userDto.getMainReward());
+        userDto.setProfileNumber(userDto.getProfileNumber());
+        userRepositoy.save(User.getUserDto(userDto));
     }
 
     public void deleteUser(String userId, String password) {
         if (validatePassword(userId, password)) {
             userRepositoy.deleteByUserId(userId);
-        } else {
-            throw new PasswordException("비밀번호가 일치하지 않습니다.");
         }
-
     }
 
     public boolean validatePassword(String userId, String password) {
-        User user = userRepositoy.findByUserId(userId).orElse(null);
-        if (user != null) {
-            if (passwordEncoder.matches(password, user.getPassword())) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            throw new UserIdNotFoundException("user does not exist.");
+        User user = userRepositoy.findByUserId(userId).orElseThrow(
+            UserNotFoundException::new);
+        if (passwordEncoder.matches(password, user.getPassword())) {
+            return true;
         }
+        throw new PasswordException("비밀번호가 일치하지 않습니다.");
     }
 
     public void changePassword(String userId, String password) {
-        User user = userRepositoy.findByUserId(userId).orElse(null);
-        if (user != null) {
+        User user = userRepositoy.findByUserId(userId).orElseThrow(
+            UserNotFoundException::new);
             UserDto userDto = UserDto.getUser(user);
             userDto.setPassword(passwordEncoder.encode(password));
-            User updatedUser = User.getUserDto(userDto);
-            userRepositoy.save(updatedUser);
-        } else {
-            throw new UserIdNotFoundException("user does not exist.");
-        }
+            userRepositoy.save(User.getUserDto(userDto));
     }
 
     public void changeProfileNumber(String userId, String profileNumber) {
-        User user = userRepositoy.findByUserId(userId).orElse(null);
-        if (user != null) {
+        User user = userRepositoy.findByUserId(userId).orElseThrow(
+            UserNotFoundException::new);
             UserDto userDto = UserDto.getUser(user);
             userDto.setProfileNumber(profileNumber);
-            User updatedUser = User.getUserDto(userDto);
-            userRepositoy.save(updatedUser);
-        } else {
-            throw new UserIdNotFoundException("user does not exist.");
-        }
+            userRepositoy.save(User.getUserDto(userDto));
     }
 
     public void changeMainAchievement(String userId, String mainAcheiveMent) {
-        User user = userRepositoy.findByUserId(userId).orElse(null);
-        if (user != null) {
+        User user = userRepositoy.findByUserId(userId).orElseThrow(
+            UserNotFoundException::new);
             UserDto userDto = UserDto.getUser(user);
             userDto.setMainReward(mainAcheiveMent);
-            User updatedUser = User.getUserDto(userDto);
-            userRepositoy.save(updatedUser);
-        } else {
-            throw new UserIdNotFoundException("user does not exist.");
-        }
+            userRepositoy.save(User.getUserDto(userDto));
     }
 
     public void changeNickname(String userId, String nickname) {
-        User user = userRepositoy.findByUserId(userId).orElse(null);
-        if (user != null) {
+        User user = userRepositoy.findByUserId(userId).orElseThrow(
+            UserNotFoundException::new);
             UserDto userDto = UserDto.getUser(user);
             userDto.setNickname(nickname);
-            User updatedUser = User.getUserDto(userDto);
-            userRepositoy.save(updatedUser);
-        } else {
-            throw new UserIdNotFoundException("user does not exist.");
-        }
+            userRepositoy.save(User.getUserDto(userDto));
     }
 }

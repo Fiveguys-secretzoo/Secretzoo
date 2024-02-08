@@ -5,10 +5,10 @@ import com.ssafy.fiveguys.game.player.dto.RewardsDto;
 import com.ssafy.fiveguys.game.player.dto.api.ApiResponse;
 import com.ssafy.fiveguys.game.player.entity.Player;
 import com.ssafy.fiveguys.game.player.entity.PlayerRewards;
-import com.ssafy.fiveguys.game.player.exception.UserException;
 import com.ssafy.fiveguys.game.player.service.AnimalRewardsService;
 import com.ssafy.fiveguys.game.player.service.PlayerService;
 import com.ssafy.fiveguys.game.player.service.RewardsService;
+import com.ssafy.fiveguys.game.user.exception.UserNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.ZoneId;
@@ -69,7 +69,7 @@ public class RewardsApiController {
     public ApiResponse<?> getPlayerDoneRewards(@PathVariable("userSequence") Long userSequence) {
 
         Player player = playerService.getPlayerByUserSequence(userSequence);
-        if(player == null) throw new UserException();
+        if(player == null) throw new UserNotFoundException();
         List<PlayerRewards> playerDoneRewards = animalRewardsService.getPlayerDoneRewards(userSequence);
         int totalPlayerCount = playerService.playerTotalCount();
         List<RewardsDto> collect = playerDoneRewards.stream()
@@ -86,7 +86,7 @@ public class RewardsApiController {
     public ApiResponse<?> getPlayerNotDoneRewards(@PathVariable("userSequence") Long userSequence) {
 
         Player player = playerService.getPlayerByUserSequence(userSequence);
-        if(player == null) throw new UserException();
+        if(player == null) throw new UserNotFoundException();
         List<PlayerRewards> playerNotDoneRewards = animalRewardsService.getPlayerNotDoneRewards(userSequence);
         int totalPlayerCount = playerService.playerTotalCount();
         List<RewardsDto> collect = playerNotDoneRewards.stream()
@@ -106,7 +106,7 @@ public class RewardsApiController {
     public ApiResponse<?> getTotalPlayerRewards(@PathVariable("userSequence") Long userSequence) {
 
         Player player = playerService.getPlayerByUserSequence(userSequence);
-        if(player == null) throw new UserException();
+        if(player == null) throw new UserNotFoundException();
         List<PlayerRewards> playerDoneRewards = animalRewardsService.getPlayerAllRewards(userSequence);
         int totalPlayerCount = playerService.playerTotalCount();
         List<RewardsDto> collect = playerDoneRewards.stream()
