@@ -64,9 +64,9 @@ public class PlayerService {
         PlayerLevel currentLevel = playerLevelRepository.findFirstByExpGreaterThanOrderByExpAsc(
             player.getExp());
         PlayerLevel prevLevel;
-        if(currentLevel.getLevel() == 1) {
+        if (currentLevel.getLevel() == 1) {
             prevLevel = new PlayerLevel(1, 0);
-        }else{
+        } else {
             prevLevel = playerLevelRepository.findExpByLevel(currentLevel.getLevel() - 1);
         }
         return new PlayerDetailDto(
@@ -75,7 +75,8 @@ public class PlayerService {
             player.getUser().getNickname(), player.getUser().getProfileNumber(),
             player.getUser().getMainReward(),
             player.getTotalRound(), player.getTotalTurn(), player.getRankingScore(),
-            player.getPlayerLevel().getLevel(), prevLevel.getExp(), player.getExp(),currentLevel.getExp());
+            player.getPlayerLevel().getLevel(), prevLevel.getExp(), player.getExp(),
+            currentLevel.getExp());
     }
 
     /**
@@ -89,8 +90,8 @@ public class PlayerService {
             .map(player -> new PlayerDto(
                 player.getUser().getUserSequence(), player.getUser().getUserId(),
                 player.getUser().getName(),
-                player.getUser().getNickname(),player.getUser().getProfileNumber(),
-                player.getUser().getMainReward(),player.getTotalRound(), player.getTotalTurn(),
+                player.getUser().getNickname(), player.getUser().getProfileNumber(),
+                player.getUser().getMainReward(), player.getTotalRound(), player.getTotalTurn(),
                 player.getRankingScore(), player.getExp(), player.getPlayerLevel().getLevel())
             ).toList();
     }
@@ -102,14 +103,16 @@ public class PlayerService {
      */
     public PlayerResult getAllPlayer(PlayerSearch playerSearch, Pageable pageable) {
         log.info("playerSearch={}", playerSearch);
-        PlayerSearchResult playerSearchResult = playerRepositoryImpl.findAll(playerSearch, pageable);
+        PlayerSearchResult playerSearchResult = playerRepositoryImpl.findAll(playerSearch,
+            pageable);
         List<PlayerDto> list = playerSearchResult.getPlayers().stream()
             .map(player -> new PlayerDto(
                 player.getUser().getUserSequence(), player.getUser().getUserId(),
                 player.getUser().getName(),
                 player.getUser().getNickname(), player.getUser().getProfileNumber(),
                 player.getUser().getMainReward(), player.getTotalRound(), player.getTotalTurn(),
-                player.getRankingScore(), player.getExp(), player.getPlayerLevel().getLevel())).toList();
+                player.getRankingScore(), player.getExp(), player.getPlayerLevel().getLevel()))
+            .toList();
 
         return new PlayerResult(list, playerSearchResult.getTotalCount());
     }
@@ -156,8 +159,6 @@ public class PlayerService {
     }
 
 
-
-
     /**
      * user signup 하면 player 기본 데이터 튜플 생성
      *
@@ -172,7 +173,7 @@ public class PlayerService {
             .build();
 
         playerRepository.save(player);
-
+        log.info("player 생성 성공");
         List<Rewards> allRewards = rewardsRepository.findAll();
         List<PlayerRewards> playerRewards = allRewards.stream()
             .map(rewards -> new PlayerRewards(player, rewards, false))

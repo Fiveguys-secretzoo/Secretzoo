@@ -38,9 +38,7 @@ public class UserService {
             .build();
 
         userRepositoy.save(user);
-        User findUser = userRepositoy.findByUserId(user.getUserId())
-            .orElseThrow(UserNotFoundException::new);
-        playerService.createPlayer(findUser);
+        playerService.createPlayer(user);
 
     }
 
