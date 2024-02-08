@@ -38,7 +38,7 @@ public class UserService {
             .build();
 
         userRepositoy.save(user);
-        playerService.createPlayer(user);
+     //   playerService.createPlayer(user);
 
     }
 

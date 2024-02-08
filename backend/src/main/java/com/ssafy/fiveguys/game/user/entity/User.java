@@ -57,7 +57,7 @@ public class User extends BaseTimeEntity {
     @Column(name = "provider_id")
     private String providerId;
 
-    @Column(name = "refresh-token")
+    @Column(name = "refresh_token")
     private String refreshToken;
 
     @OneToOne(mappedBy = "user")
