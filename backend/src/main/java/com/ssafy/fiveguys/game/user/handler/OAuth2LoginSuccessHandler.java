@@ -40,8 +40,8 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         // DB에 Refreshtoken 저장
         UserDto user = userService.findUserById(authentication.getName());
         user.setRefreshToken(tokenSet.getRefreshToken());
-        playerService.createPlayer(User.getUserDto(user));
         userService.saveUser(user);
+        playerService.createPlayer(User.getUserDto(user));
         // Redis에 Refreshtoken 저장
         RefreshToken refreshToken = RefreshToken.builder()
             .userId(authentication.getName())
