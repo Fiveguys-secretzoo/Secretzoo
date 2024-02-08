@@ -29,7 +29,6 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
     private final RedisService redisService;
-    private final PlayerService playerService;
     private final String CALLBACK_URL = "https://secretzoo.site/auth/callback";
 
     @Override
@@ -41,7 +40,6 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         UserDto user = userService.findUserById(authentication.getName());
         user.setRefreshToken(tokenSet.getRefreshToken());
         userService.saveUser(user);
-        playerService.createPlayer(User.getUserDto(user));
         // Redis에 Refreshtoken 저장
         RefreshToken refreshToken = RefreshToken.builder()
             .userId(authentication.getName())
