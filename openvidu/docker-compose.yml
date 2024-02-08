@@ -29,7 +29,7 @@ services:
     environment:
       - SERVER_PORT=5442
       - OPENVIDU_URL=http://localhost:5443
-      - OPENVIDU_SECRET=${OPENVIDU_SECRET}
+      - OPENVIDU_SECRET=MY_SECRET
     networks:
       - docker_nat
 networks:
