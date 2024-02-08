@@ -354,6 +354,7 @@ const Play = () => {
   const aaa = useRef(undefined);
   const playerSlot = (playerArr) => {
     const slotArr = [];
+    App();
     // const aaa = undefined;
     for (let k = 0; k < 5; k++) {
       let playerId = "", playerName = "";
@@ -382,7 +383,7 @@ const Play = () => {
         </PlayerView>
       )
     }
-    App();
+    // App();
     return slotArr;
   }
 
