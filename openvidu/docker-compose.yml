@@ -30,9 +30,10 @@ services:
       - SERVER_PORT=5442
       - OPENVIDU_URL=http://localhost:5443
       - OPENVIDU_SECRET=MY_SECRET
-    networks:
-      - docker_nat
-networks:
-  docker_nat:
-    external: true
+    networks_mode: host
+#     networks:
+#       - docker_nat
+# networks:
+#   docker_nat:
+#     external: true
 
