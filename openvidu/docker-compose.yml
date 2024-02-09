@@ -10,7 +10,7 @@ services:
       - docker_nat
     environment:
       - SERVER_PORT=5442
-      - OPENVIDU_URL=http://openvidu-openvidu-server:5443
+      - OPENVIDU_URL=http://openvidu-openvidu-server-1:5443
       - OPENVIDU_SECRET=MY_SECRET
 networks:
   docker_nat:
