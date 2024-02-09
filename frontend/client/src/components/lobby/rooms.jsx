@@ -46,7 +46,7 @@ const Rooms = () => {
   const enterRoom = (name) => {
     socket.emit('enterRoom', name, psq, sessionStorage.getItem('userNickName'), (callback) => {
       if (callback) {
-        dispatch(initRoomName(roomName));
+        dispatch(setRoomName(roomName));
         Swal.fire({
           "text": '입장',
           "confirmButtonColor": '#3085d6'
@@ -152,7 +152,7 @@ const Rooms = () => {
               <p className='truncate text-sm'>{rooms[key].roomName}</p>
               {/* <p>{rooms[key].players[0].playerName}</p> */}
               <p className="text-sm">{rooms[key].playerCount}/6</p>
-              <p className="text-sm">{rooms[key].status}</p>
+              <p className="text-sm">{rooms[key].status === 0 ? '대기중' : rooms[key].playerCount === 6 ? '꽉찬방' : '플레이중'}</p>
             </Card >
           ))}
         </div>

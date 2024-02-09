@@ -45,7 +45,7 @@ function App() {
                 <Route index element={<MyInfo />} />
                 <Route path="/lobby/myPage/myranking" element={<MyRanking />} />
                 <Route path="/lobby/myPage/myreward" element={<MyReward />} />
-              </Route>
+              </Route>t
             </Route>
             <Route path="/play" element={<Play />} />
           </Routes>

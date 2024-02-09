@@ -46,7 +46,7 @@ const Play = () => {
   const playerSequence = useSelector(state => state.user.userInfo.userSequence);
   // redux related const.
   const roomInfo = useSelector(state => state.plays);
-  const playState = useSelector(state => state.plays.game.status);
+  const playState = useSelector(state => state.plays.game.state);
   const playerList = useSelector(state => state.plays.players);
   const adminPlayer = useSelector(state => state.plays.adminPlayer);
   const nowTurn = useSelector(state => state.plays.nowTurn);
