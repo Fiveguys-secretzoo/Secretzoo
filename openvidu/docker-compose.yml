@@ -12,42 +12,8 @@ services:
       - host.docker.internal:localhost
     environment:
       - SERVER_PORT=5442
-      - OPENVIDU_URL=http://localhost:5443
+      - OPENVIDU_URL=https://openvidu.secretzoo.site:8443
       - OPENVIDU_SECRET=MY_SECRET
 networks:
   docker_nat:
     external: true
-
-
-
-# version: '3'
-
-# services:
-#  openvidu-app:
-#    container_name: openvidu-app
-#    expose:
-#      - 5000
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    environment:
-#      - SERVER_PORT=5442
-#      - OPENVIDU_URL=http://localhost:5443
-#      - OPENVIDU_SECRET=MY_SECRET
-#    network_mode: host
-
-
-#  version: '3'
-#  services:
-#    openvidu-app:
-#      container_name: openvidu-app
-#      expose:
-#        - 5000
-#      build:
-#        context: .
-#        dockerfile: Dockerfile
-#      environment:
-#        - SERVER_PORT=5442
-#        - OPENVIDU_URL=http://localhost:5443
-#        - OPENVIDU_SECRET=MY_SECRET
-#      network_mode: host
