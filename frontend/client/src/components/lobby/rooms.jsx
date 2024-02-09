@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Button, TextInput, Modal, Label, Card } from 'flowbite-react';
 import Swal from 'sweetalert2';
 import { useSelector, useDispatch } from 'react-redux';
-import { setRoomName } from '../../store/playSlice'
+import { initRoomName } from '../../store/playSlice'
 const Rooms = () => {
   const navigate = useNavigate();
   // 소켓
@@ -28,7 +28,7 @@ const Rooms = () => {
   const createRoom = () => {
     socket.emit('createRoom', roomName, psq, sessionStorage.getItem('userNickName'), (callback) => {
       if (callback) {
-        dispatch(setRoomName(roomName));
+        dispatch(initRoomName(roomName));
         alert("생성 완료! 게임으로 이동합니다.");
         sessionStorage.setItem("roomName", roomName);
         navigate("/play");
@@ -46,7 +46,7 @@ const Rooms = () => {
   const enterRoom = (name) => {
     socket.emit('enterRoom', name, psq, sessionStorage.getItem('userNickName'), (callback) => {
       if (callback) {
-        dispatch(setRoomName(roomName));
+        dispatch(initRoomName(roomName));
         Swal.fire({
           "text": '입장',
           "confirmButtonColor": '#3085d6'

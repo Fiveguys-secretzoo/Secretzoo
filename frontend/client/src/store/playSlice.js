@@ -44,7 +44,7 @@ export const playSlice = createSlice({
       console.log(state.roomName);
     },
 
-    setRoomName: (state, action) => {
+    initRoomName: (state, action) => {
       state.roomName = action.payload;
     },
 
@@ -152,7 +152,7 @@ export const playSlice = createSlice({
 export const {
   initRoomInfo,
   initCardInfo,
-  setRoomName,
+  initRoomName,
   modifyPlayers,
   changePlayState,
   changeAdmin,
