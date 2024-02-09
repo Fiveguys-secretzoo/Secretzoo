@@ -40,6 +40,8 @@
  services:
    openvidu-app:
      container_name: openvidu-app
+     expose:
+       - 5000
      build:
        context: .
        dockerfile: Dockerfile
