@@ -22,6 +22,7 @@ import {
   initTurnedPlayer,
   changeTurnedPlayer,
   dropCard,
+  changePenalty,
 } from '../store/playSlice'
 
 import PlayerView from '../components/play/playerView'
@@ -42,7 +43,7 @@ const Play = () => {
   const dragItem = useRef();
   const navigate = useNavigate();
 
-  const playerSequence = useSelector(state => state.userInfo.userSequence);
+  const playerSequence = useSelector(state => state.user.userInfo.userSequence);
   // redux related const.
   const roomInfo = useSelector(state => state.plays);
   const playState = useSelector(state => state.plays.game.status);
@@ -66,6 +67,7 @@ const Play = () => {
   const [gameResult, setGameResult] = useState(false);
   // 0 대기 1 시작 2 카드 드롭 후 동물 선택 3 동물 선택 후 방어 턴 4 넘기는 턴 드래그 5 넘기는 턴 동물 선택 6 결과 확인
   const [images, setImages] = useState([]);
+  const [answerCard, setAnswerCard] = useState(64); // 정답 공개 시 카드
 
   const animalList = [
     '호랑이',
@@ -171,14 +173,15 @@ const Play = () => {
     console.log(`[cardPass] draggable [${(playState === 4 && isMyTurn)}]`)
   }
 
-  const cardRevealResponseHandler = (state, card, ans,  nowTurnPlayer) => {
+  const cardRevealResponseHandler = (state, card, ans, nowTurnPlayer) => {
     if (nowTurnPlayer === playerSequence) {
       setIsMyTurn(true);
     } else {
       setIsMyTurn(false);
     }
-    dispatch(changePlayState(5)); // state 5
+    dispatch(changePlayState(5)); // state 5 // 받는 건 1이지만 확인 후에 1로 가는 걸로 변경
     setGameResult(ans);
+    setAnswerCard(card);
     dispatch(changeNowTurn(nowTurnPlayer))
     console.log(`card Answer Response!`);
   }
@@ -186,7 +189,7 @@ const Play = () => {
 
   // socket.io 페널티 추가 handler
   const penaltyAddResponseHandler = (psq, penalty) => {
-    dispatch()
+    dispatch(changePenalty(psq, penalty));
     // 패널티 점수 체크
   }
 
@@ -230,7 +233,7 @@ const Play = () => {
     // Reconnection 확인용
     socket.emit('checkReconnection', playerSequence);
     // 게임 방의 초기 정보 확인 후 가져옴
-    socket.emit('requestGameInfo', gameInfoHandler);
+    socket.emit('requestGameInfo', roomName, playerSequence, gameInfoHandler);
 
     // 내 카드 정보 받기 
     socket.on('sendCardInfo', cardInfoHandler);
@@ -247,9 +250,9 @@ const Play = () => {
     //   console.log(rooms);
     // })
 
-
+    // 카드 드래그 시 
     socket.on("cardDrag", cardDragResponseHandler);
-
+    // 카드 드롭 했을 때
     socket.on("cardDrop", cardDropResponseHandler);
 
     socket.on("cardBluffSelect", cardBluffResponseHandler);
@@ -260,7 +263,7 @@ const Play = () => {
 
     socket.on("penaltyAdd", penaltyAddResponseHandler);
 
-    socket.on("gameEnd", gameEndResponseHandler);
+    // socket.on("gameEnd", gameEndResponseHandler);
 
     return () => {
       socket.off('gameInfo', gameInfoHandler);
@@ -280,7 +283,6 @@ const Play = () => {
           dispatch(changePlayState(6));
         }
       })
-      dispatch(addTurnedPlayer(fromP));
     }
 
   }, [playState]);

@@ -30,7 +30,7 @@ export const playSlice = createSlice({
       console.log(action);
       // state = JSON.parse(JSON.stringify(action.payload));
       state.roomId = action.payload.rid;
-      state.roomName = action.payload.fnm;
+      state.roomName = action.payload.rnm;
       state.roomAddress = action.payload.radr;
       state.status = action.payload.status;
       state.createdDate = action.payload.cdt;
@@ -44,6 +44,10 @@ export const playSlice = createSlice({
       console.log(state.roomName);
     },
 
+    setRoomName: (state, action) => {
+      state.roomName = action.payload;
+    },
+
     // 게임 카드 초기화 
     initCardInfo: (state, action) => { // card 배열 
       state.card = [...action.payload];
@@ -51,7 +55,7 @@ export const playSlice = createSlice({
 
     // player 입장
     modifyPlayers: (state, action) => { // ps 배열
-      state.players = {...action.payload};
+      state.players = { ...action.payload };
     },
 
     // play State 변경
@@ -126,10 +130,8 @@ export const playSlice = createSlice({
     },
 
     // 패널티 추가
-    addPenalty: (state, action) => { // psq, penalty
-
-
-      state.players[action.payload.psq].penalty = [ ...action.payload.penalty];
+    changePenalty: (state, action) => { // psq, penalty
+      state.players[action.payload.psq].penalty = [...action.payload.penalty];
     },
 
     // 카드 드롭
@@ -138,7 +140,7 @@ export const playSlice = createSlice({
       state.players[action.payload.pid].card = filtered;
     },
 
-    
+
 
 
 
@@ -150,6 +152,7 @@ export const playSlice = createSlice({
 export const {
   initRoomInfo,
   initCardInfo,
+  setRoomName,
   modifyPlayers,
   changePlayState,
   changeAdmin,
@@ -161,8 +164,8 @@ export const {
   changeCardBluff,
   changeInitgameCard,
   initTurnedPlayer,
-  addTurnedPlayer,
+  changeTurnedPlayer,
   dropCard,
-
+  changePenalty,
 } = playSlice.actions;
 export default playSlice.reducer;

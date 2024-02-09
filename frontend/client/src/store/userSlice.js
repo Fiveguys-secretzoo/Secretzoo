@@ -10,22 +10,22 @@ export const getUserInfo = createAsyncThunk(
     try {
       const response1 = await axios.get('https://spring.secretzoo.site/users/user');
       const data1 = response1.data;
-      const response2 = await axios.get('https://spring.secretzoo.site/player/'+ data1.userSequence);
+      const response2 = await axios.get('https://spring.secretzoo.site/player/' + data1.userSequence);
       const data2 = response2.data;
       console.log(data2)
       const userData = {
-        "name" : data1.name,
+        "name": data1.name,
         "nickname": data1.nickname,
         "userSequence": data1.userSequence,
         "profileNumber": data1.profileNumber,
-        "mainReward" : data1.mainReward,
-        "email" : data1.email,
-        "level" : data2.data.currentLevel,
-        "exp" : data2.data.currentExp,
-        "nextExp" : data2.data.nextExp,
-        "prevExp" : data2.data.prevExp,
+        "mainReward": data1.mainReward,
+        "email": data1.email,
+        "level": data2.data.currentLevel,
+        "exp": data2.data.currentExp,
+        "nextExp": data2.data.nextExp,
+        "prevExp": data2.data.prevExp,
       };
-      
+
       return userData
 
     } catch (error) {
@@ -61,7 +61,7 @@ export const axiosUpdateMainAchievement = createAsyncThunk(
   async (mainAchievement, { dispatch, rejectWithValue }) => {
     try {
       await axios.put('https://spring.secretzoo.site/users/main-achievement', mainAchievement,);
-      dispatch(getUserInfo()) 
+      dispatch(getUserInfo())
     } catch (error) {
     }
   }
@@ -71,7 +71,7 @@ const userSlice = createSlice({
   name: 'user',
   initialState: {
     userInfo: null,
-    isLoading: false, 
+    isLoading: false,
     error: null
   },
   reducers: {
@@ -96,5 +96,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { setNoLoginUserInfo} = userSlice.actions;
+export const { setNoLoginUserInfo } = userSlice.actions;
 export default userSlice.reducer;

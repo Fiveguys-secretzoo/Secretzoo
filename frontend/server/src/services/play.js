@@ -16,6 +16,9 @@ const playSocketMethods = () => {
     let roomInfo = rooms[roomName];
 
     console.log(`##### [getRoomInfoForGame] roomName `);
+    console.log(roomName);
+    console.log(`##### [getRoomInfoForGame] roomInfo (room Object)`);
+    console.log(roomInfo);
     extractedData = {
       'rid': roomInfo['rid'],
       'rnm': roomInfo['rnm'],
@@ -43,12 +46,12 @@ const playSocketMethods = () => {
     if (extractedData.game.state !== 0) {
       console.log("##### [getRoomInfoForGame] entered socket emit sendCardInfo");
       let hand;
-      for (let playerSequenceNumber in roomInfo['ps']) {
-        console.log(playerSequenceNumber)
-        if (playerSequenceNumber === psq) {
+      for (let playerSeqeunce in roomInfo['ps']) {
+        console.log(playerSeqeunce)
+        if (playerSeqeunce === psq) {
           console.log("##### [getRoomInfoForGame] player hand is down below")
-          console.log(roomInfo.ps[playerSequenceNumber].hand);
-          hand = roomInfo.ps[playerSequenceNumber].hand;
+          console.log(roomInfo.ps[playerSeqeunce].hand);
+          hand = roomInfo.ps[playerSeqeunce].hand;
         }
       }
       socket.emit('sendCardInfo', hand)
@@ -58,21 +61,22 @@ const playSocketMethods = () => {
 
   /* 방 정보 전달, 보통 방 입장 시 초기에 혹은 Game 중간에 들어올 때 사용 */
   const sendGameInfo = async (socket, io, rooms) => {
-    socket.on('requestGameInfo', (roomName, playerSequenceNumber, callback) => {
-      callback(getRoomInfoForGame(socket, rooms, roomName, playerSequenceNumber));
+    socket.on('requestGameInfo', (roomName, playerSeqeunce, callback) => {
+      console.log(`##### [sendGameInfo] roomName : ${roomName} / psq : ${playerSeqeunce}`);
+      callback(getRoomInfoForGame(socket, rooms, roomName, playerSeqeunce));
       console.log(`##### [sendGameInfo] Callback Game Info to Room ${roomName}`);
     });
   }
 
   // 카드 드래그한 정보를 받고 같은 정보를 다른 모든 socket room 참여자 들에게 뿌린다.
   const cardDrag = (socket, io, rooms) => {
-    socket.on('cardDrag', (roomName, playerSequenceNumber, from, to) => {
+    socket.on('cardDrag', (roomName, playerSeqeunce, from, to) => {
       console.log("##### [cardDrag] card Dragged and Entered...")
       // io.to(rooms[socket.room].players[k].socketId).emit('cardDrag', from, to);
       console.log(`##### [cardDrag] send card Dragged Data to ${roomName}`)
-      if(rooms[roomName].nt === playerSequenceNumber){
+      if (rooms[roomName].nt === playerSeqeunce) {
         io.to(roomName).emit('cardDrag', from, to);
-      }else{
+      } else {
         console.log(`##### [cardDrag] not a now turn player dragged`);
       }
     })
@@ -80,13 +84,13 @@ const playSocketMethods = () => {
 
   // 카드 드롭한 정보를 받고 같은 정보를 다른 모든 socket room 참여자 들에게 뿌린다.
   const cardDrop = (socket, io, rooms) => {
-    socket.on('cardDrop', (roomName, playerSequenceNumber, from, to, card, callback) => {
+    socket.on('cardDrop', (roomName, playerSeqeunce, from, to, card, callback) => {
       console.log("##### [cardDrop] card Dragged and Dropped")
       // io.to(rooms[socket.room].players[k].socketId).emit('cardDrop', from, to);
 
       if (card < 64) {
-        rooms[roomName].ps[playerSequenceNumber].hand
-          = rooms[roomName].ps[playerSequenceNumber].hand.filter((e) => e !== card);
+        rooms[roomName].ps[playerSeqeunce].hand
+          = rooms[roomName].ps[playerSeqeunce].hand.filter((e) => e !== card);
         rooms[roomName].game.c = card;
       }
 
@@ -94,15 +98,15 @@ const playSocketMethods = () => {
       rooms[roomName].game.from = from;
       rooms[roomName].game.to = to;
       console.log(`##### [cardDrop] send card Dropped Data to [${roomName}], [${from}] => [${to}] a [${card}]`)
-      callback(rooms[roomName].ps[playerSequenceNumber].hand);
+      callback(rooms[roomName].ps[playerSeqeunce].hand);
       io.to(roomName).emit('cardDrop', rooms[roomName].game.state, from, to);
     })
   }
 
   // 카드 블러핑한 정보를 받고 같은 정보를 다른 모든 socket room 참여자 들에게 뿌린다.
   const cardBluffSelect = (socket, io, rooms) => {
-    socket.on('cardBluffSelect', (roomName, playerSequenceNumber, bCard) => {
-      
+    socket.on('cardBluffSelect', (roomName, playerSeqeunce, bCard) => {
+
       let from = rooms[roomName].game.from;
       let to = rooms[roomName].game.to;
       rooms[roomName].game.state = 3;
@@ -125,7 +129,7 @@ const playSocketMethods = () => {
       rooms[roomName].game.from = rooms[roomName].game.to;
       rooms[roomName].game.nt = rooms[roomName].game.from;
       rooms[roomName].game.to = '';
-      io.to(roomName).emit('cardPass', rooms[roomName].game.state, rooms[roomName].game.tp,  rooms[roomName].game.from,  rooms[roomName].game.to,  rooms[roomName].game.nt);
+      io.to(roomName).emit('cardPass', rooms[roomName].game.state, rooms[roomName].game.tp, rooms[roomName].game.from, rooms[roomName].game.to, rooms[roomName].game.nt);
       callback(rooms[roomName].game.c);
     })
   }
@@ -134,6 +138,7 @@ const playSocketMethods = () => {
 
   }
 
+  // 카드 정답 맞추면 공개..!
   const cardReveal = (socket, io, rooms) => {
     socket.on('cardReveal', (roomName, answer) => {
       rooms[roomName].game.state = 1; // 여기서는 1로 기록하지만 클라이언트는 5로 기록(결과 화면을 위함)

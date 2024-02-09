@@ -3,7 +3,8 @@ import { SocketContext } from "../../App";
 import { useNavigate } from "react-router-dom";
 import { Button, TextInput, Modal, Label, Card } from 'flowbite-react';
 import Swal from 'sweetalert2';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { setRoomName } from '../../store/playSlice'
 const Rooms = () => {
   const navigate = useNavigate();
   // 소켓
@@ -11,6 +12,8 @@ const Rooms = () => {
   // 방들의 정보
   const [rooms, setRooms] = useState({});
   // 마운트 뒬때 방들의 정보 가져옴
+  const psq = useSelector(state => state.user.userInfo.userSequence);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     // 소켓서버로 방 정보 요청 콜백함수로 받아온 정보를 저장
@@ -23,16 +26,17 @@ const Rooms = () => {
   const [roomName, setRoomName] = useState('');
   // 방만들기
   const createRoom = () => {
-    socket.emit('createRoom', roomName, sessionStorage.getItem('userName'), (callback) => {
+    socket.emit('createRoom', roomName, psq, sessionStorage.getItem('userNickName'), (callback) => {
       if (callback) {
+        dispatch(setRoomName(roomName));
         alert("생성 완료! 게임으로 이동합니다.");
-        sessionStorage.setItem("roomName",roomName);
+        sessionStorage.setItem("roomName", roomName);
         navigate("/play");
       } else {
         setOpenModal(false);
         Swal.fire({
-          "text" : '이미 있는 방제입니다. 다른방제를 선택해주세요',
-          "confirmButtonColor" : '#3085d6'
+          "text": '이미 있는 방제입니다. 다른방제를 선택해주세요',
+          "confirmButtonColor": '#3085d6'
         });
       }
     });
@@ -40,17 +44,18 @@ const Rooms = () => {
 
   // 방입장
   const enterRoom = (name) => {
-    socket.emit('enterRoom', name, sessionStorage.getItem('userName'), (callback) => {
+    socket.emit('enterRoom', name, psq, sessionStorage.getItem('userNickName'), (callback) => {
       if (callback) {
+        dispatch(setRoomName(roomName));
         Swal.fire({
-          "text" : '입장',
-          "confirmButtonColor" : '#3085d6'
+          "text": '입장',
+          "confirmButtonColor": '#3085d6'
         });
         navigate("/play");
       } else {
         Swal.fire({
-          "text" : '방이 가득찼습니다. 다른 방을 이용해주세요.',
-          "confirmButtonColor" : '#3085d6'
+          "text": '방이 가득찼습니다. 다른 방을 이용해주세요.',
+          "confirmButtonColor": '#3085d6'
         });
       }
     });
@@ -97,7 +102,7 @@ const Rooms = () => {
   const [searchRoomName, setSearchRoomName] = useState();
   const searchRoom = () => {
     socket.emit('requestRoomsInfo', (roomsInfo) => {
-      if(searchRoomName.length === 0){
+      if (searchRoomName.length === 0) {
         setRooms(roomsInfo);
         return;
       }
@@ -107,9 +112,9 @@ const Rooms = () => {
           newRooms[key] = roomsInfo[key];
         }
       });
-    setRooms(newRooms);
+      setRooms(newRooms);
     });
-    
+
   }
 
   const [openModal, setOpenModal] = useState(false);

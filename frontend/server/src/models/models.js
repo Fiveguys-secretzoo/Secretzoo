@@ -3,7 +3,7 @@
 
 const models = () => {
   // 동물 이름을 미리 저장
-  const animals = ['tiger', 'cat' , 'dog', 'deer', 'pig', 'fox', 'sheep', 'whale'];
+  const animals = ['tiger', 'cat', 'dog', 'deer', 'pig', 'fox', 'sheep', 'whale'];
 
   // 동물 마다 score 유형
   const score = {
@@ -15,11 +15,11 @@ const models = () => {
     deff: 0, // defence fail
     deft: 0, // defence Trust
     defd: 0, // defence Distrust
-    
+
   }
 
   // 플레이어의 정보를 담을 객체 
-  const Player = (playerSequenceNumber , socketId, playerNickName) => {
+  const Player = (playerSequenceNumber, socketId, playerNickName) => {
     let psq = playerSequenceNumber; // player Sequence Number
     let pn = playerNickName; // player Nick Name
     let sid = socketId; // socket Id 
