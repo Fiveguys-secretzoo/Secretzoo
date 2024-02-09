@@ -8,6 +8,8 @@ services:
     container_name: react-app
     expose:
       - 3000
+    extra_hosts:
+      - host.docker.internal: host-gateway
     #volumes:
     #  - /home/ubuntu/secretzoo/frontend/client:/usr/src/app
     #volumes:
@@ -16,7 +18,7 @@ services:
       - WDS_SOCKET_PROT=0
       - REACT_APP_SOCKET_SERVER_URL=ws://node-server:3001
       # - APPLICATION_SERVER_URL=https://openvidu.secretzoo.site
-      - APPLICATION_SERVER_URL=http://openvidu-app:5000
+      - APPLICATION_SERVER_URL=http://host-gateway:5000
     networks:
       - docker_nat
 
