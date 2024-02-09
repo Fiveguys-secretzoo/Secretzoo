@@ -4,7 +4,7 @@ import axios from 'axios';
 import './App.css';
 import UserVideoComponent from './UserVideoComponent';
 
-const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5000/';
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5442/';
 
 const App = () => {
     // const [mySessionId, setMySessionId] = useState('');
