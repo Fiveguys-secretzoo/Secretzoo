@@ -8,8 +8,6 @@ services:
       dockerfile: Dockerfile
     networks:
       - docker_nat
-    extra_hosts:
-      - host.docker.internal:localhost
     environment:
       - SERVER_PORT=5442
       - OPENVIDU_URL=https://openvidu.secretzoo.site:8443
