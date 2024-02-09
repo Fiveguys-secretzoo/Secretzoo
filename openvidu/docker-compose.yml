@@ -40,18 +40,11 @@
  services:
    openvidu-app:
      container_name: openvidu-app
-     network_mode: host
      build:
        context: .
        dockerfile: Dockerfile
-     expose:
-       - 5000
-     networks:
-       - docker_nat
      environment:
        - SERVER_PORT=5442
        - OPENVIDU_URL=http://localhost:5443
        - OPENVIDU_SECRET=MY_SECRET
- networks:
-   docker_nat:
-     external: true
+     network_mode: host
