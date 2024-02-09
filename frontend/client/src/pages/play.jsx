@@ -45,7 +45,7 @@ import PassTurnCardView from '../components/play/passTurnCardView';
 import AnswerRevealView from '../components/play/answerRevealView';
 
 // const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5442/';
-const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'http://openvidu.secretzoo.site/';
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'https://openvidu.secretzoo.site/';
 
 
 const Play = () => {
