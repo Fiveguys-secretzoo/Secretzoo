@@ -16,7 +16,7 @@ services:
       - WDS_SOCKET_PROT=0
       - REACT_APP_SOCKET_SERVER_URL=ws://node-server:3001
       # - APPLICATION_SERVER_URL=https://openvidu.secretzoo.site
-      - APPLICATION_SERVER_URL=http://localhost:5442
+      # - APPLICATION_SERVER_URL=http://localhost:5442
     networks:
       - docker_nat
 
