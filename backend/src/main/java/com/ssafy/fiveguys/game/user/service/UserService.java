@@ -1,25 +1,21 @@
 package com.ssafy.fiveguys.game.user.service;
 
+import com.ssafy.fiveguys.game.player.service.PlayerService;
 import com.ssafy.fiveguys.game.user.dto.Role;
 import com.ssafy.fiveguys.game.user.dto.UserDto;
 import com.ssafy.fiveguys.game.user.dto.UserInfoDto;
 import com.ssafy.fiveguys.game.user.dto.UserSignDto;
 import com.ssafy.fiveguys.game.user.entity.User;
 import com.ssafy.fiveguys.game.user.exception.PasswordException;
-import com.ssafy.fiveguys.game.user.exception.UserIdNotFoundException;
+import com.ssafy.fiveguys.game.user.exception.UserNotFoundException;
 import com.ssafy.fiveguys.game.user.repository.UserRepositoy;
-import jakarta.persistence.criteria.CriteriaBuilder.In;
 import jakarta.transaction.Transactional;
 
-import java.util.NoSuchElementException;
 import java.util.Optional;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import javax.swing.text.html.Option;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -29,6 +25,7 @@ public class UserService {
 
     private final UserRepositoy userRepositoy;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final PlayerService playerService;
 
     public void signUp(UserSignDto userSignDto) {
         User user = User.builder()
@@ -41,6 +38,8 @@ public class UserService {
             .build();
 
         userRepositoy.save(user);
+        playerService.createPlayer(user);
+
     }
 
     public void saveUser(UserDto userDto) {
@@ -50,101 +49,78 @@ public class UserService {
 
     public UserDto findUserById(String userId) {
         User user = userRepositoy.findByUserId(userId).orElseThrow(
-            () -> new NoSuchElementException("user does not exist."));
+            UserNotFoundException::new);
         return UserDto.getUser(user);
     }
 
+    public boolean verifyEmail(String email) {
+        Optional<User> optionalUser = userRepositoy.findByEmail(email);
+        return optionalUser.isPresent();
+    }
+
     public void deleteRefreshToken(String userId) {
-        User user = userRepositoy.findByUserId(userId).orElse(null);
-        if (user != null) {
-            UserDto userDto = UserDto.getUser(user);
-            userDto.setRefreshToken(null);
-            user = User.getUserDto(userDto);
-            userRepositoy.save(user);
-        }
+        User user = userRepositoy.findByUserId(userId).orElseThrow(
+            UserNotFoundException::new);
+        UserDto userDto = UserDto.getUser(user);
+        userDto.setRefreshToken(null);
+        userRepositoy.save(User.getUserDto(userDto));
     }
 
     public void updateUser(UserInfoDto userInfoDto) {
-        User user = userRepositoy.findByUserId(userInfoDto.getUserId()).orElse(null);
-        if (user != null) {
-            UserDto userDto = UserDto.getUser(user);
-            userDto.setName(userDto.getName());
-            userDto.setNickname(userDto.getNickname());
-            userDto.setMainAchievement(userDto.getMainAchievement());
-            userDto.setProfileNumber(userDto.getProfileNumber());
-            user = User.getUserDto(userDto);
-            userRepositoy.save(user);
-        }
-
+        User user = userRepositoy.findByUserId(userInfoDto.getUserId()).orElseThrow(
+            UserNotFoundException::new);
+        UserDto userDto = UserDto.getUser(user);
+        userDto.setName(userDto.getName());
+        userDto.setNickname(userDto.getNickname());
+        userDto.setMainReward(userDto.getMainReward());
+        userDto.setProfileNumber(userDto.getProfileNumber());
+        userRepositoy.save(User.getUserDto(userDto));
     }
 
     public void deleteUser(String userId, String password) {
         if (validatePassword(userId, password)) {
             userRepositoy.deleteByUserId(userId);
-        } else {
-            throw new PasswordException("비밀번호가 일치하지 않습니다.");
         }
-
     }
 
     public boolean validatePassword(String userId, String password) {
-        User user = userRepositoy.findByUserId(userId).orElse(null);
-        if (user != null) {
-            if (passwordEncoder.matches(password, user.getPassword())) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            throw new UserIdNotFoundException("user does not exist.");
+        User user = userRepositoy.findByUserId(userId).orElseThrow(
+            UserNotFoundException::new);
+        if (passwordEncoder.matches(password, user.getPassword())) {
+            return true;
         }
+        throw new PasswordException("비밀번호가 일치하지 않습니다.");
     }
 
     public void changePassword(String userId, String password) {
-        User user = userRepositoy.findByUserId(userId).orElse(null);
-        if (user != null) {
-            UserDto userDto = UserDto.getUser(user);
-            userDto.setPassword(passwordEncoder.encode(password));
-            User updatedUser = User.getUserDto(userDto);
-            userRepositoy.save(updatedUser);
-        } else {
-            throw new UserIdNotFoundException("user does not exist.");
-        }
+        User user = userRepositoy.findByUserId(userId).orElseThrow(
+            UserNotFoundException::new);
+        UserDto userDto = UserDto.getUser(user);
+        userDto.setPassword(passwordEncoder.encode(password));
+        userRepositoy.save(User.getUserDto(userDto));
     }
 
     public void changeProfileNumber(String userId, String profileNumber) {
-        User user = userRepositoy.findByUserId(userId).orElse(null);
-        if (user != null) {
-            UserDto userDto = UserDto.getUser(user);
-            userDto.setProfileNumber(profileNumber);
-            User updatedUser = User.getUserDto(userDto);
-            userRepositoy.save(updatedUser);
-        } else {
-            throw new UserIdNotFoundException("user does not exist.");
-        }
+        User user = userRepositoy.findByUserId(userId).orElseThrow(
+            UserNotFoundException::new);
+        UserDto userDto = UserDto.getUser(user);
+        userDto.setProfileNumber(profileNumber);
+        userRepositoy.save(User.getUserDto(userDto));
     }
 
     public void changeMainAchievement(String userId, String mainAcheiveMent) {
-        User user = userRepositoy.findByUserId(userId).orElse(null);
-        if (user != null) {
-            UserDto userDto = UserDto.getUser(user);
-            userDto.setMainAchievement(mainAcheiveMent);
-            User updatedUser = User.getUserDto(userDto);
-            userRepositoy.save(updatedUser);
-        } else {
-            throw new UserIdNotFoundException("user does not exist.");
-        }
+        User user = userRepositoy.findByUserId(userId).orElseThrow(
+            UserNotFoundException::new);
+        UserDto userDto = UserDto.getUser(user);
+        userDto.setMainReward(mainAcheiveMent);
+        userRepositoy.save(User.getUserDto(userDto));
     }
 
     public void changeNickname(String userId, String nickname) {
-        User user = userRepositoy.findByUserId(userId).orElse(null);
-        if (user != null) {
-            UserDto userDto = UserDto.getUser(user);
-            userDto.setNickname(nickname);
-            User updatedUser = User.getUserDto(userDto);
-            userRepositoy.save(updatedUser);
-        } else {
-            throw new UserIdNotFoundException("user does not exist.");
-        }
+        User user = userRepositoy.findByUserId(userId).orElseThrow(
+            UserNotFoundException::new);
+        UserDto userDto = UserDto.getUser(user);
+        userDto.setNickname(nickname);
+        userRepositoy.save(User.getUserDto(userDto));
     }
 }

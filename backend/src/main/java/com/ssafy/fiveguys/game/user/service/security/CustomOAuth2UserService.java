@@ -1,6 +1,7 @@
 package com.ssafy.fiveguys.game.user.service.security;
 
 
+import com.ssafy.fiveguys.game.player.service.PlayerService;
 import com.ssafy.fiveguys.game.user.auth.GameUserDetails;
 import com.ssafy.fiveguys.game.user.auth.userinfo.GoogleOAuth2UserInfo;
 import com.ssafy.fiveguys.game.user.auth.userinfo.KakaoOAuth2UserInfo;
@@ -32,6 +33,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private static final String KAKAO = "kakao";
     private final String GOOGLE = "google";
     private static final String GET_NAVER_ATTRIBUTE = "response";
+    private final PlayerService playerService;
     private User user;
 
     @Override
@@ -40,22 +42,23 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         Oauth2UserInfo oauth2UserInfo = ofOAuth2UserInfo(registrationId, oAuth2User);
         Optional<User> optionalUser = userRepositoy.findByProviderAndProviderId(
-                oauth2UserInfo.getProvider(), oauth2UserInfo.getProviderId());
+            oauth2UserInfo.getProvider(), oauth2UserInfo.getProviderId());
         if (optionalUser.isPresent()) {
             UserDto userDto = UserDto.getUser(optionalUser.get());
             userDto.setEmail(oauth2UserInfo.getEmail());
             user = User.getUserDto(userDto);
         } else {
             user = User.builder()
-                    .userId(oauth2UserInfo.getProviderId())
-                    .email(oauth2UserInfo.getEmail())
-                    .name(oauth2UserInfo.getName())
-                    .nickname(oauth2UserInfo.getProvider() + "_" + oauth2UserInfo.getProviderId())
-                    .provider(oauth2UserInfo.getProvider())
-                    .providerId(oauth2UserInfo.getProviderId())
-                    .build();
+                .userId(oauth2UserInfo.getProviderId())
+                .email(oauth2UserInfo.getEmail())
+                .name(oauth2UserInfo.getName())
+                .nickname(oauth2UserInfo.getProvider() + "_" + oauth2UserInfo.getProviderId())
+                .provider(oauth2UserInfo.getProvider())
+                .providerId(oauth2UserInfo.getProviderId())
+                .build();
         }
         userRepositoy.save(user);
+        playerService.createPlayer(user);
         return new GameUserDetails(user, oAuth2User.getAttributes());
     }
 
@@ -64,7 +67,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             return new GoogleOAuth2UserInfo(oAuth2User.getAttributes());
         } else if (registrationId.equals(NAVER)) {
             return new NaverOAuth2UserInfo(
-                    (Map) oAuth2User.getAttributes().get(GET_NAVER_ATTRIBUTE));
+                (Map) oAuth2User.getAttributes().get(GET_NAVER_ATTRIBUTE));
         } else if (registrationId.equals(KAKAO)) {
             return new KakaoOAuth2UserInfo(oAuth2User.getAttributes());
         }
