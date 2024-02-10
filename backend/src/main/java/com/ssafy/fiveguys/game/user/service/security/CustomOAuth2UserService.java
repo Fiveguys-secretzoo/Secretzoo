@@ -58,6 +58,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .providerId(oauth2UserInfo.getProviderId())
                 .build();
         }
+
         userRepositoy.save(user);
         if (optionalUser.isEmpty()) {
             playerService.createPlayer(user);
