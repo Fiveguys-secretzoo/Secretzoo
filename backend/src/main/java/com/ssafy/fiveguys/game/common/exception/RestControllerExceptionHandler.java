@@ -5,6 +5,7 @@ import com.ssafy.fiveguys.game.user.exception.DuplicateIdentifierException;
 import com.ssafy.fiveguys.game.user.exception.PasswordException;
 import com.ssafy.fiveguys.game.user.exception.RefreshTokenNotFoundException;
 import com.ssafy.fiveguys.game.user.exception.UserNotFoundException;
+import com.ssafy.fiveguys.game.user.exception.VerificationCodeException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.extern.slf4j.Slf4j;
@@ -45,8 +46,14 @@ public class RestControllerExceptionHandler {
     }
 
     @ExceptionHandler(UnsupportedJwtException.class) // 지원하지 않는 토큰 인증 방식 예외 처리
-    public ResponseEntity<ErrorResponse> handleJwtTokenException(Exception exception) {
+    public ResponseEntity<ErrorResponse> handleJwtTokenException(UnsupportedJwtException exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
             new ErrorResponse("ERROR_40002", exception.getMessage()));
+    }
+
+    @ExceptionHandler(VerificationCodeException.class) // 이메일 인증 코드가 일치하지 않거나 유효시간이 만료된 예외 처리
+    public ResponseEntity<ErrorResponse> handleJVerificationCodeException(VerificationCodeException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+            new ErrorResponse("ERROR_40003", exception.getMessage()));
     }
 }

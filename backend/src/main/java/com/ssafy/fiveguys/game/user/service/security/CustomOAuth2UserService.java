@@ -7,7 +7,6 @@ import com.ssafy.fiveguys.game.user.auth.userinfo.GoogleOAuth2UserInfo;
 import com.ssafy.fiveguys.game.user.auth.userinfo.KakaoOAuth2UserInfo;
 import com.ssafy.fiveguys.game.user.auth.userinfo.NaverOAuth2UserInfo;
 import com.ssafy.fiveguys.game.user.auth.userinfo.Oauth2UserInfo;
-import com.ssafy.fiveguys.game.user.dto.Role;
 import com.ssafy.fiveguys.game.user.dto.UserDto;
 import com.ssafy.fiveguys.game.user.entity.User;
 import com.ssafy.fiveguys.game.user.repository.UserRepositoy;
@@ -22,6 +21,7 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -37,6 +37,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private User user;
 
     @Override
+    @Transactional
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
@@ -58,7 +59,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .build();
         }
         userRepositoy.save(user);
-        playerService.createPlayer(user);
+        if (optionalUser.isEmpty()) {
+            playerService.createPlayer(user);
+        }
         return new GameUserDetails(user, oAuth2User.getAttributes());
     }
 
