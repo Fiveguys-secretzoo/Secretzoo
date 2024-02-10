@@ -17,6 +17,7 @@ axiosInstance.interceptors.response.use(response => {
   const originalRequest = error.config;
   if (error.response.status === 401 && !originalRequest._retry) {
     originalRequest._retry = true;
+    console.log('토큰 재발급');
     const refresh_Token = sessionStorage.getItem('refresh_token');
     const access_token = sessionStorage.getItem('authorization');
     try {

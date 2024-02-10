@@ -14,7 +14,7 @@ const MyInfo = () => {
 
   useEffect(() => {
     getRewards();
-  }, [])
+  }, [user])
 
   const updateProfileImage = (number) => {
     dispatch(axiosUpdateProfileImage(number));
