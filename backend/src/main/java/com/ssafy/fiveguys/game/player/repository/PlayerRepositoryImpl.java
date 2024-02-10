@@ -19,7 +19,7 @@ import org.springframework.util.StringUtils;
 
 @Repository
 
-public class PlayerRepositoryImpl{
+public class PlayerRepositoryImpl {
 
     private final JPAQueryFactory query;
 
@@ -39,6 +39,7 @@ public class PlayerRepositoryImpl{
             .limit(pageable.getPageSize())
             .fetch();
     }
+
     public PlayerSearchResult findAll(PlayerSearch playerSearch, Pageable pageable) {
         QPlayer player = QPlayer.player;
         QUser user = QUser.user;
@@ -46,7 +47,8 @@ public class PlayerRepositoryImpl{
             .select(player)
             .from(player)
             .join(player.user, user)
-            .where(nicknameLike(playerSearch.getNickname()), userIdLike(playerSearch.getUserId()))
+            .where(nicknameLike(playerSearch.getNickname()), userIdLike(playerSearch.getUserId()), nameLike(
+                playerSearch.getName()))
             .orderBy(player.user.userSequence.asc())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
@@ -56,13 +58,12 @@ public class PlayerRepositoryImpl{
             .select(player)
             .from(player)
             .join(player.user, user)
-            .where(nicknameLike(playerSearch.getNickname()), userIdLike(playerSearch.getUserId()))
+            .where(nicknameLike(playerSearch.getNickname()), userIdLike(playerSearch.getUserId()),
+                nameLike(playerSearch.getName()))
             .fetchCount();
 
         return new PlayerSearchResult(list, totalCount);
     }
-
-
 
 
     private BooleanExpression nicknameLike(String nameCond) {
@@ -71,11 +72,19 @@ public class PlayerRepositoryImpl{
         }
         return player.user.nickname.contains(nameCond);
     }
+
     private BooleanExpression userIdLike(String userIdCond) {
         if (!StringUtils.hasText(userIdCond)) {
             return null;
         }
         return player.user.userId.contains(userIdCond);
+    }
+
+    private BooleanExpression nameLike(String nameCond) {
+        if (!StringUtils.hasText(nameCond)) {
+            return null;
+        }
+        return player.user.userId.contains(nameCond);
     }
 
 }
