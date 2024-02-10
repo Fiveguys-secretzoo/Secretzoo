@@ -9,6 +9,8 @@
 ## 🤲🏻 팀원 구성 및 역할 분담 🤲🏻
 
 <table align=center>
+
+<div align=center> 
     <tr align=center>
         <td style="min-width: 250px;">
             <a href="https://github.com/">
@@ -54,8 +56,11 @@
         <br/>
         </td>
     </tr>
+</div>
 </table>
+
 <table align=center>
+<div align=center> 
     <tr align=center>
         <td style="min-width: 250px;">
             <a href="https://github.com/">
@@ -84,6 +89,7 @@
         <br/>
         </td>
     </tr>
+</div>
 </table>
 
 <br/>
