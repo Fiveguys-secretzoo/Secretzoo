@@ -1,4 +1,5 @@
 // import React, { useState, useEffect, useRef } from 'react';
+// import { Card } from 'flowbite-react'
 import { OpenVidu } from 'openvidu-browser';
 import axios from 'axios';
 import './openvidu/App.css';
@@ -32,7 +33,6 @@ import {
 } from '../store/playSlice'
 import PlayerContainer from '../components/play/playerContainer';//추가
 // import PlayerView from '../components/play/playerView'//직접 추가했음
-const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'https://openvidu.secretzoo.site/';
 
 import CardView from '../components/play/cardView'
 
@@ -44,6 +44,8 @@ import AnswerSelectNotTurn from '../components/play/answerSelectNotTurn';
 import PassTurnCardView from '../components/play/passTurnCardView';
 import AnswerRevealView from '../components/play/answerRevealView';
 
+// const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5442/';
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'https://openvidu.secretzoo.site/';
 
 
 const Play = () => {
@@ -51,7 +53,7 @@ const Play = () => {
   const dragItem = useRef();
   const pid = sessionStorage.getItem("userName");
   const navigate = useNavigate();
-
+  
   // redux related const.
   const roomInfo = useSelector(state => state.plays);
   const playState = useSelector(state => state.plays.onBoard.status);
@@ -353,6 +355,7 @@ const Play = () => {
   const aaa = useRef(undefined);
   const playerSlot = (playerArr) => {
     const slotArr = [];
+    App();
     // const aaa = undefined;
     for (let k = 0; k < 5; k++) {
       let playerId = "", playerName = "";
@@ -381,7 +384,7 @@ const Play = () => {
         </PlayerView>
       )
     }
-    App();
+    // App();
     return slotArr;
   }
 
