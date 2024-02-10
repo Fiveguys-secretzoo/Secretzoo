@@ -8,8 +8,8 @@
 
 ## 🤲🏻 팀원 구성 및 역할 분담 🤲🏻
 
-<table align="center">
-    <tr align="center">
+<table align=center>
+    <tr align=center>
         <td style="min-width: 250px;">
             <a href="https://github.com/">
               <img src="https://avatars.githubusercontent.com/u" width="100">
@@ -55,8 +55,8 @@
         </td>
     </tr>
 </table>
-<table align="center">
-    <tr align="center">
+<table align=center>
+    <tr align=center>
         <td style="min-width: 250px;">
             <a href="https://github.com/">
               <img src="https://avatars.githubusercontent.com/u" width="100">
