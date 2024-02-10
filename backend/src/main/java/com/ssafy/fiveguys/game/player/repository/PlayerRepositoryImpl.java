@@ -84,7 +84,7 @@ public class PlayerRepositoryImpl {
         if (!StringUtils.hasText(nameCond)) {
             return null;
         }
-        return player.user.userId.contains(nameCond);
+        return player.user.name.contains(nameCond);
     }
 
 }
