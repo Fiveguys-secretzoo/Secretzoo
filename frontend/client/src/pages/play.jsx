@@ -401,18 +401,8 @@ const Play = () => {
             window.removeEventListener('beforeunload', onbeforeunload);
             leaveSession();
         };
-      }, []);
-      useEffect(() => {
-        if(playerList.length!==1){
-          console.log('???????????????????????');
-            window.addEventListener('beforeunload', onbeforeunload);  
-            joinSession();
-          return () => {
-              window.removeEventListener('beforeunload', onbeforeunload);
-              leaveSession();
-          };
-        }
       }, [playerList]);
+      
       const onbeforeunload = () => {
           leaveSession();
       };
