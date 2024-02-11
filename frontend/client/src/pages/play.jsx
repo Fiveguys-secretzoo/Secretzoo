@@ -140,7 +140,6 @@ const Play = () => {
   const playerEnterHandler = (player) => {
     console.log(`##### player entered...`);
     console.log(player);
-    App();
     dispatch(addPlayer(player));
   }
 
@@ -355,7 +354,7 @@ const Play = () => {
   const aaa = useRef(undefined);
   const playerSlot = (playerArr) => {
     const slotArr = [];
-    // App();
+    App();
     // const aaa = undefined;
     for (let k = 0; k < 5; k++) {
       let playerId = "", playerName = "";
@@ -420,7 +419,7 @@ const Play = () => {
               const subscriber = mySession.subscribe(event.stream, undefined);
               setSubscribers((prevSubscribers) => [...prevSubscribers, subscriber]);
               console.log("########## check subscribers ");
-              console.log(subscribers);
+              console.log(subscriber);
           });
           
           mySession.on('streamDestroyed', (event) => {
