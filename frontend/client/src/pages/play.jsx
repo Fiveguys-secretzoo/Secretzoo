@@ -636,7 +636,7 @@ const Play = () => {
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Type a message..."
                 />
-                <Button onClick={/*sendMessage*/() => { console.log(roomInfo) }}>Send</Button>
+                <Button onClick={sendMessage() /*=> { console.log(roomInfo) }*/}>Send</Button>
               </div>
             </div>
               <Button className={(playState === 0) ? '' : 'hidden'} disabled={!isAdmin} color="success" onClick={start}>start</Button>
