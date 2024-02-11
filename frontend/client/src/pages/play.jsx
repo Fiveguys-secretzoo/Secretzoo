@@ -89,6 +89,12 @@ const Play = () => {
     '고래',
   ];
 
+  const [myUserName, setMyUserName] = useState(sessionStorage.getItem('userName'));
+  const [publisher, setPublisher] = useState(undefined);
+  const [subscribers, setSubscribers] = useState([]);
+  const session = useRef(undefined);
+
+
   const PlayerView = ({ pid, key, pn = "SomethingWrong", activate = false,video }) => {
 
     const playerContainer = PlayerContainer();
@@ -348,10 +354,12 @@ const Play = () => {
   const start = () => {
     socket.emit('start');
   }
-  useEffect(()=>{ // 사람이 들어왔을때 다시 실행함 
-    playerSlot();
-  },[subscribers])
+  
   const video = useRef(undefined);
+
+  useEffect(()=>{
+    playerSlot();
+  },[subscribers]);
   const playerSlot = (playerArr) => {
     const slotArr = [];
     App();
@@ -386,19 +394,16 @@ const Play = () => {
     return slotArr;
   }
 
-  const [myUserName, setMyUserName] = useState(sessionStorage.getItem('userName'));
-  const [publisher, setPublisher] = useState(undefined);
-  const [subscribers, setSubscribers] = useState([]);
-  const session = useRef(undefined);
+  
   const App = () => {
       useEffect(() => {
         console.log('$$$$$$$$$$$$$$$$$$$$$$$4');
-          window.addEventListener('beforeunload', onbeforeunload);
-          joinSession();
-          return () => {
-              window.removeEventListener('beforeunload', onbeforeunload);
-              leaveSession();
-          };
+        window.addEventListener('beforeunload', onbeforeunload);
+        joinSession();
+        return () => {
+            window.removeEventListener('beforeunload', onbeforeunload);
+            leaveSession();
+        };
       }, []);
 
       const onbeforeunload = () => {
