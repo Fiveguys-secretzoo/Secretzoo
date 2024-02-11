@@ -121,6 +121,28 @@ export const axiosUpdatePassword = createAsyncThunk(
     }
   }
 );
+export const axiosGetDoneRewards= createAsyncThunk(
+  'user/axiosGetDoneRewards',
+  async (userSequence) => {
+    try {
+      const response =axiosInstance.get('https://spring.secretzoo.site/rewards/done/'+ userSequence);
+      return response.data;
+    } catch (error) {
+     throw error;
+    }
+  }
+);
+export const axiosGetTotalRewards= createAsyncThunk(
+  'user/axiosGetTotalRewards',
+  async (userSequence) => {
+    try {
+     const response = axiosInstance.put('https://spring.secretzoo.site/rewards/total/'+ userSequence);
+      return response.data;
+    } catch (error) {
+     throw error;
+    }
+  }
+);
 
 const userSlice = createSlice({
   name: 'user',
