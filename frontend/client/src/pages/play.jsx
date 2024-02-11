@@ -44,7 +44,6 @@ import AnswerSelectNotTurn from '../components/play/answerSelectNotTurn';
 import PassTurnCardView from '../components/play/passTurnCardView';
 import AnswerRevealView from '../components/play/answerRevealView';
 
-// const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5442/';
 const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'https://openvidu.secretzoo.site/';
 
 
@@ -108,9 +107,7 @@ const Play = () => {
             {pid}
           </p>
           {aaa}
-          {/* {(pid === sessionStorage.getItem('userName'))&&
-          <App pid={pid}/>
-           }  */}
+         
         </div>
       </>
     );
@@ -353,9 +350,12 @@ const Play = () => {
   }
 
   const aaa = useRef(undefined);
-  const playerSlot = (playerArr) => {
+  const PlayerSlot = ({ playerArr }) => {
+    useEffect(() => {
+      App();
+    }, [playerArr]);
     const slotArr = [];
-    App();
+    // App();
     // const aaa = undefined;
     for (let k = 0; k < 5; k++) {
       let playerId = "", playerName = "";
@@ -392,17 +392,19 @@ const Play = () => {
   const [publisher, setPublisher] = useState(undefined);
   const [subscribers, setSubscribers] = useState([]);
   const session = useRef(undefined);
+
+
   const App = () => {
       useEffect(() => {
         console.log('$$$$$$$$$$$$$$$$$$$$$$$4');
-          window.addEventListener('beforeunload', onbeforeunload);
+          window.addEventListener('beforeunload', onbeforeunload);  
           joinSession();
-          return () => {
-              window.removeEventListener('beforeunload', onbeforeunload);
-              leaveSession();
-          };
+        return () => {
+            window.removeEventListener('beforeunload', onbeforeunload);
+            leaveSession();
+        };
       }, []);
-
+      
       const onbeforeunload = () => {
           leaveSession();
       };
@@ -496,27 +498,6 @@ const Play = () => {
           });
           return response.data;
       };
-
-      // return (
-      //     <div className="container">
-      //         <div id="video-container" className="col-md-6">
-      //             {publisher !== undefined ? (
-      //                 <div className="stream-container col-md-6 col-xs-6">
-      //                     <UserVideoComponent streamManager={publisher} />
-      //                 </div>
-                      
-      //             ) : null}
-      //         </div>
-      //         <div className="sub-container">
-      //             {subscribers.map((sub, i) => (
-      //                 <div key={sub.id} className="stream-container col-md-6 col-xs-6">
-      //                     <span>{sub.id}</span>
-      //                     <UserVideoComponent streamManager={sub} />
-      //                 </div>
-      //             ))}
-      //         </div>
-      //     </div>
-      // );
   };
 
 
