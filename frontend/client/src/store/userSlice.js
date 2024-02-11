@@ -18,7 +18,7 @@ axiosInstance.interceptors.response.use(response => {
   if (error.response.status === 401 && !originalRequest._retry) {
     originalRequest._retry = true;
     console.log('토큰 재발급');
-    const refresh_Token = sessionStorage.getItem('refresh_token');
+    const refresh_Token = sessionStorage.getItem('refresh-token');
     const access_token = sessionStorage.getItem('authorization');
     try {
       const response = await axiosInstance.post('https://spring.secretzoo.site/auth/token/refresh', {} ,{
@@ -27,8 +27,8 @@ axiosInstance.interceptors.response.use(response => {
           "refresh-token" : refresh_Token,
         }
       });
-      sessionStorage.setItem('authorization', 'Bearer ' + response.data.access_token);
-      sessionStorage.setItem('refresh_token', response.data.refresh_token);
+      sessionStorage.setItem('authorization', 'Bearer ' + response.data['access-token']);
+      sessionStorage.setItem('refresh-token', response.data['refresh-token']);
       axiosInstance.defaults.headers.common['Authorization'] = sessionStorage.getItem('authorization');
       return axiosInstance(originalRequest);
     } catch (refreshError) {

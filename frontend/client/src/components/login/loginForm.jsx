@@ -32,7 +32,7 @@ const LoginForm = () => {
       }
     ).then(response => {
       sessionStorage.setItem('authorization', response.headers['authorization']);
-      sessionStorage.setItem('refresh_token', response.headers['refresh_token']);
+      sessionStorage.setItem('refresh-token', response.headers['refresh-token']);
       sessionStorage.setItem('user', response.data);
       navigate('lobby');
     }).catch(e => {
