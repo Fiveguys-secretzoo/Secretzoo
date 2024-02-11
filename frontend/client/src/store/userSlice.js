@@ -23,8 +23,8 @@ axiosInstance.interceptors.response.use(response => {
     try {
       const response = await axiosInstance.post('https://spring.secretzoo.site/auth/token/refresh', {} ,{
         headers: {
-          "access_token" : access_token,
-          "refresh_token" : refresh_Token,
+          "access-token" : access_token,
+          "refresh-token" : refresh_Token,
         }
       });
       sessionStorage.setItem('authorization', 'Bearer ' + response.data.access_token);
