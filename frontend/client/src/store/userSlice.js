@@ -52,11 +52,11 @@ export const getUserInfo = createAsyncThunk(
         "userSequence": data1.userSequence,
         "profileNumber": data1.profileNumber,
         "mainReward" : data1.mainReward,
-        "email" : data1.email,
-        "level" : data2.data.currentLevel,
-        "exp" : data2.data.currentExp,
-        "nextExp" : data2.data.nextExp,
-        "prevExp" : data2.data.prevExp,
+        // "email" : data1.email,
+        // "level" : data2.data.currentLevel,
+        // "exp" : data2.data.currentExp,
+        // "nextExp" : data2.data.nextExp,
+        // "prevExp" : data2.data.prevExp,
       };
       sessionStorage.setItem('userName',data1.userId);
       

@@ -25,7 +25,7 @@ const LoginForm = () => {
       return;
     }
 
-    axios.post('https://spring.secretzoo.site/auth/login',
+    axios.post('http://localhost:8080/auth/login',
       {
         "userId": id,
         "password": pass,

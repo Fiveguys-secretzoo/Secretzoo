@@ -16,42 +16,42 @@ const SignupForm = () => {
     return regex.test(password);
   };
   const requsetLogin = () => {
-    if (!idCheck) {
-      Swal.fire({
-        "text" : 'id 중복체크하세요.',
-        "confirmButtonColor" : '#3085d6'
-      });
-      return;
-    }
-    if(!validatePassword(pass)){
-      Swal.fire({
-        "text" : '비밀번호가 너무 약합니다',
-        "confirmButtonColor" : '#3085d6'
-      });
-      return;
-    }
-    if (pass != passCheck) {
-      Swal.fire({
-        "text" : '비밀번호가 잃치하지 않습니다.',
-        "confirmButtonColor" : '#3085d6'
-      });
-      return;
-    }
-    if(name.length <= 0){
-      Swal.fire({
-        "text" : '이름을 입력해주세요',
-        "confirmButtonColor" : '#3085d6'
-      });
-      return;
-    }
-    if (!emailCheckSate) {
-      Swal.fire({
-        "text" : '아직 이메일 인증이 되지 않았습니다.',
-        "confirmButtonColor" : '#3085d6'
-      });
-      return;
-    }
-    axios.post('https://spring.secretzoo.site/auth/signup',
+    // if (!idCheck) {
+    //   Swal.fire({
+    //     "text" : 'id 중복체크하세요.',
+    //     "confirmButtonColor" : '#3085d6'
+    //   });
+    //   return;
+    // }
+    // if(!validatePassword(pass)){
+    //   Swal.fire({
+    //     "text" : '비밀번호가 너무 약합니다',
+    //     "confirmButtonColor" : '#3085d6'
+    //   });
+    //   return;
+    // }
+    // if (pass != passCheck) {
+    //   Swal.fire({
+    //     "text" : '비밀번호가 잃치하지 않습니다.',
+    //     "confirmButtonColor" : '#3085d6'
+    //   });
+    //   return;
+    // }
+    // if(name.length <= 0){
+    //   Swal.fire({
+    //     "text" : '이름을 입력해주세요',
+    //     "confirmButtonColor" : '#3085d6'
+    //   });
+    //   return;
+    // }
+    // if (!emailCheckSate) {
+    //   Swal.fire({
+    //     "text" : '아직 이메일 인증이 되지 않았습니다.',
+    //     "confirmButtonColor" : '#3085d6'
+    //   });
+    //   return;
+    // }
+    axios.post('http://localhost:8080/auth/signup',
       {
         "userId": id,
         "password": pass,
@@ -132,7 +132,7 @@ const SignupForm = () => {
       },
     });
   
-    axios.post('https://spring.secretzoo.site/verify-email/send',data)
+    axios.post('https://localhost:8080/verify-email/send',data)
     .then(Response => {
       Swal.close();
       Swal.fire({
