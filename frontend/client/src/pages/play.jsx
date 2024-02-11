@@ -402,9 +402,15 @@ const Play = () => {
             leaveSession();
         };
       }, []);
-      useEffect(()=>{
-        App();
-      },[playerList])
+      useEffect(() => {
+        console.log('???????????????????????');
+          window.addEventListener('beforeunload', onbeforeunload);  
+          joinSession();
+        return () => {
+            window.removeEventListener('beforeunload', onbeforeunload);
+            leaveSession();
+        };
+      }, [playerList]);
       const onbeforeunload = () => {
           leaveSession();
       };
