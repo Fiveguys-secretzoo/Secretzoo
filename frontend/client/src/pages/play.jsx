@@ -400,7 +400,7 @@ const Play = () => {
               window.removeEventListener('beforeunload', onbeforeunload);
               leaveSession();
           };
-      }, [subscribers]);
+      }, [subscribers,publisher]);
 
       const onbeforeunload = () => {
           leaveSession();
