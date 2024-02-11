@@ -403,13 +403,15 @@ const Play = () => {
         };
       }, []);
       useEffect(() => {
-        console.log('???????????????????????');
-          window.addEventListener('beforeunload', onbeforeunload);  
-          joinSession();
-        return () => {
-            window.removeEventListener('beforeunload', onbeforeunload);
-            leaveSession();
-        };
+        if(playerList.length!==1){
+          console.log('???????????????????????');
+            window.addEventListener('beforeunload', onbeforeunload);  
+            joinSession();
+          return () => {
+              window.removeEventListener('beforeunload', onbeforeunload);
+              leaveSession();
+          };
+        }
       }, [playerList]);
       const onbeforeunload = () => {
           leaveSession();
