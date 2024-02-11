@@ -395,12 +395,14 @@ const Play = () => {
       useEffect(() => {
         console.log('$$$$$$$$$$$$$$$$$$$$$$$4');
           window.addEventListener('beforeunload', onbeforeunload);
-          joinSession();
-          return () => {
-              window.removeEventListener('beforeunload', onbeforeunload);
-              leaveSession();
-          };
-      }, []);
+          if (subscribers.length > 0 && publisher !== undefined) {
+            joinSession();
+        }
+        return () => {
+            window.removeEventListener('beforeunload', onbeforeunload);
+            leaveSession();
+        };
+      }, [subscribers,publisher]);
 
       const onbeforeunload = () => {
           leaveSession();
@@ -415,55 +417,53 @@ const Play = () => {
 
           const mySession = OV.initSession();
           
-          
-          mySession.on('streamDestroyed', (event) => {
-            deleteSubscriber(event.stream.streamManager);
-          });
-          
-          mySession.on('exception', (exception) => {
-            console.warn(exception);
-          });
-          
-          try {
-            const token = await getToken(sessionStorage.getItem('roomName'));
-            setMyUserName(sessionStorage.getItem('userName'));
-            
-            mySession.connect(token, { clientData: myUserName })
-            .then(async () => {
-              let newPublisher = await OV.initPublisherAsync(undefined, {
-                audioSource: undefined,
-                videoSource: undefined,
-                publishAudio: true,
-                publishVideo: true,
-                resolution: '600x480',
-                frameRate: 30,
-                insertMode: 'APPEND',
-                mirror: false,
-              });
-              
-              await mySession.publish(newPublisher);
-              
-              setPublisher(newPublisher);
-              console.log(session);
-              
-              console.log(publisher);
-            })
-            .catch((error) => {
-              console.log('There was an error connecting to the session:', error.code, error.message);
-            });
-          } catch (error) {
-            console.error(error);
-          }
           mySession.on('streamCreated', (event) => {
               const subscriber = mySession.subscribe(event.stream, undefined);
               setSubscribers((prevSubscribers) => [...prevSubscribers, subscriber]);
-              console.log("########## check subscribers ");
-              console.log(subscriber);
           });
+          
+          mySession.on('streamDestroyed', (event) => {
+              deleteSubscriber(event.stream.streamManager);
+          });
+          
+          mySession.on('exception', (exception) => {
+              console.warn(exception);
+          });
+          
+          try {
+              const token = await getToken(sessionStorage.getItem('roomName'));
+              setMyUserName(sessionStorage.getItem('userName'));
+              
+              mySession.connect(token, { clientData: myUserName })
+              .then(async () => {
+                  let newPublisher = await OV.initPublisherAsync(undefined, {
+                      audioSource: undefined,
+                      videoSource: undefined,
+                      publishAudio: true,
+                      publishVideo: true,
+                      resolution: '600x480',
+                      frameRate: 30,
+                      insertMode: 'APPEND',
+                      mirror: false,
+                  });
+                  
+                  await mySession.publish(newPublisher);
+                  
+                  setPublisher(newPublisher);
+                  console.log(session);
+                  
+                  console.log(publisher);
+              })
+              .catch((error) => {
+                  console.log('There was an error connecting to the session:', error.code, error.message);
+              });
+          } catch (error) {
+              console.error(error);
+          }
           session.current = mySession;
-        };
-        
-        const leaveSession = () => {
+      };
+      
+      const leaveSession = () => {
           const mySession = session.current;
           sessionStorage.removeItem('roomName');
           if (mySession) {
@@ -498,6 +498,26 @@ const Play = () => {
           return response.data;
       };
 
+      // return (
+      //     <div className="container">
+      //         <div id="video-container" className="col-md-6">
+      //             {publisher !== undefined ? (
+      //                 <div className="stream-container col-md-6 col-xs-6">
+      //                     <UserVideoComponent streamManager={publisher} />
+      //                 </div>
+                      
+      //             ) : null}
+      //         </div>
+      //         <div className="sub-container">
+      //             {subscribers.map((sub, i) => (
+      //                 <div key={sub.id} className="stream-container col-md-6 col-xs-6">
+      //                     <span>{sub.id}</span>
+      //                     <UserVideoComponent streamManager={sub} />
+      //                 </div>
+      //             ))}
+      //         </div>
+      //     </div>
+      // );
   };
 
 
