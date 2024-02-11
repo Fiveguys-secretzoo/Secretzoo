@@ -77,7 +77,6 @@ public class AuthService {
 
 
     public JwtTokenDto reissueToken(String accessToken, String refreshToken) {
-        log.debug("Refresh Token = {}", refreshToken);
         Authentication authentication = jwtTokenProvider.getAuthentication(
             resolveToken(accessToken));
         String principal = authentication.getName();
