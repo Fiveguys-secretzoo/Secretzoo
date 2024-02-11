@@ -349,14 +349,11 @@ const Play = () => {
   }
 
   const aaa = useRef(undefined);
-  const playerSlot = (playerArr) => {
+  const playerSlot = ({playerArr}) => {
+    const slotArr = [];
     useEffect(()=>{
       App();
-    },[]);
-    useEffect(()=>{
-      playerSlot(playerList);
-    },[subscribers]);
-    const slotArr = [];
+    },[playerArr])
     // App();
     // const aaa = undefined;
     for (let k = 0; k < 5; k++) {
