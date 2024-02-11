@@ -141,6 +141,7 @@ const Play = () => {
     console.log(`##### player entered...`);
     console.log(player);
     dispatch(addPlayer(player));
+    playerSlot(playerList);
   }
 
   // player leave socket event handle
@@ -394,15 +395,13 @@ const Play = () => {
   const App = () => {
       useEffect(() => {
         console.log('$$$$$$$$$$$$$$$$$$$$$$$4');
-          window.addEventListener('beforeunload', onbeforeunload);
-          if (subscribers.length > 0 && publisher !== undefined) {
-            joinSession();
-        }
+          window.addEventListener('beforeunload', onbeforeunload);  
+          joinSession();
         return () => {
             window.removeEventListener('beforeunload', onbeforeunload);
             leaveSession();
         };
-      }, [subscribers,publisher]);
+      }, []);
 
       const onbeforeunload = () => {
           leaveSession();
