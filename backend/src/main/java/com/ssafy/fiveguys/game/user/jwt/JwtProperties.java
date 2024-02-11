@@ -8,6 +8,6 @@ public interface JwtProperties {
     final String HEADER = "Authorization";
     final String TOKEN_PREFIX = "Bearer ";
     final String ACCESS_TOKEN = "access_token";
-    final String REFRESH_TOKEN = "refresh_token";
+    final String REFRESH_TOKEN = "refresh-token";
     final String EXPRIES_IN = "expires_in";
 }
