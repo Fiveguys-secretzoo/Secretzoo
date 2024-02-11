@@ -77,6 +77,7 @@ public class AuthService {
 
 
     public JwtTokenDto reissueToken(String accessToken, String refreshToken) {
+        log.debug("Refresh Token = {}", refreshToken);
         Authentication authentication = jwtTokenProvider.getAuthentication(
             resolveToken(accessToken));
         String principal = authentication.getName();
@@ -91,6 +92,7 @@ public class AuthService {
                 throw new RefreshTokenNotFoundException("refresh token 값이 존재하지 않습니다.");
             }
         }
+        log.debug("Refresh Token in DB = {}", refreshTokenInDB);
         if (!refreshTokenInDB.equals(refreshToken) || !jwtTokenProvider.validateToken(
             refreshToken)) {
             redisService.deleteRefreshToken(refreshToken);
@@ -100,8 +102,7 @@ public class AuthService {
         }
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        if (redisService.getRefreshToken(refreshToken) != null)
-        {
+        if (redisService.getRefreshToken(refreshToken) != null) {
             // Redis에 저장되어 있는 RT 삭제
             redisService.deleteRefreshToken(refreshToken);
         }
