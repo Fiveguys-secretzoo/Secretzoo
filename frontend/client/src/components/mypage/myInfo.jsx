@@ -67,11 +67,13 @@ const MyInfo = () => {
   };
 
   const [myRewards, setMyrewards] = useState(null);
-  const getRewards =  () => {
-    dispatch(axiosGetDoneRewards(user.userSequence))
-      .then(Response => {
-        setMyrewards(Response.payload);
+  const getRewards = async () => {
+    if(user.userSequence){
+      dispatch(axiosGetDoneRewards(user.userSequence))
+        .then(Response => {
+          setMyrewards(Response.payload);
       });
+    }
   };
 
   const [openProfileImageModal, setOpenProfileImageModal] = useState(false);

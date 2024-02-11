@@ -23,7 +23,7 @@ const MyReward = () => {
 
   console.log(payload);
 
-  const getRewards =  () => {
+  const getRewards = async () => {
     if(user.userSequence){
       dispatch(axiosGetTotalRewards(user.userSequence))
         .then(Response => {
