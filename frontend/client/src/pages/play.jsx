@@ -107,9 +107,6 @@ const Play = () => {
             {pid}
           </p>
           {aaa}
-          {/* {(pid === sessionStorage.getItem('userName'))&&
-          <App pid={pid}/>
-           }  */}
         </div>
       </>
     );
@@ -141,7 +138,6 @@ const Play = () => {
     console.log(`##### player entered...`);
     console.log(player);
     dispatch(addPlayer(player));
-    playerSlot(playerList);
   }
 
   // player leave socket event handle
@@ -392,6 +388,11 @@ const Play = () => {
   const [publisher, setPublisher] = useState(undefined);
   const [subscribers, setSubscribers] = useState([]);
   const session = useRef(undefined);
+
+  useEffect(()=>{
+    App();
+  },[subscribers])
+
   const App = () => {
       useEffect(() => {
         console.log('$$$$$$$$$$$$$$$$$$$$$$$4');
@@ -496,27 +497,6 @@ const Play = () => {
           });
           return response.data;
       };
-
-      // return (
-      //     <div className="container">
-      //         <div id="video-container" className="col-md-6">
-      //             {publisher !== undefined ? (
-      //                 <div className="stream-container col-md-6 col-xs-6">
-      //                     <UserVideoComponent streamManager={publisher} />
-      //                 </div>
-                      
-      //             ) : null}
-      //         </div>
-      //         <div className="sub-container">
-      //             {subscribers.map((sub, i) => (
-      //                 <div key={sub.id} className="stream-container col-md-6 col-xs-6">
-      //                     <span>{sub.id}</span>
-      //                     <UserVideoComponent streamManager={sub} />
-      //                 </div>
-      //             ))}
-      //         </div>
-      //     </div>
-      // );
   };
 
 
