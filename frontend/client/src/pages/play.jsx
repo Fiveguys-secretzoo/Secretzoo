@@ -418,6 +418,8 @@ const Play = () => {
           mySession.on('streamCreated', (event) => {
               const subscriber = mySession.subscribe(event.stream, undefined);
               setSubscribers((prevSubscribers) => [...prevSubscribers, subscriber]);
+              console.log("########## check subscribers ");
+              console.log(subscribers);
           });
           
           mySession.on('streamDestroyed', (event) => {
