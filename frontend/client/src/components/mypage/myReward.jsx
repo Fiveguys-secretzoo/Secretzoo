@@ -24,10 +24,12 @@ const MyReward = () => {
   console.log(payload);
 
   const getRewards =  () => {
-    dispatch(axiosGetTotalRewards(user.userSequence))
-      .then(Response => {
-        setMyrewards(Response.payload);
-      });
+    if(user.userSequence){
+      dispatch(axiosGetTotalRewards(user.userSequence))
+        .then(Response => {
+          setMyrewards(Response.payload);
+        });
+    }
   };
   useEffect(() => {
     getRewards();
