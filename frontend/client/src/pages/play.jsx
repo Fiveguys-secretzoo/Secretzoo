@@ -89,7 +89,7 @@ const Play = () => {
     '고래',
   ];
 
-  const PlayerView = ({ pid, key, pn = "SomethingWrong", activate = false,aaa }) => {
+  const PlayerView = ({ pid, key, pn = "SomethingWrong", activate = false,video }) => {
 
     const playerContainer = PlayerContainer();
     const { dragOver, dragEnterHandler, dropHandler } = playerContainer;
@@ -107,10 +107,7 @@ const Play = () => {
           <p className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
             {pid}
           </p>
-          {aaa}
-          {/* {(pid === sessionStorage.getItem('userName'))&&
-          <App pid={pid}/>
-           }  */}
+          {video}
         </div>
       </>
     );
@@ -351,12 +348,13 @@ const Play = () => {
   const start = () => {
     socket.emit('start');
   }
-
-  const aaa = useRef(undefined);
+  useEffect(()=>{ // 사람이 들어왔을때 다시 실행함 
+    playerSlot();
+  },[subscribers])
+  const video = useRef(undefined);
   const playerSlot = (playerArr) => {
     const slotArr = [];
     App();
-    // const aaa = undefined;
     for (let k = 0; k < 5; k++) {
       let playerId = "", playerName = "";
       let activate = false;
@@ -365,14 +363,14 @@ const Play = () => {
         playerName = playerArr[k].playerName;
         activate = true;
         if(k==0){
-          aaa.current = <UserVideoComponent streamManager={publisher} />
+          video.current = <UserVideoComponent streamManager={publisher} />
         }
         else{
-          aaa.current = <UserVideoComponent streamManager={subscribers[k-1]} />
+          video.current = <UserVideoComponent streamManager={subscribers[k-1]} />
         }
       }
       else{
-        aaa.current=undefined;
+        video.current=undefined;
       }
       slotArr.push(
         <PlayerView
@@ -380,7 +378,7 @@ const Play = () => {
         key={k}
         pn={playerName}
         activate={activate}
-        aaa={aaa.current}>
+        video={video.current}>
         </PlayerView>
       )
     }
