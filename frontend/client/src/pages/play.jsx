@@ -350,8 +350,14 @@ const Play = () => {
 
   const aaa = useRef(undefined);
   const playerSlot = (playerArr) => {
+    useEffect(()=>{
+      App();
+    },[]);
+    useEffect(()=>{
+      playerSlot(playerList);
+    },[subscribers]);
     const slotArr = [];
-    App();
+    // App();
     // const aaa = undefined;
     for (let k = 0; k < 5; k++) {
       let playerId = "", playerName = "";
@@ -389,6 +395,8 @@ const Play = () => {
   const [subscribers, setSubscribers] = useState([]);
   const session = useRef(undefined);
 
+
+
   const App = () => {
       useEffect(() => {
         console.log('$$$$$$$$$$$$$$$$$$$$$$$4');
@@ -408,7 +416,7 @@ const Play = () => {
           setSubscribers((prevSubscribers) => prevSubscribers.filter((sub) => sub !== streamManager));
       };
 
-      const joinSession = () => {
+      const joinSession = async () => {
           const OV = new OpenVidu();
 
           const mySession = OV.initSession();
@@ -427,7 +435,7 @@ const Play = () => {
           });
           
           try {
-              const token = getToken(sessionStorage.getItem('roomName'));
+              const token = await getToken(sessionStorage.getItem('roomName'));
               setMyUserName(sessionStorage.getItem('userName'));
               
               mySession.connect(token, { clientData: myUserName })
