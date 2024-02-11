@@ -8,8 +8,8 @@ const Callback = () => {
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    sessionStorage.setItem('authorization', 'Bearer ' + params.get('access_token'));
-    sessionStorage.setItem('refresh-token', params.get('refresh_token'));
+    sessionStorage.setItem('authorization', 'Bearer ' + params.get('access-token'));
+    sessionStorage.setItem('refresh-token', params.get('refresh-token'));
 
     params.delete('authorization');
     params.delete('refresh_token');
