@@ -44,7 +44,6 @@ import AnswerSelectNotTurn from '../components/play/answerSelectNotTurn';
 import PassTurnCardView from '../components/play/passTurnCardView';
 import AnswerRevealView from '../components/play/answerRevealView';
 
-// const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5442/';
 const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'https://openvidu.secretzoo.site/';
 
 
@@ -89,13 +88,7 @@ const Play = () => {
     '고래',
   ];
 
-  const [myUserName, setMyUserName] = useState(sessionStorage.getItem('userName'));
-  const [publisher, setPublisher] = useState(undefined);
-  const [subscribers, setSubscribers] = useState([]);
-  const session = useRef(undefined);
-
-
-  const PlayerView = ({ pid, key, pn = "SomethingWrong", activate = false,video }) => {
+  const PlayerView = ({ pid, key, pn = "SomethingWrong", activate = false,aaa }) => {
 
     const playerContainer = PlayerContainer();
     const { dragOver, dragEnterHandler, dropHandler } = playerContainer;
@@ -113,7 +106,10 @@ const Play = () => {
           <p className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
             {pid}
           </p>
-          {video}
+          {aaa}
+          {/* {(pid === sessionStorage.getItem('userName'))&&
+          <App pid={pid}/>
+           }  */}
         </div>
       </>
     );
@@ -354,15 +350,12 @@ const Play = () => {
   const start = () => {
     socket.emit('start');
   }
-  
-  const video = useRef(undefined);
 
-  useEffect(()=>{
-    playerSlot();
-  },[subscribers]);
+  const aaa = useRef(undefined);
   const playerSlot = (playerArr) => {
     const slotArr = [];
     App();
+    // const aaa = undefined;
     for (let k = 0; k < 5; k++) {
       let playerId = "", playerName = "";
       let activate = false;
@@ -371,14 +364,14 @@ const Play = () => {
         playerName = playerArr[k].playerName;
         activate = true;
         if(k==0){
-          video.current = <UserVideoComponent streamManager={publisher} />
+          aaa.current = <UserVideoComponent streamManager={publisher} />
         }
         else{
-          video.current = <UserVideoComponent streamManager={subscribers[k-1]} />
+          aaa.current = <UserVideoComponent streamManager={subscribers[k-1]} />
         }
       }
       else{
-        video.current=undefined;
+        aaa.current=undefined;
       }
       slotArr.push(
         <PlayerView
@@ -386,7 +379,7 @@ const Play = () => {
         key={k}
         pn={playerName}
         activate={activate}
-        video={video.current}>
+        aaa={aaa.current}>
         </PlayerView>
       )
     }
@@ -394,16 +387,19 @@ const Play = () => {
     return slotArr;
   }
 
-  
+  const [myUserName, setMyUserName] = useState(sessionStorage.getItem('userName'));
+  const [publisher, setPublisher] = useState(undefined);
+  const [subscribers, setSubscribers] = useState([]);
+  const session = useRef(undefined);
   const App = () => {
       useEffect(() => {
         console.log('$$$$$$$$$$$$$$$$$$$$$$$4');
-        window.addEventListener('beforeunload', onbeforeunload);
-        joinSession();
-        return () => {
-            window.removeEventListener('beforeunload', onbeforeunload);
-            leaveSession();
-        };
+          window.addEventListener('beforeunload', onbeforeunload);
+          joinSession();
+          return () => {
+              window.removeEventListener('beforeunload', onbeforeunload);
+              leaveSession();
+          };
       }, []);
 
       const onbeforeunload = () => {
