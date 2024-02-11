@@ -395,6 +395,7 @@ const Play = () => {
   const App = () => {
       useEffect(() => {
         console.log('$$$$$$$$$$$$$$$$$$$$$$$4');
+        console.log(playerList);
           window.addEventListener('beforeunload', onbeforeunload);  
           joinSession();
         return () => {
