@@ -42,7 +42,7 @@ export const getUserInfo = createAsyncThunk(
     try {
       const response1 = await axiosInstance.get('https://spring.secretzoo.site/users/user');
       const data1 = response1.data;
-      const response2 = await axiosInstance.get('https://spring.secretzoo.site/player/'+ data1.userSequence);
+      const response2 = await axiosInstance.get('https://spring.secretzoo.site/players/'+ data1.userSequence);
       const data2 = response2.data;
       console.log(data2)
       const userData = {
@@ -139,6 +139,9 @@ const userSlice = createSlice({
       };
       state.isLoading = false;
     },
+    logoutUser(state) {
+      state.userInfo = null;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -156,5 +159,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { setNoLoginUserInfo} = userSlice.actions;
+export const { setNoLoginUserInfo, logoutUser } = userSlice.actions;
 export default userSlice.reducer;
