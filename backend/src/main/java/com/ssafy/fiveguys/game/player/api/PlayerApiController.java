@@ -36,7 +36,7 @@ public class PlayerApiController {
      * @return
      */
     @Operation(summary = "플레이어 한명 정보 조회 API")
-    @GetMapping("/player/{userSequence}")
+    @GetMapping("/players/{userSequence}")
     public ApiResponse<?> getOnePlayerInfo(@PathVariable("userSequence") Long userSequence) {
 //        Player player = playerService.getPlayerByUserSequence(userSequence);
 //        // player sequence 가 db에 없는 경우 null 반환 -> 비회원 정보 조회 X
