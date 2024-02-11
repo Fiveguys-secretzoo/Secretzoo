@@ -50,7 +50,7 @@ public class AuthController {
     @PostMapping("/token/refresh")
     public ResponseEntity<?> reissue(HttpServletRequest request) {
         String accessToken = request.getHeader(HttpHeaders.AUTHORIZATION);
-        String refreshToken = request.getHeader(JwtProperties.REFRESH_TOKEN);
+        String refreshToken = request.getHeader("REFRESHTOKEN");
         log.debug("request.getHeader(refresh_token) = {}", refreshToken);
         JwtTokenDto reissuedToken = authService.reissueToken(accessToken, refreshToken);
         return ResponseEntity.status(HttpStatus.OK).body(reissuedToken.responseDto());
