@@ -389,19 +389,25 @@ const Play = () => {
   const [publisher, setPublisher] = useState(undefined);
   const [subscribers, setSubscribers] = useState([]);
   const session = useRef(undefined);
-
+  const prevPlayerListRef = useRef(playerList);
+  
  
 
   const App = () => {
       useEffect(() => {
-        console.log('$$$$$$$$$$$$$$$$$$$$$$$4');
-        console.log(playerList);
-          window.addEventListener('beforeunload', onbeforeunload);  
-          joinSession();
-        return () => {
-            window.removeEventListener('beforeunload', onbeforeunload);
-            leaveSession();
-        };
+        if(prevPlayerListRef.current.length<playerList.length){
+          console.log('$$$$$$$$$$$$$$$$$$$$$$$4');
+          console.log(playerList);
+            window.addEventListener('beforeunload', onbeforeunload);  
+            joinSession();
+          return () => {
+              window.removeEventListener('beforeunload', onbeforeunload);
+              leaveSession();
+          };
+        }
+        else{
+          prevPlayerListRef.current = playerList;
+        }
       }, [playerList]);
       
       const onbeforeunload = () => {
