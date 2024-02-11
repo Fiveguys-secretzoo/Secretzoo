@@ -350,12 +350,9 @@ const Play = () => {
   }
 
   const aaa = useRef(undefined);
-  const PlayerSlot = ({ playerArr }) => {
-    useEffect(() => {
-      App();
-    }, [playerArr]);
+  const playerSlot = (playerArr) => {
     const slotArr = [];
-    // App();
+    App();
     // const aaa = undefined;
     for (let k = 0; k < 5; k++) {
       let playerId = "", playerName = "";
@@ -393,6 +390,7 @@ const Play = () => {
   const [subscribers, setSubscribers] = useState([]);
   const session = useRef(undefined);
 
+ 
 
   const App = () => {
       useEffect(() => {
