@@ -26,6 +26,7 @@ axiosInstance.interceptors.response.use(response => {
           "refresh_token" : refresh_Token,
         }
       });
+      alert('hi');
       sessionStorage.setItem('authorization', 'Bearer ' + response.data.access_token);
       sessionStorage.setItem('refresh_token', response.data.refresh_token);
       axiosInstance.defaults.headers.common['Authorization'] = sessionStorage.getItem('authorization');
