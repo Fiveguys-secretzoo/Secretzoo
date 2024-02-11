@@ -402,7 +402,9 @@ const Play = () => {
             leaveSession();
         };
       }, []);
-      
+      useEffect(()=>{
+        App();
+      },[playerList])
       const onbeforeunload = () => {
           leaveSession();
       };
@@ -471,9 +473,7 @@ const Play = () => {
           
           session.current=undefined;
           setSubscribers([]);
-          // setMySessionId('');
           setMyUserName(sessionStorage.getItem('userName'));
-          // setMainStreamManager(undefined);
           setPublisher(undefined);
       };
 
