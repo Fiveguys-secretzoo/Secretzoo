@@ -389,10 +389,6 @@ const Play = () => {
   const [subscribers, setSubscribers] = useState([]);
   const session = useRef(undefined);
 
-  useEffect(()=>{
-    App();
-  },[subscribers])
-
   const App = () => {
       useEffect(() => {
         console.log('$$$$$$$$$$$$$$$$$$$$$$$4');
@@ -412,7 +408,7 @@ const Play = () => {
           setSubscribers((prevSubscribers) => prevSubscribers.filter((sub) => sub !== streamManager));
       };
 
-      const joinSession = async () => {
+      const joinSession = () => {
           const OV = new OpenVidu();
 
           const mySession = OV.initSession();
@@ -431,7 +427,7 @@ const Play = () => {
           });
           
           try {
-              const token = await getToken(sessionStorage.getItem('roomName'));
+              const token = getToken(sessionStorage.getItem('roomName'));
               setMyUserName(sessionStorage.getItem('userName'));
               
               mySession.connect(token, { clientData: myUserName })
