@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Progress } from 'flowbite-react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getUserInfo, setNoLoginUserInfo, } from '../../store/userSlice';
+import { axiosGetTotalRewards } from '../../store/userSlice';
 
 
 
@@ -23,11 +23,11 @@ const MyReward = () => {
 
   console.log(payload);
 
-  const getRewards = async () => {
-    axios.get(`https://spring.secretzoo.site/rewards/total/`+ user.userSequence)
-    .then(response => {
-      setMyrewards(response.data);
-    });
+  const getRewards =  () => {
+    dispatch(axiosGetTotalRewards(user.userSequence))
+      .then(Response => {
+        setMyrewards(Response.payload);
+      });
   };
   useEffect(() => {
     getRewards();
