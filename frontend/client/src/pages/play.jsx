@@ -107,6 +107,7 @@ const Play = () => {
             {pid}
           </p>
           {aaa}
+         
         </div>
       </>
     );
@@ -390,7 +391,6 @@ const Play = () => {
   const session = useRef(undefined);
 
 
-
   const App = () => {
       useEffect(() => {
         console.log('$$$$$$$$$$$$$$$$$$$$$$$4');
@@ -401,7 +401,7 @@ const Play = () => {
             leaveSession();
         };
       }, []);
-
+      
       const onbeforeunload = () => {
           leaveSession();
       };
