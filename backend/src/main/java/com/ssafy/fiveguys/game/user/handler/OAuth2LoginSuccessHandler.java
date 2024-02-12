@@ -48,7 +48,9 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         redisService.saveRefreshToken(refreshToken.getUserId(), refreshToken.getRefreshToken());
         // token 쿼리스트링
         String targetUrl = UriComponentsBuilder.fromUriString(CALLBACK_URL)
+            .queryParam(JwtProperties.TOKEN_TYPE, JwtProperties.TOKEN_PREFIX.substring(0, 6))
             .queryParam(JwtProperties.ACCESS_TOKEN, tokenSet.getAccessToken())
+            .queryParam(JwtProperties.EXPRIES_IN, JwtProperties.ACCESS_TOKEN_EXPIRATION_TIME)
             .queryParam(JwtProperties.REFRESH_TOKEN, tokenSet.getRefreshToken())
             .build().toUriString();
         getRedirectStrategy().sendRedirect(request, response, targetUrl);

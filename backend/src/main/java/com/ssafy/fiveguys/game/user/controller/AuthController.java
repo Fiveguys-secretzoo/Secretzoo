@@ -39,11 +39,7 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody LoginRequestDto loginDto) {
         JwtTokenDto jwtTokenDto = authService.login(loginDto);
         return ResponseEntity.status(HttpStatus.OK)
-            .header(HttpHeaders.AUTHORIZATION,
-                JwtProperties.TOKEN_PREFIX + jwtTokenDto.getAccessToken())
-            .header(JwtProperties.REFRESH_TOKEN, jwtTokenDto.getRefreshToken())
-            .build()
-            ;
+            .body(jwtTokenDto.responseDto());
     }
 
     @Operation(summary = "RT 재발급 API, reqeust(헤더) : Access Token, Refresh Token")

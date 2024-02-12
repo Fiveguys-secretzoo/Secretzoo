@@ -2,8 +2,9 @@ package com.ssafy.fiveguys.game.common.exception;
 
 import com.ssafy.fiveguys.game.common.dto.ErrorResponse;
 import com.ssafy.fiveguys.game.user.exception.DuplicateIdentifierException;
+import com.ssafy.fiveguys.game.user.exception.JwtBlackListException;
 import com.ssafy.fiveguys.game.user.exception.PasswordException;
-import com.ssafy.fiveguys.game.user.exception.RefreshTokenNotFoundException;
+import com.ssafy.fiveguys.game.user.exception.RefreshTokenException;
 import com.ssafy.fiveguys.game.user.exception.UserNotFoundException;
 import com.ssafy.fiveguys.game.user.exception.VerificationCodeException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -25,9 +26,9 @@ public class RestControllerExceptionHandler {
             new ErrorResponse("ERROR_40901", exception.getMessage()));
     }
 
-    @ExceptionHandler(RefreshTokenNotFoundException.class) // DB에 없는 RT 예외 처리
+    @ExceptionHandler(RefreshTokenException.class) // RT 관련 예외 처리
     public ResponseEntity<ErrorResponse> handleRefreshTokenNotFoundException(
-        RefreshTokenNotFoundException exception) {
+        RefreshTokenException exception) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
             new ErrorResponse("ERROR_40101", exception.getMessage()));
     }
@@ -38,7 +39,12 @@ public class RestControllerExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
             new ErrorResponse("ERROR_40102", exception.getMessage()));
     }
-
+    @ExceptionHandler(JwtBlackListException.class) // JWT Black List(로그아웃된 엑세스 토큰 관리) 예외 처리
+    public ResponseEntity<ErrorResponse> handleJwtBlackListException(
+        MalformedJwtException exception) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+            new ErrorResponse("ERROR_40103", exception.getMessage()));
+    }
     @ExceptionHandler({UserNotFoundException.class, PasswordException.class}) // 로그인 예외 처리
     public ResponseEntity<ErrorResponse> handleLoginException(Exception exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(

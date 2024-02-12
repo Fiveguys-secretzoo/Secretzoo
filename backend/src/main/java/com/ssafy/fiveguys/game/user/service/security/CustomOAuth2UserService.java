@@ -53,7 +53,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .userId(oauth2UserInfo.getProviderId())
                 .email(oauth2UserInfo.getEmail())
                 .name(oauth2UserInfo.getName())
-                .nickname(oauth2UserInfo.getProvider() + "_" + oauth2UserInfo.getProviderId())
                 .provider(oauth2UserInfo.getProvider())
                 .providerId(oauth2UserInfo.getProviderId())
                 .build();

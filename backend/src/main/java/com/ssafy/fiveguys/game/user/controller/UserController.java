@@ -2,6 +2,7 @@ package com.ssafy.fiveguys.game.user.controller;
 
 import com.ssafy.fiveguys.game.user.dto.UserDto;
 import com.ssafy.fiveguys.game.user.dto.UserInfoDto;
+import com.ssafy.fiveguys.game.user.jwt.JwtProperties;
 import com.ssafy.fiveguys.game.user.service.AuthService;
 import com.ssafy.fiveguys.game.user.service.UserService;
 
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/users")
 @Tag(name = "UserController", description = "회원 관련 서비스 컨트롤러")
-@CrossOrigin(origins = {"https://secretzoo.site","http://localhost:3000"}, exposedHeaders = "*")
+@CrossOrigin(origins = {"https://secretzoo.site", "http://localhost:3000"}, exposedHeaders = "*")
 public class UserController {
 
     private final UserService userService;
@@ -104,4 +105,15 @@ public class UserController {
         userService.changePassword(userId, password);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+
+    @Operation(summary = "중복 로그인 체크 API")
+    @GetMapping("/check-concurrent-login")
+    public ResponseEntity<?> detectConcurrentLogin(HttpServletRequest request) {
+        String accessToken = request.getHeader(HttpHeaders.AUTHORIZATION);
+        String refreshToken = request.getHeader(JwtProperties.REFRESH_TOKEN);
+        userService.detectConcurrentUser(accessToken, refreshToken);
+        log.info("User is unique.");
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
 }

@@ -14,5 +14,4 @@ public class UserSignDto {
     private String password;
     private String name;
     private String email;
-    private String nickname;
 }

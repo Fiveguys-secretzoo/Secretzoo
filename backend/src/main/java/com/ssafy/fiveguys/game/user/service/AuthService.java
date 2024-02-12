@@ -4,7 +4,7 @@ import com.ssafy.fiveguys.game.user.dto.LoginRequestDto;
 import com.ssafy.fiveguys.game.user.entity.RefreshToken;
 import com.ssafy.fiveguys.game.user.entity.User;
 import com.ssafy.fiveguys.game.user.exception.DuplicateIdentifierException;
-import com.ssafy.fiveguys.game.user.exception.RefreshTokenNotFoundException;
+import com.ssafy.fiveguys.game.user.exception.RefreshTokenException;
 import com.ssafy.fiveguys.game.user.jwt.JwtProperties;
 import com.ssafy.fiveguys.game.user.jwt.JwtTokenProvider;
 import com.ssafy.fiveguys.game.user.dto.JwtTokenDto;
@@ -12,6 +12,7 @@ import com.ssafy.fiveguys.game.user.dto.UserDto;
 import com.ssafy.fiveguys.game.user.exception.PasswordException;
 import com.ssafy.fiveguys.game.user.exception.UserNotFoundException;
 import com.ssafy.fiveguys.game.user.repository.UserRepositoy;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.transaction.Transactional;
@@ -88,12 +89,19 @@ public class AuthService {
             refreshTokenInDB = user.getRefreshToken();
             if (refreshTokenInDB == null) { // MySQL에 RT 없을 경우
                 log.debug("Refresh Token is not in MySQL.");
-                throw new RefreshTokenNotFoundException("refresh token 값이 존재하지 않습니다.");
+                throw new RefreshTokenException("refresh token 값이 존재하지 않습니다.");
             }
         }
         log.debug("Refresh Token in DB = {}", refreshTokenInDB);
-        if (!refreshTokenInDB.equals(refreshToken) || !jwtTokenProvider.validateToken(
-            refreshToken)) {
+
+        if (!refreshTokenInDB.equals(refreshToken)) {
+            redisService.deleteRefreshToken(refreshToken);
+            userService.deleteRefreshToken(principal);
+            log.info("Refresh Token is not identical.");
+            throw new RefreshTokenException("Refresh Token 값이 일치하지 않습니다.");
+        }
+
+        if (!jwtTokenProvider.validateToken(refreshToken)) {
             redisService.deleteRefreshToken(refreshToken);
             userService.deleteRefreshToken(principal);
             log.info("Refresh Token is invalidate.");
@@ -123,6 +131,7 @@ public class AuthService {
     public void logout(String accessToken) {
         String token = resolveToken(accessToken);
         String principal = jwtTokenProvider.getAuthentication(token).getName();
+        redisService.saveJwtBlackList(token);
         redisService.deleteRefreshToken(principal);
         userService.deleteRefreshToken(principal);
     }
@@ -146,5 +155,12 @@ public class AuthService {
         }
     }
 
+    public long getTokenExpiration(String accessToken) {
+        String token = resolveToken(accessToken);
+        Claims claims = jwtTokenProvider.parseClaims(token);
+        long tokenExpirationTime = claims.getExpiration().getTime();
+        long remainingTime = tokenExpirationTime - System.currentTimeMillis();
+        return remainingTime > 0 ? remainingTime : 0;
+    }
 }
 
