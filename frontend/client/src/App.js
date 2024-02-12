@@ -34,10 +34,10 @@ function App() {
     const loadData = async () => {
       const authorization = localStorage.getItem('authorization');
       if (authorization) {
-        dispatch(getUserInfo);
+        dispatch(getUserInfo());
       }
       if(sessionStorage.getItem('noLogin')){
-        dispatch(setNoLoginUserInfo);
+        dispatch(setNoLoginUserInfo());
       }
     };
 

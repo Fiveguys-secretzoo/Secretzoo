@@ -11,7 +11,7 @@ const Ranking = () => {
   const user = useSelector((state) => state.user.userInfo);
 
   // 공격랭킹 가져오기
-  const getAttack = () => {
+  const getAttack = async () => {
     changeTab();
     axios.get('https://spring.secretzoo.site/rank/attack')
     .then(Response => {
@@ -63,7 +63,7 @@ const Ranking = () => {
   }
 
   // 처음에 공격랭킹 가져오기
-  useEffect(() => {
+  useEffect( () => {
     getAttack();
   }, [user])
   
@@ -98,7 +98,8 @@ const Ranking = () => {
               onClick={getPass}>패스</button>
           </div>
         </nav>
-        <div className={`py-1 px-4  my-2 w-[518px] mx-auto border-1 rounded transition-opacity duration-1000  ${isLoaded ? 'rotate-y' : ''} shadow flex items-center border-2`}
+        { ranking[0] ?
+        (<div><div className={`py-1 px-4  my-2 w-[518px] mx-auto border-1 rounded transition-opacity duration-1000  ${isLoaded ? 'rotate-y' : ''} shadow flex items-center border-2`}
               style={{
                 animationDelay: `${1 * 0.2}s`
               }}>
@@ -121,7 +122,8 @@ const Ranking = () => {
           <div className='bg-bronze-medal w-10 h-10 bg-contain bg-no-repeat'></div>
           <div className='flex-grow'>닉네임 : {ranking[2].nickname}</div>
           <div className='mr-10'>점수 : {ranking[2].score}</div>
-        </div>
+        </div></div>)
+         : (<div>isLoaded</div>)}
         {
           ranking.slice(3).map((item, index) => (
             <div className={`py-1 px-4 my-2 w-[518px] mx-auto border-1 rounded transition-opacity duration-1000  ${isLoaded ? 'rotate-y' : ''} shadow flex items-center`}
