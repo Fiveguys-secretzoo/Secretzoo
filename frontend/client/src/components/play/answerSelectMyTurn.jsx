@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Button } from 'flowbite-react';
 import { changePlayState } from '../../store/playSlice'
@@ -35,6 +35,10 @@ const AnswerSelectMyTurn = ({ roomName, setIsMyTurn, playerCount, tpCount }) => 
     socket.emit('cardReveal', roomName, answer);
   }
 
+  useEffect(() => {
+    console.log(`##### [answerSelect] ${playerCount} / ${tpCount}`)
+  })
+
   return (
     <>
       <div className="overlay">
@@ -42,7 +46,7 @@ const AnswerSelectMyTurn = ({ roomName, setIsMyTurn, playerCount, tpCount }) => 
           맞다
         </Button>
 
-        <Button className={tpCount === playerCount - 1 ? 'disabled' : ''} onClick={() => handleAnswer(1)}>
+        <Button disabled={(tpCount === playerCount) ? true : false} onClick={() => handleAnswer(1)}>
           패스
         </Button>
         <Button onClick={() => handleAnswer(2)} >

@@ -15,6 +15,7 @@ const playSocketMethods = () => {
     let extractedData = {};
     let roomInfo = rooms[roomName];
 
+    console.log(rooms);
     console.log(`##### [getRoomInfoForGame] roomName `);
     console.log(roomName);
     console.log(`##### [getRoomInfoForGame] roomInfo (room Object)`);
@@ -115,7 +116,10 @@ const playSocketMethods = () => {
       if (!rooms[roomName].game.tp.includes(from)) {
         rooms[roomName].game.tp.push(from);
       }
-      rooms[roomName].game.tp.push(to);
+      if (!rooms[roomName].game.tp.includes(to)) {
+        rooms[roomName].game.tp.push(to);
+      }
+      rooms[roomName].game.nt = rooms[roomName].game.to;
       console.log(`##### card Bluffed to ${bCard}, to room ${roomName}`)
 
       io.to(roomName).emit('cardBluffSelect', rooms[roomName].game.state, rooms[roomName].game.tp, from, to, bCard);
@@ -126,7 +130,9 @@ const playSocketMethods = () => {
   const passingTurnStart = (socket, io, rooms) => {
     socket.on('cardPass', (roomName, callback) => {
       rooms[roomName].game.state = 4;
-      rooms[roomName].game.tp.push(rooms[roomName].game.from);
+      if (!rooms[roomName].game.tp.includes(rooms[roomName].game.from)) {
+        rooms[roomName].game.tp.push(rooms[roomName].game.from);
+      }
       rooms[roomName].game.from = rooms[roomName].game.to;
       rooms[roomName].game.nt = rooms[roomName].game.from;
       rooms[roomName].game.to = '';

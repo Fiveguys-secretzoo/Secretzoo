@@ -57,6 +57,7 @@ export const playSlice = createSlice({
     // player 입장
     modifyPlayers: (state, action) => { // ps 배열
       state.players = { ...action.payload };
+      state.playerCount = Object.keys(action.payload).length;
     },
 
     // play State 변경

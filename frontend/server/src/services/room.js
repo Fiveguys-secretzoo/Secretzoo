@@ -189,10 +189,17 @@ const roomSocketMethods = () => {
   /* 방 입장 이벤트 */
   const enterRoom = async (socket, io, rooms) => {
     socket.on('enterRoom', (roomName, psq, pn, callback) => {
-      // 인원수 체크
-      if (rooms[roomName] && rooms[roomName].pc >= 6) {
-        callback(false);
-      } else {
+
+      if (roomName === undefined || rooms[roomName] === undefined) { // 방이 사라진 경우...
+        callback(false)
+      }
+
+      const matchingKey = Object.keys(rooms[roomName].ps).find(key => rooms[roomName].ps[key].psq === psq);
+      if (matchingKey === undefined) {
+        // 인원수 체크
+        if (rooms[roomName] && rooms[roomName].pc >= 6) {
+          callback(false);
+        }
         // 기존방 나가기
         for (let nowRoom of socket.rooms) {
           if (nowRoom !== socket.id) {
@@ -200,24 +207,24 @@ const roomSocketMethods = () => {
             removePlayer(io, socket, rooms, nowRoom, psq);
           }
         }
-
-        for (let rn in rooms) {
-          for (let p in rooms[rn].ps) {
-            if (p === psq) {
-              removePlayer(io, socket, rooms, rn, psq);
-            }
+      }
+      for (let rn in rooms) {
+        for (let p in rooms[rn].ps) {
+          if (p === psq) {
+            removePlayer(io, socket, rooms, rn, psq);
           }
         }
-
-        // 입력받은 방 들어가기
-        socket.join(roomName);
-
-        // console.log(io.of('/').adapter.rooms);
-        socket.emit('updateRoom', rooms);
-        addPlayer(io, socket, rooms, roomName, psq, socket.id, pn)
-        callback(true)
-        console.log(`##### [enterRoom] player ${socket.id} join room : ${roomName}`);
       }
+
+      // 입력받은 방 들어가기
+      socket.join(roomName);
+
+      // console.log(io.of('/').adapter.rooms);
+      socket.emit('updateRoom', rooms);
+      addPlayer(io, socket, rooms, roomName, psq, socket.id, pn)
+      callback(true)
+      console.log(`##### [enterRoom] player ${socket.id} join room : ${roomName}`);
+
     });
   }
 
@@ -274,7 +281,7 @@ const roomSocketMethods = () => {
       console.log(`##### [cardShare] current Room : [${(roomName)}]`);
       shuffleArray(rooms, roomName);
       console.log('##### [cardShare] Shuffle End')
-
+      rooms[roomName].status = 1;
       rooms[roomName].game.state = 1;
       for (let psq in rooms[roomName].ps) {
         io.to(rooms[roomName].ps[psq].sid).emit('gameStart', rooms[roomName].game.state, rooms[roomName].ps[psq].hand)
