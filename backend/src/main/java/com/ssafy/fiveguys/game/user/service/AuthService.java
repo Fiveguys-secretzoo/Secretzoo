@@ -81,7 +81,7 @@ public class AuthService {
 
     public JwtTokenDto reissueToken(String accessToken, String refreshToken) {
         Authentication authentication = jwtTokenProvider.getAuthentication(
-            resolveToken(accessToken));
+            jwtTokenProvider.resolveToken(accessToken));
         String principal = authentication.getName();
         String refreshTokenInDB = redisService.getRefreshToken(principal);
         log.debug("User Id = {}", principal);
@@ -131,24 +131,13 @@ public class AuthService {
     }
 
     public void logout(String accessToken) {
-        String token = resolveToken(accessToken);
+        String token = jwtTokenProvider.resolveToken(accessToken);
         String principal = jwtTokenProvider.getAuthentication(token).getName();
         jwtBlackListService.saveJwtBlackList(token);
         redisService.deleteRefreshToken(principal);
         userService.deleteRefreshToken(principal);
     }
 
-    public String extractUserId(String accessToken) {
-        String token = resolveToken(accessToken);
-        return jwtTokenProvider.parseClaims(token).getSubject();
-    }
-
-    public String resolveToken(String accessToken) {
-        if (accessToken != null && accessToken.startsWith(JwtProperties.TOKEN_PREFIX)) {
-            return accessToken.substring(7);
-        }
-        throw new UnsupportedJwtException("지원하지 않는 토큰 형식입니다.");
-    }
 
     public void idDuplicated(String userId) throws Exception {
         Optional<User> optionalUser = userRepositoy.findByUserId(userId);
@@ -158,7 +147,7 @@ public class AuthService {
     }
 
     public long getTokenExpiration(String accessToken) {
-        String token = resolveToken(accessToken);
+        String token = jwtTokenProvider.resolveToken(accessToken);
         Claims claims = jwtTokenProvider.parseClaims(token);
         long tokenExpirationTime = claims.getExpiration().getTime();
         long remainingTime = tokenExpirationTime - System.currentTimeMillis();
@@ -166,14 +155,14 @@ public class AuthService {
     }
 
     public void detectConcurrentUser(String requestAccessToken, String requestRefreshToken) {
-        String accessToken = resolveToken(requestAccessToken);
+        String accessToken = jwtTokenProvider.resolveToken(requestAccessToken);
         if (jwtBlackListService.hasJwtBlackList(accessToken)) {
             log.error("access token is in black list.");
             throw new JwtBlackListException("로그아웃 처리된 토큰입니다.");
         }
         log.debug("1. access token is validate.");
 
-        String userId = extractUserId(requestAccessToken);
+        String userId = jwtTokenProvider.extractUserId(requestAccessToken);
         log.debug("user id= {}", userId);
 
         User user = userRepositoy.findByUserId(userId).orElseThrow(

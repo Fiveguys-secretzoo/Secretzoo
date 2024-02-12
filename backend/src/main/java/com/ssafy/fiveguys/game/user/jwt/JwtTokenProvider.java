@@ -107,4 +107,14 @@ public class JwtTokenProvider {
         return false;
     }
 
+    public String resolveToken(String accessToken) {
+        if (accessToken != null && accessToken.startsWith(JwtProperties.TOKEN_PREFIX)) {
+            return accessToken.substring(7);
+        }
+        throw new UnsupportedJwtException("지원하지 않는 토큰 형식입니다.");
+    }
+
+    public String extractUserId(String accessToken) {
+        return parseClaims(resolveToken(accessToken)).getSubject();
+    }
 }

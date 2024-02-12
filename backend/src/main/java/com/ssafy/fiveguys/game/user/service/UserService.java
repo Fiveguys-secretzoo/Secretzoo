@@ -125,4 +125,5 @@ public class UserService {
         userDto.setNickname(nickname);
         userRepositoy.save(User.getUserDto(userDto));
     }
+
 }
