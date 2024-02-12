@@ -6,10 +6,12 @@ import com.ssafy.fiveguys.game.user.dto.UserDto;
 import com.ssafy.fiveguys.game.user.dto.UserInfoDto;
 import com.ssafy.fiveguys.game.user.dto.UserSignDto;
 import com.ssafy.fiveguys.game.user.entity.User;
+import com.ssafy.fiveguys.game.user.exception.DuplicateIdentifierException;
 import com.ssafy.fiveguys.game.user.exception.JwtBlackListException;
 import com.ssafy.fiveguys.game.user.exception.PasswordException;
 import com.ssafy.fiveguys.game.user.exception.RefreshTokenException;
 import com.ssafy.fiveguys.game.user.exception.UserNotFoundException;
+import com.ssafy.fiveguys.game.user.jwt.JwtTokenProvider;
 import com.ssafy.fiveguys.game.user.repository.UserRepositoy;
 import io.jsonwebtoken.MalformedJwtException;
 import jakarta.transaction.Transactional;
@@ -29,7 +31,8 @@ public class UserService {
     private final UserRepositoy userRepositoy;
     private final BCryptPasswordEncoder passwordEncoder;
     private final PlayerService playerService;
-
+    private final RedisService redisService;
+    private final JwtTokenProvider jwtTokenProvider;
     public void signUp(UserSignDto userSignDto) {
         User user = User.builder()
             .userId(userSignDto.getUserId())
@@ -126,4 +129,31 @@ public class UserService {
         userRepositoy.save(User.getUserDto(userDto));
     }
 
+    public void idDuplicated(String userId) {
+        Optional<User> optionalUser = userRepositoy.findByUserId(userId);
+        if (optionalUser.isPresent()) {
+            throw new DuplicateIdentifierException("이미 존재하는 아이디입니다.");
+        }
+    }
+    public void detectConcurrentUser(String requestAccessToken, String requestRefreshToken) {
+        String accessToken = jwtTokenProvider.resolveToken(requestAccessToken);
+        if (redisService.hasJwtBlackList(accessToken)) {
+            log.error("access token is in black list.");
+            throw new JwtBlackListException("로그아웃 처리된 토큰입니다.");
+        }
+        log.debug("1. access token is validate.");
+
+        String userId = jwtTokenProvider.extractUserId(requestAccessToken);
+        log.debug("user id= {}", userId);
+
+        User user = userRepositoy.findByUserId(userId).orElseThrow(
+            UserNotFoundException::new);
+        String refreshToken = user.getRefreshToken();
+
+        if (!refreshToken.equals(requestRefreshToken)) {
+            log.error("refresh token does not match in Database.");
+            throw new RefreshTokenException("Refresh Token 값이 일치하지 않습니다.");
+        }
+        log.debug("2. refresh token is identical.");
+    }
 }

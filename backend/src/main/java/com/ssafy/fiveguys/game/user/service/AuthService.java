@@ -36,9 +36,7 @@ public class AuthService {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
-    private final UserRepositoy userRepositoy;
     private final RedisService redisService;
-    private final JwtBlackListService jwtBlackListService;
     private final BCryptPasswordEncoder passwordEncoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
@@ -133,47 +131,10 @@ public class AuthService {
     public void logout(String accessToken) {
         String token = jwtTokenProvider.resolveToken(accessToken);
         String principal = jwtTokenProvider.getAuthentication(token).getName();
-        jwtBlackListService.saveJwtBlackList(token);
+        redisService.saveJwtBlackList(token);
         redisService.deleteRefreshToken(principal);
         userService.deleteRefreshToken(principal);
     }
 
-
-    public void idDuplicated(String userId) throws Exception {
-        Optional<User> optionalUser = userRepositoy.findByUserId(userId);
-        if (optionalUser.isPresent()) {
-            throw new DuplicateIdentifierException("이미 존재하는 아이디입니다.");
-        }
-    }
-
-    public long getTokenExpiration(String accessToken) {
-        String token = jwtTokenProvider.resolveToken(accessToken);
-        Claims claims = jwtTokenProvider.parseClaims(token);
-        long tokenExpirationTime = claims.getExpiration().getTime();
-        long remainingTime = tokenExpirationTime - System.currentTimeMillis();
-        return remainingTime > 0 ? remainingTime : 0;
-    }
-
-    public void detectConcurrentUser(String requestAccessToken, String requestRefreshToken) {
-        String accessToken = jwtTokenProvider.resolveToken(requestAccessToken);
-        if (jwtBlackListService.hasJwtBlackList(accessToken)) {
-            log.error("access token is in black list.");
-            throw new JwtBlackListException("로그아웃 처리된 토큰입니다.");
-        }
-        log.debug("1. access token is validate.");
-
-        String userId = jwtTokenProvider.extractUserId(requestAccessToken);
-        log.debug("user id= {}", userId);
-
-        User user = userRepositoy.findByUserId(userId).orElseThrow(
-            UserNotFoundException::new);
-        String refreshToken = user.getRefreshToken();
-
-        if (!refreshToken.equals(requestRefreshToken)) {
-            log.error("refresh token does not match in Database.");
-            throw new RefreshTokenException("Refresh Token 값이 일치하지 않습니다.");
-        }
-        log.debug("2. refresh token is identical.");
-    }
 }
 

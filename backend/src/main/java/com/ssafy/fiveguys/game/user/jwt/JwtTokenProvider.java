@@ -117,4 +117,12 @@ public class JwtTokenProvider {
     public String extractUserId(String accessToken) {
         return parseClaims(resolveToken(accessToken)).getSubject();
     }
+
+    public long getTokenExpiration(String accessToken) {
+        String token = resolveToken(accessToken);
+        Claims claims = parseClaims(token);
+        long tokenExpirationTime = claims.getExpiration().getTime();
+        long remainingTime = tokenExpirationTime - System.currentTimeMillis();
+        return remainingTime > 0 ? remainingTime : 0;
+    }
 }
