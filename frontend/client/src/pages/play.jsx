@@ -329,24 +329,53 @@ const Play = () => {
 
   const playerSlot = (playerArr) => {
     const slotArr = [];
+    let count = 0;
     for (let player in playerArr) {
-      let psq = "", playerName = "";
-      let activate = false;
-      if (playerArr[player] != null || playerArr[player] !== undefined) {
-        psq = player;
-        playerName = playerArr[player].pn;
-        activate = true;
+      if (player !== playerSequence) {
+        count++;
+        let psq = "", playerName = "";
+        let activate = false;
+        if (playerArr[player] != null || playerArr[player] !== undefined) {
+          psq = player;
+          playerName = playerArr[player].pn;
+          activate = true;
+        }
+        slotArr.push(
+          <PlayerView
+            psq={psq}
+            key={player}
+            pn={playerName}
+            activate={activate}
+            setCards={setCards}>
+          </PlayerView>
+        )
       }
+    }
+
+    for (let k = count; k < 6; k++) {
       slotArr.push(
-        <PlayerView
-          psq={psq}
-          key={player}
-          pn={playerName}
-          activate={activate}
-          setCards={setCards}>
-        </PlayerView>
+        <div className="bg-white rounded w-[30%] m-2"
+        >
+        </div>
       )
     }
+    let psq = "", playerName = "";
+    let activate = false;
+    if (playerArr[playerSequence] != null || playerArr[playerSequence] !== undefined) {
+      psq = playerSequence;
+      playerName = playerArr[playerSequence].pn;
+      activate = true;
+    }
+    slotArr.push(
+      <PlayerView
+        psq={psq}
+        key={playerSequence}
+        pn={playerName}
+        activate={activate}
+        setCards={setCards}>
+      </PlayerView>
+    )
+
     return slotArr;
   }
 
