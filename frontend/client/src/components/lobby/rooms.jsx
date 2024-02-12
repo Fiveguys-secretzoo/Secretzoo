@@ -26,11 +26,11 @@ const Rooms = () => {
   const [roomName, setRoomName] = useState('');
   // 방만들기
   const createRoom = () => {
-    socket.emit('createRoom', roomName, psq, sessionStorage.getItem('userNickName'), (callback) => {
+    socket.emit('createRoom', roomName, psq, sessionStorage.getItem('userNickname'), (callback) => {
       if (callback) {
         dispatch(initRoomName(roomName));
-        alert("생성 완료! 게임으로 이동합니다.");
         sessionStorage.setItem("roomName", roomName);
+        alert("생성 완료! 게임으로 이동합니다.");
         navigate("/play");
       } else {
         setOpenModal(false);
@@ -42,11 +42,12 @@ const Rooms = () => {
     });
   }
 
-  // 방입장
+  // 방입장 
   const enterRoom = (name) => {
-    socket.emit('enterRoom', name, psq, sessionStorage.getItem('userNickName'), (callback) => {
+    socket.emit('enterRoom', name, psq, sessionStorage.getItem('userNickname'), (callback) => {
       if (callback) {
-        dispatch(setRoomName(roomName));
+        dispatch(initRoomName(name));
+        sessionStorage.setItem("roomName", name);
         Swal.fire({
           "text": '입장',
           "confirmButtonColor": '#3085d6'

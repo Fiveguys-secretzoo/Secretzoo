@@ -53,8 +53,8 @@ const Play = () => {
   const roomName = useSelector(state => state.plays.roomName);
   const fromP = useSelector(state => state.plays.game.from);
   const toP = useSelector(state => state.plays.game.to);
-  const card = useSelector(state => state.plays.game.card);
-  const bCard = useSelector(state => state.plays.game.cardBluff);
+  const card = useSelector(state => state.plays.game.c);
+  const bCard = useSelector(state => state.plays.game.bc);
 
   const dispatch = useDispatch();
 
@@ -198,7 +198,7 @@ const Play = () => {
 
   }
 
-  // 게임 시작 버튼을 눌렀을 때 작동하는  함수, 여러가지 socket을 on 처리 시킨다.
+  // 게임 시작 버튼을 눌렀을 때 작동하는 함수
   const gameStart = (state, cards) => {
     console.log("##### Game Started ! #####");
     setCards(cards);
@@ -233,7 +233,7 @@ const Play = () => {
     // Reconnection 확인용
     socket.emit('checkReconnection', playerSequence);
     // 게임 방의 초기 정보 확인 후 가져옴
-    socket.emit('requestGameInfo', roomName, playerSequence, gameInfoHandler);
+    socket.emit('requestGameInfo', sessionStorage.getItem("roomName"), playerSequence, gameInfoHandler);
 
     // 내 카드 정보 받기 
     socket.on('sendCardInfo', cardInfoHandler);
@@ -313,6 +313,7 @@ const Play = () => {
   }, [cards]);
 
 
+
   const sendMessage = () => {
     socket.emit('chat message', input, localStorage.getItem(''));
     setInput('');
@@ -325,20 +326,21 @@ const Play = () => {
 
   const playerSlot = (playerArr) => {
     const slotArr = [];
-    for (let k = 0; k < 5; k++) {
+    for (let player in playerArr) {
       let psq = "", playerName = "";
       let activate = false;
-      if (playerArr[k] != null || playerArr[k] !== undefined) {
-        psq = playerArr[k].playerId;
-        playerName = playerArr[k].playerName;
+      if (playerArr[player] != null || playerArr[player] !== undefined) {
+        psq = player;
+        playerName = playerArr[player].pn;
         activate = true;
       }
       slotArr.push(
         <PlayerView
           psq={psq}
-          key={k}
+          key={player}
           pn={playerName}
-          activate={activate}>
+          activate={activate}
+          setCards={setCards}>
         </PlayerView>
       )
     }
@@ -357,6 +359,7 @@ const Play = () => {
 
             <SelectScreen>
               <DropSelectMyTurn
+                roomName={roomName}
                 animalList={animalList}
               >
               </DropSelectMyTurn>

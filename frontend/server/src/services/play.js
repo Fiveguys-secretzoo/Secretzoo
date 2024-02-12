@@ -19,6 +19,7 @@ const playSocketMethods = () => {
     console.log(roomName);
     console.log(`##### [getRoomInfoForGame] roomInfo (room Object)`);
     console.log(roomInfo);
+    if (roomName === undefined || roomName === null || roomName === "") return;
     extractedData = {
       'rid': roomInfo['rid'],
       'rnm': roomInfo['rnm'],
@@ -32,8 +33,9 @@ const playSocketMethods = () => {
           const player = roomInfo.ps[id];
           acc[id] = {
             'psq': player['psq'],
-            'pnn': player['pnn'],
+            'pn': player['pn'],
             'pen': [...player['pen']],
+            'hand': [],
           };
           return acc;
         }, {}),
@@ -84,29 +86,28 @@ const playSocketMethods = () => {
 
   // 카드 드롭한 정보를 받고 같은 정보를 다른 모든 socket room 참여자 들에게 뿌린다.
   const cardDrop = (socket, io, rooms) => {
-    socket.on('cardDrop', (roomName, playerSeqeunce, from, to, card, callback) => {
+    socket.on('cardDrop', (roomName, playerSequence, from, to, card, callback) => {
       console.log("##### [cardDrop] card Dragged and Dropped")
       // io.to(rooms[socket.room].players[k].socketId).emit('cardDrop', from, to);
 
       if (card < 64) {
-        rooms[roomName].ps[playerSeqeunce].hand
-          = rooms[roomName].ps[playerSeqeunce].hand.filter((e) => e !== card);
+        rooms[roomName].ps[playerSequence].hand
+          = rooms[roomName].ps[playerSequence].hand.filter((e) => e !== card);
         rooms[roomName].game.c = card;
       }
 
-      rooms[roomName].game.state = 1;
+      rooms[roomName].game.state = 2;
       rooms[roomName].game.from = from;
       rooms[roomName].game.to = to;
       console.log(`##### [cardDrop] send card Dropped Data to [${roomName}], [${from}] => [${to}] a [${card}]`)
-      callback(rooms[roomName].ps[playerSeqeunce].hand);
+      callback(rooms[roomName].ps[playerSequence].hand);
       io.to(roomName).emit('cardDrop', rooms[roomName].game.state, from, to);
     })
   }
 
   // 카드 블러핑한 정보를 받고 같은 정보를 다른 모든 socket room 참여자 들에게 뿌린다.
   const cardBluffSelect = (socket, io, rooms) => {
-    socket.on('cardBluffSelect', (roomName, playerSeqeunce, bCard) => {
-
+    socket.on('cardBluffSelect', (roomName, playerSequence, bCard) => {
       let from = rooms[roomName].game.from;
       let to = rooms[roomName].game.to;
       rooms[roomName].game.state = 3;
@@ -171,21 +172,24 @@ const playSocketMethods = () => {
     }
   }
 
-  const addPenalty = (io, rooms, room, nowTurnPlayer) => {
+  const addPenalty = (io, rooms, roomName, nowTurnPlayer) => {
     //player Idx 찾기 
     console.log(`##### [addPenalty] nowTurnPlayer : ${nowTurnPlayer}`);
 
     // playerIdx에 지금 카드 패널티로 추가
-    rooms[room].ps[nowTurnPlayer].p[Math.floor(rooms[room].game.c / 8)]++;
-    io.to(room).emit('penaltyAdd', nowTurnPlayer, rooms[room].ps[nowTurnPlayer].p);
+    rooms[roomName].ps[nowTurnPlayer].pen[Math.floor(rooms[roomName].game.c / 8)]++;
+    console.log(`##### [addPenalty] nowTurnPlayer, pen`)
+    console.log(nowTurnPlayer)
+    console.log(rooms[roomName].ps[nowTurnPlayer].pen)
+    io.to(roomName).emit('penaltyAdd', { psq: nowTurnPlayer, pen: rooms[roomName].ps[nowTurnPlayer].pen });
   }
 
   const checkLoser = (socket, io, rooms) => {
     socket.on("isTurnEnd", (roomName, callback) => {
       for (let player in rooms[roomName].ps) {
         for (let k = 0; k < 8; k++) {
-          if (rooms[roomName].ps[player].p[k] === 4) {
-            callback(rooms[roomName].ps[i].psq);
+          if (rooms[roomName].ps[player].pen[k] === 4) {
+            callback(rooms[roomName].ps[player].psq);
             return;
           }
         }

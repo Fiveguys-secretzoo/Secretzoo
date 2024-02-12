@@ -46,6 +46,7 @@ export const playSlice = createSlice({
 
     initRoomName: (state, action) => {
       state.roomName = action.payload;
+      console.log(`##### [initRoomName] ${action.payload}`)
     },
 
     // 게임 카드 초기화 
@@ -61,7 +62,7 @@ export const playSlice = createSlice({
     // play State 변경
     changePlayState: (state, action) => {
       console.log(`change status to store [${action.payload}]`);
-      state.game.status = action.payload;
+      state.game.state = action.payload;
     },
 
     // 방장 변경
@@ -88,7 +89,7 @@ export const playSlice = createSlice({
     changeCardStatus: (state, action) => {
       console.log(`change card drag to store [${action.payload.from}] [${action.payload.card}]`);
       state.game.from = action.payload.from;
-      state.game.card = action.payload.card;
+      state.game.c = action.payload.card;
     },
 
     // 카드 드래그 시 변경
@@ -108,39 +109,46 @@ export const playSlice = createSlice({
     // 카드 속이기 시 변경
     changeCardBluff: (state, action) => {
       console.log(`[cardBluff] bluffed to [${action.payload}]`)
-      state.game.cardBluff = action.payload;
+      state.game.bc = action.payload;
     },
 
     // 게임 카드 초기화 
     changeInitgameCard: (state, action) => {
       state.game.from = '';
       state.game.to = '';
-      state.game.cardBluff = -1;
-      state.game.card = -1;
+      state.game.bc = -1;
+      state.game.c = -1;
     },
 
     // 턴 보냈던 플레이어 초기화 
-    initTurnedPlayer: (state, action) => {
-      state.game.turnedPlayer = [];
+    initTurnedPlayer: (state) => {
+      state.game.tp = [];
     },
 
     // 턴 보냈던 플레이어 추가
     changeTurnedPlayer: (state, action) => {
-      state.game.turnedPlayer = [...state.game.turnedPlayer, action.payload]
+      state.game.tp = [...state.game.turnedPlayer, action.payload]
     },
 
     // 패널티 추가
     changePenalty: (state, action) => { // psq, penalty
-      state.players[action.payload.psq].penalty = [...action.payload.penalty];
+      console.log(`#####[changePenalty] payload`)
+      console.log(action.payload);
+      state.players[action.payload.psq].pen = [...action.payload.pen];
     },
 
-    // 카드 드롭
+    // 카드 드롭 // TODO 받은거 달아주기 
     dropCard: (state, action) => {
       let filtered = state.players[action.payload.pid].card.filter((e) => e !== action.payload.card);
-      state.players[action.payload.pid].card = filtered;
+      state.players[action.payload.pid].hand = filtered;
     },
 
-
+    changeCardFromHand: (state, action) => {
+      console.log(`##### [changeCardFromHand] activated.`)
+      console.log(state.players[action.payload.playerSequenceNumber].hand);
+      console.log(action.payload.hand);
+      state.players[action.payload.playerSequenceNumber].hand = [...action.payload.hand]
+    }
 
 
 
@@ -167,5 +175,6 @@ export const {
   changeTurnedPlayer,
   dropCard,
   changePenalty,
+  changeCardFromHand,
 } = playSlice.actions;
 export default playSlice.reducer;
