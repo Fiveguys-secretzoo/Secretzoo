@@ -89,7 +89,7 @@ const playSocketMethods = () => {
     socket.on('cardDrop', (roomName, playerSequence, from, to, card, callback) => {
       console.log("##### [cardDrop] card Dragged and Dropped")
       // io.to(rooms[socket.room].players[k].socketId).emit('cardDrop', from, to);
-
+      console.log(`##### roomName : ${roomName} / psq : ${playerSequence} / f : ${from} / t : ${to} / c : ${card}`)
       if (card < 64) {
         rooms[roomName].ps[playerSequence].hand
           = rooms[roomName].ps[playerSequence].hand.filter((e) => e !== card);

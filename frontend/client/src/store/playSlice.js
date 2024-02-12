@@ -135,6 +135,7 @@ export const playSlice = createSlice({
       console.log(`#####[changePenalty] payload`)
       console.log(action.payload);
       state.players[action.payload.psq].pen = [...action.payload.pen];
+      console.log(state.players[action.payload.psq].pen);
     },
 
     // 카드 드롭 // TODO 받은거 달아주기 

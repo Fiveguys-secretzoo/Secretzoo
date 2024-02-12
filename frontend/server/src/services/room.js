@@ -136,7 +136,7 @@ const removePlayer = (io, socket, rooms, roomName, psq) => {
   console.log(roomName);
   delete rooms[roomName].ps[psq];
   rooms[roomName].pc -= 1;
-  io.to(roomName).emit('playerLeave', psq);
+  io.to(roomName).emit('playerLeave', rooms[roomName].ps);
   if (rooms[roomName].pc === 0) {
     removeRoom(rooms, roomName);
   }

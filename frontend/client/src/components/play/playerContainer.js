@@ -54,7 +54,10 @@ const PlayerContainer = () => {
       dispatch(changeCardDrop({ from: dragFrom, to: psq }));
       console.log(`[dropHandler/Bluff] [${dragItem}] drop [${dragTo}], psq : [${psq}]`)
       alert(`${dragItem} drop to ${e.target.textContent}`);
-      socket.emit("cardDrop", dragFrom, psq, dragItem);
+      socket.emit("cardDrop", roomName, playerSequenceNumber, dragFrom, psq, dragItem, (hand) => {
+        dispatch(changeCardFromHand({ playerSequenceNumber: playerSequenceNumber, hand: hand }));
+        setCards([...hand]);
+      });
       dispatch(changePlayState(2));
     }
   };
