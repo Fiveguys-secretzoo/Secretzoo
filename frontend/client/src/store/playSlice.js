@@ -18,9 +18,9 @@ export const playSlice = createSlice({
       "state": 0,  // 0 : 대기 , 1 : 주는 턴, 2 : 받는 턴, 3: 넘기는 턴 
       "from": '',
       "to": '',
-      "bluffCard": '',
-      "card": '',
-      "turnedPlayer": [],
+      "bc": '',
+      "c": '',
+      "tp": [],
     }
   }, //TODO : change initialState
   reducers: {
@@ -127,7 +127,7 @@ export const playSlice = createSlice({
 
     // 턴 보냈던 플레이어 추가
     changeTurnedPlayer: (state, action) => {
-      state.game.tp = [...state.game.turnedPlayer, action.payload]
+      state.game.tp = [...action.payload]
     },
 
     // 패널티 추가
@@ -146,6 +146,9 @@ export const playSlice = createSlice({
 
     changeCardFromHand: (state, action) => {
       console.log(`##### [changeCardFromHand] activated.`)
+      console.log(action.payload.playerSequenceNumber);
+      console.log(state);
+      console.log(state.players);
       console.log(state.players[action.payload.playerSequenceNumber].hand);
       console.log(action.payload.hand);
       state.players[action.payload.playerSequenceNumber].hand = [...action.payload.hand]

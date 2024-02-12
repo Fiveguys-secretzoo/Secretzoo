@@ -148,6 +148,7 @@ const playSocketMethods = () => {
       console.log(`##### [cardReveal] result ${result}`)
       console.log(result);
       addPenalty(io, rooms, roomName, result.nowTurn);
+
       io.to(roomName).emit('cardReveal', rooms[roomName].game.state, rooms[roomName].game.card, result.ans, result.nowTurn);
     })
   }
@@ -168,6 +169,7 @@ const playSocketMethods = () => {
       nowTurnPlayer = rooms[room].game.to;
       rooms[room].game.from = rooms[room].game.to;
       rooms[room].nt = rooms[room].game.to;
+      rooms[room].game.tp = [];
       return { 'ans': false, 'nowTurn': nowTurnPlayer };
     }
   }

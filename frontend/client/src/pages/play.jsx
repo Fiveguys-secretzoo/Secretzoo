@@ -36,7 +36,7 @@ import AnswerSelectNotTurn from '../components/play/answerSelectNotTurn';
 import PassTurnCardView from '../components/play/passTurnCardView';
 import AnswerRevealView from '../components/play/answerRevealView';
 
-
+// TODO passing Turn Player Exception Handle (!)  l
 
 const Play = () => {
   const socket = useContext(SocketContext);
@@ -55,6 +55,8 @@ const Play = () => {
   const toP = useSelector(state => state.plays.game.to);
   const card = useSelector(state => state.plays.game.c);
   const bCard = useSelector(state => state.plays.game.bc);
+  const turnedPlayer = useSelector(state => state.plays.game.tp);
+  const playerCount = useSelector(state => state.plays.playerCount);
 
   const dispatch = useDispatch();
 
@@ -183,6 +185,7 @@ const Play = () => {
     setGameResult(ans);
     setAnswerCard(card);
     dispatch(changeNowTurn(nowTurnPlayer))
+    dispatch(initTurnedPlayer());
     console.log(`card Answer Response!`);
   }
 
@@ -379,6 +382,8 @@ const Play = () => {
               <AnswerSelectMyTurn
                 roomName={roomName}
                 setIsMyTurn={setIsMyTurn}
+                playerCount={playerCount}
+                tpCount={turnedPlayer.length}
               ></AnswerSelectMyTurn>
             </SelectScreen>
           }

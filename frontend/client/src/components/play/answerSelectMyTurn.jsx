@@ -4,7 +4,7 @@ import { Button } from 'flowbite-react';
 import { changePlayState } from '../../store/playSlice'
 import { SocketContext } from '../../App';
 
-const AnswerSelectMyTurn = ({ roomName, setIsMyTurn }) => {
+const AnswerSelectMyTurn = ({ roomName, setIsMyTurn, playerCount, tpCount }) => {
 
   const socket = useContext(SocketContext);
   const dispatch = useDispatch();
@@ -41,13 +41,14 @@ const AnswerSelectMyTurn = ({ roomName, setIsMyTurn }) => {
         <Button onClick={() => handleAnswer(0)}>
           맞다
         </Button>
-        <Button onClick={() => handleAnswer(1)}>
+
+        <Button className={tpCount === playerCount - 1 ? 'disabled' : ''} onClick={() => handleAnswer(1)}>
           패스
         </Button>
         <Button onClick={() => handleAnswer(2)} >
           아니다
         </Button>
-      </div>
+      </div >
     </>
   )
 }

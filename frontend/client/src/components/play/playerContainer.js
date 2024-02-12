@@ -27,39 +27,27 @@ const PlayerContainer = () => {
   // 플레이어 위에 드롭 했을 때 socket.io 로 emit
   const dropHandler = (e, psq, setCards) => {
     e.preventDefault();
+    console.log(`##### [drop Handler]`);
+    console.log(turnedPlayer);
+    console.log(psq);
 
+    if (turnedPlayer.includes(psq) || psq === playerSequenceNumber) {
+      console.log(`Cannot drop on Player ${psq}`);
+      return;
+    }
+
+    dispatch(changeCardDrop({ from: dragFrom, to: psq }));
+    console.log(`[dropHandler] [${dragItem}] drop [${dragTo}], psq : [${psq}]`);
     // bluff 아닐 때
     if (dragItem < 64) {
-      if (turnedPlayer.includes(psq)) {
-        console.log(`Cannot drop on Player ${psq}`);
-        return;
-      }
-
-      dispatch(changeCardDrop({ from: dragFrom, to: psq }));
-      console.log(`[dropHandler] [${dragItem}] drop [${dragTo}], psq : [${psq}]`);
-      alert(dragItem + " drop " + e.target.textContent);
       dropCard({ 'psq': psq, 'card': dragItem });
-      socket.emit("cardDrop", roomName, playerSequenceNumber, dragFrom, psq, dragItem, (hand) => {
-        dispatch(changeCardFromHand({ playerSequenceNumber: playerSequenceNumber, hand: hand }));
-        setCards([...hand]);
-      });
-      dispatch(changePlayState(2));
     }
-    else { // bluff 턴일 때
-      if (turnedPlayer.includes(psq)) {
-        console.log(`Cannot drop on Player ${psq}`);
-        return;
-      }
-
-      dispatch(changeCardDrop({ from: dragFrom, to: psq }));
-      console.log(`[dropHandler/Bluff] [${dragItem}] drop [${dragTo}], psq : [${psq}]`)
-      alert(`${dragItem} drop to ${e.target.textContent}`);
-      socket.emit("cardDrop", roomName, playerSequenceNumber, dragFrom, psq, dragItem, (hand) => {
-        dispatch(changeCardFromHand({ playerSequenceNumber: playerSequenceNumber, hand: hand }));
-        setCards([...hand]);
-      });
-      dispatch(changePlayState(2));
-    }
+    alert(`${dragItem} drop to ${psq}`);
+    socket.emit("cardDrop", roomName, playerSequenceNumber, dragFrom, psq, dragItem, (hand) => {
+      dispatch(changeCardFromHand({ playerSequenceNumber: playerSequenceNumber, hand: hand }));
+      setCards([...hand]);
+    });
+    dispatch(changePlayState(2));
   };
 
   return {

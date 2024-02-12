@@ -9,6 +9,8 @@ const PlayerView = ({ roomName, psq, key, pn, activate = false, setCards }) => {
   const playerContainer = PlayerContainer();
   const { dragOver, dragEnterHandler, dropHandler } = playerContainer;
 
+  const nowTurnPlayer = useSelector(state => state.plays.nowTurn);
+  const turnedPlayer = useSelector(state => state.plays.game.tp);
   const players = useSelector(state => state.plays.players);
   const [penalty, setPenalty] = useState([0, 0, 0, 0, 0, 0, 0, 0]);
   const prevPen = useRef((players && players[psq])?.pen ?? [0, 0, 0, 0, 0, 0, 0, 0]);
@@ -39,7 +41,9 @@ const PlayerView = ({ roomName, psq, key, pn, activate = false, setCards }) => {
           {psq}
         </p>
         {pn} <br></br>
-        {penalty}
+        {penalty} <br></br>
+        {turnedPlayer.map((value) => { return `[${value}]` })}<br></br>
+        [{nowTurnPlayer}]
         {(psq === sessionStorage.getItem('userName')) &&
           <App psq={psq} />
         }
