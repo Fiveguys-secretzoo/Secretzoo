@@ -38,6 +38,7 @@ public class AuthService {
     private final UserService userService;
     private final UserRepositoy userRepositoy;
     private final RedisService redisService;
+    private final JwtBlackListService jwtBlackListService;
     private final BCryptPasswordEncoder passwordEncoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
@@ -132,7 +133,7 @@ public class AuthService {
     public void logout(String accessToken) {
         String token = resolveToken(accessToken);
         String principal = jwtTokenProvider.getAuthentication(token).getName();
-        redisService.saveJwtBlackList(token);
+        jwtBlackListService.saveJwtBlackList(token);
         redisService.deleteRefreshToken(principal);
         userService.deleteRefreshToken(principal);
     }
@@ -164,10 +165,9 @@ public class AuthService {
         return remainingTime > 0 ? remainingTime : 0;
     }
 
-
     public void detectConcurrentUser(String requestAccessToken, String requestRefreshToken) {
         String accessToken = resolveToken(requestAccessToken);
-        if (redisService.hasJwtBlackList(accessToken)) {
+        if (jwtBlackListService.hasJwtBlackList(accessToken)) {
             log.error("access token is in black list.");
             throw new JwtBlackListException("로그아웃 처리된 토큰입니다.");
         }
