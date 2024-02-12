@@ -4,6 +4,7 @@ import com.ssafy.fiveguys.game.user.dto.LoginRequestDto;
 import com.ssafy.fiveguys.game.user.entity.RefreshToken;
 import com.ssafy.fiveguys.game.user.entity.User;
 import com.ssafy.fiveguys.game.user.exception.DuplicateIdentifierException;
+import com.ssafy.fiveguys.game.user.exception.JwtBlackListException;
 import com.ssafy.fiveguys.game.user.exception.RefreshTokenException;
 import com.ssafy.fiveguys.game.user.jwt.JwtProperties;
 import com.ssafy.fiveguys.game.user.jwt.JwtTokenProvider;
@@ -161,6 +162,29 @@ public class AuthService {
         long tokenExpirationTime = claims.getExpiration().getTime();
         long remainingTime = tokenExpirationTime - System.currentTimeMillis();
         return remainingTime > 0 ? remainingTime : 0;
+    }
+
+
+    public void detectConcurrentUser(String requestAccessToken, String requestRefreshToken) {
+        String accessToken = resolveToken(requestAccessToken);
+        if (redisService.hasJwtBlackList(accessToken)) {
+            log.error("access token is in black list.");
+            throw new JwtBlackListException("로그아웃 처리된 토큰입니다.");
+        }
+        log.debug("1. access token is validate.");
+
+        String userId = extractUserId(requestAccessToken);
+        log.debug("user id= {}", userId);
+
+        User user = userRepositoy.findByUserId(userId).orElseThrow(
+            UserNotFoundException::new);
+        String refreshToken = user.getRefreshToken();
+
+        if (!refreshToken.equals(requestRefreshToken)) {
+            log.error("refresh token does not match in Database.");
+            throw new RefreshTokenException("Refresh Token 값이 일치하지 않습니다.");
+        }
+        log.debug("2. refresh token is identical.");
     }
 }
 

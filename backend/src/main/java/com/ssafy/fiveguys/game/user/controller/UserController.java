@@ -106,14 +106,5 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @Operation(summary = "중복 로그인 체크 API")
-    @GetMapping("/check-concurrent-login")
-    public ResponseEntity<?> detectConcurrentLogin(HttpServletRequest request) {
-        String accessToken = request.getHeader(HttpHeaders.AUTHORIZATION);
-        String refreshToken = request.getHeader(JwtProperties.REFRESH_TOKEN);
-        userService.detectConcurrentUser(accessToken, refreshToken);
-        log.info("User is unique.");
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
 
 }
