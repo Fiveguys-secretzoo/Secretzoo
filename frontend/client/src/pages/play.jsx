@@ -32,7 +32,7 @@ import {
   dropCard,
 } from '../store/playSlice'
 import PlayerContainer from '../components/play/playerContainer';//추가
-// import PlayerView from '../components/play/playerView'//직접 추가했음
+import PlayerView from '../components/play/playerView'//직접 추가했음
 
 import CardView from '../components/play/cardView'
 
@@ -88,30 +88,6 @@ const Play = () => {
     '고래',
   ];
 
-  const PlayerView = ({ pid, key, pn = "SomethingWrong", activate = false,aaa }) => {
-
-    const playerContainer = PlayerContainer();
-    const { dragOver, dragEnterHandler, dropHandler } = playerContainer;
-  
-    // TODO 위에 올렸을 때 가능하냐 안하냐에 따라서 효과를 다르게 주는 것...!!
-  
-    return (
-      <>
-        <div className="bg-white rounded w-[30%] m-2"
-          key={key}
-          onDragEnter={(e) => dragEnterHandler(e, pid)}
-          onDragOver={(e) => dragOver(e, pid)}
-          onDrop={(e) => dropHandler(e, pid)}
-        >
-          <p className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-            {pid}
-          </p>
-          {aaa}
-         
-        </div>
-      </>
-    );
-  }
 
   const imageRoute = (i) => {
     return require(`../assets/img/card/0${Math.floor(i / 8)}/00${i % 8}.png`);
@@ -349,7 +325,7 @@ const Play = () => {
     socket.emit('start');
   }
 
-  const aaa = useRef(undefined);
+  const video = useRef(undefined);
   const playerSlot = (playerArr) => {
     const slotArr = [];
     App();
@@ -362,10 +338,10 @@ const Play = () => {
         playerName = playerArr[k].playerName;
         activate = true;
         if(k==0){
-          aaa.current = <UserVideoComponent streamManager={publisher} />
+          video.current = <UserVideoComponent streamManager={publisher} />
         }
         else{
-          aaa.current = <UserVideoComponent streamManager={subscribers[k-1]} />
+          video.current = <UserVideoComponent streamManager={subscribers[k-1]} />
         }
       }
       else{
@@ -377,7 +353,7 @@ const Play = () => {
         key={k}
         pn={playerName}
         activate={activate}
-        aaa={aaa.current}>
+        video={video.current}>
         </PlayerView>
       )
     }
