@@ -12,7 +12,7 @@ const MyReward = () => {
  
 
   const [myRewards, setMyrewards] = useState(null);
-  axios.defaults.headers.common['access-token'] = localStorage.getItem('access-token');
+  axios.defaults.headers.common['Authorization'] = localStorage.getItem('token_type') + ' ' + localStorage.getItem('access-token');
 
   const authHeader = localStorage.getItem('access-token');
   const token = authHeader.split(' ')[1];
