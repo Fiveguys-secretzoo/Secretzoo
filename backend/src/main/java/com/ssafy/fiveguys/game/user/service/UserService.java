@@ -150,6 +150,8 @@ public class UserService {
             UserNotFoundException::new);
         String refreshToken = user.getRefreshToken();
 
+        log.debug("detectConcurrentUser.requestRefreshToken = {}",requestRefreshToken);
+        log.debug("detectConcurrentUser.refreshToken = {}",refreshToken);
         if (!refreshToken.equals(requestRefreshToken)) {
             log.error("refresh token does not match in Database.");
             throw new RefreshTokenException("Refresh Token 값이 일치하지 않습니다.");
