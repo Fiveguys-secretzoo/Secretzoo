@@ -114,32 +114,4 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @Operation(summary = "중복 로그인 체크 API")
-    @GetMapping("/check-concurrent-login")
-    public ResponseEntity<?> detectConcurrentLogin(HttpServletRequest request) {
-        log.debug("now running detect concurrent login function.");
-        String accessToken = request.getHeader(HttpHeaders.AUTHORIZATION);
-        log.debug("access token = {}", accessToken);
-        userService.detectConcurrentUser(accessToken);
-        log.info("User is unique.");
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
-
-    @Operation(summary = "방 참가 API")
-    @GetMapping("/join-room")
-    public ResponseEntity<?> joinRoom(HttpServletRequest request) {
-        String accessToken = request.getHeader(HttpHeaders.AUTHORIZATION);
-        String userId = jwtTokenProvider.extractUserId(accessToken);
-        userService.joinRoom(userId);
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
-
-    @Operation(summary = "방 나가기 API")
-    @GetMapping("/leave-room")
-    public ResponseEntity<?> leaveRoom(HttpServletRequest request) {
-        String accessToken = request.getHeader(HttpHeaders.AUTHORIZATION);
-        String userId = jwtTokenProvider.extractUserId(accessToken);
-        userService.leaveRoom(userId);
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
 }

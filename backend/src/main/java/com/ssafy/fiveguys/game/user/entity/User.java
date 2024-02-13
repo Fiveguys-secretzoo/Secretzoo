@@ -60,10 +60,6 @@ public class User extends BaseTimeEntity {
     @Column(name = "refresh_token")
     private String refreshToken;
 
-    @Column
-    @Builder.Default
-    private boolean connection = false;
-
     @OneToOne(mappedBy = "user")
     private Player player;
 
@@ -89,7 +85,6 @@ public class User extends BaseTimeEntity {
             .provider(userDto.getProvider())
             .providerId(userDto.getProviderId())
             .refreshToken(userDto.getRefreshToken())
-            .connection(userDto.isConnection())
             .build();
     }
 }

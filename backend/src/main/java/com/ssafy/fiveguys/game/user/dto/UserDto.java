@@ -42,7 +42,6 @@ public class UserDto {
             .provider(user.getProvider())
             .providerId(user.getProviderId())
             .refreshToken(user.getRefreshToken())
-            .connection(user.isConnection())
             .creationDate(user.getCreatedDate())
             .lastModifiedDate(user.getLastModifiedDate())
             .build();
