@@ -40,7 +40,7 @@ axiosInstance.interceptors.request.use(async config => {
     }
     return;
   }
-  axios.post('https://spring.secretzoo.site/users/check-concurrent-login', {} , {
+  axios.get('https://spring.secretzoo.site/users/check-concurrent-login', {} , {
     headers: {
       "Authorization" : localStorage.getItem('token_type') + ' ' + localStorage.getItem('access-token'),
       "refresh-token" : localStorage.getItem('refresh-token'),
