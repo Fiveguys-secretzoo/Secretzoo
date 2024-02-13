@@ -61,6 +61,7 @@ public class AuthService {
         JwtTokenDto tokenSet = jwtTokenProvider.generateToken(authentication);
         // DB에 Refreshtoken 저장
         user.setRefreshToken(tokenSet.getRefreshToken());
+        user.setConnection(false);
         userService.saveUser(user);
         // RefreshToken Redis에 저장
         RefreshToken refreshToken = RefreshToken.builder()
