@@ -371,7 +371,7 @@ const Play = () => {
         )
       }
     }
-    video.current=undefined;
+    // video.current=undefined;
     for (let k = count; k < 6; k++) {
       slotArr.push(
         <div className="bg-white rounded w-[30%] m-2"
