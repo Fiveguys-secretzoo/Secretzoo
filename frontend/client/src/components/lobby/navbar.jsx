@@ -4,7 +4,8 @@ import { Sidebar, Button  } from 'flowbite-react';
 import { IoGameController, IoTrophy  } from 'react-icons/io5';
 import { HiUser } from 'react-icons/hi'
 import { IoMdSearch } from "react-icons/io";
-import NoLogin from "../login/noLogin";
+import { axiosLogout } from "../../store/userSlice";
+import { useDispatch } from "react-redux";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -23,9 +24,12 @@ const Navbar = () => {
       </div>
     )
   };
+  const dispatch = useDispatch();
 
-  const logout = () => {
+  const logout = async () => {
+    await dispatch(axiosLogout());
     sessionStorage.clear();
+    localStorage.clear();
     navigate('/');
   }
 

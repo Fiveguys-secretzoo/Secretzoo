@@ -31,9 +31,12 @@ const LoginForm = () => {
         "password": pass,
       }
     ).then(response => {
-      sessionStorage.setItem('authorization', response.headers['authorization']);
-      sessionStorage.setItem('refresh-token', response.headers['refresh-token']);
-      sessionStorage.setItem('user', response.data);
+      const expiresIn = response.data['expires_in'] - 600000; 
+      const expiresAt = Date.now() + expiresIn;
+      localStorage.setItem('access-token', response.data['access-token']);
+      localStorage.setItem('refresh-token', response.data['refresh-token']);
+      localStorage.setItem('token_type', response.data['token_type']);
+      localStorage.setItem('expires_at', expiresAt.toString());
       navigate('lobby');
     }).catch(e => {
       Swal.fire({

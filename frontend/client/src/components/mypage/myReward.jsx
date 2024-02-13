@@ -12,9 +12,9 @@ const MyReward = () => {
  
 
   const [myRewards, setMyrewards] = useState(null);
-  axios.defaults.headers.common['Authorization'] = sessionStorage.getItem('authorization');
+  axios.defaults.headers.common['access-token'] = localStorage.getItem('access-token');
 
-  const authHeader = sessionStorage.getItem('authorization');
+  const authHeader = localStorage.getItem('access-token');
   const token = authHeader.split(' ')[1];
   const parts = token.split('.');
   const payloadInBase64 = parts[1];
