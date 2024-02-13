@@ -420,7 +420,7 @@ const Play = () => {
           };
         }
         else{
-          prevPlayerListRef.current = playerList;
+          prevPlayerListRef.current = {...playerList};
         }
       }, [playerList]);
       
