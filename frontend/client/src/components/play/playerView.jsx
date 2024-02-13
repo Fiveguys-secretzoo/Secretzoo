@@ -1,6 +1,6 @@
 import { Card } from 'flowbite-react'
 import PlayerContainer from './playerContainer';
-import App from "./openvidu/App.js";
+import App from "../../pages/openvidu/App";
 import React, { useEffect } from 'react';
 
 const PlayerView = ({ pid, key, pn = "SomethingWrong", activate = false ,video}) => {
