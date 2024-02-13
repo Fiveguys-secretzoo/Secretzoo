@@ -1,6 +1,6 @@
 import react, { useEffect, useState } from 'react'
 import { motion, useDragControls, AnimatePresence } from "framer-motion"
-
+import { useSelector } from 'react-redux'
 
 const Test = () => {
   const controls = useDragControls()

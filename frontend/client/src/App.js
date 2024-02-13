@@ -23,8 +23,8 @@ import SearchPlayerDetail from './pages/searchPlayerDetail';
 
 
 //노드 서버
-// const socket = io("http://localhost:3001");
-const socket = io('https://secretzoo.site');
+const socket = io("http://localhost:3001");
+// const socket = io('https://secretzoo.site');
 export const SocketContext = createContext();
 
 function App() {
@@ -61,7 +61,7 @@ function App() {
                 <Route index element={<MyInfo />} />
                 <Route path="/lobby/myPage/myranking" element={<MyRanking />} />
                 <Route path="/lobby/myPage/myreward" element={<MyReward />} />
-              </Route>
+              </Route>t
             </Route>
             <Route path="/play" element={<Play />} />
           </Routes>
