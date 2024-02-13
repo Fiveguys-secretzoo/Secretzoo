@@ -6,6 +6,7 @@ import { HiUser } from 'react-icons/hi'
 import { IoMdSearch } from "react-icons/io";
 import { axiosLogout } from "../../store/userSlice";
 import { useDispatch } from "react-redux";
+import axios from "axios";
 
 const Navbar = () => {
   const navigate = useNavigate();

@@ -19,11 +19,11 @@ const Profile = () => {
     }
   }, [dispatch])
   
-  useEffect(() => {
-    if(user.nickname === null){
-      setOpenNicknameModal(true);
-    }
-  },[])
+  // useEffect(() => {
+  //   if(!user.nickname){
+  //     setOpenNicknameModal(true);
+  //   }
+  // },[])
   const [openNicknameModal, setOpenNicknameModal] = useState(false);
   const NicknameModal = () => {    
     const [changeNickname, setChangeNickname] = useState('');
