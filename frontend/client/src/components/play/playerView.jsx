@@ -1,7 +1,7 @@
 import { Card } from 'flowbite-react'
 import PlayerContainer from './playerContainer';
 
-import App from "../../pages/openvidu/App";
+// import App from "../../pages/openvidu/App";
 import React, { useEffect, useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 

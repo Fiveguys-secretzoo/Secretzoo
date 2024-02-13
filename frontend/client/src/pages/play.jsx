@@ -344,7 +344,25 @@ const Play = () => {
     const slotArr = [];
     App();
     // const aaa = undefined;
-
+    let psq = "", playerName = "";
+    let activate = false;
+    if (playerArr[playerSequence] != null || playerArr[playerSequence] !== undefined) {
+      psq = playerSequence;
+      playerName = playerArr[playerSequence].pn;
+      activate = true;
+    }
+    video.current = <UserVideoComponent streamManager={publisher} />
+    slotArr.push(
+      <PlayerView
+        psq={psq}
+        key={playerSequence}
+        pn={playerName}
+        activate={activate}
+        setCards={setCards}
+        animalList={animalList}
+        video={video.current}>
+      </PlayerView>
+    )
     let count = 0;
     for (let player in playerArr) {
       if (player !== playerSequence) {
@@ -379,25 +397,25 @@ const Play = () => {
         </div>
       )
     }
-    let psq = "", playerName = "";
-    let activate = false;
-    if (playerArr[playerSequence] != null || playerArr[playerSequence] !== undefined) {
-      psq = playerSequence;
-      playerName = playerArr[playerSequence].pn;
-      activate = true;
-    }
-    video.current = <UserVideoComponent streamManager={publisher} />
-    slotArr.push(
-      <PlayerView
-        psq={psq}
-        key={playerSequence}
-        pn={playerName}
-        activate={activate}
-        setCards={setCards}
-        animalList={animalList}
-        video={video.current}>
-      </PlayerView>
-    )
+    // let psq = "", playerName = "";
+    // let activate = false;
+    // if (playerArr[playerSequence] != null || playerArr[playerSequence] !== undefined) {
+    //   psq = playerSequence;
+    //   playerName = playerArr[playerSequence].pn;
+    //   activate = true;
+    // }
+    // video.current = <UserVideoComponent streamManager={publisher} />
+    // slotArr.push(
+    //   <PlayerView
+    //     psq={psq}
+    //     key={playerSequence}
+    //     pn={playerName}
+    //     activate={activate}
+    //     setCards={setCards}
+    //     animalList={animalList}
+    //     video={video.current}>
+    //   </PlayerView>
+    // )
     return slotArr;
   }
 
@@ -423,9 +441,9 @@ const Play = () => {
               leaveSession();
           };
         }
-        else{
+        
           prevPlayerListRef.current = {...playerList};
-        }
+        
       }, [playerList]);
       
       const onbeforeunload = () => {
