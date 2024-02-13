@@ -348,7 +348,6 @@ const Play = () => {
     let count = 0;
     for (let player in playerArr) {
       if (player !== playerSequence) {
-        count++;
         let psq = "", playerName = "";
         let activate = false;
         if (playerArr[player] != null || playerArr[player] !== undefined) {
@@ -356,12 +355,9 @@ const Play = () => {
           playerName = playerArr[player].pn;
           activate = true;
         }
-        if(player === playerSequence){
-         
-        }
-        else{
-          video.current = <UserVideoComponent streamManager={subscribers[k-1]} />
-        }
+        video.current = <UserVideoComponent streamManager={subscribers[count]} />
+        
+        count ++ ;
         slotArr.push(
           <PlayerView
             psq={psq}
@@ -405,7 +401,7 @@ const Play = () => {
     return slotArr;
   }
 
-  const [myUserName, setMyUserName] = useState(sessionStorage.getItem('userName'));
+  const [myUserName, setMyUserName] = useState(sessionStorage.getItem('userNickname'));
   const [publisher, setPublisher] = useState(undefined);
   const [subscribers, setSubscribers] = useState([]);
   const session = useRef(undefined);
@@ -456,7 +452,7 @@ const Play = () => {
           
           try {
               const token = await getToken(sessionStorage.getItem('roomName'));
-              setMyUserName(sessionStorage.getItem('userName'));
+              setMyUserName(sessionStorage.getItem('userNickname'));
               
               mySession.connect(token, { clientData: myUserName })
               .then(async () => {
@@ -496,7 +492,7 @@ const Play = () => {
           
           session.current=undefined;
           setSubscribers([]);
-          setMyUserName(sessionStorage.getItem('userName'));
+          setMyUserName(sessionStorage.getItem('userNickname'));
           setPublisher(undefined);
       };
 

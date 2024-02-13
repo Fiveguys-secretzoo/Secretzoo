@@ -117,7 +117,7 @@ export const getUserInfo = createAsyncThunk(
         "prevExp": data2.data.prevExp,
       };
       sessionStorage.setItem('userName',data1.userId);
-      
+      sessionStorage.setItem('userNickname', data1.nickname);
       return userData
 
     } catch (error) {
