@@ -409,11 +409,11 @@ const Play = () => {
 
   const App = () => {
       useEffect(() => {
-        if(Object.keys(prevPlayerListRef.current).length<Object.keys(playerList).length){
+        // if(Object.keys(prevPlayerListRef.current).length<Object.keys(playerList).length){
           console.log('$$$$$$$$$$$$$$$$$$$$$$$4');
-          console.log(Object.keys(playerList));
-          console.log(Object.keys(playerList).length);
-          console.log(Object.keys(prevPlayerListRef.current).length);
+          // console.log(Object.keys(playerList));
+          // console.log(Object.keys(playerList).length);
+          // console.log(Object.keys(prevPlayerListRef.current).length);
 
             window.addEventListener('beforeunload', onbeforeunload);  
             joinSession();
@@ -422,18 +422,20 @@ const Play = () => {
               window.removeEventListener('beforeunload', onbeforeunload);
               leaveSession();
           };
-        }
-        else{
+        // }
+        
           prevPlayerListRef.current = {...playerList};
-        }
-      }, [playerList]);
+        
+      }, []);//playerlist 지움
       
       const onbeforeunload = () => {
           leaveSession();
       };
 
       const deleteSubscriber = (streamManager) => {
+          
           setSubscribers((prevSubscribers) => prevSubscribers.filter((sub) => sub !== streamManager));
+       
       };
 
       const joinSession = async () => {
