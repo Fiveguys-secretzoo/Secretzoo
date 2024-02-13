@@ -105,19 +105,19 @@ export const getUserInfo = createAsyncThunk(
       const data2 = response2.data;
       console.log(data2)
       const userData = {
-        "name" : data1.name,
+        "name": data1.name,
         "nickname": data1.nickname,
         "userSequence": data1.userSequence,
         "profileNumber": data1.profileNumber,
-        "mainReward" : data1.mainReward,
-        "email" : data1.email,
-        "level" : data2.data.currentLevel,
-        "exp" : data2.data.currentExp,
-        "nextExp" : data2.data.nextExp,
-        "prevExp" : data2.data.prevExp,
+        "mainReward": data1.mainReward,
+        "email": data1.email,
+        "level": data2.data.currentLevel,
+        "exp": data2.data.currentExp,
+        "nextExp": data2.data.nextExp,
+        "prevExp": data2.data.prevExp,
       };
       sessionStorage.setItem('userName',data1.userId);
-      
+      sessionStorage.setItem('userNickname', data1.nickname);
       return userData
 
     } catch (error) {
@@ -205,7 +205,7 @@ export const axiosLogout = createAsyncThunk(
   'user/axiosLogout',
    () => {
     try {
-     const response =  axios.post('https://spring.secretzoo.site/auth/logout/', {} ,{
+     const response =  axios.post('https://spring.secretzoo.site/auth/logout', {} ,{
       headers: {
         "Authorization" : localStorage.getItem('token_type') + ' ' + localStorage.getItem('access-token'),
       }
@@ -264,5 +264,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { setNoLoginUserInfo} = userSlice.actions;
+export const { setNoLoginUserInfo } = userSlice.actions;
 export default userSlice.reducer;
