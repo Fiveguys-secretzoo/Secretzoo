@@ -412,6 +412,8 @@ const Play = () => {
         if(Object.keys(prevPlayerListRef.current).length<Object.keys(playerList).length){
           console.log('$$$$$$$$$$$$$$$$$$$$$$$4');
           console.log(Object.keys(playerList));
+          console.log(Object.keys(playerList).length);
+
             window.addEventListener('beforeunload', onbeforeunload);  
             joinSession();
             console.log(subscribers);
