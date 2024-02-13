@@ -414,7 +414,6 @@ const Play = () => {
           console.log(playerList);
             window.addEventListener('beforeunload', onbeforeunload);  
             joinSession();
-            console.log('!!!!!!!!!!!!!!!!!!');
             console.log(subscribers);
           return () => {
               window.removeEventListener('beforeunload', onbeforeunload);
