@@ -345,7 +345,7 @@ const Play = () => {
         }
       }
       else{
-        aaa.current=undefined;
+        video.current=undefined;
       }
       slotArr.push(
         <PlayerView
