@@ -1,14 +1,14 @@
 import { useDispatch } from 'react-redux'
 import { changeCardStatus } from '../../store/playSlice'
 
-const CardView = ({ key, src, index, card, cardlength, isMyTurn, playState, pid }) => {
+const CardView = ({ key, src, index, card, cardlength, isMyTurn, playState, psq }) => {
   const dispatch = useDispatch();
 
   const dragStart = (event, item) => {
     if (playState !== 1 || !isMyTurn) {
       event.preventDefault();
     }
-    dispatch(changeCardStatus({ 'from': pid, 'card': item }));
+    dispatch(changeCardStatus({ 'from': psq, 'card': item }));
   }
 
   return (
