@@ -36,9 +36,6 @@ function App() {
       if (localStorage.getItem('access-token')) {
         dispatch(getUserInfo());
       }
-      if(sessionStorage.getItem('noLogin')){
-        dispatch(setNoLoginUserInfo());
-      }
     };
 
     loadData();
