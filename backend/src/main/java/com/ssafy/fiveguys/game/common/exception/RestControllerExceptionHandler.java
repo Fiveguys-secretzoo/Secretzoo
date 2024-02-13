@@ -45,6 +45,7 @@ public class RestControllerExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
             new ErrorResponse("ERROR_40103", exception.getMessage()));
     }
+
     @ExceptionHandler({UserNotFoundException.class, PasswordException.class}) // 로그인 예외 처리
     public ResponseEntity<ErrorResponse> handleLoginException(Exception exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
