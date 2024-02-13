@@ -131,7 +131,7 @@ const SignupForm = () => {
       },
     });
   
-    axios.post('https://localhost:8080/verify-email/send',data)
+    axios.post('https://spring.secretzoo.site/verify-email/send',data)
     .then(Response => {
       Swal.close();
       Swal.fire({
