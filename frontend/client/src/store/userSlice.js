@@ -53,7 +53,7 @@ axiosInstance.interceptors.request.use(async config => {
     }
   }).then(Response => {
     const access_token = localStorage.getItem('access-token');
-    axiosInstance.defaults.headers.common['Authorization'] = access_token ? localStorage.getItem('token_type') + ' ' + access_token : '';
+    config.headers.Authorization = access_token ? localStorage.getItem('token_type') + ' ' + access_token : '';
     return config;
   }).catch(error => {
     console.log(error) 
@@ -64,7 +64,7 @@ axiosInstance.interceptors.request.use(async config => {
     // localStorage.clear();
     // window.location.href = 'https://secretzoo.site';
   })
-  axiosInstance.defaults.headers.common['Authorization'] = localStorage.getItem('token_type') + ' ' + localStorage.getItem('access-token');
+  config.headers.Authorization = localStorage.getItem('token_type') + ' ' + localStorage.getItem('access-token');
   return config;
 });
 
