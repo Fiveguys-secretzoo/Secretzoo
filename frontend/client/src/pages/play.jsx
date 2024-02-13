@@ -43,6 +43,7 @@ import AnswerSelectMyTurn from '../components/play/answerSelectMyTurn';
 import AnswerSelectNotTurn from '../components/play/answerSelectNotTurn';
 import PassTurnCardView from '../components/play/passTurnCardView';
 import AnswerRevealView from '../components/play/answerRevealView';
+import GameResultView from '../components/play/gameResultView';
 
 const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'https://openvidu.secretzoo.site/';
 
@@ -221,7 +222,7 @@ const Play = () => {
     dispatch(changePlayState(state));
     console.log("##### [gameStart] Card Set");
     console.log(cards);
-  } 
+  }
   // 게임 종료 시 사용
   // playState 1 으로 정의 
 
@@ -357,8 +358,8 @@ const Play = () => {
           activate = true;
         }
         video.current = <UserVideoComponent streamManager={subscribers[count]} />
-        
-        count ++ ;
+
+        count++;
         slotArr.push(
           <PlayerView
             psq={psq}
@@ -409,115 +410,115 @@ const Play = () => {
   const prevPlayerListRef = useRef({});
 
   const App = () => {
-      useEffect(() => {
-        if(Object.keys(prevPlayerListRef.current).length<Object.keys(playerList).length){
-          console.log('$$$$$$$$$$$$$$$$$$$$$$$4');
-          console.log(playerList);
-            window.addEventListener('beforeunload', onbeforeunload);  
-            joinSession();
-            console.log('!!!!!!!!!!!!!!!!!!');
-            console.log(subscribers);
-          return () => {
-              window.removeEventListener('beforeunload', onbeforeunload);
-              leaveSession();
-          };
-        }
-        else{
-          prevPlayerListRef.current = {...playerList};
-        }
-      }, [playerList]);
-      
-      const onbeforeunload = () => {
+    useEffect(() => {
+      if (Object.keys(prevPlayerListRef.current).length < Object.keys(playerList).length) {
+        console.log('$$$$$$$$$$$$$$$$$$$$$$$4');
+        console.log(playerList);
+        window.addEventListener('beforeunload', onbeforeunload);
+        joinSession();
+        console.log('!!!!!!!!!!!!!!!!!!');
+        console.log(subscribers);
+        return () => {
+          window.removeEventListener('beforeunload', onbeforeunload);
           leaveSession();
-      };
+        };
+      }
+      else {
+        prevPlayerListRef.current = { ...playerList };
+      }
+    }, [playerList]);
 
-      const deleteSubscriber = (streamManager) => {
-          setSubscribers((prevSubscribers) => prevSubscribers.filter((sub) => sub !== streamManager));
-      };
+    const onbeforeunload = () => {
+      leaveSession();
+    };
 
-      const joinSession = async () => {
-          const OV = new OpenVidu();
+    const deleteSubscriber = (streamManager) => {
+      setSubscribers((prevSubscribers) => prevSubscribers.filter((sub) => sub !== streamManager));
+    };
 
-          const mySession = OV.initSession();
-          
-          mySession.on('streamCreated', (event) => {
-              const subscriber = mySession.subscribe(event.stream, undefined);
-              setSubscribers((prevSubscribers) => [...prevSubscribers, subscriber]);
-              console.log("is created!!!!!!!!!!!!!!");
+    const joinSession = async () => {
+      const OV = new OpenVidu();
+
+      const mySession = OV.initSession();
+
+      mySession.on('streamCreated', (event) => {
+        const subscriber = mySession.subscribe(event.stream, undefined);
+        setSubscribers((prevSubscribers) => [...prevSubscribers, subscriber]);
+        console.log("is created!!!!!!!!!!!!!!");
+      });
+
+      mySession.on('streamDestroyed', (event) => {
+        deleteSubscriber(event.stream.streamManager);
+      });
+
+      mySession.on('exception', (exception) => {
+        console.warn(exception);
+      });
+
+      try {
+        const token = await getToken(sessionStorage.getItem('roomName'));
+        setMyUserName(sessionStorage.getItem('userNickname'));
+
+        mySession.connect(token, { clientData: myUserName })
+          .then(async () => {
+            let newPublisher = await OV.initPublisherAsync(undefined, {
+              audioSource: undefined,
+              videoSource: undefined,
+              publishAudio: true,
+              publishVideo: true,
+              resolution: '600x480',
+              frameRate: 30,
+              insertMode: 'APPEND',
+              mirror: false,
+            });
+
+            await mySession.publish(newPublisher);
+
+            setPublisher(newPublisher);
+            console.log(session);
+
+            console.log(publisher);
+          })
+          .catch((error) => {
+            console.log('There was an error connecting to the session:', error.code, error.message);
           });
-          
-          mySession.on('streamDestroyed', (event) => {
-              deleteSubscriber(event.stream.streamManager);
-          });
-          
-          mySession.on('exception', (exception) => {
-              console.warn(exception);
-          });
-          
-          try {
-              const token = await getToken(sessionStorage.getItem('roomName'));
-              setMyUserName(sessionStorage.getItem('userNickname'));
-              
-              mySession.connect(token, { clientData: myUserName })
-              .then(async () => {
-                  let newPublisher = await OV.initPublisherAsync(undefined, {
-                      audioSource: undefined,
-                      videoSource: undefined,
-                      publishAudio: true,
-                      publishVideo: true,
-                      resolution: '600x480',
-                      frameRate: 30,
-                      insertMode: 'APPEND',
-                      mirror: false,
-                  });
-                  
-                  await mySession.publish(newPublisher);
-                  
-                  setPublisher(newPublisher);
-                  console.log(session);
-                  
-                  console.log(publisher);
-              })
-              .catch((error) => {
-                  console.log('There was an error connecting to the session:', error.code, error.message);
-              });
-          } catch (error) {
-              console.error(error);
-          }
-          session.current = mySession;
-      };
-      
-      const leaveSession = () => {
-          const mySession = session.current;
-          if (mySession) {
-              mySession.disconnect();
-          }
-          
-          session.current=undefined;
-          setSubscribers([]);
-          setMyUserName(sessionStorage.getItem('userNickname'));
-          setPublisher(undefined);
-      };
+      } catch (error) {
+        console.error(error);
+      }
+      session.current = mySession;
+    };
 
-      const getToken = async (sid) => {
-          const safeid = encodeURIComponent(sid).replace(/[%]/g, '');
-          const sessionId = await createSession(safeid);
-          return await createToken(sessionId);
-      };
+    const leaveSession = () => {
+      const mySession = session.current;
+      if (mySession) {
+        mySession.disconnect();
+      }
 
-      const createSession = async (sessionId) => {
-          const response = await axios.post(APPLICATION_SERVER_URL + 'api/sessions', { customSessionId: sessionId }, {
-              headers: { 'Content-Type': 'application/json' },
-          });
-          return response.data;
-      };
+      session.current = undefined;
+      setSubscribers([]);
+      setMyUserName(sessionStorage.getItem('userNickname'));
+      setPublisher(undefined);
+    };
 
-      const createToken = async (sessionId) => {
-          const response = await axios.post(APPLICATION_SERVER_URL + 'api/sessions/' + sessionId + '/connections', {}, {
-              headers: { 'Content-Type': 'application/json' },
-          });
-          return response.data;
-      };
+    const getToken = async (sid) => {
+      const safeid = encodeURIComponent(sid).replace(/[%]/g, '');
+      const sessionId = await createSession(safeid);
+      return await createToken(sessionId);
+    };
+
+    const createSession = async (sessionId) => {
+      const response = await axios.post(APPLICATION_SERVER_URL + 'api/sessions', { customSessionId: sessionId }, {
+        headers: { 'Content-Type': 'application/json' },
+      });
+      return response.data;
+    };
+
+    const createToken = async (sessionId) => {
+      const response = await axios.post(APPLICATION_SERVER_URL + 'api/sessions/' + sessionId + '/connections', {}, {
+        headers: { 'Content-Type': 'application/json' },
+      });
+      return response.data;
+    };
   };
 
 
@@ -613,7 +614,11 @@ const Play = () => {
           {
             playState === 6 &&
             <SelectScreen>
-              <gameResultView></gameResultView>
+              <GameResultView
+                roomName={sessionStorage.getItem("roomName")}
+                playerSequence={playerSequence}
+                gameInfoHandler={gameInfoHandler}
+              ></GameResultView>
             </SelectScreen>
           }
           {/* 플레이어 표현 부분 */}
@@ -663,7 +668,7 @@ const Play = () => {
             <Button color="success" onClick={leaveRoom}>방 나가기</Button>
           </div>
         </div>
-      </div>
+      </div >
 
     </>
   );

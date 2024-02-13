@@ -26,7 +26,7 @@ const models = () => {
     let hand = []; // hand 
     let pen = [0, 0, 0, 0, 0, 0, 0, 0]; //penalty
     let sc = {
-      'r': 0, // round Count
+      'r': 1, // round Count
       't': 0, // turn Count 
       'p': 0, // pass Count
       'atka': 0, // attack Attempt
@@ -37,8 +37,8 @@ const models = () => {
 
     let count = 0;
     for (let animal of animals) {
-      sc[animal][animalScore] = { ...score };
-      sc[animal] = {...sc[animal], 'animalId' : animalIds[count ++]}
+      sc[animal] = { 'animalScore': { ...score } };
+      sc[animal] = { ...sc[animal], 'animalId': animalIds[count++] }
     }
 
     return {
@@ -67,7 +67,7 @@ const models = () => {
     'game': { // onBoard
       // 0 : 대기, 1 : 시작, 2 : 주는 턴, 3 : 받는 턴, 4: 넘기는 턴 
       'state': 0, // status -> state
-      'fr': '', // from 
+      'from': '', // from 
       'to': '', // to 
       'bc': '', // cardBluff
       'c': '', // card
