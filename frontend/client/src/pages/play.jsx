@@ -57,6 +57,7 @@ const Play = () => {
   const bCard = useSelector(state => state.plays.game.bc);
   const turnedPlayer = useSelector(state => state.plays.game.tp);
   const playerCount = useSelector(state => state.plays.playerCount);
+  const players = useSelector(state => state.plays.players);
 
   const dispatch = useDispatch();
 
@@ -208,7 +209,7 @@ const Play = () => {
     dispatch(changePlayState(state));
     console.log("##### [gameStart] Card Set");
     console.log(cards);
-  }
+  } 
   // 게임 종료 시 사용
   // playState 1 으로 정의 
 
@@ -346,7 +347,8 @@ const Play = () => {
             key={player}
             pn={playerName}
             activate={activate}
-            setCards={setCards}>
+            setCards={setCards}
+            animalList={animalList}>
           </PlayerView>
         )
       }
@@ -372,7 +374,8 @@ const Play = () => {
         key={playerSequence}
         pn={playerName}
         activate={activate}
-        setCards={setCards}>
+        setCards={setCards}
+        animalList={animalList}>
       </PlayerView>
     )
 
@@ -421,8 +424,8 @@ const Play = () => {
             playState === 3 && !isMyTurn &&
             <SelectScreen>
               <AnswerSelectNotTurn
-                p1="playerFrom"
-                p2="playerTo"
+                p1={players[fromP].pn}
+                p2={players[toP].pn}
                 animal={animalList[bCard]}
               >
               </AnswerSelectNotTurn>
@@ -517,7 +520,7 @@ const Play = () => {
               </div>
             </div>
             <Button className={(playState === 0) ? '' : 'hidden'} disabled={!isAdmin} color="success" onClick={start}>start</Button>
-            <Button color="success" onClick={leaveRoom}>난 나갈거다.</Button>
+            <Button color="success" onClick={leaveRoom}>방 나가기</Button>
           </div>
         </div>
       </div>

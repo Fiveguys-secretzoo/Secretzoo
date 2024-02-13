@@ -4,7 +4,7 @@ import App from "./openvidu/App.js";
 import React, { useEffect, useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 
-const PlayerView = ({ roomName, psq, key, pn, activate = false, setCards }) => {
+const PlayerView = ({ roomName, psq, key, pn, activate = false, setCards, animalList }) => {
 
   const playerContainer = PlayerContainer();
   const { dragOver, dragEnterHandler, dropHandler } = playerContainer;
@@ -38,11 +38,18 @@ const PlayerView = ({ roomName, psq, key, pn, activate = false, setCards }) => {
         onDrop={(e) => dropHandler(e, psq, setCards)}
       >
         <p className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-          {psq}
+          {pn} 
         </p>
-        {pn} <br></br>
-        {penalty} <br></br>
-        {turnedPlayer.map((value) => { return `[${value}]` })}<br></br>
+        {penalty.map((key, value) =>(
+          <>
+            {animalList[value]} : {key} 
+            {value % 2 === 1 ? <br></br>: <></>}
+          </>
+          
+        ))} 
+        지금 턴 지난 플레이어 <br></br>
+        {turnedPlayer.map((value) => { return `[${value}]` })}
+        지금 턴 플레이어 <br></br>
         [{nowTurnPlayer}]
         {(psq === sessionStorage.getItem('userName')) &&
           <App psq={psq} />
