@@ -107,7 +107,7 @@ export const getUserInfo = createAsyncThunk(
       const userData = {
         "name": data1.name,
         "nickname": data1.nickname,
-        "userSequence": data1.userSequence,
+        "userSequence": data1.userSequence.toString(),
         "profileNumber": data1.profileNumber,
         "mainReward": data1.mainReward,
         "email": data1.email,
@@ -241,6 +241,9 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.isAuthenticated = true;
     },
+    resetUserInfo: (state) => {
+      state.userInfo = null;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -264,5 +267,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { setNoLoginUserInfo } = userSlice.actions;
+export const { setNoLoginUserInfo, resetUserInfo } = userSlice.actions;
 export default userSlice.reducer;

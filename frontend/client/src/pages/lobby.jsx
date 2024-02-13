@@ -2,18 +2,24 @@ import React, { useEffect, useContext } from "react";
 import Profile from "../components/lobby/profile";
 import Navbar from "../components/lobby/navbar";
 import { Outlet, } from "react-router-dom";
-
 import { SocketContext } from '../App';
 import { useNavigate } from "react-router-dom";
-
+import { useDispatch } from "react-redux";
+import { resetUserInfo } from "../store/userSlice";
 const Lobby = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const socket = useContext(SocketContext);
   useEffect(() => {
     socket.on("serverClosed", (e) => {
       navigate('/');
     });
   })
+  useEffect(() => {
+    return () => {
+      dispatch(resetUserInfo())
+    }
+  },[dispatch]);
 
   return (
     <>
