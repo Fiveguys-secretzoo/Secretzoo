@@ -63,7 +63,7 @@ public class PlayerApiController {
     @GetMapping("/players/search")
     public ApiResponse<?> SearchPlayerInfo(
         @ModelAttribute("playerSearch") PlayerSearch playerSearch, Pageable pageable) {
-        log.info("controller : playerSearch={}", playerSearch);
+        log.debug("controller : playerSearch={}", playerSearch);
         PlayerResult playerList = playerService.getAllPlayer(playerSearch, pageable);
         if (playerList.getPlayers().isEmpty()) {
             return null;

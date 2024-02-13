@@ -55,7 +55,7 @@ public class RewardsApiController {
     @Operation(summary = "플레이어 업적 정보 저장 API")
     @PostMapping("/save")
     public ResponseEntity<String> saveRewards(@RequestBody AnimalDto animalDto) {
-        log.info("animalDto = {}", animalDto);
+        log.debug("animalDto = {}", animalDto);
 //        rewardsService.saveRewards(animalDto);
         rewardsService.saveRewards(animalDto);
         return ResponseEntity.status(HttpStatus.OK)

@@ -59,7 +59,7 @@ public class RankApiController {
     @Operation(summary = "랭킹 정보 저장 API")
     @PostMapping("/save")
     public ResponseEntity<String> saveRank(@RequestBody RankRequestDto rankRequestDto) {
-        log.info("rankRequestDto = {}", rankRequestDto);
+        log.debug("rankRequestDto = {}", rankRequestDto);
         //attack, defense, pass 점수 계산 로직으로 계산 후 Score 인스턴스로 만든 후에 rankService 에 저장해주기
         double attackScore = RankingScore.scoreCalculator(rankRequestDto.getAttackAttempt(),
             rankRequestDto.getAttackSuccess());

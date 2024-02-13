@@ -213,7 +213,7 @@ public class RankService {
     @Scheduled(cron = "0 59 23 * * *") // 특정 시간 기준 스케줄링 ex : 매월 매일 23시 59분 마다
     public void updateAllRanking() {
 
-        log.info("DB 랭킹 점수 갱신 시작");
+        log.debug("DB 랭킹 점수 갱신 시작");
         List<Player> players = playerRepository.findAll();
         //레디스의 점수 정보를 DB 정보에 업데이트
         ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
@@ -240,7 +240,7 @@ public class RankService {
                 findPlayer.getRankingScore().setPassScore(tuple.getScore());
             }
         }
-        log.info("DB 랭킹 점수 갱신 완료");
+        log.debug("DB 랭킹 점수 갱신 완료");
         updateRedisRanking(players);
     }
 
@@ -261,7 +261,7 @@ public class RankService {
             zSetOperations.add(defenseRankKey, String.valueOf(player.getUser().getUserSequence()), player.getRankingScore().getDefenseScore());
             zSetOperations.add(passRankKey, String.valueOf(player.getUser().getUserSequence()), player.getRankingScore().getPassScore());
         }
-        log.info("redis 캐싱 랭킹 갱신 완료");
+        log.debug("redis 캐싱 랭킹 갱신 완료");
     }
 
     public void addNewPlayerRanking(Player player){

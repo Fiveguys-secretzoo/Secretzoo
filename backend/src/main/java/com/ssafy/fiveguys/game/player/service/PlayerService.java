@@ -136,7 +136,7 @@ public class PlayerService {
     @Transactional
     public void savePlayer(Long userSequence, RankRequestDto rankRequestDto) {
 
-        log.info("user seq = {}", userSequence);
+        log.debug("user seq = {}", userSequence);
         //pass count 저장
         Player player = playerRepository.findByUser_UserSequence(userSequence);
         if (player == null) {
@@ -149,11 +149,11 @@ public class PlayerService {
             + rankRequestDto.getDefenseSuccess());
         //플에이어 경험지 계산
         long exp = LevelExp.expCalculator(rankRequestDto.getPassCount(), totalSuccess);
-        log.info("player curr exp = {}", player.getExp());
-        log.info("player add exp = {}", exp);
+        log.debug("player curr exp = {}", player.getExp());
+        log.debug("player add exp = {}", exp);
         //경험치 업데이트
         player.setExp(exp + player.getExp());
-        log.info("player new exp = {}", player.getExp());
+        log.debug("player new exp = {}", player.getExp());
         //레벨 업데이트
         levelService.updateLevel(userSequence, player.getExp());
     }
@@ -173,7 +173,7 @@ public class PlayerService {
             .build();
 
         playerRepository.save(player);
-        log.info("player 생성 성공");
+        log.debug("player 생성 성공");
         List<Rewards> allRewards = rewardsRepository.findAll();
         List<PlayerRewards> playerRewards = allRewards.stream()
             .map(rewards -> new PlayerRewards(player, rewards, false))
