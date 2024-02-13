@@ -5,7 +5,6 @@ import { IoGameController, IoTrophy  } from 'react-icons/io5';
 import { HiUser } from 'react-icons/hi'
 import { IoMdSearch } from "react-icons/io";
 import { GiSoundOff, GiSoundOn  } from "react-icons/gi";
-import { logoutUser } from "../../store/userSlice";
 import bg from "../../assets/sound/bg.mp3";
 import { axiosLogout, resetUserInfo } from "../../store/userSlice";
 import { useDispatch } from "react-redux";
@@ -34,7 +33,6 @@ const Navbar = () => {
     await dispatch(axiosLogout());
     dispatch(resetUserInfo);
     sessionStorage.clear();
-    logoutUser();
     localStorage.clear();
     navigate('/');
   }
