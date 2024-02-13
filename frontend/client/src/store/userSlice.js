@@ -54,8 +54,8 @@ axiosInstance.interceptors.request.use(async config => {
       "text" : '유효하지 않은 접근입니다.',
       "confirmButtonColor" : '#3085d6'
     });
-    localStorage.clear();
-    window.location.href = 'https://secretzoo.site';
+    // localStorage.clear();
+    // window.location.href = 'https://secretzoo.site';
   })
   axiosInstance.defaults.headers.common['Authorization'] = localStorage.getItem('token_type') + ' ' + localStorage.getItem('access-token');
   return config;
