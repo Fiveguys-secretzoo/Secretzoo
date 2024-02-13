@@ -133,6 +133,7 @@ const Play = () => {
   // 방을 나간다. 나는 나간다.
   const leaveRoom = () => {
     socket.emit("leaveRoom", roomName, playerSequence);
+    dispatch(modifyPlayers({}));
     navigate('/lobby')
   }
 
@@ -405,7 +406,7 @@ const Play = () => {
   const [publisher, setPublisher] = useState(undefined);
   const [subscribers, setSubscribers] = useState([]);
   const session = useRef(undefined);
-  const prevPlayerListRef = useRef(playerList);
+  const prevPlayerListRef = useRef({});
 
   const App = () => {
       useEffect(() => {
@@ -442,6 +443,7 @@ const Play = () => {
           mySession.on('streamCreated', (event) => {
               const subscriber = mySession.subscribe(event.stream, undefined);
               setSubscribers((prevSubscribers) => [...prevSubscribers, subscriber]);
+              console.log("is created!!!!!!!!!!!!!!");
           });
           
           mySession.on('streamDestroyed', (event) => {
