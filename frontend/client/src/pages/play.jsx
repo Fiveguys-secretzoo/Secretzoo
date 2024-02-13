@@ -423,9 +423,9 @@ const Play = () => {
               leaveSession();
           };
         }
-        else{
+        
           prevPlayerListRef.current = {...playerList};
-        }
+        
       }, [playerList]);
       
       const onbeforeunload = () => {
