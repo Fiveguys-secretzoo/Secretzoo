@@ -12,6 +12,7 @@ const Page404 = () => {
   const [secret2, setSecret2] = useState(0);
   const [secret3, setSecret3] = useState(0);
   const [showAiImage, setShowAiImage] = useState(false);
+  const [showAiMV, setShowAiMV] =useState(false);
   const isSecretUnlocked = secret1 >= 3 && secret2 >= 3 && secret3 >= 3;
   return (
     <>
@@ -25,6 +26,8 @@ const Page404 = () => {
             className='absolute right-64'
           />
       <Button onClick={() => setShowAiImage(true)}>누르지마시오</Button>
+      { showAiImage ? <Button onClick={() => setShowAiMV(true)}>누르지마세요!!</Button> : <div></div>}
+      { showAiMV ? <iframe width="560" height="315" src="https://www.youtube.com/embed/ZRtdQ81jPUQ?si=VDtKv6JTROLn5EW_" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe> : <></>}
     </div>
       ):
       <div className='text-center flex flex-col justify-center w-screen h-screen bg-white'>
