@@ -433,7 +433,11 @@ const Play = () => {
       };
 
       const deleteSubscriber = (streamManager) => {
+          console.log("##before");
+          console.log(subscribers);
           setSubscribers((prevSubscribers) => prevSubscribers.filter((sub) => sub !== streamManager));
+          console.log("##after");
+          console.log(subscribers);
       };
 
       const joinSession = async () => {
