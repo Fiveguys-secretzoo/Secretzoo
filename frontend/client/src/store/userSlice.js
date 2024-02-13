@@ -68,32 +68,32 @@ axiosInstance.interceptors.request.use(async config => {
   return config;
 });
 
-axiosInstance.interceptors.response.use(response => {
-  return response;
-}, async (error) => {
-  const originalRequest = error.config;
-  if (error.response.status === 401 && !originalRequest._retry) {
-    originalRequest._retry = true;
-    console.log('토큰 재발급');
-    const refresh_Token = localStorage.getItem('refresh-token');
-    const access_token = localStorage.getItem('access-token');
-    try {
-      const response = await axiosInstance.post('https://spring.secretzoo.site/auth/token/refresh', {} ,{
-        headers: {
-          "Authorization" : localStorage.getItem('token_type') + ' ' + access_token,
-          "refresh-token" : refresh_Token,
-        }
-      });
-      localStorage.setItem('access-token', response.data['access-token']);
-      localStorage.setItem('refresh-token', response.data['refresh-token']);
-      axiosInstance.defaults.headers.common['Authorization'] = localStorage.getItem('token_type') + ' ' + localStorage.getItem('access-token');
-      return axiosInstance(originalRequest);
-    } catch (refreshError) {
+// axiosInstance.interceptors.response.use(response => {
+//   return response;
+// }, async (error) => {
+//   const originalRequest = error.config;
+//   if (error.response.status === 401 && !originalRequest._retry) {
+//     originalRequest._retry = true;
+//     console.log('토큰 재발급');
+//     const refresh_Token = localStorage.getItem('refresh-token');
+//     const access_token = localStorage.getItem('access-token');
+//     try {
+//       const response = await axiosInstance.post('https://spring.secretzoo.site/auth/token/refresh', {} ,{
+//         headers: {
+//           "Authorization" : localStorage.getItem('token_type') + ' ' + access_token,
+//           "refresh-token" : refresh_Token,
+//         }
+//       });
+//       localStorage.setItem('access-token', response.data['access-token']);
+//       localStorage.setItem('refresh-token', response.data['refresh-token']);
+//       axiosInstance.defaults.headers.common['Authorization'] = localStorage.getItem('token_type') + ' ' + localStorage.getItem('access-token');
+//       return axiosInstance(originalRequest);
+//     } catch (refreshError) {
       
-    }
-  }
-  return Promise.reject(error);
-});
+//     }
+//   }
+//   return Promise.reject(error);
+// });
 
 export const getUserInfo = createAsyncThunk(
   'user/getUserInfo',
@@ -203,9 +203,9 @@ export const axiosGetTotalRewards= createAsyncThunk(
 );
 export const axiosLogout = createAsyncThunk(
   'user/axiosLogout',
-  async () => {
+   () => {
     try {
-     const response = await axios.post('https://spring.secretzoo.site/auth/logout/', {} ,{
+     const response =  axios.post('https://spring.secretzoo.site/auth/logout/', {} ,{
       headers: {
         "Authorization" : localStorage.getItem('token_type') + ' ' + localStorage.getItem('access-token'),
       }
