@@ -13,7 +13,7 @@ const Rooms = () => {
   // 방들의 정보
   const [rooms, setRooms] = useState({});
   // 마운트 뒬때 방들의 정보 가져옴
-  const psq = useSelector(state => state.user.userInfo.userSequence);
+  const user = useSelector(state => state.user.userInfo);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -33,7 +33,7 @@ const Rooms = () => {
   const [roomName, setRoomName] = useState('');
   // 방만들기
   const createRoom = () => {
-    socket.emit('createRoom', roomName, psq, sessionStorage.getItem('userNickname'), (callback) => {
+    socket.emit('createRoom', roomName, user.userSequence, sessionStorage.getItem('userNickname'), (callback) => {
       if (callback) {
         dispatch(initRoomName(roomName));
         sessionStorage.setItem("roomName", roomName);
@@ -51,7 +51,7 @@ const Rooms = () => {
 
   // 방입장 
   const enterRoom = (name) => {
-    socket.emit('enterRoom', name, psq, sessionStorage.getItem('userNickname'), (callback) => {
+    socket.emit('enterRoom', name, user.userSequence, sessionStorage.getItem('userNickname'), (callback) => {
       if (callback) {
         dispatch(initRoomName(name));
         sessionStorage.setItem("roomName", name);
