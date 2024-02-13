@@ -127,8 +127,17 @@ const playSocketMethods = () => {
       // 지금 턴 진행 플레이어 변경
       rooms[roomName].game.nt = rooms[roomName].game.to;
 
+      // 스코어 추가
+      console.log(`##### [addScore]`)
       rooms[roomName].ps[from].sc.atka +=1 ;
-      rooms[roomName].ps[from].sc.t += 1;
+      rooms[roomName].ps[from].sc.t += 1; 
+      if(rooms[roomName].game.c/8 === bCard % 8){
+        console.log('truth')
+        rooms[roomName].ps[from].sc[animals[bCard/8]].animalScore.atkt;
+      }else {
+        console.log('lie')
+        rooms[roomName].ps[from].sc[animals[bCard/8]].animalScore.atkl;
+      }
       
       console.log(`##### card Bluffed to ${bCard}, to room ${roomName}`)
 
@@ -139,13 +148,23 @@ const playSocketMethods = () => {
   // 패스 선택시 
   const passingTurnStart = (socket, io, rooms) => {
     socket.on('cardPass', (roomName, callback) => {
+
+      //score 기록
+      rooms[roomName].ps[rooms[roomName].game.to].sc.p +=1 ;
+
+      // PASSING TURN
       rooms[roomName].game.state = 4;
+
+      // 턴을 보낸 플레이어에 추가
       if (!rooms[roomName].game.tp.includes(rooms[roomName].game.from)) {
         rooms[roomName].game.tp.push(rooms[roomName].game.from);
       }
+
+      // to, from, nt 바꾸기 
       rooms[roomName].game.from = rooms[roomName].game.to;
       rooms[roomName].game.nt = rooms[roomName].game.from;
       rooms[roomName].game.to = '';
+
       io.to(roomName).emit('cardPass', rooms[roomName].game.state, rooms[roomName].game.tp, rooms[roomName].game.from, rooms[roomName].game.to, rooms[roomName].game.nt);
       callback(rooms[roomName].game.c);
     })
@@ -202,11 +221,23 @@ const playSocketMethods = () => {
     io.to(roomName).emit('penaltyAdd', { psq: nowTurnPlayer, pen: rooms[roomName].ps[nowTurnPlayer].pen });
   }
 
+  // 서버에 스코어 전송 
+  const sendScore = (rooms, roomName) => { 
+
+  }
+
+  // 방 정보 초기화
+  const initRoomInfo = (rooms, roomName) => {
+
+  }
+
   const checkLoser = (socket, io, rooms) => {
     socket.on("isTurnEnd", (roomName, callback) => {
       for (let player in rooms[roomName].ps) {
         for (let k = 0; k < 8; k++) {
           if (rooms[roomName].ps[player].pen[k] === 4) {
+            sendScore(rooms, roomName);
+            initRoomInfo(rooms, roomName);
             callback(rooms[roomName].ps[player].psq);
             return;
           }

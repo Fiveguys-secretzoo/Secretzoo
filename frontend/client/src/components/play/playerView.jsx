@@ -34,6 +34,7 @@ const PlayerView = ({ roomName, psq, key, pn, activate = false, setCards, animal
     <>
       <div className="bg-white rounded w-[30%] m-2"
         key={key}
+        onDragStart={(e)=>e.preventDefault()}
         onDragEnter={(e) => dragEnterHandler(e, psq)}
         onDragOver={(e) => dragOver(e, psq)}
         onDrop={(e) => dropHandler(e, psq, setCards)}

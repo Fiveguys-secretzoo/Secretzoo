@@ -4,7 +4,7 @@
 const models = () => {
   // 동물 이름을 미리 저장
   const animals = ['tiger', 'cat', 'dog', 'deer', 'pig', 'fox', 'sheep', 'whale'];
-  const animalIds = ['tiger', 'cat', 'dog', 'deer', 'pig', 'fox', 'sheep', 'whale'];
+  const animalIds = ['TIGER01', 'CAT02', 'DOG03', 'DEER04', 'PIG05', 'FOX06', 'SHEEP07', 'WHALE08'];
   // 동물 마다 score 유형
   const score = {
     atks: 0, // attack Success
@@ -35,8 +35,10 @@ const models = () => {
       'defs': 0, // defence Success
     }
 
+    let count = 0;
     for (let animal of animals) {
-      sc[animal] = { ...score };
+      sc[animal][animalScore] = { ...score };
+      sc[animal] = {...sc[animal], 'animalId' : animalIds[count ++]}
     }
 
     return {
