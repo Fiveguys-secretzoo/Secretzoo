@@ -366,7 +366,7 @@ const Play = () => {
             activate={activate}
             setCards={setCards}
             animalList={animalList}
-            video={video}>
+            video={video.current}>
           </PlayerView>
         )
       }
@@ -395,7 +395,7 @@ const Play = () => {
         activate={activate}
         setCards={setCards}
         animalList={animalList}
-        video={video}>
+        video={video.current}>
       </PlayerView>
     )
     return slotArr;
