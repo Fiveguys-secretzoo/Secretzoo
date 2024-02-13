@@ -135,7 +135,7 @@ public class UserController {
     }
 
     @Operation(summary = "방 나가기 API")
-    @GetMapping("/join-room")
+    @GetMapping("/leave-room")
     public ResponseEntity<?> leaveRoom(HttpServletRequest request) {
         String accessToken = request.getHeader(HttpHeaders.AUTHORIZATION);
         String userId = jwtTokenProvider.extractUserId(accessToken);
