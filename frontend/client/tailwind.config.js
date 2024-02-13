@@ -15,6 +15,7 @@ module.exports = {
       "silver-medal" : 'url(./assets/img/ranking/silver-medal.png)',
       "bronze-medal" : 'url(./assets/img/ranking/bronze-medal.png)',
       "main-logo" : 'url(./assets/img/main-logo.png)',
+      "ranking-bg" : 'url(./assets/img/ranking/ranking-bg.png)',
     },
   },
   plugins: [require("flowbite/plugin")],

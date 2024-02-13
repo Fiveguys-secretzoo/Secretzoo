@@ -132,8 +132,14 @@ const Play = () => {
 
   // 방을 나간다. 나는 나간다.
   const leaveRoom = () => {
-    socket.emit("leaveRoom", roomName, playerSequence);
-    navigate('/lobby')
+    axios.get('https://spring.secretzoo.site/users/leave-room', {
+      headers: {
+        "Authorization" : localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token'),
+      }
+    }).then(Response => {
+      socket.emit("leaveRoom", roomName, playerSequence);
+      navigate('/lobby')
+    })
   }
 
   // 메시지를 처리한다. 그런 함수다.
