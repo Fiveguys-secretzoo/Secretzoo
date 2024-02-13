@@ -84,7 +84,7 @@ const addPlayer = (io, socket, rooms, roomName, playerSequence, socketId, player
     let playersData = Object.keys(rooms[roomName].ps).reduce((acc, id) => {
       const player = rooms[roomName].ps[id];
       acc[id] = {
-        'pid': player.psq,
+        'psq': player.psq,
         'pn': player.pn,
         'pen': player.pen,
       };
