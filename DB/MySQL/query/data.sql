@@ -33,22 +33,22 @@ VALUES
 (20, 10000);
 
 -- user 초기 데이터
-INSERT INTO `user` (`user_sequence`, `email`, `name`, `nickname`, `password`, `role`, `profile_number`, `user_id`)
-VALUES (101, 'test1@test.com', '이상혁', 'FAKER', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '000','test1'),
-(102, 'test2@test.com', '김중광', '미칠광 가운데중', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '37', 'test2'),
-(103, 'test3@test.com', '구마적', '구마유시', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '38', 'test3'),
-(104, 'test4@test.com', '김김김', 'kim kim', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '39', 'test4'),
-(105, 'test5@test.com', '이상혁', 'hide on bush', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W','USER', '40', 'test5'),
-(106, 'test6@test.com', '정지훈', 'chovy', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '41','test6'),
-(107, 'test7@test.com', '김기인', 'kiin', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '42','test7'),
-(108, 'test8@test.com', '곰돌이', '곰돌이 푸우', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '43', 'test8'),
-(109, 'test9@test.com', '제니', '블랙핑크', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '44','test9'),
-(110, 'test10@test.com', '오지혜', '헤일리', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '45','test10'),
-(111, 'test11@test.com', '유승호', '호승이', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '46','test11'),
-(112, 'test12@test.com', '유재영', '구월동 휴그랜트', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '47','test12'),
-(113, 'test13@test.com', '조용환', '아빠 안잔다', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '48', 'test13'),
-(114, 'test14@test.com', '박준형', '풀무원', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '49','test14'),
-(115, 'test15@test.com', '이선철', '배곧최수종', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '50','test15');
+INSERT INTO `user` (`user_sequence`, `email`, `name`, `nickname`, `password`, `role`, `profile_number`, `user_id`,`connection`)
+VALUES (101, 'test1@test.com', '이상혁', 'FAKER', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '000','test1',false),
+(102, 'test2@test.com', '김중광', '미칠광 가운데중', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '37', 'test2',false),
+(103, 'test3@test.com', '구마적', '구마유시', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '38', 'test3',false),
+(104, 'test4@test.com', '김김김', 'kim kim', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '39', 'test4',false),
+(105, 'test5@test.com', '이상혁', 'hide on bush', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W','USER', '40', 'test5',false),
+(106, 'test6@test.com', '정지훈', 'chovy', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '41','test6',false),
+(107, 'test7@test.com', '김기인', 'kiin', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '42','test7',false),
+(108, 'test8@test.com', '곰돌이', '곰돌이 푸우', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '43', 'test8',false),
+(109, 'test9@test.com', '제니', '블랙핑크', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '44','test9',false),
+(110, 'test10@test.com', '오지혜', '헤일리', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '45','test10',false),
+(111, 'test11@test.com', '유승호', '호승이', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '46','test11',false),
+(112, 'test12@test.com', '유재영', '구월동 휴그랜트', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '47','test12',false),
+(113, 'test13@test.com', '조용환', '아빠 안잔다', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '48', 'test13',false),
+(114, 'test14@test.com', '박준형', '풀무원', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '49','test14',false),
+(115, 'test15@test.com', '이선철', '배곧최수종', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '50','test15',false);
 
 -- player 테이블 초기 데이터
 INSERT INTO player (player_sequence, attack_score, defense_score, pass_score, total_round, total_turn, total_pass, exp, player_level, user_sequence)
