@@ -27,8 +27,8 @@
             </a> 
         </td>
         <td style="min-width: 250px;">
-            <a href="https://github.com">
-              <img src="https://avatars.githubusercontent.com/u" width="100">
+            <a href="https://github.com/jaeyun1723">
+              <img src="https://avatars.githubusercontent.com/u/84389492?v=4" width="100">
               <br />
               <b>김재윤</b>
             </a>
