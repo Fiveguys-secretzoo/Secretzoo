@@ -118,7 +118,9 @@ public class UserController {
     @GetMapping("/check-concurrent-login")
     public ResponseEntity<?> detectConcurrentLogin(HttpServletRequest request) {
         String accessToken = request.getHeader(HttpHeaders.AUTHORIZATION);
+        log.debug("access token = {}",accessToken);
         String refreshToken = request.getHeader(JwtProperties.REFRESH_TOKEN);
+        log.debug("refresh token = {}",refreshToken);
         userService.detectConcurrentUser(accessToken, refreshToken);
         log.info("User is unique.");
         return ResponseEntity.status(HttpStatus.OK).build();
