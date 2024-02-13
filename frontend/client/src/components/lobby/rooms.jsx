@@ -5,6 +5,7 @@ import { Button, TextInput, Modal, Label, Card } from 'flowbite-react';
 import Swal from 'sweetalert2';
 import { useSelector, useDispatch } from 'react-redux';
 import { initRoomName } from '../../store/playSlice'
+import { getUserInfo } from "../../store/userSlice";
 const Rooms = () => {
   const navigate = useNavigate();
   // 소켓
@@ -21,6 +22,12 @@ const Rooms = () => {
       setRooms(roomsInfo);
     });
   }, []);
+  useEffect(() => {
+    if (sessionStorage.getItem('noLogin')) {
+    } else {
+      dispatch(getUserInfo());
+    }
+  }, [dispatch])
 
   // 방제목
   const [roomName, setRoomName] = useState('');
