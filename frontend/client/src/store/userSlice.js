@@ -41,10 +41,15 @@ axiosInstance.interceptors.request.use(async config => {
     return;
   }
   console.log(config);
+  
+  const refresh_Token = localStorage.getItem('refresh-token');
+  const access_token = localStorage.getItem('access-token');
+  const token_type = localStorage.getItem('token_type')
+
   axios.get('https://spring.secretzoo.site/users/check-concurrent-login', {
     headers: {
-      "Authorization" : localStorage.getItem('token_type') + ' ' + localStorage.getItem('access-token'),
-      "refresh-token" : localStorage.getItem('refresh-token'),
+      "Authorization" : token_type + ' ' + access_token,
+      "refresh-token" : refresh_Token,
     }
   }).then(Response => {
     const access_token = localStorage.getItem('access-token');

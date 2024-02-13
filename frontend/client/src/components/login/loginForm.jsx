@@ -25,7 +25,7 @@ const LoginForm = () => {
       return;
     }
 
-    axios.post('https://spring.secretzoo.site/auth/login',
+     axios.post('https://spring.secretzoo.site/auth/login',
       {
         "userId": id,
         "password": pass,
@@ -37,6 +37,7 @@ const LoginForm = () => {
       localStorage.setItem('refresh-token', response.data['refresh-token']);
       localStorage.setItem('token_type', response.data['token_type']);
       localStorage.setItem('expires_at', expiresAt.toString());
+      navigate('lobby');
     }).catch(e => {
       Swal.fire({
         "text" : '아이디 혹은 비밀번호가 일치하지 않습니다',
@@ -44,7 +45,6 @@ const LoginForm = () => {
       });
       return;
     })
-    navigate('lobby');
   }
 
   const signup = () => {
