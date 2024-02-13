@@ -356,7 +356,7 @@ const Play = () => {
           activate = true;
         }
         video.current = <UserVideoComponent streamManager={subscribers[count]} />
-        
+        console.log(subscribers);
         count ++ ;
         slotArr.push(
           <PlayerView

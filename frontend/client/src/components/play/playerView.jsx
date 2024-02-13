@@ -52,8 +52,8 @@ const PlayerView = ({ roomName, psq, key, pn, activate = false, setCards, animal
         {turnedPlayer.map((value) => { return `[${value}]` })}
         지금 턴 플레이어 <br></br>
         [{nowTurnPlayer}]
-        {(psq === sessionStorage.getItem('userName')) &&
-          <App psq={psq} />
+        {(psq === sessionStorage.getItem('userName')) 
+          // <App psq={psq} />
         }
         <br></br>
         {video}
