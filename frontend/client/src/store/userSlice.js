@@ -13,6 +13,7 @@ axiosInstance.interceptors.request.use(async config => {
       "confirmButtonColor" : '#3085d6'
     });
     window.location.href = 'https://secretzoo.site';
+    return;
   }
   const expiresAt = parseInt(localStorage.getItem('expires_at'), 10);
   if (Date.now() > expiresAt) {
@@ -36,6 +37,7 @@ axiosInstance.interceptors.request.use(async config => {
       localStorage.clear();
       window.location.href = 'https://secretzoo.site';
     }
+    return;
   }
   axios.post('https://spring.secretzoo.site/users/check-concurrent-login', {} , {
     headers: {
