@@ -474,7 +474,7 @@ const Play = () => {
           
           try {
               const token = await getToken(sessionStorage.getItem('roomName'));
-              setMyUserName(sessionStorage.getItem('userNickname'));
+              // setMyUserName(sessionStorage.getItem('userNickname'));
               
               mySession.connect(token, { clientData: myUserName })
               .then(async () => {
@@ -492,9 +492,7 @@ const Play = () => {
                   await mySession.publish(newPublisher);
                   
                   setPublisher(newPublisher);
-                  console.log(session);
-                  
-                  console.log(publisher);
+
               })
               .catch((error) => {
                   console.log('There was an error connecting to the session:', error.code, error.message);
@@ -510,7 +508,7 @@ const Play = () => {
           if (mySession) {
               mySession.disconnect();
           }
-          
+          session.unpublish();
           session.current=undefined;
           setSubscribers([]);
           setMyUserName(sessionStorage.getItem('userNickname'));
