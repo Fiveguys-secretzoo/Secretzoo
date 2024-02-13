@@ -51,7 +51,7 @@ const SignupForm = () => {
     //   });
     //   return;
     // }
-    axios.post('http://localhost:8080/auth/signup',
+    axios.post('https://spring.secretzoo.site/auth/signup',
       {
         "userId": id,
         "password": pass,

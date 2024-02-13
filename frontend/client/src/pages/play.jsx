@@ -411,7 +411,7 @@ const Play = () => {
   const [publisher, setPublisher] = useState(undefined);
   const [subscribers, setSubscribers] = useState([]);
   const session = useRef(undefined);
-  const prevPlayerListRef = useRef(playerList);
+  const prevPlayerListRef = useRef({});
 
   const App = () => {
       useEffect(() => {
@@ -438,6 +438,7 @@ const Play = () => {
 
       const deleteSubscriber = (streamManager) => {
           setSubscribers((prevSubscribers) => prevSubscribers.filter((sub) => sub !== streamManager));
+          console.log("## delete!!!!!!!!!!!");
       };
 
       const joinSession = async () => {
@@ -448,6 +449,7 @@ const Play = () => {
           mySession.on('streamCreated', (event) => {
               const subscriber = mySession.subscribe(event.stream, undefined);
               setSubscribers((prevSubscribers) => [...prevSubscribers, subscriber]);
+              console.log("is created!!!!!!!!!!!!!!");
           });
           
           mySession.on('streamDestroyed', (event) => {
