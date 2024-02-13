@@ -23,11 +23,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private String resolveToken(HttpServletRequest request) {
         String token = request.getHeader(JwtProperties.HEADER);
+        log.debug("access token in jwtFilter = {}", token);
         if (StringUtils.hasText(token) && token.startsWith(JwtProperties.TOKEN_PREFIX)) {
             return token.substring(7);
         }
         return null;
     }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
         FilterChain chain) throws ServletException, IOException {
