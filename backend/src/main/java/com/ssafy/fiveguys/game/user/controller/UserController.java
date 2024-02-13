@@ -117,6 +117,7 @@ public class UserController {
     @Operation(summary = "중복 로그인 체크 API")
     @GetMapping("/check-concurrent-login")
     public ResponseEntity<?> detectConcurrentLogin(HttpServletRequest request) {
+        log.debug("now running detect concurrent login function.");
         String accessToken = request.getHeader(HttpHeaders.AUTHORIZATION);
         log.debug("access token = {}",accessToken);
         String refreshToken = request.getHeader(JwtProperties.REFRESH_TOKEN);

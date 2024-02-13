@@ -23,7 +23,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private String resolveToken(HttpServletRequest request) {
         String token = request.getHeader(JwtProperties.HEADER);
-        log.debug("access token in jwtFilter = {}", token);
         if (StringUtils.hasText(token) && token.startsWith(JwtProperties.TOKEN_PREFIX)) {
             return token.substring(7);
         }
@@ -35,6 +34,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         FilterChain chain) throws ServletException, IOException {
         // Request Header에서 JWT Token 추출
         String token = resolveToken(request);
+        log.debug("access token in jwtFilter = {}", token);
         // validateToken으로 토큰 유효성 검사
         if (jwtTokenProvider.validateToken(token) && token != null) {
             // 토큰이 유효할 경우 토큰에서 Authentication 객체를 가지고 와서 SecurityContext 에 저장
