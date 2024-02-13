@@ -409,7 +409,7 @@ const Play = () => {
 
   const App = () => {
       useEffect(() => {
-        if(prevPlayerListRef.current.length<playerList.length){
+        if(Object.keys(prevPlayerListRef.current).length<Object.keys(playerList).length){
           console.log('$$$$$$$$$$$$$$$$$$$$$$$4');
           console.log(playerList);
             window.addEventListener('beforeunload', onbeforeunload);  
