@@ -7,14 +7,14 @@ import Swal from 'sweetalert2';
 const axiosInstance = axios.create();
 
 axiosInstance.interceptors.request.use(async config => {
-  if(!localStorage.getItem('access-token')){
-    Swal.fire({
-      "text" : '로그인 해요',
-      "confirmButtonColor" : '#3085d6'
-    });
-    // window.location.href = 'https://secretzoo.site';
-    return;
-  }
+  // if(!localStorage.getItem('access-token')){
+  //   Swal.fire({
+  //     "text" : '로그인 해요',
+  //     "confirmButtonColor" : '#3085d6'
+  //   });
+  //   // window.location.href = 'https://secretzoo.site';
+  //   return;
+  // }
   const expiresAt = parseInt(localStorage.getItem('expires_at'), 10);
   if (Date.now() > expiresAt) {
     const refresh_Token = localStorage.getItem('refresh-token');
