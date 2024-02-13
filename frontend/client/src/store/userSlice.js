@@ -33,28 +33,6 @@ axiosInstance.interceptors.request.use(async config => {
     return;
   }
   
-  const refresh_Token = localStorage.getItem('refresh-token');
-  const access_token = localStorage.getItem('access-token');
-  const token_type = localStorage.getItem('token_type')
-
-  axios.get('https://spring.secretzoo.site/users/check-concurrent-login', {
-    headers: {
-      "Authorization" : token_type + ' ' + access_token,
-      "refresh-token" : refresh_Token,
-    }
-  }).then(Response => {
-    const access_token = localStorage.getItem('access-token');
-    config.headers.Authorization = access_token ? localStorage.getItem('token_type') + ' ' + access_token : '';
-    return config;
-  }).catch(error => {
-    console.log(error) 
-    Swal.fire({
-      "text" : '유효하지 않은 접근입니다.',
-      "confirmButtonColor" : '#3085d6'
-    });
-    // localStorage.clear();
-    // window.location.href = 'https://secretzoo.site';
-  })
   config.headers.Authorization = localStorage.getItem('token_type') + ' ' + localStorage.getItem('access-token');
   return config;
 });
