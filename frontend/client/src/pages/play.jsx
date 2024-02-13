@@ -485,7 +485,6 @@ const Play = () => {
       
       const leaveSession = () => {
           const mySession = session.current;
-          sessionStorage.removeItem('roomName');
           if (mySession) {
               mySession.disconnect();
           }
