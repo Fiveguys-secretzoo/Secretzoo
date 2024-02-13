@@ -60,6 +60,10 @@ public class User extends BaseTimeEntity {
     @Column(name = "refresh_token")
     private String refreshToken;
 
+    @Column
+    @Builder.Default
+    private boolean connection = false;
+
     @OneToOne(mappedBy = "user")
     private Player player;
 
@@ -73,18 +77,19 @@ public class User extends BaseTimeEntity {
 
     public static User getUserDto(UserDto userDto) {
         return User.builder()
-                .userSequence(userDto.getUserSequence())
-                .userId(userDto.getUserId())
-                .password(userDto.getPassword())
-                .email(userDto.getEmail())
-                .name(userDto.getName())
-                .nickname(userDto.getNickname())
-                .mainReward(userDto.getMainReward())
-                .role(userDto.getRole())
-                .profileNumber(userDto.getProfileNumber())
-                .provider(userDto.getProvider())
-                .providerId(userDto.getProviderId())
-                .refreshToken(userDto.getRefreshToken())
-                .build();
+            .userSequence(userDto.getUserSequence())
+            .userId(userDto.getUserId())
+            .password(userDto.getPassword())
+            .email(userDto.getEmail())
+            .name(userDto.getName())
+            .nickname(userDto.getNickname())
+            .mainReward(userDto.getMainReward())
+            .role(userDto.getRole())
+            .profileNumber(userDto.getProfileNumber())
+            .provider(userDto.getProvider())
+            .providerId(userDto.getProviderId())
+            .refreshToken(userDto.getRefreshToken())
+            .connection(userDto.isConnection())
+            .build();
     }
 }

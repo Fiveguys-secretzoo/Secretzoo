@@ -1,12 +1,14 @@
 package com.ssafy.fiveguys.game.common.exception;
 
 import com.ssafy.fiveguys.game.common.dto.ErrorResponse;
+import com.ssafy.fiveguys.game.user.exception.ConnectionException;
 import com.ssafy.fiveguys.game.user.exception.DuplicateIdentifierException;
 import com.ssafy.fiveguys.game.user.exception.JwtBlackListException;
 import com.ssafy.fiveguys.game.user.exception.PasswordException;
 import com.ssafy.fiveguys.game.user.exception.RefreshTokenException;
 import com.ssafy.fiveguys.game.user.exception.UserNotFoundException;
 import com.ssafy.fiveguys.game.user.exception.VerificationCodeException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.extern.slf4j.Slf4j;
@@ -46,6 +48,12 @@ public class RestControllerExceptionHandler {
             new ErrorResponse("ERROR_40103", exception.getMessage()));
     }
 
+    @ExceptionHandler(JwtException.class) // JWT 유효성 검사
+    public ResponseEntity<ErrorResponse> handleJwtException(JwtException exception) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+            new ErrorResponse("ERROR_40104", exception.getMessage()));
+    }
+
     @ExceptionHandler({UserNotFoundException.class, PasswordException.class}) // 로그인 예외 처리
     public ResponseEntity<ErrorResponse> handleLoginException(Exception exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
@@ -62,5 +70,11 @@ public class RestControllerExceptionHandler {
     public ResponseEntity<ErrorResponse> handleJVerificationCodeException(VerificationCodeException exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
             new ErrorResponse("ERROR_40003", exception.getMessage()));
+    }
+
+    @ExceptionHandler(ConnectionException.class) // 동시 접속 로그인 예외 처리
+    public ResponseEntity<ErrorResponse> handleJConnectionException(ConnectionException exception) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
+            new ErrorResponse("ERROR_40301", exception.getMessage()));
     }
 }
