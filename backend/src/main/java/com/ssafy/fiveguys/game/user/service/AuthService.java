@@ -133,7 +133,7 @@ public class AuthService {
         log.debug("token = {}", token);
         String principal = jwtTokenProvider.extractUserId(accessToken);
         log.debug("principal = {}", principal);
-        redisService.saveJwtBlackList(token);
+        redisService.saveJwtBlackList(accessToken);
         redisService.deleteRefreshToken(principal);
         userService.deleteRefreshToken(principal);
     }

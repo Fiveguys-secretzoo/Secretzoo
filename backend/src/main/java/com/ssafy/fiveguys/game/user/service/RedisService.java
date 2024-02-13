@@ -53,10 +53,10 @@ public class RedisService {
         verificationCodeRedisTemplate.delete(VC_PREFIX + email + SUFFIX);
     }
 
-    public void saveJwtBlackList(String token) {
-        long expirationTime = jwtTokenProvider.getTokenExpiration(token);
+    public void saveJwtBlackList(String accessToken) {
+        long expirationTime = jwtTokenProvider.getTokenExpiration(accessToken);
         jwtBlackListRedisTemplate.opsForValue()
-            .set(BL_PREFIX + token + SUFFIX, "logout", expirationTime,
+            .set(BL_PREFIX + accessToken + SUFFIX, "logout", expirationTime,
                 TimeUnit.MILLISECONDS);
     }
 
