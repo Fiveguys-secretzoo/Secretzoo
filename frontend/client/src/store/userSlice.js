@@ -205,7 +205,7 @@ export const axiosLogout = createAsyncThunk(
   'user/axiosLogout',
   async () => {
     try {
-     const response = await axiosInstance.get('https://spring.secretzoo.site/auth/logout/');
+     const response = await axiosInstance.post('https://spring.secretzoo.site/auth/logout/');
       return response.data;
     } catch (error) {
       Swal.fire({
