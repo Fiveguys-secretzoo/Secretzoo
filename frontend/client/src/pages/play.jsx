@@ -405,7 +405,7 @@ const Play = () => {
   const [publisher, setPublisher] = useState(undefined);
   const [subscribers, setSubscribers] = useState([]);
   const session = useRef(undefined);
-  const prevPlayerListRef = useRef(playerList);
+  const prevPlayerListRef = useRef({});
 
   const App = () => {
       useEffect(() => {
@@ -413,6 +413,7 @@ const Play = () => {
           console.log('$$$$$$$$$$$$$$$$$$$$$$$4');
           console.log(Object.keys(playerList));
           console.log(Object.keys(playerList).length);
+          console.log(Object.keys(prevPlayerListRef.current).length);
 
             window.addEventListener('beforeunload', onbeforeunload);  
             joinSession();
