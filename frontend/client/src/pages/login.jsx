@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import LoginForm from "../components/login/loginForm";
 import NoLogin from "../components/login/noLogin";
 import GoogleLogin from "../components/login/googleLogin";
@@ -6,8 +6,15 @@ import KakaoLogin from "../components/login/kakaoLogin";
 import NaverLogin from "../components/login/naverLogin";
 import '../style/login.css';
 import {css, keyframes} from '@emotion/react';
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    if(localStorage.getItem('access-token')){
+      navigate('lobby');      
+    }
+  });
   return (
     <>
       <div className="flex flex-col items-center justify-center h-screen opacity-[90%]">

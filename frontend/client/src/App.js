@@ -2,9 +2,8 @@ import React, { createContext, useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 // import './App.css';
 import io from "socket.io-client";
-import { getUserInfo, setNoLoginUserInfo } from './store/userSlice';
+import { getUserInfo,} from './store/userSlice';
 import { useDispatch } from 'react-redux';
-
 
 import Lobby from './pages/lobby'
 import Login from './pages/login'
@@ -21,9 +20,10 @@ import Page404 from './pages/Page404';
 import SearchPlayer from './pages/searchPlayer';
 import SearchPlayerDetail from './pages/searchPlayerDetail';
 
+
 //노드 서버
 // const socket = io("http://localhost:3001");
-const socket = io('https://secretzoo.site');
+const socket = io('https://secretzoo.site'); // 노드 서버 URL 
 export const SocketContext = createContext();
 
 function App() {
@@ -32,15 +32,10 @@ function App() {
 
   useEffect(() => {
     const loadData = async () => {
-      const authorization = localStorage.getItem('authorization');
-      if (authorization) {
+      if (localStorage.getItem('access-token')) {
         dispatch(getUserInfo());
       }
-      if(sessionStorage.getItem('noLogin')){
-        dispatch(setNoLoginUserInfo());
-      }
     };
-
     loadData();
   }, [dispatch]);
   return (
@@ -61,7 +56,7 @@ function App() {
                 <Route index element={<MyInfo />} />
                 <Route path="/lobby/myPage/myranking" element={<MyRanking />} />
                 <Route path="/lobby/myPage/myreward" element={<MyReward />} />
-              </Route>
+              </Route>t
             </Route>
             <Route path="/play" element={<Play />} />
           </Routes>

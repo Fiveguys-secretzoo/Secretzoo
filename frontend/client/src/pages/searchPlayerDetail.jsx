@@ -7,7 +7,7 @@ const  SearchPlayerDetail = () => {
   const [searchedUserRank, setSearchUserRank] = useState(null);
 
   useEffect(() =>{
-    axios.get('https://spring.secretzoo.site/player/'+ userSequence)
+    axios.get('https://spring.secretzoo.site/players/'+ userSequence)
       .then((Response) => {
         setSearchedUserInfo(Response.data);
         console.log(Response.data)

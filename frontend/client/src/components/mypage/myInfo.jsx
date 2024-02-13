@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUserInfo, axiosUpdateProfileImage, axiosUpdateNickname, axiosUpdateMainAchievement, axiosCheckPassword, axiosUpdatePassword } from '../../store/userSlice';
+import { axiosGetDoneRewards, axiosUpdateProfileImage, axiosUpdateNickname, axiosUpdateMainAchievement, axiosCheckPassword, axiosUpdatePassword } from '../../store/userSlice';
 import axios from 'axios';
 import { Button, TextInput, Modal, Label, Card } from 'flowbite-react';
 import Swal from 'sweetalert2';
@@ -68,10 +68,12 @@ const MyInfo = () => {
 
   const [myRewards, setMyrewards] = useState(null);
   const getRewards = async () => {
-    axios.get(`https://spring.secretzoo.site/rewards/done/`+ user.userSequence)
-    .then(response => {
-      setMyrewards(response.data);
-    });
+    if(user.userSequence){
+      dispatch(axiosGetDoneRewards(user.userSequence))
+        .then(Response => {
+          setMyrewards(Response.payload);
+      });
+    }
   };
 
   const [openProfileImageModal, setOpenProfileImageModal] = useState(false);

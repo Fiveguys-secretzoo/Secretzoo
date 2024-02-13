@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  openvidu-app:
+    container_name: openvidu-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - docker_nat
+    environment:
+      - SERVER_PORT=5442
+      - OPENVIDU_URL=https://openvidu.secretzoo.site:8443
+      - OPENVIDU_SECRET=MY_SECRET
+networks:
+  docker_nat:
+    external: true

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { getUserInfo ,setNoLoginUserInfo } from '../../store/userSlice';
-import { Card, Progress, Label } from 'flowbite-react';
+import { axiosUpdateNickname, getUserInfo ,setNoLoginUserInfo } from '../../store/userSlice';
+import { Card, Progress, Label, Modal, Button, TextInput } from 'flowbite-react';
 
 
 
@@ -17,6 +17,30 @@ const Profile = () => {
       dispatch(getUserInfo());
     }
   }, [dispatch])
+  
+  // useEffect(() => {
+  //   if(!user.nickname){
+  //     setOpenNicknameModal(true);
+  //   }
+  // },[])
+  const [openNicknameModal, setOpenNicknameModal] = useState(false);
+  const NicknameModal = () => {    
+    const [changeNickname, setChangeNickname] = useState('');
+    return (
+      <Modal show={openNicknameModal} size="md" onClose={() => setOpenNicknameModal(false)}>
+        <Modal.Body>
+          <Label>바꿀 닉네임</Label>
+          <TextInput value={changeNickname} onChange={(e) => setChangeNickname(e.target.value)}></TextInput>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={() => { dispatch(axiosUpdateNickname(changeNickname)); setOpenNicknameModal(false) }}>수정</Button>
+          <Button color="gray" onClick={() => setOpenNicknameModal(false)}>
+            취소
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    )
+  }
 
   if (!user) {
     return <div>Loading...</div>;
@@ -46,6 +70,7 @@ const Profile = () => {
           </div>)
         }
       </Card>
+      <NicknameModal></NicknameModal>
     </>
   );
 };

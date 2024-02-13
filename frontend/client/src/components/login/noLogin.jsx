@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { Button, Label, TextInput } from 'flowbite-react';
 import { useDispatch} from 'react-redux';
 import { setNoLoginUserInfo } from '../../store/userSlice';
-import { v4 as uuidv4 } from 'uuid';
 import Swal from 'sweetalert2';
 
 const NoLogin = () => {

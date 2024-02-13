@@ -3,7 +3,7 @@ import { useDispatch, } from 'react-redux';
 import { changeCardStatus } from '../../store/playSlice'
 import { SocketContext } from '../../App';
 
-const PassTurnCardView = ({ bCard, isMyTurn, img, pid, playState }) => {
+const PassTurnCardView = ({ bCard, isMyTurn, img, psq, playState }) => {
 
   const dispatch = useDispatch();
 
@@ -11,7 +11,7 @@ const PassTurnCardView = ({ bCard, isMyTurn, img, pid, playState }) => {
     if (playState !== 4 || !isMyTurn) {
       event.preventDefault();
     }
-    dispatch(changeCardStatus({ 'from': pid, 'card': item }));
+    dispatch(changeCardStatus({ 'from': psq, 'card': item }));
   }
 
 
