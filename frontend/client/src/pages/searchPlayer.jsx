@@ -81,7 +81,7 @@ const SearchPlayer = () => {
               <div className="flex overflow-x-auto sm:justify-center">
                 <Pagination 
                 currentPage={currentPage} 
-                totalPages={Math.round(searchResult.totalPlayer/4)} 
+                totalPages={Math.floor(searchResult.totalPlayer/4)+1} 
                 onPageChange={onPageChange} showIcons/>
               </div>
             </div> ): ( <div>조회된 플레이어가 없습니다.</div>)}
