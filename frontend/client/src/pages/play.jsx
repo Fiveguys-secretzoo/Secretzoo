@@ -560,8 +560,8 @@ const Play = () => {
             playState === 3 && !isMyTurn &&
             <SelectScreen>
               <AnswerSelectNotTurn
-                p1={players[fromP].pn}
-                p2={players[toP].pn}
+                p1={players[fromP]?.pn}
+                p2={players[toP]?.pn}
                 animal={animalList[bCard]}
               >
               </AnswerSelectNotTurn>
