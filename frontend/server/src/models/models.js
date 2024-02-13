@@ -4,13 +4,13 @@
 const models = () => {
   // 동물 이름을 미리 저장
   const animals = ['tiger', 'cat', 'dog', 'deer', 'pig', 'fox', 'sheep', 'whale'];
-
+  const animalIds = ['tiger', 'cat', 'dog', 'deer', 'pig', 'fox', 'sheep', 'whale'];
   // 동물 마다 score 유형
   const score = {
     atks: 0, // attack Success
     atkf: 0, // attack Fail
     atkl: 0, // attack lie
-    atkt: 0, // aatcl truth
+    atkt: 0, // attack truth
     defs: 0, // defence Success
     deff: 0, // defence fail
     deft: 0, // defence Trust
@@ -75,6 +75,7 @@ const models = () => {
 
   return {
     animals,
+    animalIds,
     score,
     Player,
     roomInfo,

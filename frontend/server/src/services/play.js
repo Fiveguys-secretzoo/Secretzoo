@@ -6,8 +6,10 @@ const model = models();
 const { animals,
   score,
   Player,
-  roomInfo } = model;
+  roomInfo,
+  animalIds } = model;
 
+  
 const playSocketMethods = () => {
 
   // 방에 처음 입장할 때 실행하게 되는 함수
@@ -113,13 +115,21 @@ const playSocketMethods = () => {
       let to = rooms[roomName].game.to;
       rooms[roomName].game.state = 3;
       rooms[roomName].game.bc = bCard;
+
+      // 턴 플레이어 추가
       if (!rooms[roomName].game.tp.includes(from)) {
         rooms[roomName].game.tp.push(from);
       }
       if (!rooms[roomName].game.tp.includes(to)) {
         rooms[roomName].game.tp.push(to);
       }
+
+      // 지금 턴 진행 플레이어 변경
       rooms[roomName].game.nt = rooms[roomName].game.to;
+
+      rooms[roomName].ps[from].sc.atka +=1 ;
+      rooms[roomName].ps[from].sc.t += 1;
+      
       console.log(`##### card Bluffed to ${bCard}, to room ${roomName}`)
 
       io.to(roomName).emit('cardBluffSelect', rooms[roomName].game.state, rooms[roomName].game.tp, from, to, bCard);
