@@ -10,14 +10,13 @@ import ReactDOM from 'react-dom';
 import { SocketContext } from '../App';
 import { useNavigate } from "react-router-dom";
 import { motion, useDragControls } from 'framer-motion';
-import { Spinner, Button } from 'flowbite-react';
+import { Button } from 'flowbite-react';
 
 import { useSelector, useDispatch } from 'react-redux';
 import {
   initRoomInfo,
   initCardInfo,
-  addPlayer,
-  removePlayer,
+  modifyPlayers,
   changePlayState,
   changeAdmin,
   changeNowTurn,
@@ -26,10 +25,11 @@ import {
   changeCardDrag,
   changeCardDrop,
   changeCardBluff,
-  changeInitOnBoardCard,
+  changeInitgameCard,
   initTurnedPlayer,
-  addTurnedPlayer,
+  changeTurnedPlayer,
   dropCard,
+  changePenalty,
 } from '../store/playSlice'
 import PlayerContainer from '../components/play/playerContainer';//추가
 import PlayerView from '../components/play/playerView'//직접 추가했음
@@ -46,24 +46,28 @@ import AnswerRevealView from '../components/play/answerRevealView';
 
 const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'https://openvidu.secretzoo.site/';
 
+// TODO passing Turn Player Exception Handle (!)  l
 
 const Play = () => {
   const socket = useContext(SocketContext);
   const dragItem = useRef();
-  const pid = sessionStorage.getItem("userName");
   const navigate = useNavigate();
-  
+
+  const playerSequence = useSelector(state => state.user.userInfo.userSequence);
   // redux related const.
   const roomInfo = useSelector(state => state.plays);
-  const playState = useSelector(state => state.plays.onBoard.status);
+  const playState = useSelector(state => state.plays.game.state);
   const playerList = useSelector(state => state.plays.players);
   const adminPlayer = useSelector(state => state.plays.adminPlayer);
   const nowTurn = useSelector(state => state.plays.nowTurn);
   const roomName = useSelector(state => state.plays.roomName);
-  const fromP = useSelector(state => state.plays.onBoard.from);
-  const toP = useSelector(state => state.plays.onBoard.to);
-  const card = useSelector(state => state.plays.onBoard.card);
-  const bCard = useSelector(state => state.plays.onBoard.cardBluff);
+  const fromP = useSelector(state => state.plays.game.from);
+  const toP = useSelector(state => state.plays.game.to);
+  const card = useSelector(state => state.plays.game.c);
+  const bCard = useSelector(state => state.plays.game.bc);
+  const turnedPlayer = useSelector(state => state.plays.game.tp);
+  const playerCount = useSelector(state => state.plays.playerCount);
+  const players = useSelector(state => state.plays.players);
 
   const dispatch = useDispatch();
 
@@ -76,6 +80,7 @@ const Play = () => {
   const [gameResult, setGameResult] = useState(false);
   // 0 대기 1 시작 2 카드 드롭 후 동물 선택 3 동물 선택 후 방어 턴 4 넘기는 턴 드래그 5 넘기는 턴 동물 선택 6 결과 확인
   const [images, setImages] = useState([]);
+  const [answerCard, setAnswerCard] = useState(64); // 정답 공개 시 카드
 
   const animalList = [
     '호랑이',
@@ -111,22 +116,23 @@ const Play = () => {
   }
 
   // player enter socket event handle
-  const playerEnterHandler = (player) => {
+  const playerEnterHandler = (players) => {
     console.log(`##### player entered...`);
-    console.log(player);
-    dispatch(addPlayer(player));
+    console.log(players);
+    dispatch(modifyPlayers(players));
   }
 
   // player leave socket event handle
-  const playerLeaveHandler = (player) => {
-    dispatch(removePlayer(player));
+  const playerLeaveHandler = (players) => {
+    console.log(`##### player leaved...`);
+    dispatch(modifyPlayers(players));
   }
 
   // 플레이어가 속일 동물 종류를 선택 시
 
   // 방을 나간다. 나는 나간다.
   const leaveRoom = () => {
-    socket.emit("leaveRoom", roomName, pid);
+    socket.emit("leaveRoom", roomName, playerSequence);
     navigate('/lobby')
   }
 
@@ -143,36 +149,36 @@ const Play = () => {
     dispatch(changeCardDrag({ from: from, to: to }))
   };
   // socket.io drag handle
-  const cardDropResponseHandler = (from, to) => {
+  const cardDropResponseHandler = (state, from, to) => {
     console.log(`[cardDrop] [${from}] to [${to}]`);
-
-    dispatch(changePlayState(2));
-    dispatch(changeNowTurn(from));
+    dispatch(changePlayState(state));
     dispatch(changeCardDrop({ from: from, to: to }))
-    console.log(`[cardDrop] nowTurn : ${nowTurn} / pid : ${pid}`);
+    console.log(`[cardDrop] nowTurn : ${nowTurn} / psq : ${playerSequence}`);
     console.log(`[cardDrop] playState is ${playState} / isMyTurn : ${isMyTurn}`)
   };
 
   // socket.io handleBluff Response
-  const cardBluffResponseHandler = (from, to, bCard) => {
+  const cardBluffResponseHandler = (state, turnedPlayer, from, to, bCard) => {
     console.log(`card Bluffed [${from}] to [${to}] by [${bCard}]`);
-    dispatch(changePlayState(3));
-    dispatch(changeNowTurn(to));
-    if (nowTurn === pid) {
+    if (to === playerSequence) {
       setIsMyTurn(true);
     } else {
       setIsMyTurn(false);
     }
+
+    dispatch(changePlayState(state));
+    dispatch(changeNowTurn(to));
+    dispatch(changeTurnedPlayer(turnedPlayer));
     dispatch(changeCardBluff(bCard));
   }
 
   // socket.io handle Pass Res
-  const cardPassResponseHandler = (from, nowTurnPlayer) => {
-    console.log(`card Pass Response!`)
-    dispatch(changePlayState(4))
+  const cardPassResponseHandler = (state, turnedPlayer, from, to, nowTurnPlayer) => {
+    console.log(`##### [cardPass] card Pass Response!`)
+    dispatch(changePlayState(state))
     dispatch(changeNowTurn(nowTurnPlayer));
     dispatch(changeCardStatus({ 'from': from, 'card': card }));
-    if (nowTurnPlayer === pid) {
+    if (nowTurnPlayer === playerSequence) {
       setIsMyTurn(true);
     } else {
       setIsMyTurn(false);
@@ -181,55 +187,53 @@ const Play = () => {
     console.log(`[cardPass] draggable [${(playState === 4 && isMyTurn)}]`)
   }
 
-  const cardRevealResponseHandler = (result, nowTurnPlayer) => {
-    setGameResult(result);
-    dispatch(changePlayState(5));
-    dispatch(changeNowTurn(nowTurnPlayer))
-    if (nowTurnPlayer === pid) {
+  const cardRevealResponseHandler = (state, card, ans, nowTurnPlayer) => {
+    if (nowTurnPlayer === playerSequence) {
       setIsMyTurn(true);
     } else {
       setIsMyTurn(false);
     }
+    dispatch(changePlayState(5)); // state 5 // 받는 건 1이지만 확인 후에 1로 가는 걸로 변경
+    setGameResult(ans);
+    setAnswerCard(card);
+    dispatch(changeNowTurn(nowTurnPlayer))
+    dispatch(initTurnedPlayer());
     console.log(`card Answer Response!`);
   }
 
 
   // socket.io 페널티 추가 handler
-  const penaltyAddResponseHandler = (pid, penalty) => {
-
+  const penaltyAddResponseHandler = (psq, penalty) => {
+    dispatch(changePenalty(psq, penalty));
     // 패널티 점수 체크
   }
 
   // socket.io 게임 종료 handler 
-  const gameEndResponseHandler = (loserPid) => {
+  const gameEndResponseHandler = (loserpsq) => {
 
   }
 
-  // 게임 시작 버튼을 눌렀을 때 작동하는  함수, 여러가지 socket을 on 처리 시킨다.
-  const gameStart = (cards, firstPlayer) => {
-    console.log("##### Game Started !");
+  // 게임 시작 버튼을 눌렀을 때 작동하는 함수
+  const gameStart = (state, cards) => {
+    console.log("##### Game Started ! #####");
     setCards(cards);
-    dispatch(changePlayState(1));
-    console.log("##### Card Set");
+    dispatch(changePlayState(state));
+    console.log("##### [gameStart] Card Set");
     console.log(cards);
-    console.log(images);
-  }
+  } 
   // 게임 종료 시 사용
   // playState 1 으로 정의 
 
 
   // game Info 변경 시 사용
   const gameInfoHandler = (game) => {
-    console.log("this comes when the game info is change");
+    console.log("##### [gameInfoHandler] game info arrived");
     console.log(game);
     dispatch(initRoomInfo(game));
   }
 
   const cardInfoHandler = (cards) => {
-    try { setCards([...cards]) }
-    catch (e) {
-
-    }
+    setCards([...cards])
   }
 
   /* 이벤트 수신, 방 입장 시 실행 */
@@ -242,27 +246,39 @@ const Play = () => {
     });
 
     // Reconnection 확인용
-    socket.emit('checkReconnection', pid);
+    socket.emit('checkReconnection', playerSequence);
     // 게임 방의 초기 정보 확인 후 가져옴
-    socket.emit('requestGameInfo', gameInfoHandler);
+    socket.emit('requestGameInfo', sessionStorage.getItem("roomName"), playerSequence, gameInfoHandler);
+
+    // 내 카드 정보 받기 
     socket.on('sendCardInfo', cardInfoHandler);
+
     socket.on('chatMessage', messageHandler);
+
     socket.on('gameStart', gameStart);
+
     socket.on('playerEnter', playerEnterHandler);
+
     socket.on('playerLeave', playerLeaveHandler);
     //test, and get the every room info
     // socket.emit('testRoomsInfo', (rooms) => {
     //   console.log(rooms);
     // })
 
-
+    // 카드 드래그 시 
     socket.on("cardDrag", cardDragResponseHandler);
+    // 카드 드롭 했을 때
     socket.on("cardDrop", cardDropResponseHandler);
+
     socket.on("cardBluffSelect", cardBluffResponseHandler);
+
     socket.on("cardPass", cardPassResponseHandler);
+
     socket.on("cardReveal", cardRevealResponseHandler);
+
     socket.on("penaltyAdd", penaltyAddResponseHandler);
-    socket.on("gameEnd", gameEndResponseHandler);
+
+    // socket.on("gameEnd", gameEndResponseHandler);
 
     return () => {
       socket.off('gameInfo', gameInfoHandler);
@@ -275,26 +291,23 @@ const Play = () => {
   useEffect(() => {
     console.log(`check playState : ${playState}`);
     if (playState === 1) {
-      socket.emit("isTurnEnd", roomName, (loserPid) => {
-        if (loserPid !== false) {
-
-          alert(`Loser is ${loserPid}`);
+      socket.emit("isTurnEnd", roomName, (loserpsq) => {
+        if (loserpsq !== false) {
+          alert(`Loser is ${loserpsq}`);
           dispatch(initTurnedPlayer());
           dispatch(changePlayState(6));
         }
       })
-      dispatch(addTurnedPlayer(fromP));
     }
 
   }, [playState]);
 
-
   //nowTurn, adminPlayer 추적
   useEffect(() => {
-    if (nowTurn === pid) {
+    if (nowTurn === playerSequence) {
       setIsMyTurn(true);
     }
-    if (adminPlayer === pid) {
+    if (adminPlayer === playerSequence) {
       setIsAdmin(true);
     }
     console.log(`isMyTurn : ${isAdmin}`);
@@ -315,14 +328,15 @@ const Play = () => {
   }, [cards]);
 
 
+
   const sendMessage = () => {
-    socket.emit('chat message', input, localStorage.getItem('userName'));
+    socket.emit('chat message', input, localStorage.getItem(''));
     setInput('');
   };
 
   // 게임시작 이벤트 호출
   const start = () => {
-    socket.emit('start');
+    socket.emit('start', roomName);
   }
 
   const video = useRef(undefined);
@@ -330,34 +344,64 @@ const Play = () => {
     const slotArr = [];
     App();
     // const aaa = undefined;
-    for (let k = 0; k < 5; k++) {
-      let playerId = "", playerName = "";
-      let activate = false;
-      if (playerArr[k] != null || playerArr[k] !== undefined) {
-        playerId = playerArr[k].playerId;
-        playerName = playerArr[k].playerName;
-        activate = true;
-        if(k==0){
-          video.current = <UserVideoComponent streamManager={publisher} />
+
+    let count = 0;
+    for (let player in playerArr) {
+      if (player !== playerSequence) {
+        count++;
+        let psq = "", playerName = "";
+        let activate = false;
+        if (playerArr[player] != null || playerArr[player] !== undefined) {
+          psq = player;
+          playerName = playerArr[player].pn;
+          activate = true;
+        }
+        if(player === playerSequence){
+         
         }
         else{
           video.current = <UserVideoComponent streamManager={subscribers[k-1]} />
         }
+        slotArr.push(
+          <PlayerView
+            psq={psq}
+            key={player}
+            pn={playerName}
+            activate={activate}
+            setCards={setCards}
+            animalList={animalList}
+            video={video}>
+          </PlayerView>
+        )
       }
-      else{
-        video.current=undefined;
-      }
+    }
+    video.current=undefined;
+    for (let k = count; k < 6; k++) {
       slotArr.push(
-        <PlayerView
-        pid={playerId}
-        key={k}
-        pn={playerName}
-        activate={activate}
-        video={video.current}>
-        </PlayerView>
+        <div className="bg-white rounded w-[30%] m-2"
+        >
+        </div>
       )
     }
-    // App();
+    let psq = "", playerName = "";
+    let activate = false;
+    if (playerArr[playerSequence] != null || playerArr[playerSequence] !== undefined) {
+      psq = playerSequence;
+      playerName = playerArr[playerSequence].pn;
+      activate = true;
+    }
+    video.current = <UserVideoComponent streamManager={publisher} />
+    slotArr.push(
+      <PlayerView
+        psq={psq}
+        key={playerSequence}
+        pn={playerName}
+        activate={activate}
+        setCards={setCards}
+        animalList={animalList}
+        video={video}>
+      </PlayerView>
+    )
     return slotArr;
   }
 
@@ -366,8 +410,6 @@ const Play = () => {
   const [subscribers, setSubscribers] = useState([]);
   const session = useRef(undefined);
   const prevPlayerListRef = useRef(playerList);
-  
- 
 
   const App = () => {
       useEffect(() => {
@@ -493,6 +535,7 @@ const Play = () => {
 
             <SelectScreen>
               <DropSelectMyTurn
+                roomName={roomName}
                 animalList={animalList}
               >
               </DropSelectMyTurn>
@@ -512,6 +555,8 @@ const Play = () => {
               <AnswerSelectMyTurn
                 roomName={roomName}
                 setIsMyTurn={setIsMyTurn}
+                playerCount={playerCount}
+                tpCount={turnedPlayer.length}
               ></AnswerSelectMyTurn>
             </SelectScreen>
           }
@@ -520,8 +565,8 @@ const Play = () => {
             playState === 3 && !isMyTurn &&
             <SelectScreen>
               <AnswerSelectNotTurn
-                p1="playerFrom"
-                p2="playerTo"
+                p1={players[fromP].pn}
+                p2={players[toP].pn}
                 animal={animalList[bCard]}
               >
               </AnswerSelectNotTurn>
@@ -536,7 +581,7 @@ const Play = () => {
                 bCard={bCard}
                 isMyTurn={isMyTurn}
                 img={images[64]}
-                pid={pid}
+                psq={playerSequence}
                 playState={playState}
               ></PassTurnCardView>
             </SelectScreen>
@@ -552,7 +597,7 @@ const Play = () => {
                 bCard={bCard}
                 isMyTurn={isMyTurn}
                 img={images[64]}
-                pid={pid}
+                psq={playerSequence}
                 playState={playState}
               ></PassTurnCardView>
             </SelectScreen>
@@ -592,7 +637,7 @@ const Play = () => {
                     cardlength={cards.length}
                     isMyTurn={isMyTurn}
                     playState={playState}
-                    pid={pid} >
+                    psq={playerSequence} >
                   </CardView>
                 ))
               }
@@ -615,8 +660,8 @@ const Play = () => {
                 <Button onClick={/*sendMessage*/() => { console.log(roomInfo) }}>Send</Button>
               </div>
             </div>
-              <Button className={(playState === 0) ? '' : 'hidden'} disabled={!isAdmin} color="success" onClick={start}>start</Button>
-              <Button color="success" onClick={leaveRoom}>난 나갈거다.</Button>
+            <Button className={(playState === 0) ? '' : 'hidden'} disabled={!isAdmin} color="success" onClick={start}>start</Button>
+            <Button color="success" onClick={leaveRoom}>방 나가기</Button>
           </div>
         </div>
       </div>

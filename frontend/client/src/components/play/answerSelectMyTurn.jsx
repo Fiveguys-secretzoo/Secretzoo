@@ -1,16 +1,16 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Button } from 'flowbite-react';
 import { changePlayState } from '../../store/playSlice'
 import { SocketContext } from '../../App';
 
-const AnswerSelectMyTurn = ({ roomName, setIsMyTurn }) => {
+const AnswerSelectMyTurn = ({ roomName, setIsMyTurn, playerCount, tpCount }) => {
 
   const socket = useContext(SocketContext);
   const dispatch = useDispatch();
   // 공격당한 플레이어의 선택지 발생 시 
   const handleAnswer = (val) => {
-    console.log(`Answer : ${val}`);
+    console.log(`[AnswerSelect] Answer : ${val}`);
     if (val === 1) {
       cardPassHandler();
       dispatch(changePlayState(4));
@@ -22,18 +22,22 @@ const AnswerSelectMyTurn = ({ roomName, setIsMyTurn }) => {
 
   // 카드 패스 선택시
   const cardPassHandler = () => {
-    console.log(`card Passed!`);
+    console.log(`[cardPass] card Passed!`);
     socket.emit('cardPass', roomName, (result) => {
       console.log(`[cardPass] ${result}`)
       setIsMyTurn(true);
     });
   }
 
-  // 카드 정답 맞추기
+  // 카드 정답 맞추기 
   const cardAnswerHandler = (answer) => {
-    console.log(`card Answered!`);
+    console.log(`[cardAnswer] card Answered!`);
     socket.emit('cardReveal', roomName, answer);
   }
+
+  useEffect(() => {
+    console.log(`##### [answerSelect] ${playerCount} / ${tpCount}`)
+  })
 
   return (
     <>
@@ -41,13 +45,14 @@ const AnswerSelectMyTurn = ({ roomName, setIsMyTurn }) => {
         <Button onClick={() => handleAnswer(0)}>
           맞다
         </Button>
-        <Button onClick={() => handleAnswer(1)}>
+
+        <Button disabled={(tpCount === playerCount) ? true : false} onClick={() => handleAnswer(1)}>
           패스
         </Button>
         <Button onClick={() => handleAnswer(2)} >
           아니다
         </Button>
-      </div>
+      </div >
     </>
   )
 }
