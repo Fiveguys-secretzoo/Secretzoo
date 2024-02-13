@@ -9,6 +9,7 @@ import jakarta.persistence.EntityManager;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.cache.CacheProperties.Redis;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Component;
@@ -21,7 +22,8 @@ public class InitRedis {
 
     private final PlayerRepository playerRepository;
     private final RankService rankService;
-    private final RedisTemplate<String, String> redisTemplate;
+//    private final RedisTemplate<>
+    private final RedisTemplate<String, String> RankingRedisTemplate;
     private final EntityManager em;
 
     private final String attackRankKey = "rank:attack";
@@ -31,9 +33,9 @@ public class InitRedis {
     public void init() {
         log.info("서버 시작 후 DB init 작업");
         //redis 캐시 메모리 초기화
-        redisTemplate.delete(attackRankKey);
-        redisTemplate.delete(defenseRankKey);
-        redisTemplate.delete(passRankKey);
+        RankingRedisTemplate.delete(attackRankKey);
+        RankingRedisTemplate.delete(defenseRankKey);
+        RankingRedisTemplate.delete(passRankKey);
         //DB 에서 player 데이터 가져오기
         List<Player> players = playerRepository.findAll();
 
