@@ -411,7 +411,7 @@ const Play = () => {
       useEffect(() => {
         if(Object.keys(prevPlayerListRef.current).length<Object.keys(playerList).length){
           console.log('$$$$$$$$$$$$$$$$$$$$$$$4');
-          console.log(playerList);
+          console.log(playerList.length);
             window.addEventListener('beforeunload', onbeforeunload);  
             joinSession();
             console.log(subscribers);
