@@ -55,6 +55,7 @@ public class AuthController {
     @Operation(summary = "로그아웃 API")
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken) {
+        log.debug("access token ={}", accessToken);
         authService.logout(accessToken);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
