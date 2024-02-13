@@ -2,9 +2,8 @@ import React, { createContext, useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 // import './App.css';
 import io from "socket.io-client";
-import { getUserInfo, setNoLoginUserInfo } from './store/userSlice';
+import { getUserInfo, resetUserInfo, setNoLoginUserInfo } from './store/userSlice';
 import { useDispatch } from 'react-redux';
-
 
 import Lobby from './pages/lobby'
 import Login from './pages/login'
@@ -37,8 +36,10 @@ function App() {
         dispatch(getUserInfo());
       }
     };
-
     loadData();
+    return () => {
+      dispatch(resetUserInfo())
+    }
   }, [dispatch]);
   return (
     <BrowserRouter>

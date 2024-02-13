@@ -5,7 +5,7 @@ import { Outlet, } from "react-router-dom";
 import { SocketContext } from '../App';
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { resetUserInfo } from "../store/userSlice";
+
 const Lobby = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -15,11 +15,6 @@ const Lobby = () => {
       navigate('/');
     });
   })
-  useEffect(() => {
-    return () => {
-      dispatch(resetUserInfo())
-    }
-  },[dispatch]);
 
   return (
     <>
