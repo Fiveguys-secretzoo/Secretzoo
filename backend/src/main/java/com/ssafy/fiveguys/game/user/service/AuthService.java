@@ -130,7 +130,9 @@ public class AuthService {
 
     public void logout(String accessToken) {
         String token = jwtTokenProvider.resolveToken(accessToken);
-        String principal = jwtTokenProvider.getAuthentication(token).getName();
+        log.debug("token = {}", token);
+        String principal = jwtTokenProvider.extractUserId(token);
+        log.debug("principal = {}", principal);
         redisService.saveJwtBlackList(token);
         redisService.deleteRefreshToken(principal);
         userService.deleteRefreshToken(principal);
