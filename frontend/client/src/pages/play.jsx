@@ -134,7 +134,7 @@ const Play = () => {
   const leaveRoom = () => {
     axios.get('https://spring.secretzoo.site/users/leave-room', {
       headers: {
-        "Authorization" : localStorage.getItem('token_type') + ' ' + localStorage.getItem('access_token'),
+        "Authorization" : localStorage.getItem('token_type') + ' ' + localStorage.getItem('access-token'),
       }
     }).then(Response => {
       socket.emit("leaveRoom", roomName, playerSequence);
