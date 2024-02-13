@@ -57,7 +57,6 @@ const SignupForm = () => {
         "password": pass,
         "name": name,
         "email": email,
-        "nickname": "임시닉네임",
       }
     ).then((Response) => {
       console.log(Response.data);
@@ -70,7 +69,7 @@ const SignupForm = () => {
     const [checkIdInput, setCheckIdInput] = useState(id);
     const [idCheckState, setIdCheckState] = useState(false);
     const checkid = (id) => {
-      axios.post('https://spring.secretzoo.site/auth/check/' + id)
+      axios.post('https://spring.secretzoo.site/users/check/' + id)
         .then(Response => {
           Swal.fire({
             "text" : '사용가능한 아이디입니다.',

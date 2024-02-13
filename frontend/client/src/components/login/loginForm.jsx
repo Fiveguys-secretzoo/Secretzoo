@@ -31,10 +31,12 @@ const LoginForm = () => {
         "password": pass,
       }
     ).then(response => {
-      sessionStorage.setItem('authorization', response.headers['authorization']);
-      sessionStorage.setItem('refresh-token', response.headers['refresh-token']);
-      sessionStorage.setItem('user', response.data);
-      navigate('lobby');
+      const expiresIn = response.data['expires_in'] - 600000; 
+      const expiresAt = Date.now() + expiresIn;
+      localStorage.setItem('access-token', response.data['access-token']);
+      localStorage.setItem('refresh-token', response.data['refresh-token']);
+      localStorage.setItem('token_type', response.data['token_type']);
+      localStorage.setItem('expires_at', expiresAt.toString());
     }).catch(e => {
       Swal.fire({
         "text" : '아이디 혹은 비밀번호가 일치하지 않습니다',
@@ -42,6 +44,7 @@ const LoginForm = () => {
       });
       return;
     })
+    navigate('lobby');
   }
 
   const signup = () => {

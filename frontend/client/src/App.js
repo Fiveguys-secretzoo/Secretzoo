@@ -21,6 +21,7 @@ import Page404 from './pages/Page404';
 import SearchPlayer from './pages/searchPlayer';
 import SearchPlayerDetail from './pages/searchPlayerDetail';
 
+
 //노드 서버
 // const socket = io("http://localhost:3001");
 const socket = io('https://secretzoo.site');
@@ -32,8 +33,7 @@ function App() {
 
   useEffect(() => {
     const loadData = async () => {
-      const authorization = localStorage.getItem('authorization');
-      if (authorization) {
+      if (localStorage.getItem('access-token')) {
         dispatch(getUserInfo());
       }
       if(sessionStorage.getItem('noLogin')){

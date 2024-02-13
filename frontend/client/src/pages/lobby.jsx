@@ -6,7 +6,6 @@ import { Outlet, } from "react-router-dom";
 import { SocketContext } from '../App';
 import { useNavigate } from "react-router-dom";
 
-
 const Lobby = () => {
   const navigate = useNavigate();
   const socket = useContext(SocketContext);
