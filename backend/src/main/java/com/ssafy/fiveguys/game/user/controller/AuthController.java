@@ -37,6 +37,7 @@ public class AuthController {
     @Operation(summary = "자체 로그인 API")
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDto loginDto) {
+        log.debug("Login 진행중!!!!!!!!!!!!!!!!!");
         JwtTokenDto jwtTokenDto = authService.login(loginDto);
         return ResponseEntity.status(HttpStatus.OK)
             .body(jwtTokenDto.responseDto());
