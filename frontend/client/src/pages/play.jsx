@@ -508,7 +508,7 @@ const Play = () => {
           if (mySession) {
               mySession.disconnect();
           }
-          session.unpublish();
+          session.unpublish(publisher);
           session.current=undefined;
           setSubscribers([]);
           setMyUserName(sessionStorage.getItem('userNickname'));
