@@ -132,14 +132,8 @@ const Play = () => {
 
   // 방을 나간다. 나는 나간다.
   const leaveRoom = () => {
-    axios.get('https://spring.secretzoo.site/users/leave-room', {
-      headers: {
-        "Authorization" : localStorage.getItem('token_type') + ' ' + localStorage.getItem('access-token'),
-      }
-    }).then(Response => {
-      socket.emit("leaveRoom", roomName, playerSequence);
-      navigate('/lobby')
-    })
+    socket.emit("leaveRoom", roomName, playerSequence);
+    navigate('/lobby')
   }
 
   // 메시지를 처리한다. 그런 함수다.
@@ -411,7 +405,7 @@ const Play = () => {
   const [publisher, setPublisher] = useState(undefined);
   const [subscribers, setSubscribers] = useState([]);
   const session = useRef(undefined);
-  const prevPlayerListRef = useRef({});
+  const prevPlayerListRef = useRef(playerList);
 
   const App = () => {
       useEffect(() => {
@@ -438,7 +432,6 @@ const Play = () => {
 
       const deleteSubscriber = (streamManager) => {
           setSubscribers((prevSubscribers) => prevSubscribers.filter((sub) => sub !== streamManager));
-          console.log("## delete!!!!!!!!!!!");
       };
 
       const joinSession = async () => {
@@ -449,7 +442,6 @@ const Play = () => {
           mySession.on('streamCreated', (event) => {
               const subscriber = mySession.subscribe(event.stream, undefined);
               setSubscribers((prevSubscribers) => [...prevSubscribers, subscriber]);
-              console.log("is created!!!!!!!!!!!!!!");
           });
           
           mySession.on('streamDestroyed', (event) => {

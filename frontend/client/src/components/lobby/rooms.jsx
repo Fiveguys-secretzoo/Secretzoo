@@ -6,7 +6,6 @@ import Swal from 'sweetalert2';
 import { useSelector, useDispatch } from 'react-redux';
 import { initRoomName } from '../../store/playSlice'
 import { getUserInfo } from "../../store/userSlice";
-import axios from "axios";
 const Rooms = () => {
   const navigate = useNavigate();
   // 소켓
@@ -34,86 +33,40 @@ const Rooms = () => {
   const [roomName, setRoomName] = useState('');
   // 방만들기
   const createRoom = () => {
-    const refresh_Token = localStorage.getItem('refresh-token');
-    const access_token = localStorage.getItem('access-token');
-    const token_type = localStorage.getItem('token_type')
-
-    axios.get('https://spring.secretzoo.site/users/check-concurrent-login', {
-      headers: {
-        "Authorization" : token_type + ' ' + access_token,
-        "refresh-token" : refresh_Token,
+    socket.emit('createRoom', roomName, user.userSequence, sessionStorage.getItem('userNickname'), (callback) => {
+      if (callback) {
+        dispatch(initRoomName(roomName));
+        sessionStorage.setItem("roomName", roomName);
+        alert("생성 완료! 게임으로 이동합니다.");
+        navigate("/play");
+      } else {
+        setOpenModal(false);
+        Swal.fire({
+          "text": '이미 있는 방제입니다. 다른방제를 선택해주세요',
+          "confirmButtonColor": '#3085d6'
+        });
       }
-    }).then(Response => {
-      axios.get('https://spring.secretzoo.site/users/join-room', {
-      headers: {
-        "Authorization" : token_type + ' ' + access_token,
-      }
-    }).then(Response => {
-      socket.emit('createRoom', roomName, user.userSequence, sessionStorage.getItem('userNickname'), (callback) => {
-        if (callback) {
-          dispatch(initRoomName(roomName));
-          sessionStorage.setItem("roomName", roomName);
-          alert("생성 완료! 게임으로 이동합니다.");
-          navigate("/play");
-        } else {
-          setOpenModal(false);
-          Swal.fire({
-            "text": '이미 있는 방제입니다. 다른방제를 선택해주세요',
-            "confirmButtonColor": '#3085d6'
-          });
-        }
-      });
-    })
-    }).catch(error => {
-      Swal.fire({
-        "text" : '이미 게임에 참여중입니다.',
-        "confirmButtonColor" : '#3085d6'
-      });
-    }) 
+    });
   }
 
   // 방입장 
   const enterRoom = (name) => {
-    const refresh_Token = localStorage.getItem('refresh-token');
-    const access_token = localStorage.getItem('access-token');
-    const token_type = localStorage.getItem('token_type')
-
-    axios.get('https://spring.secretzoo.site/users/check-concurrent-login', {
-      headers: {
-        "Authorization" : token_type + ' ' + access_token,
-        "refresh-token" : refresh_Token,
+    socket.emit('enterRoom', name, user.userSequence, sessionStorage.getItem('userNickname'), (callback) => {
+      if (callback) {
+        dispatch(initRoomName(name));
+        sessionStorage.setItem("roomName", name);
+        Swal.fire({
+          "text": '입장',
+          "confirmButtonColor": '#3085d6'
+        });
+        navigate("/play");
+      } else {
+        Swal.fire({
+          "text": '방이 가득찼습니다. 다른 방을 이용해주세요.',
+          "confirmButtonColor": '#3085d6'
+        });
       }
-    }).then(Response => {
-      axios.get('https://spring.secretzoo.site/users/join-room', {
-      headers: {
-        "Authorization" : token_type + ' ' + access_token,
-      }
-    }).then(Response => {
-      socket.emit('enterRoom', name, user.userSequence, sessionStorage.getItem('userNickname'), (callback) => {
-        if (callback) {
-          dispatch(initRoomName(name));
-          sessionStorage.setItem("roomName", name);
-          Swal.fire({
-            "text": '입장',
-            "confirmButtonColor": '#3085d6'
-          });
-          axios.get()
-          navigate("/play");
-        } else {
-          Swal.fire({
-            "text": '방이 가득찼습니다. 다른 방을 이용해주세요.',
-            "confirmButtonColor": '#3085d6'
-          });
-        }
-      });
-    })
-    }).catch(error => {
-      Swal.fire({
-        "text" : '이미 게임에 참여중입니다.',
-        "confirmButtonColor" : '#3085d6'
-      });
-    })  
-    
+    });
   }
 
   // 필터 
