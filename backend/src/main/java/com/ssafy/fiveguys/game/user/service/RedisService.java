@@ -56,7 +56,7 @@ public class RedisService {
     public void saveJwtBlackList(String accessToken) {
         long expirationTime = jwtTokenProvider.getTokenExpiration(accessToken);
         jwtBlackListRedisTemplate.opsForValue()
-            .set(BL_PREFIX + accessToken + SUFFIX, "logout", expirationTime,
+            .set(BL_PREFIX + jwtTokenProvider.resolveToken(accessToken) + SUFFIX, "logout", expirationTime,
                 TimeUnit.MILLISECONDS);
     }
 
