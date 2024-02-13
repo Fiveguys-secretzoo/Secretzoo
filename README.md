@@ -50,7 +50,7 @@
         </td>
         <td>
         0️⃣ 👨🏻‍💻Back-end<br>
-        1️⃣ 스프링 시큐리티 담당 <br>
+        1️⃣ Spring Security 담당(JWT, Oauth2) <br>
         2️⃣ 유저 API 개발 <br>
         3️⃣ 구글 / 네이버 / 카카오 소셜 로그인 <br>
         <br/>
