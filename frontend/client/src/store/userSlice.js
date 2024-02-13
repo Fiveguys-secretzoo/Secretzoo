@@ -40,23 +40,23 @@ axiosInstance.interceptors.request.use(async config => {
   //   }
   //   return;
   // }
-  // axios.get('https://spring.secretzoo.site/users/check-concurrent-login', {} , {
-  //   headers: {
-  //     "Authorization" : localStorage.getItem('token_type') + ' ' + localStorage.getItem('access-token'),
-  //     "refresh-token" : localStorage.getItem('refresh-token'),
-  //   }
-  // }).then(Response => {
-  //   const access_token = localStorage.getItem('access-token');
-  //   config.headers['Authorization'] = access_token ? localStorage.getItem('token_type') + ' ' + access_token : '';
-  //   return config;
-  // }).catch(error => {
-  //   Swal.fire({
-  //     "text" : '유효하지 않은 접근입니다.',
-  //     "confirmButtonColor" : '#3085d6'
-  //   });
-  //   // localStorage.clear();
-  //   // window.location.href = 'https://secretzoo.site';
-  // })
+  axios.get('https://spring.secretzoo.site/users/check-concurrent-login', {} , {
+    headers: {
+      "Authorization" : localStorage.getItem('token_type') + ' ' + localStorage.getItem('access-token'),
+      "refresh-token" : localStorage.getItem('refresh-token'),
+    }
+  }).then(Response => {
+    const access_token = localStorage.getItem('access-token');
+    config.defaults.headers['Authorization'] = access_token ? localStorage.getItem('token_type') + ' ' + access_token : '';
+    return config;
+  }).catch(error => {
+    Swal.fire({
+      "text" : '유효하지 않은 접근입니다.',
+      "confirmButtonColor" : '#3085d6'
+    });
+    // localStorage.clear();
+    // window.location.href = 'https://secretzoo.site';
+  })
   axiosInstance.defaults.headers.common['Authorization'] = localStorage.getItem('token_type') + ' ' + localStorage.getItem('access-token');
   return config;
 });
