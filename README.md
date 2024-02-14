@@ -2,6 +2,7 @@
 
 ### SSAFY 10기 공통 프로젝트 서울 4반 🍔FIVE GUYS🍔
 ![secretzoo](/uploads/8a1558bcc2bc4e723a5e629aac9307f3/secretzoo.jpg)
+![secretzoo2](/uploads/3b6120aea5c0f7d127fffc93ef97da09/secretzoo2.jpg)
 #### 주제: 🎮 바퀴벌레 포커 온라인 리메이크 SECRET ZOO 🐯
 <br/>
 
