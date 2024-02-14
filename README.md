@@ -86,6 +86,7 @@
         <td>
         0️⃣ 👨🏻Front-end<br> 
         1️⃣ UI/UX 담당 <br>
+        2️⃣ 메인 페이지 구현 <br>
         <br/>
         </td>
     </tr>
