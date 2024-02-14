@@ -106,16 +106,18 @@ const MyInfo = () => {
     const [changeNickname, setChangeNickname] = useState('');
     return (
       <Modal show={openNicknameModal} size="md" onClose={() => setOpenNicknameModal(false)}>
-        <Modal.Body>
-          <Label>바꿀 닉네임</Label>
-          <TextInput value={changeNickname} onChange={(e) => setChangeNickname(e.target.value)}></TextInput>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={() => { updateNickname(changeNickname); setOpenNicknameModal(false) }}>수정</Button>
-          <Button color="gray" onClick={() => setOpenNicknameModal(false)}>
-            취소
-          </Button>
-        </Modal.Footer>
+        <form action="#" onSubmit={e => e.preventDefault()}>
+          <Modal.Body>
+            <Label>바꿀 닉네임</Label>
+            <TextInput value={changeNickname} onChange={(e) => setChangeNickname(e.target.value)}></TextInput>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button type='submit' onClick={(e) => {updateNickname(changeNickname); setOpenNicknameModal(false) }}>수정</Button>
+            <Button color="gray" onClick={() => setOpenNicknameModal(false)}>
+              취소
+            </Button>
+          </Modal.Footer>
+        </form>
       </Modal>
     )
   }
@@ -147,16 +149,18 @@ const MyInfo = () => {
     const [nowpassword, setNowpassword] = useState('');
     return (
       <Modal show={openCheckPasswordModal} size="md" onClose={() => setOpenCheckPasswordModal(false)}>
-        <Modal.Body>
-          <Label>비밀번호</Label>
-          <TextInput type='password' value={nowpassword} onChange={(e) => setNowpassword(e.target.value)}></TextInput>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={() => { checkPassword(nowpassword); setOpenCheckPasswordModal(false); setNowpassword('') }}>확인</Button>
-          <Button color="gray" onClick={() => setOpenCheckPasswordModal(false)}>
-            취소
-          </Button>
-        </Modal.Footer>
+        <form action="#" onSubmit={e => e.preventDefault()}>
+          <Modal.Body>
+            <Label>비밀번호</Label>
+            <TextInput type='password' value={nowpassword} onChange={(e) => setNowpassword(e.target.value)}></TextInput>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button type='submit' onClick={() => { checkPassword(nowpassword); setOpenCheckPasswordModal(false); setNowpassword('') }}>확인</Button>
+            <Button color="gray" onClick={() => setOpenCheckPasswordModal(false)}>
+              취소
+            </Button>
+          </Modal.Footer>
+        </form>
       </Modal>
     )
   };
@@ -166,18 +170,20 @@ const MyInfo = () => {
     const [changePasswordCheck, setChangePasswordCheck] = useState('');
     return (
       <Modal show={openUpdatePasswordModal} size="md" onClose={() => setOpenUpdatePasswordModal(false)}>
-        <Modal.Body>
-          <Label>바꿀 비밀번호</Label>
-          <TextInput value={changePassword} onChange={(e) => setChangePassword(e.target.value)} type='password'></TextInput>
-          <Label>비밀번호 확인</Label>
-          <TextInput value={changePasswordCheck} onChange={(e) => setChangePasswordCheck(e.target.value)} type='password'></TextInput>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={() => updatePassword(changePassword, changePasswordCheck) }>수정</Button>
-          <Button color="gray" onClick={() => { setOpenUpdatePasswordModal(false); setPasswordCheckState(false) }}>
-            취소
-          </Button>
-        </Modal.Footer>
+        <form action="#" onSubmit={e => e.preventDefault()}>
+          <Modal.Body>
+            <Label>바꿀 비밀번호</Label>
+            <TextInput value={changePassword} onChange={(e) => setChangePassword(e.target.value)} type='password'></TextInput>
+            <Label>비밀번호 확인</Label>
+            <TextInput value={changePasswordCheck} onChange={(e) => setChangePasswordCheck(e.target.value)} type='password'></TextInput>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button type='submit' onClick={() => updatePassword(changePassword, changePasswordCheck) }>수정</Button>
+            <Button color="gray" onClick={() => { setOpenUpdatePasswordModal(false); setPasswordCheckState(false) }}>
+              취소
+            </Button>
+          </Modal.Footer>
+        </form>
       </Modal>
     )
   };

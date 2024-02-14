@@ -167,16 +167,18 @@ const Rooms = () => {
       </div>
       {/* 모달 */}
       <Modal show={openModal} size="md" onClose={() => setOpenModal(false)}>
+        <form action="#" onSubmit={e => e.preventDefault()}>
         <Modal.Body>
           <Label>방 제목</Label>
           <TextInput value={roomName} onChange={(e) => setRoomName(e.target.value)}></TextInput>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={() => createRoom()}>방 만들기</Button>
+          <Button type="submit" onClick={() => createRoom()}>방 만들기</Button>
           <Button color="gray" onClick={() => setOpenModal(false)}>
             취소
           </Button>
         </Modal.Footer>
+        </form>
       </Modal>
     </>
   );

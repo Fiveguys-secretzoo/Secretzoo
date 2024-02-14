@@ -330,7 +330,7 @@ const Play = () => {
 
 
   const sendMessage = () => {
-    socket.emit('chat message', input, localStorage.getItem(''));
+    socket.emit('chat message', input, sessionStorage.getItem(''));
     setInput('');
   };
 
