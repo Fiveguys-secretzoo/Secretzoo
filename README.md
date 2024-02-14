@@ -13,7 +13,7 @@
 ##### 6️⃣ [개발 회고](#vi-개발-회고)
 <br/>
 
-# Ⅰ. 서비스 소개
+# Ⅰ. 서비스 소개 🎈
 
 ### 📌 Overview
 #### "놀랄 만큼 쉽고 믿기 힘들 만큼 재밌습니다."
@@ -92,7 +92,7 @@
 <br>
 
 
-# Ⅲ. 팀원 소개 및 역할
+# Ⅲ. 팀원 소개 및 역할 (🍔FIVE GUYS🍔)
 <table align=center>
 <div align=center> 
     <tr align=center>
