@@ -1,5 +1,5 @@
 import PlayerContainer from './playerContainer';
-
+import './playerView.css';
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Lottie from 'react-lottie';
@@ -8,11 +8,11 @@ import blackCircle from '../../assets/lottie/Animation - circle.json'
 import circle from '../../assets/lottie/Animation - black.json'
 import '../../style/playerView.css'
 
-const PlayerView = ({ roomName, psq, key, pn = "빈 플레이어", activate = false, setCards, animalList, video = "" }) => {
+const PlayerView = ({ roomName, psq, key, pn="빈 플레이어", activate = false, setCards, animalList, video="",count }) => {
 
   const playerContainer = PlayerContainer();
   const { dragOver, dragEnterHandler, dropHandler } = playerContainer;
-
+  const c = count;
   const nowTurnPlayer = useSelector(state => state.plays.nowTurn);
   const turnedPlayer = useSelector(state => state.plays.game.tp);
   const players = useSelector(state => state.plays.players);
@@ -51,7 +51,7 @@ const PlayerView = ({ roomName, psq, key, pn = "빈 플레이어", activate = fa
 
   return (
     <>
-      <div className="bg-white rounded w-96 h-60 m-2 flex flex-col p-2 mx-5"
+      <div className={(c===6)?`bg-white border-4 border-red-700 rounded w-96 h-52 m-2 item item${c}`:`bg-white rounded w-96 h-52 m-2 item item${c}`}
         key={key}
         onDragStart={(e) => e.preventDefault()}
         onDragEnter={(e) => dragEnterHandler(e, psq)}
@@ -59,12 +59,12 @@ const PlayerView = ({ roomName, psq, key, pn = "빈 플레이어", activate = fa
         onDrop={(e) => dropHandler(e, psq, setCards)}
       >
         <div>
-          <p className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-            {pn}
+          <p className="text-2xl font-bold tracking-tight text-gray-900 dark:text-blue text-center">
+            {(c===6)?'YOUR VIDEO!':pn} 
           </p>
         </div>
         <div className="flex flex-1">
-          <div className="w-2/3 pb-5">
+          <div className="w-2/3 h-2/3 pb-5">
             {video}
           </div>
           <div className="w-1/3">
