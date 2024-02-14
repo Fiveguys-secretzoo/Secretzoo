@@ -1,8 +1,7 @@
 # 🐯SECRET ZOO (온라인 화상 블러핑 카드 게임🎮)
 
 ### SSAFY 10기 공통 프로젝트 서울 4반 🍔FIVE GUYS🍔
-![secretzoo](/uploads/8a1558bcc2bc4e723a5e629aac9307f3/secretzoo.jpg)
-![secretzoo2](/uploads/3b6120aea5c0f7d127fffc93ef97da09/secretzoo2.jpg)
+
 #### 주제: 🎮 바퀴벌레 포커 온라인 리메이크 SECRET ZOO 🐯
 <br/>
 
@@ -13,8 +12,8 @@
 <div align=center> 
     <tr align=center>
         <td style="min-width: 250px;">
-            <a href="https://github.com/">
-              <img src="https://avatars.githubusercontent.com/u" width="100">
+            <a href="https://github.com/hyeounguk2">
+              <img src="https://avatars.githubusercontent.com/u/80465980?v=4" width="100">
               <br />
               <b>전형욱</b>
             </a> 
@@ -63,8 +62,8 @@
 <div align=center> 
     <tr align=center>
         <td style="min-width: 250px;">
-            <a href="https://github.com/">
-              <img src="https://avatars.githubusercontent.com/u" width="100">
+            <a href="https://github.com/gwanu-dev">
+              <img src="https://avatars.githubusercontent.com/u/26521521?v=4" width="100">
               <br />
               <b>김관우</b>
             </a> 
