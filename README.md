@@ -91,7 +91,8 @@
 <br>
 <br>
 
-<div id="3"/>
+
+<div id="3"></div>
 
 ## 3️⃣ 팀원 소개 및 역할
 <table align=center>
