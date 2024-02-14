@@ -14,7 +14,7 @@ async function main() {
   const app = express();
 
   const roomMethods = roomSocketMethods();
-  const playMethods = playSocketMethods();
+  const playMethods = playSocketMethods();  
   const {
     sendRoomInfo,
     createRoom,
@@ -87,7 +87,6 @@ async function main() {
     cardBluffSelect(socket, io, rooms);
     passingTurnStart(socket, io, rooms);
     cardReveal(socket, io, rooms);
-    checkLoser(socket, io, rooms);
 
     // test codes
     testRoomsInfo(socket, io, rooms);
