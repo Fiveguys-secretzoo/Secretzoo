@@ -2,8 +2,13 @@ import PlayerContainer from './playerContainer';
 
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
+import Lottie from 'react-lottie';
 
-const PlayerView = ({ roomName, psq, key, pn="빈 플레이어", activate = false, setCards, animalList, video="" }) => {
+import blackCircle from '../../assets/lottie/Animation - circle.json'
+import circle from '../../assets/lottie/Animation - black.json'
+import '../../style/playerView.css'
+
+const PlayerView = ({ roomName, psq, key, pn = "빈 플레이어", activate = false, setCards, animalList, video = "" }) => {
 
   const playerContainer = PlayerContainer();
   const { dragOver, dragEnterHandler, dropHandler } = playerContainer;
@@ -26,20 +31,36 @@ const PlayerView = ({ roomName, psq, key, pn="빈 플레이어", activate = fals
     console.log(penalty);
   }, [psq, players, players?.[psq]?.pen]);
 
+  const defaultOption = {
+    loop: true,
+    autoplay: true,
+    animationData: circle,
+    rendererSettings: {
+      preserveAspectRatio: 'xMidYMid slice'
+    },
+  }
+  const penaltyOption = {
+    loop: true,
+    autoplay: true,
+    animationData: blackCircle,
+    rendererSettings: {
+      preserveAspectRatio: 'xMidYMid slice'
+    },
+  }
   // TODO 위에 올렸을 때 가능하냐 안하냐에 따라서 효과를 다르게 주는 것...!!
 
   return (
     <>
       <div className="bg-white rounded w-96 h-60 m-2 flex flex-col p-2 mx-5"
         key={key}
-        onDragStart={(e)=>e.preventDefault()}
+        onDragStart={(e) => e.preventDefault()}
         onDragEnter={(e) => dragEnterHandler(e, psq)}
         onDragOver={(e) => dragOver(e, psq)}
         onDrop={(e) => dropHandler(e, psq, setCards)}
       >
         <div>
           <p className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-            {pn} 
+            {pn}
           </p>
         </div>
         <div className="flex flex-1">
@@ -47,12 +68,33 @@ const PlayerView = ({ roomName, psq, key, pn="빈 플레이어", activate = fals
             {video}
           </div>
           <div className="w-1/3">
-            {penalty.map((key, value) =>(
+            {penalty.map((key, value) => ( /*value : 동물 index */
               <>
-                {animalList[value]} : {key} 
-                {value % 2 === 1 ? <br></br>: <></>}
+                <div className="animationContainer">
+                  {Array.from({ length: key }, (_, i) => (
+                    <div className="animation" key={i}>
+                      <Lottie
+                        options={defaultOption}
+                        height={20}
+                        width={20}
+                        isClickToPauseDisabled={true}
+                      />
+                    </div>
+                  ))}
+                  {Array.from({ length: 4 - key }, (_, i) => (
+                    <div className="animation" key={i}>
+                      <Lottie
+                        options={penaltyOption}
+                        height={20}
+                        width={20}
+                        isClickToPauseDisabled={true}
+                      />
+                    </div>
+                  ))}
+                </div>
               </>
-            ))} 
+            ))}
+
           </div>
         </div>
       </div>

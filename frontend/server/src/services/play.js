@@ -286,14 +286,14 @@ const playSocketMethods = () => {
           rewardData[animal] = {
             "animalId": rooms[roomName].ps[player].sc[animal].animalId,
             "animalScore": {
-              "attackSuccess": rooms[roomName].ps[player].sc[animal].animalScore.atks ,
-              "attackFail": rooms[roomName].ps[player].sc[animal].animalScore.atkf ,
-              "defenseSuccess": rooms[roomName].ps[player].sc[animal].animalScore.defs ,
-              "defenseFail": rooms[roomName].ps[player].sc[animal].animalScore.deff ,
-              "trust": rooms[roomName].ps[player].sc[animal].animalScore.deft ,
-              "distrust": rooms[roomName].ps[player].sc[animal].animalScore.defd ,
-              "truth": rooms[roomName].ps[player].sc[animal].animalScore.atkt ,
-              "lie": rooms[roomName].ps[player].sc[animal].animalScore.atkl ,
+              "attackSuccess": rooms[roomName].ps[player].sc[animal].animalScore.atks,
+              "attackFail": rooms[roomName].ps[player].sc[animal].animalScore.atkf,
+              "defenseSuccess": rooms[roomName].ps[player].sc[animal].animalScore.defs,
+              "defenseFail": rooms[roomName].ps[player].sc[animal].animalScore.deff,
+              "trust": rooms[roomName].ps[player].sc[animal].animalScore.deft,
+              "distrust": rooms[roomName].ps[player].sc[animal].animalScore.defd,
+              "truth": rooms[roomName].ps[player].sc[animal].animalScore.atkt,
+              "lie": rooms[roomName].ps[player].sc[animal].animalScore.atkl,
             }
           };
         }
@@ -311,8 +311,8 @@ const playSocketMethods = () => {
           'userSequence': Number(player),
           'round': rooms[roomName].ps[player].sc.r,
           'turn': rooms[roomName].ps[player].sc.t,
-          'attackAttempt': rooms[roomName].ps[player].sc.atka ,
-          'attackSuccess': rooms[roomName].ps[player].sc.atks ,
+          'attackAttempt': rooms[roomName].ps[player].sc.atka,
+          'attackSuccess': rooms[roomName].ps[player].sc.atks,
           'defenseAttempt': rooms[roomName].ps[player].sc.defa,
           'defenseSuccess': rooms[roomName].ps[player].sc.defs,
           'passCount': rooms[roomName].ps[player].sc.p,
@@ -369,14 +369,14 @@ const playSocketMethods = () => {
   const checkLoser = (socket, io, rooms, roomName) => {
     for (let player in rooms[roomName].ps) {
       for (let k = 0; k < 8; k++) {
-        if (rooms[roomName].ps[player].pen[k] === 4) {
-          setTimeout( () => {
+        if (rooms[roomName].ps[player].pen[k] === 4 || rooms[roomName].ps[rooms[roomName].nt].hand.length === 0) {
+          setTimeout(() => {
             sendScore(rooms, roomName);
             // 방 정보 초기화입니다.
             initRoomInfo(rooms, roomName);
             io.to(roomName).emit("gameEnd", player);
             return;
-          }, 2700)
+          }, 2500)
           // 점수 전송
         }
       }

@@ -1,0 +1,10 @@
+.animationContainer {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.animation {
+  flex: 1 0 21%;
+  /* flex-grow | flex-shrink | flex-basis */
+  margin: 1%;
+}
