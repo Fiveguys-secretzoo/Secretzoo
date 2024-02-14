@@ -275,7 +275,7 @@ const playSocketMethods = () => {
   // 서버에 스코어 전송 
   const sendScore = (rooms, roomName) => {
     for (let player in rooms[roomName].ps) {
-      if (true || player.length < 10) {
+      if (player.length < 10) {
         let rewardData = {
           'userSequence': Number(player),
           'round': rooms[roomName].ps[player].sc.r,
