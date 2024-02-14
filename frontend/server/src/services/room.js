@@ -135,6 +135,18 @@ const removePlayer = (io, socket, rooms, roomName, psq) => {
   console.log(rooms[roomName]);
   console.log(roomName);
   delete rooms[roomName].ps[psq];
+  if (rooms[roomName].adm === psq) {
+    for (let player in rooms[roomName].ps) {
+      rooms[roomName].adm = player;
+      break;
+    }
+  }
+  if (rooms[roomName].nt === psq) {
+    for (let player in rooms[roomName].ps) {
+      rooms[roomName].nt = player;
+      break;
+    }
+  }
   rooms[roomName].pc -= 1;
   io.to(roomName).emit('playerLeave', rooms[roomName].ps);
   if (rooms[roomName].pc === 0) {
@@ -196,6 +208,7 @@ const roomSocketMethods = () => {
 
       const matchingKey = Object.keys(rooms[roomName].ps).find(key => rooms[roomName].ps[key].psq === psq);
       if (matchingKey === undefined) {
+        
         // 인원수 체크
         if (rooms[roomName] && rooms[roomName].pc >= 6) {
           callback(false);

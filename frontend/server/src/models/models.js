@@ -4,7 +4,7 @@
 const models = () => {
   // 동물 이름을 미리 저장
   const animals = ['tiger', 'cat', 'dog', 'deer', 'pig', 'fox', 'sheep', 'whale'];
-  const animalIds = ['tiger', 'cat', 'dog', 'deer', 'pig', 'fox', 'sheep', 'whale'];
+  const animalIds = ['TIGER01', 'CAT02', 'DOG03', 'DEER04', 'PIG05', 'FOX06', 'SHEEP07', 'WHALE08'];
   // 동물 마다 score 유형
   const score = {
     atks: 0, // attack Success
@@ -26,7 +26,7 @@ const models = () => {
     let hand = []; // hand 
     let pen = [0, 0, 0, 0, 0, 0, 0, 0]; //penalty
     let sc = {
-      'r': 0, // round Count
+      'r': 1, // round Count
       't': 0, // turn Count 
       'p': 0, // pass Count
       'atka': 0, // attack Attempt
@@ -35,8 +35,10 @@ const models = () => {
       'defs': 0, // defence Success
     }
 
+    let count = 0;
     for (let animal of animals) {
-      sc[animal] = { ...score };
+      sc[animal] = { 'animalScore': { ...score } };
+      sc[animal] = { ...sc[animal], 'animalId': animalIds[count++] }
     }
 
     return {
@@ -65,7 +67,7 @@ const models = () => {
     'game': { // onBoard
       // 0 : 대기, 1 : 시작, 2 : 주는 턴, 3 : 받는 턴, 4: 넘기는 턴 
       'state': 0, // status -> state
-      'fr': '', // from 
+      'from': '', // from 
       'to': '', // to 
       'bc': '', // cardBluff
       'c': '', // card

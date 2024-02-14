@@ -8,7 +8,7 @@ const DropSelectMyTurn = ({ animalList, roomName, psq }) => {
 
   const socket = useContext(SocketContext);
   const dispatch = useDispatch();
-  
+
   const cardBluffHandler = (value) => {
     dispatch(changePlayState(3));
     console.log(`[cardBluff] value [${value}]`)

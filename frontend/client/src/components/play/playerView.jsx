@@ -1,11 +1,9 @@
-import { Card } from 'flowbite-react'
 import PlayerContainer from './playerContainer';
 
-// import App from "../../pages/openvidu/App";
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-const PlayerView = ({ roomName, psq, key, pn, activate = false, setCards, animalList, video }) => {
+const PlayerView = ({ roomName, psq, key, pn="빈 플레이어", activate = false, setCards, animalList, video="" }) => {
 
   const playerContainer = PlayerContainer();
   const { dragOver, dragEnterHandler, dropHandler } = playerContainer;
@@ -32,34 +30,41 @@ const PlayerView = ({ roomName, psq, key, pn, activate = false, setCards, animal
 
   return (
     <>
-      <div className="bg-white rounded w-[30%] m-2"
+      <div className="bg-white rounded w-96 h-60 m-2 flex flex-col p-2 mx-5"
         key={key}
+        onDragStart={(e)=>e.preventDefault()}
         onDragEnter={(e) => dragEnterHandler(e, psq)}
         onDragOver={(e) => dragOver(e, psq)}
         onDrop={(e) => dropHandler(e, psq, setCards)}
       >
-        <p className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-          {pn} 
-        </p>
-        {penalty.map((key, value) =>(
-          <>
-            {animalList[value]} : {key} 
-            {value % 2 === 1 ? <br></br>: <></>}
-          </>
-          
-        ))} 
-        지금 턴 지난 플레이어 <br></br>
-        {turnedPlayer.map((value) => { return `[${value}]` })}
-        지금 턴 플레이어 <br></br>
-        [{nowTurnPlayer}]
-        {(psq === sessionStorage.getItem('userName')) 
-          // <App psq={psq} />
-        }
-        <br></br>
-        {video}
+        <div>
+          <p className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+            {pn} 
+          </p>
+        </div>
+        <div className="flex flex-1">
+          <div className="w-2/3 pb-5">
+            {video}
+          </div>
+          <div className="w-1/3">
+            {penalty.map((key, value) =>(
+              <>
+                {animalList[value]} : {key} 
+                {value % 2 === 1 ? <br></br>: <></>}
+              </>
+            ))} 
+          </div>
+        </div>
       </div>
     </>
   );
+  // 지금 턴 지난 플레이어 <br></br>
+  // {turnedPlayer.map((value) => { return `[${value}]` })}
+  // 지금 턴 플레이어 <br></br>
+  // [{nowTurnPlayer}]
+  // {(psq === sessionStorage.getItem('userName')) &&
+  //   <App psq={psq} />
+  // }
 }
 
 export default PlayerView;
