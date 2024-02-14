@@ -100,39 +100,39 @@
             <a href="https://github.com/hyeounguk2">
               <img src="https://avatars.githubusercontent.com/u/80465980?v=4" width="100">
               <br />
-              <b>전형욱</b>
+              <b>👨🏻전형욱👑</b>
             </a> 
         </td>
      <td style="min-width: 250px;">
             <a href="https://github.com/gwanu-dev">
               <img src="https://avatars.githubusercontent.com/u/26521521?v=4" width="100">
               <br />
-              <b>김관우</b>
+              <b>👨🏻김관우</b>
             </a> 
         </td>
         <td style="min-width: 250px;">
             <a href="https://github.com/kimjungkwang1">
               <img src="https://avatars.githubusercontent.com/u/134460604?v=4" width="100">
               <br />
-              <b>김중광</b>
+              <b>👨🏻김중광</b>
             </a> 
         </td>
     </tr>
     <tr align="left">
         <td>
-        0️⃣ 👨🏻Front-end(팀장👑)<br> 
+        0️⃣ Front-end(팀장)<br> 
         1️⃣ Web-RTC(Openvidu) 전담<br>
         2️⃣ 게임 플레이 화면 구현
         <br/>
         </td>
        <td>
-        0️⃣ 👨🏻Front-end<br> 
+        0️⃣ Front-end<br> 
         1️⃣ 게임 플레이 구현<br>
         2️⃣ 프론트 소켓 서버 담당 <br>
         <br/>
         </td>
         <td>
-        0️⃣ 👨🏻Front-end<br> 
+        0️⃣ Front-end<br> 
         1️⃣ UI/UX 담당 <br>
         2️⃣ 메인 페이지 구현 <br>
         <br/>
@@ -148,20 +148,20 @@
             <a href="https://github.com/hyunsoo10">
               <img src="https://avatars.githubusercontent.com/u/139304756?v=4" width="100">
               <br />
-              <b>조현수</b>
+              <b>👨🏻조현수</b>
             </a> 
         </td>
         <td style="min-width: 250px;">
             <a href="https://github.com/jaeyun1723">
               <img src="https://avatars.githubusercontent.com/u/84389492?v=4" width="100">
               <br />
-              <b>김재윤</b>
+              <b>👨🏻김재윤</b>
             </a>
         </td>
     </tr>
     <tr align="left">
           <td>
-        0️⃣ 👨🏻Back-end <br> 
+        0️⃣ Back-end <br> 
         1️⃣ 인프라 담당<br>
         2️⃣ 게임 Ranking API 개발, QA <br>
         3️⃣ 플레이어 Rewards API 개발 <br>
