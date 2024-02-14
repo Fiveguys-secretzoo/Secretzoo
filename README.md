@@ -219,21 +219,28 @@
 <img src="https://img.shields.io/badge/Gradle-02303A.svg?style=for-the-badge&logo=Gradle&logoColor=white"> 
 
 #### 상세 스택
-    Spring boot 3.2.1
-    Spring-boot-starter-data-jpa
-    Spring security 6.2.1
-    Lombok 1.18.30
-    Azul-17
-    MySQL 5.7.43
-    Redis 7.0.4
-    Swagger3
-    Gradle
+    spring boot 3.2.1
+    spring-boot-starter-data-jpa
+    spring security 6.2.1
+    lombok 1.18.30
+    azul-17
+    mysql 5.7.43
+    redis 7.0.4
+    swagger3
+    gradle
 <br/>
 
 ## 🖱 CI/CD
 <img src="https://img.shields.io/badge/jenkins-%232C5263.svg?style=for-the-badge&logo=jenkins&logoColor=white">
 <img src="https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white">
 <img src="https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white">
+![EC2](https://img.shields.io/badge/EC2-232F3E?style=for-the-badge&logo=Amazon-ec2&logoColor=white)
+
+#### 상세 스택
+    docker 25.0.1
+    docker-compose 2.21.0
+    jenkins LTS 2.401.1
+ 
 <br>
 
 ## 🎨 UI/UX
@@ -241,11 +248,15 @@
 <br>
  
 ## 👨‍👩‍👧 협업 툴
-<img src="https://img.shields.io/badge/gitlab-%23181717.svg?style=for-the-badge&logo=gitlab&logoColor=white">
 <img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white">
+<img src="https://img.shields.io/badge/gitlab-%23181717.svg?style=for-the-badge&logo=gitlab&logoColor=white">
+<br>
 <img src="https://img.shields.io/badge/jira-%230A0FFF.svg?style=for-the-badge&logo=jira&logoColor=white">
+![Notion](https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=Notion&logoColor=white)
+<br>
 ![Mattermost](https://img.shields.io/badge/Mattermost-0072C6?style=for-the-badge&logo=mattermost&logoColor=white)
 <br>
+
 
 </div>
 
