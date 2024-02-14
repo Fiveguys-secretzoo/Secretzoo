@@ -67,7 +67,7 @@
 
 
 
-# 2️⃣ 서비스 화면🎬
+# Ⅱ. 서비스 화면🎬
 
 #### 회원가입
 
@@ -92,7 +92,7 @@
 <br>
 
 
-# 3️⃣ 팀원 소개 및 역할
+# Ⅲ. 팀원 소개 및 역할
 <table align=center>
 <div align=center> 
     <tr align=center>
@@ -181,7 +181,7 @@
 <br/>
 <br/>
 
-# 4️⃣ 개발 환경 🖥 
+# Ⅳ. 개발 환경 🖥 
 ## 🖱 Frontend
 <img src="https://img.shields.io/badge/JavaScript(es6)-F7DF1E.svg?style=for-the-badge&logo=javascript&logoColor=black">
 ![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-007ACC.svg?&style=for-the-badge&logo=Visual%20Studio%20Code&logoColor=white) <br/>
@@ -266,7 +266,7 @@
 <br>
 <br>
 
-## 5️⃣ 프로젝트 산출물
+# V. 프로젝트 산출물
 
 
 ### 📄ERD
@@ -280,7 +280,7 @@
 
 
 
-## 6️⃣ 개발 회고
+# VI. 개발 회고
 
 ### 🔲개발 컨벤션
 
