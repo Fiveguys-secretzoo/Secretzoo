@@ -282,7 +282,19 @@ const playSocketMethods = () => {
         };
 
         for (let animal of animals) {
-          rewardData[animal] = { ...rooms[roomName].ps[player].sc[animal] }
+          rewardData[animal] = {
+            "animalId": rooms[roomName].ps[player].sc[animal].animalId,
+            "animalScore": {
+              "attackSuccess": rooms[roomName].ps[player].sc[animal].animalScore.atks,
+              "attackFail": rooms[roomName].ps[player].sc[animal].animalScore.atkf,
+              "defenseSuccess": rooms[roomName].ps[player].sc[animal].animalScore.defs,
+              "defenseFail": rooms[roomName].ps[player].sc[animal].animalScore.deff,
+              "trust": rooms[roomName].ps[player].sc[animal].animalScore.deft,
+              "distrust": rooms[roomName].ps[player].sc[animal].animalScore.defd,
+              "truth": rooms[roomName].ps[player].sc[animal].animalScore.atkt,
+              "lie": rooms[roomName].ps[player].sc[animal].animalScore.atkl
+            }
+          };
         }
 
         console.log(`##### [sendScore] reward sends`)
