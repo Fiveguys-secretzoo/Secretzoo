@@ -37,20 +37,20 @@
     <tr align="left">
         <td>
         0️⃣ 👨🏻‍💻팀장<br> 
-        1️⃣ Openvidu 담당 <br>
-        2️⃣ Openvidu 게임플레이 화면 구현
+        1️⃣ Web-RTC(Openvidu) 전담<br>
+        2️⃣ 게임 플레이 화면 구현
         <br/>
         </td>
         <td>
         0️⃣ 👨🏻‍💻Back-end <br> 
-        1️⃣ 인프라 담당 <br>
-        2️⃣ 게임 Ranking API 개발 <br>
+        1️⃣ 인프라 전담<br>
+        2️⃣ 게임 Ranking API 개발, QA <br>
         3️⃣ 플레이어 Rewards API 개발 <br>
         <br/>
         </td>
         <td>
         0️⃣ 👨🏻‍💻Back-end<br>
-        1️⃣ Spring Security 담당(JWT, Oauth2.0) <br>
+        1️⃣ Spring Security 전담(JWT, Oauth2.0) <br>
         2️⃣ 유저 API 개발, QA <br>
         3️⃣ 구글 / 네이버 / 카카오 소셜 로그인 <br>
         <br/>
@@ -80,7 +80,8 @@
     <tr align="left">
         <td>
         0️⃣ 👨🏻‍💻Front-end<br> 
-        1️⃣ 게임 플레이 구현 담당<br>
+        1️⃣ 게임 플레이 구현<br>
+        2️⃣ 프론트 소켓 서버 담당 <br>
         <br/>
         </td>
         <td>
