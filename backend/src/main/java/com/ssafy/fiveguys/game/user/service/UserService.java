@@ -155,8 +155,13 @@ public class UserService {
 
         String userId = jwtTokenProvider.extractUserId(requestAccessToken);
         log.debug("user id= {}", userId);
-
-        if (!redisService.hasRefreshToken(userId)) {
+        if (redisService.hasRefreshToken(userId)) {
+            if (!requestRefreshToken.equals(redisService.getRefreshToken(userId))) {
+                log.error("refresh token does not match in Redis.");
+                redisService.saveJwtBlackList(requestAccessToken);
+                throw new RefreshTokenException("Refresh Token 값이 일치하지 않습니다.");
+            }
+        } else {
             User user = userRepositoy.findByUserId(userId).orElseThrow(
                 UserNotFoundException::new);
             String refreshToken = user.getRefreshToken();
@@ -164,6 +169,7 @@ public class UserService {
             log.debug("detectConcurrentUser.refreshToken = {}", refreshToken);
             if (!refreshToken.equals(requestRefreshToken)) {
                 log.error("refresh token does not match in Database.");
+                redisService.saveJwtBlackList(requestAccessToken);
                 throw new RefreshTokenException("Refresh Token 값이 일치하지 않습니다.");
             }
         }
