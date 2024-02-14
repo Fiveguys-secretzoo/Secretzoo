@@ -61,7 +61,7 @@ const Rooms = () => {
   // 방입장 
   const enterRoom = (name, password) => {
     socket.emit('enterRoom', name, password, user.userSequence, sessionStorage.getItem('userNickname'), (callback) => {
-      if (callback) {
+      if (callback === 0) {
         dispatch(initRoomName(name));
         sessionStorage.setItem("roomName", name);
         Swal.fire({
@@ -70,7 +70,7 @@ const Rooms = () => {
           'showConfirmButton': false,
         });
         navigate("/play");
-      } else {
+      } else if(callback === 2){
         setOpenEnterModal(false);
         Swal.fire({
           'icon' : 'error',
@@ -78,7 +78,20 @@ const Rooms = () => {
           "text": '방이 가득찼습니다. 다른 방을 이용해주세요.',
           "confirmButtonColor": '#3085d6'
         });
+      } else if(callback === 3){
+        setOpenEnterModal(false);
+        Swal.fire({
+          "text": '비밀번호가 틀렸습니다.',
+          "confirmButtonColor": '#3085d6'
+        });
+      } else if(callback === 4){
+        setOpenEnterModal(false);
+        Swal.fire({
+          "text": '이미 게임이 시작됐습니다.',
+          "confirmButtonColor": '#3085d6'
+        });
       }
+
     });
   }
 
@@ -223,7 +236,14 @@ const Rooms = () => {
         <div className="flex flex-wrap  my-2 border-2 overflow-y-auto h-[30em] w-[40em] content-start">
           {Object.keys(rooms).map((key) => (
             <Card href="#" className="w-[47%] h-[30%] m-2"
-              onClick={(e) => { e.preventDefault(); setSelectedRoomName(rooms[key].roomName); setOpenEnterModal(true); }}>
+              onClick={(e) => {
+              if(rooms[key].isLocked){
+                e.preventDefault(); 
+                setSelectedRoomName(rooms[key].roomName); 
+                setOpenEnterModal(true); }
+                else {
+                  enterRoom(rooms[key].roomName,'');
+                }}}>
               {rooms[key].isLocked ? <CiLock></CiLock> : null}
               <p className='text'>{rooms[key].roomName}</p>
               <p className='text-sm'>{rooms[key].adminPlayer}</p>

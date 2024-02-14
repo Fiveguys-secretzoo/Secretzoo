@@ -41,7 +41,7 @@ function App() {
   return (
     <BrowserRouter>
       <SocketContext.Provider value={socket}>
-        <div className="App font-DNFBitBitv2">
+        <div className="App font-Maplestory">
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="*" element={<Page404 />} />
