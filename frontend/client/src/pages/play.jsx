@@ -78,7 +78,7 @@ const Play = () => {
   const [input, setInput] = useState('');
   const [isMyTurn, setIsMyTurn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [cards, setCards] = useState([0, 1, 2, 3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]); // 손에 들고 있는 카드 관리
+  const [cards, setCards] = useState([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]); // 손에 들고 있는 카드 관리
   const [isRight, setIsRight] = useState(false);
   const [gameResult, setGameResult] = useState(false);
   // 0 대기 1 시작 2 카드 드롭 후 동물 선택 3 동물 선택 후 방어 턴 4 넘기는 턴 드래그 5 넘기는 턴 동물 선택 6 결과 확인
@@ -142,9 +142,9 @@ const Play = () => {
 
   // 메시지를 처리한다. 그런 함수다.
   const messageHandler = (user, msg) => {
-    console.log(user) 
+    console.log(user)
     console.log(msg)
-    
+
     let imsg = user + " : " + msg;
     setMessages((msgs) => [...msgs, imsg]);
   };
@@ -376,7 +376,7 @@ const Play = () => {
         video.current = <UserVideoComponent streamManager={subscribers.get(player)} />
         console.log("@###@#@#@##sub")
         console.log(subscribers);
-        
+
         slotArr.push(
           <PlayerView
             psq={psq}
@@ -389,18 +389,18 @@ const Play = () => {
             count={count}>
           </PlayerView>
         )
-        count ++ ;
+        count++;
       }
     }
-    video.current=undefined;
+    video.current = undefined;
     let k = count;
     for (; k < 6; k++) {
-        slotArr.push(
-          <div className={`bg-white rounded w-96 h-52 m-2 item item${k}`}
-          >
-          </div>
-        )
-      
+      slotArr.push(
+        <div className={`bg-white rounded w-96 h-52 m-2 item item${k}`}
+        >
+        </div>
+      )
+
     }
     let psq = "", playerName = "";
     let activate = false;
@@ -433,107 +433,107 @@ const Play = () => {
   const prevPlayerListRef = useRef({});
 
   const App = () => {
-      useEffect(() => {
-        // if(Object.keys(prevPlayerListRef.current).length<Object.keys(playerList).length){
-          console.log('$$$$$$$$$$$$$$$$$$$$$$$4');
-          // console.log(Object.keys(playerList));
-          // console.log(Object.keys(playerList).length);
-          // console.log(Object.keys(prevPlayerListRef.current).length);
+    useEffect(() => {
+      // if(Object.keys(prevPlayerListRef.current).length<Object.keys(playerList).length){
+      console.log('$$$$$$$$$$$$$$$$$$$$$$$4');
+      // console.log(Object.keys(playerList));
+      // console.log(Object.keys(playerList).length);
+      // console.log(Object.keys(prevPlayerListRef.current).length);
 
-            window.addEventListener('beforeunload', onbeforeunload);  
-            joinSession();
-            console.log(subscribers);
-          return () => {
-              window.removeEventListener('beforeunload', onbeforeunload);
-              leaveSession();
-          };
-        // }
-        
-      }, []);//playerlist 지움
-      
+      window.addEventListener('beforeunload', onbeforeunload);
+      joinSession();
+      console.log(subscribers);
+      return () => {
+        window.removeEventListener('beforeunload', onbeforeunload);
+        leaveSession();
+      };
+      // }
+
+    }, []);//playerlist 지움
+
     const onbeforeunload = () => {
       leaveSession();
     };
-      
-      const deleteSubscriber = (streamManager) => {
-          
-          // setSubscribers((prevSubscribers) => prevSubscribers.filter((sub) => sub !== streamManager));
-          setSubscribers((prevSubscribers) => new Map([...prevSubscribers].filter(([key, value]) => value !== streamManager)));
-      };
+
+    const deleteSubscriber = (streamManager) => {
+
+      // setSubscribers((prevSubscribers) => prevSubscribers.filter((sub) => sub !== streamManager));
+      setSubscribers((prevSubscribers) => new Map([...prevSubscribers].filter(([key, value]) => value !== streamManager)));
+    };
 
     const joinSession = async () => {
       const OV = new OpenVidu();
-          const mySession = OV.initSession();
-          
-          // mySession.on('streamCreated', (event) => {
-          //     const subscriber = mySession.subscribe(event.stream, undefined);
-          //     setSubscribers((prevSubscribers) => [...prevSubscribers, subscriber]);
-          // });
-          mySession.on('streamCreated', (event) => {
-            const subscriber = mySession.subscribe(event.stream, undefined);
-            setSubscribers((prevSubscribers) => {
-              const newSubscribers = new Map(prevSubscribers);
-              if (!newSubscribers.has(JSON.parse(event.stream.connection.data).clientData2)) {
-                  newSubscribers.set(JSON.parse(event.stream.connection.data).clientData2, subscriber);
-              }
-              return newSubscribers;
+      const mySession = OV.initSession();
+
+      // mySession.on('streamCreated', (event) => {
+      //     const subscriber = mySession.subscribe(event.stream, undefined);
+      //     setSubscribers((prevSubscribers) => [...prevSubscribers, subscriber]);
+      // });
+      mySession.on('streamCreated', (event) => {
+        const subscriber = mySession.subscribe(event.stream, undefined);
+        setSubscribers((prevSubscribers) => {
+          const newSubscribers = new Map(prevSubscribers);
+          if (!newSubscribers.has(JSON.parse(event.stream.connection.data).clientData2)) {
+            newSubscribers.set(JSON.parse(event.stream.connection.data).clientData2, subscriber);
+          }
+          return newSubscribers;
+        });
+      });
+      mySession.on('streamDestroyed', (event) => {
+        deleteSubscriber(event.stream.streamManager);
+      });
+
+      mySession.on('exception', (exception) => {
+        console.warn(exception);
+      });
+
+      try {
+        const token = await getToken(sessionStorage.getItem('roomName'));
+        setMyUserName(sessionStorage.getItem('userNickname'));
+        setMyUserSequence(sessionStorage.getItem('userSequence'));
+
+
+        mySession.connect(token, { clientData: myUserName, clientData2: myUserSequence })
+          .then(async () => {
+            let newPublisher = await OV.initPublisherAsync(undefined, {
+              audioSource: undefined,
+              videoSource: undefined,
+              publishAudio: true,
+              publishVideo: true,
+              resolution: '600x400',
+              frameRate: 30,
+              insertMode: 'APPEND',
+              mirror: false,
             });
+
+            await mySession.publish(newPublisher);
+
+            setPublisher(newPublisher);
+            console.log(session);
+
+            console.log(publisher);
+          })
+          .catch((error) => {
+            console.log('There was an error connecting to the session:', error.code, error.message);
           });
-          mySession.on('streamDestroyed', (event) => {
-              deleteSubscriber(event.stream.streamManager);
-          });
-          
-          mySession.on('exception', (exception) => {
-              console.warn(exception);
-          });
-          
-          try {
-              const token = await getToken(sessionStorage.getItem('roomName'));
-              setMyUserName(sessionStorage.getItem('userNickname'));
-              setMyUserSequence(sessionStorage.getItem('userSequence'));
-              
-              
-              mySession.connect(token, { clientData: myUserName, clientData2: myUserSequence})
-              .then(async () => {
-                  let newPublisher = await OV.initPublisherAsync(undefined, {
-                      audioSource: undefined,
-                      videoSource: undefined,
-                      publishAudio: true,
-                      publishVideo: true,
-                      resolution: '600x400',
-                      frameRate: 30,
-                      insertMode: 'APPEND',
-                      mirror: false,
-                  });
-                  
-                  await mySession.publish(newPublisher);
-                  
-                  setPublisher(newPublisher);
-                  console.log(session);
-                  
-                  console.log(publisher);
-              })
-              .catch((error) => {
-                  console.log('There was an error connecting to the session:', error.code, error.message);
-              });
-          } catch (error) {
-              console.error(error);
-          }
-          session.current = mySession;
-      };
-      
-      const leaveSession = () => {
-          const mySession = session.current;
-          if (mySession) {
-              mySession.disconnect();
-          }
-          
-          session.current=undefined;
-          setSubscribers(new Map());
-          setMyUserName(sessionStorage.getItem('userNickname'));
-          setMyUserSequence(sessionStorage.getItem('userSequence'));
-          setPublisher(undefined);
-      };
+      } catch (error) {
+        console.error(error);
+      }
+      session.current = mySession;
+    };
+
+    const leaveSession = () => {
+      const mySession = session.current;
+      if (mySession) {
+        mySession.disconnect();
+      }
+
+      session.current = undefined;
+      setSubscribers(new Map());
+      setMyUserName(sessionStorage.getItem('userNickname'));
+      setMyUserSequence(sessionStorage.getItem('userSequence'));
+      setPublisher(undefined);
+    };
 
     const getToken = async (sid) => {
       const safeid = encodeURIComponent(sid).replace(/[%]/g, '');
@@ -555,7 +555,7 @@ const Play = () => {
       return response.data;
     };
   };
-  
+
 
 
   return (
@@ -684,42 +684,38 @@ const Play = () => {
               }
             </div>
           </div>
-            <div className='flex bg-white rounded-lg w-96 h-52 m-2 item item8'>
-              <div className='flex-col w-[90%]'>
+          <div className='flex bg-white rounded-lg w-96 h-52 m-2 item item8'>
+            <div className='flex-col w-[90%]'>
               <h1>Chat Application</h1>
-                <div className="message-list bg-white"  
-                  style={{height: '68%',width: '100%', overflowY: 'auto', border: '1px solid #ccc' }}
-                  ref={messageListRef}>
-                  {messages.map((msg, index) => (
-                    <div key={index} className="message">[{msg}]</div>
-                  ))}
-                </div>
-                <div className='flex w-[100%]'>
-                  <div className="message-input w-[90%]" >
-                    <input
-                      type="text"
-                      value={input}
-                      onChange={(e) => setInput(e.target.value)}
-                      onKeyDown={handleKeyDown}
-                      placeholder="Type a message..."
-                      style={{width: '100%'}}
-                    />
-                  </div>
-                  <Button onClick={sendMessage}>Send</Button>
-                </div>
+              <div className="message-list bg-white"
+                style={{ height: '68%', width: '100%', overflowY: 'auto', border: '1px solid #ccc' }}
+                ref={messageListRef}>
+                {messages.map((msg, index) => (
+                  <div key={index} className="message">[{msg}]</div>
+                ))}
               </div>
-              <div className='flex-col'>
-                <Button className="" color="success" style={{height:"50%" ,width:"100%"}} onClick={leaveRoom}>exit</Button>
-                <Button className={(playState === 0) ? "" : " hidden"} disabled={!isAdmin} color="success" style={{height:"50%"}} onClick={start}>start</Button>
+              <div className='flex w-[100%]'>
+                <div className="message-input w-[90%]" >
+                  <input
+                    type="text"
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    placeholder="Type a message..."
+                    style={{ width: '100%' }}
+                  />
+                </div>
+                <Button onClick={sendMessage}>Send</Button>
               </div>
             </div>
-            
-              
-            
-            
+            <div className='flex-col'>
+              <Button className="" color="success" style={{ height: "50%", width: "100%" }} onClick={leaveRoom}>exit</Button>
+              <Button className={(playState === 0) ? "" : " hidden"} disabled={(!isAdmin || playerCount < 4)} color="success" style={{ height: "50%" }} onClick={start}>start</Button>
+            </div>
           </div>
         </div>
-      
+      </div>
+
 
     </>
   );

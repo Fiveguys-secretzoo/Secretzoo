@@ -4,11 +4,19 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Lottie from 'react-lottie';
 
-import blackCircle from '../../assets/lottie/Animation - circle.json'
-import circle from '../../assets/lottie/Animation - black.json'
+import emptySlot from '../../assets/lottie/emptySlot.json'
+import orangeCircle from '../../assets/lottie/orangeCircle.json'
+import blackCircle from '../../assets/lottie/blackCircle.json'
+import greyCircle from '../../assets/lottie/greyCircle.json'
+import brownCircle from '../../assets/lottie/brownCircle.json'
+import pinkCircle from '../../assets/lottie/pinkCircle.json'
+import whiteCircle from '../../assets/lottie/whiteCircle.json'
+import greenCircle from '../../assets/lottie/greenCircle.json'
+import blueCircle from '../../assets/lottie/blueCircle.json'
+
 import '../../style/playerView.css'
 
-const PlayerView = ({ roomName, psq, key, pn="빈 플레이어", activate = false, setCards, animalList, video="",count }) => {
+const PlayerView = ({ roomName, psq, key, pn = "빈 플레이어", activate = false, setCards, animalList, video = "", count }) => {
 
   const playerContainer = PlayerContainer();
   const { dragOver, dragEnterHandler, dropHandler } = playerContainer;
@@ -31,27 +39,39 @@ const PlayerView = ({ roomName, psq, key, pn="빈 플레이어", activate = fals
     console.log(penalty);
   }, [psq, players, players?.[psq]?.pen]);
 
+  const lottieArray =
+    [orangeCircle,
+      blackCircle,
+      greyCircle,
+      brownCircle,
+      pinkCircle,
+      whiteCircle,
+      greenCircle,
+      blueCircle]
+
   const defaultOption = {
+    loop: false,
+    autoplay: false,
+    animationData: emptySlot,
+    rendererSettings: {
+      preserveAspectRatio: 'xMidYMid slice'
+    }
+  }
+
+  const penaltyOption = (i) => ({
     loop: true,
     autoplay: true,
-    animationData: circle,
+    animationData: lottieArray[i],
     rendererSettings: {
       preserveAspectRatio: 'xMidYMid slice'
     },
-  }
-  const penaltyOption = {
-    loop: true,
-    autoplay: true,
-    animationData: blackCircle,
-    rendererSettings: {
-      preserveAspectRatio: 'xMidYMid slice'
-    },
-  }
+  })
+
   // TODO 위에 올렸을 때 가능하냐 안하냐에 따라서 효과를 다르게 주는 것...!!
 
   return (
     <>
-      <div className={(c===6)?`bg-white border-4 border-red-700 rounded w-96 h-52 m-2 item item${c}`:`bg-white rounded w-96 h-52 m-2 item item${c}`}
+      <div className={(c === 6) ? `bg-white border-4 border-red-700 rounded w-96 h-52 m-2 item item${c}` : `bg-white rounded w-96 h-52 m-2 item item${c}`}
         key={key}
         onDragStart={(e) => e.preventDefault()}
         onDragEnter={(e) => dragEnterHandler(e, psq)}
@@ -60,7 +80,7 @@ const PlayerView = ({ roomName, psq, key, pn="빈 플레이어", activate = fals
       >
         <div>
           <p className="text-2xl font-bold tracking-tight text-gray-900 dark:text-blue text-center">
-            {(c===6)?'YOUR VIDEO!':pn} 
+            {(c === 6) ? 'YOUR VIDEO!' : pn}
           </p>
         </div>
         <div className="flex flex-1">
@@ -74,9 +94,9 @@ const PlayerView = ({ roomName, psq, key, pn="빈 플레이어", activate = fals
                   {Array.from({ length: key }, (_, i) => (
                     <div className="animation" key={i}>
                       <Lottie
-                        options={defaultOption}
-                        height={20}
-                        width={20}
+                        options={penaltyOption(value)}
+                        height={18}
+                        width={18}
                         isClickToPauseDisabled={true}
                       />
                     </div>
@@ -84,9 +104,9 @@ const PlayerView = ({ roomName, psq, key, pn="빈 플레이어", activate = fals
                   {Array.from({ length: 4 - key }, (_, i) => (
                     <div className="animation" key={i}>
                       <Lottie
-                        options={penaltyOption}
-                        height={20}
-                        width={20}
+                        options={defaultOption}
+                        height={18}
+                        width={18}
                         isClickToPauseDisabled={true}
                       />
                     </div>
@@ -94,7 +114,6 @@ const PlayerView = ({ roomName, psq, key, pn="빈 플레이어", activate = fals
                 </div>
               </>
             ))}
-
           </div>
         </div>
       </div>
