@@ -97,7 +97,8 @@
 <br/>
 
 <div align=left><h2>💻TECH STACKS</h2></div>
-
+### 📌 Overview
+#### "놀랄 만큼 쉽고 믿기 힘들 만큼 재밌습니다."
 <div align=center> 
 
 <img src="https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB">
@@ -143,7 +144,7 @@
 온라인 화상 블러핑 카드 게임, Secret Zoo<br/>
 화제의 보드게임, "바퀴벌레 포커"를 온라인으로 즐길 수 있다는 것을 알고 계신가요? 지금 당장 Secret Zoo에서 친구들과 플레이 해보세요!!
 
-### 🎯 이런 사람들에게 최고의 서비스에요!
+### 🎯 타겟
 - 시간 / 공간적 제약으로 인해 오프라인으로 지인들과 함께 보드게임을 즐길 수 없는 사람들
 - 아이스브레이킹과 함께 사람들끼리 친해지기 위한 방법이 필요한 사람들(ex. 대학교 OT, 싸피데이, 심심풀이 게임)
 - 웃고 떠들며 재밌게 게임하고 싶은 사람들
