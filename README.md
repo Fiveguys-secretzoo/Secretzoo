@@ -13,7 +13,7 @@
 ##### 6️⃣ [개발 회고](#6%EF%B8%8F⃣-개발-회고-1)
 <br/>
 
-# 1️⃣  서비스 소개
+# Ⅰ  서비스 소개
 
 ### 📌 Overview
 #### "놀랄 만큼 쉽고 믿기 힘들 만큼 재밌습니다."
@@ -100,21 +100,21 @@
             <a href="https://github.com/hyeounguk2">
               <img src="https://avatars.githubusercontent.com/u/80465980?v=4" width="100">
               <br />
-              <b>👑전형욱</b>
+              <b>전형욱👑</b>
             </a> 
         </td>
      <td style="min-width: 250px;">
             <a href="https://github.com/gwanu-dev">
               <img src="https://avatars.githubusercontent.com/u/26521521?v=4" width="100">
               <br />
-              <b>👨🏻김관우</b>
+              <b>김관우👨🏻</b>
             </a> 
         </td>
         <td style="min-width: 250px;">
             <a href="https://github.com/kimjungkwang1">
               <img src="https://avatars.githubusercontent.com/u/134460604?v=4" width="100">
               <br />
-              <b>👨🏻김중광</b>
+              <b>김중광👨🏻</b>
             </a> 
         </td>
     </tr>
@@ -148,14 +148,14 @@
             <a href="https://github.com/hyunsoo10">
               <img src="https://avatars.githubusercontent.com/u/139304756?v=4" width="100">
               <br />
-              <b>👨🏻조현수</b>
+              <b>조현수👨🏻</b>
             </a> 
         </td>
         <td style="min-width: 250px;">
             <a href="https://github.com/jaeyun1723">
               <img src="https://avatars.githubusercontent.com/u/84389492?v=4" width="100">
               <br />
-              <b>👨🏻김재윤</b>
+              <b>김재윤👨🏻</b>
             </a>
         </td>
     </tr>
