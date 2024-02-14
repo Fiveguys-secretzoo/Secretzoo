@@ -91,11 +91,11 @@ const Ranking = () => {
         <div className='w-full h-full py-4 px-16 rounded'>
           <nav className="px-4 py-2 text-center rounded shadow-md">
             <div className="flex space-x-2 justify-center">
-              <button className='px-6 rounded-md hover:bg-gray-200'
+              <button className='px-6 rounded-md hover:bg-gray-600'
                 onClick={getAttack}>공격</button>
-              <button className='px-6 rounded-md hover:bg-gray-200'
+              <button className='px-6 rounded-md hover:bg-gray-600'
                 onClick={getDefense}>수비</button>
-              <button className='px-6 rounded-md hover:bg-gray-200'
+              <button className='px-6 rounded-md hover:bg-gray-600'
                 onClick={getPass}>패스</button>
             </div>
           </nav>
@@ -137,7 +137,7 @@ const Ranking = () => {
             </div>
             ))
           }
-          { sessionStorage.getItem('noLogin') ? (<div className='p-1 my-2 ml-10'>랭킹 서비스를 이용하시려면 로그인 하세요</div>) :
+          { sessionStorage.getItem('noLogin') ? (<div className='p-1 my-2 ml-10 text-center'>랭킹 서비스를 이용하시려면 로그인 하세요</div>) :
             (<div className={`py-1 px-4  my-2 w-[518px] mx-auto border-1 rounded transition-opacity duration-1000  ${isLoaded ? 'rotate-y' : ''} shadow flex items-center`}
                 style={{
                   animationDelay: `${10 * 0.2}s`

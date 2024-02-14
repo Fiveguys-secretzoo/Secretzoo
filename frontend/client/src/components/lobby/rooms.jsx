@@ -218,13 +218,16 @@ const Rooms = () => {
               <Button color="gray" onClick={noFilter}><IoMdRefresh className="w-6 h-6 text-bold"></IoMdRefresh></Button>
             </Button.Group>
           </div>
-          <form className="flex justify-end"
+          <form className="flex justify-end items-center"
             onSubmit={(e) => e.preventDefault()}>
             <TextInput
               type="text"
               placeholder='방이름'
               value={searchRoomName}
-              onChange={(e) => setSearchRoomName(e.target.value)} />
+              onChange={(e) => setSearchRoomName(e.target.value)}
+              />
+              &nbsp;
+              &nbsp; 
             <Button color="gray"
               type="submit" onClick={() => searchRoom()}>검색</Button>
           </form>
@@ -235,7 +238,7 @@ const Rooms = () => {
         </div>
         <div className="flex flex-wrap  my-2 border-2 overflow-y-auto h-[30em] w-[40em] content-start">
           {Object.keys(rooms).map((key) => (
-            <Card href="#" className="w-[47%] h-[30%] m-2"
+            <Card href="#" className="w-[47%] h-[30%] m-2 hover:bg-[#1F2544] hover:text-white"
               onClick={(e) => {
               if(rooms[key].isLocked){
                 e.preventDefault(); 

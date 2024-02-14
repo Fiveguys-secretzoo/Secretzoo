@@ -5,7 +5,7 @@ import { Outlet, } from "react-router-dom";
 
 const myPage = () => {
   if (sessionStorage.getItem('noLogin')) {
-    return <div>로그인하시면 이용할 수 있습니다.</div>;
+    return <div className='text-white text-center text-xl'>로그인하시면 이용할 수 있습니다.</div>;
   }
 
   return (
