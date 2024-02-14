@@ -43,6 +43,7 @@ import AnswerSelectMyTurn from '../components/play/answerSelectMyTurn';
 import AnswerSelectNotTurn from '../components/play/answerSelectNotTurn';
 import PassTurnCardView from '../components/play/passTurnCardView';
 import AnswerRevealView from '../components/play/answerRevealView';
+import GameResultView from '../components/play/gameResultView';
 
 const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'https://openvidu.secretzoo.site/';
 
@@ -81,6 +82,7 @@ const Play = () => {
   // 0 대기 1 시작 2 카드 드롭 후 동물 선택 3 동물 선택 후 방어 턴 4 넘기는 턴 드래그 5 넘기는 턴 동물 선택 6 결과 확인
   const [images, setImages] = useState([]);
   const [answerCard, setAnswerCard] = useState(64); // 정답 공개 시 카드
+  const [loserPsq, setLoserPsq] = useState('');
 
   const animalList = [
     '호랑이',
@@ -137,9 +139,12 @@ const Play = () => {
   }
 
   // 메시지를 처리한다. 그런 함수다.
-  const messageHandler = (msg) => {
-    console.log(1)
-    setMessages((msgs) => [...msgs, msg]);
+  const messageHandler = (user, msg) => {
+    console.log(user) 
+    console.log(msg)
+    
+    let imsg = user + " : " + msg;
+    setMessages((msgs) => [...msgs, imsg]);
   };
 
 
@@ -210,8 +215,12 @@ const Play = () => {
 
   // socket.io 게임 종료 handler 
   const gameEndResponseHandler = (loserpsq) => {
+    setLoserPsq(loserpsq);
+    setCards([]);
+    dispatch(changePlayState(6));
 
   }
+
 
   // 게임 시작 버튼을 눌렀을 때 작동하는 함수
   const gameStart = (state, cards) => {
@@ -220,7 +229,7 @@ const Play = () => {
     dispatch(changePlayState(state));
     console.log("##### [gameStart] Card Set");
     console.log(cards);
-  } 
+  }
   // 게임 종료 시 사용
   // playState 1 으로 정의 
 
@@ -278,6 +287,7 @@ const Play = () => {
 
     socket.on("penaltyAdd", penaltyAddResponseHandler);
 
+    socket.on("gameEnd", gameEndResponseHandler);
     // socket.on("gameEnd", gameEndResponseHandler);
 
     return () => {
@@ -288,19 +298,6 @@ const Play = () => {
   }, []);
 
   // playState 추적 
-  useEffect(() => {
-    console.log(`check playState : ${playState}`);
-    if (playState === 1) {
-      socket.emit("isTurnEnd", roomName, (loserpsq) => {
-        if (loserpsq !== false) {
-          alert(`Loser is ${loserpsq}`);
-          dispatch(initTurnedPlayer());
-          dispatch(changePlayState(6));
-        }
-      })
-    }
-
-  }, [playState]);
 
   //nowTurn, adminPlayer 추적
   useEffect(() => {
@@ -330,7 +327,7 @@ const Play = () => {
 
 
   const sendMessage = () => {
-    socket.emit('chat message', input, localStorage.getItem(''));
+    socket.emit('chatMessage', input, sessionStorage.getItem('userNickname'), sessionStorage.getItem('roomName'));
     setInput('');
   };
 
@@ -355,8 +352,15 @@ const Play = () => {
           playerName = playerArr[player].pn;
           activate = true;
         }
-        video.current = <UserVideoComponent streamManager={subscribers[count]} />
-        
+        if(count==4){slotArr.push(
+            <div className="bg-white rounded w-96 h-60 m-2 flex flex-col p-2 mx-5 invisible">
+            </div>
+          );
+          count++;
+        }
+        video.current = <UserVideoComponent streamManager={subscribers.get(player)} />
+        console.log("@###@#@#@##sub")
+        console.log(subscribers);
         count ++ ;
         slotArr.push(
           <PlayerView
@@ -373,11 +377,20 @@ const Play = () => {
     }
     video.current=undefined;
     for (let k = count; k < 6; k++) {
-      slotArr.push(
-        <div className="bg-white rounded w-[30%] m-2"
-        >
-        </div>
-      )
+      if(k==4){
+        slotArr.push(
+          <div className="bg-white rounded w-96 h-60 m-2 flex flex-col p-2 mx-5 invisible"
+          >
+          </div>
+        )
+      }
+      else{
+        slotArr.push(
+          <div className="bg-white rounded w-96 h-60 m-2 flex flex-col p-2 mx-5"
+          >
+          </div>
+        )
+      }
     }
     let psq = "", playerName = "";
     let activate = false;
@@ -402,8 +415,9 @@ const Play = () => {
   }
 
   const [myUserName, setMyUserName] = useState(sessionStorage.getItem('userNickname'));
+  const [myUserSequence, setMyUserSequence] = useState(sessionStorage.getItem('userSequence'));
   const [publisher, setPublisher] = useState(undefined);
-  const [subscribers, setSubscribers] = useState([]);
+  const [subscribers, setSubscribers] = useState(new Map());
   const session = useRef(undefined);
   const prevPlayerListRef = useRef({});
 
@@ -424,30 +438,36 @@ const Play = () => {
           };
         // }
         
-          prevPlayerListRef.current = {...playerList};
-        
       }, []);//playerlist 지움
       
-      const onbeforeunload = () => {
-          leaveSession();
-      };
-
+    const onbeforeunload = () => {
+      leaveSession();
+    };
+      
       const deleteSubscriber = (streamManager) => {
           
-          setSubscribers((prevSubscribers) => prevSubscribers.filter((sub) => sub !== streamManager));
-       
+          // setSubscribers((prevSubscribers) => prevSubscribers.filter((sub) => sub !== streamManager));
+          setSubscribers((prevSubscribers) => new Map([...prevSubscribers].filter(([key, value]) => value !== streamManager)));
       };
 
-      const joinSession = async () => {
-          const OV = new OpenVidu();
-
+    const joinSession = async () => {
+      const OV = new OpenVidu();
           const mySession = OV.initSession();
           
+          // mySession.on('streamCreated', (event) => {
+          //     const subscriber = mySession.subscribe(event.stream, undefined);
+          //     setSubscribers((prevSubscribers) => [...prevSubscribers, subscriber]);
+          // });
           mySession.on('streamCreated', (event) => {
-              const subscriber = mySession.subscribe(event.stream, undefined);
-              setSubscribers((prevSubscribers) => [...prevSubscribers, subscriber]);
+            const subscriber = mySession.subscribe(event.stream, undefined);
+            setSubscribers((prevSubscribers) => {
+              const newSubscribers = new Map(prevSubscribers);
+              if (!newSubscribers.has(JSON.parse(event.stream.connection.data).clientData2)) {
+                  newSubscribers.set(JSON.parse(event.stream.connection.data).clientData2, subscriber);
+              }
+              return newSubscribers;
+            });
           });
-          
           mySession.on('streamDestroyed', (event) => {
               deleteSubscriber(event.stream.streamManager);
           });
@@ -459,8 +479,10 @@ const Play = () => {
           try {
               const token = await getToken(sessionStorage.getItem('roomName'));
               setMyUserName(sessionStorage.getItem('userNickname'));
+              setMyUserSequence(sessionStorage.getItem('userSequence'));
               
-              mySession.connect(token, { clientData: myUserName })
+              
+              mySession.connect(token, { clientData: myUserName, clientData2: myUserSequence})
               .then(async () => {
                   let newPublisher = await OV.initPublisherAsync(undefined, {
                       audioSource: undefined,
@@ -496,30 +518,31 @@ const Play = () => {
           }
           
           session.current=undefined;
-          setSubscribers([]);
+          setSubscribers(new Map());
           setMyUserName(sessionStorage.getItem('userNickname'));
+          setMyUserSequence(sessionStorage.getItem('userSequence'));
           setPublisher(undefined);
       };
 
-      const getToken = async (sid) => {
-          const safeid = encodeURIComponent(sid).replace(/[%]/g, '');
-          const sessionId = await createSession(safeid);
-          return await createToken(sessionId);
-      };
+    const getToken = async (sid) => {
+      const safeid = encodeURIComponent(sid).replace(/[%]/g, '');
+      const sessionId = await createSession(safeid);
+      return await createToken(sessionId);
+    };
 
-      const createSession = async (sessionId) => {
-          const response = await axios.post(APPLICATION_SERVER_URL + 'api/sessions', { customSessionId: sessionId }, {
-              headers: { 'Content-Type': 'application/json' },
-          });
-          return response.data;
-      };
+    const createSession = async (sessionId) => {
+      const response = await axios.post(APPLICATION_SERVER_URL + 'api/sessions', { customSessionId: sessionId }, {
+        headers: { 'Content-Type': 'application/json' },
+      });
+      return response.data;
+    };
 
-      const createToken = async (sessionId) => {
-          const response = await axios.post(APPLICATION_SERVER_URL + 'api/sessions/' + sessionId + '/connections', {}, {
-              headers: { 'Content-Type': 'application/json' },
-          });
-          return response.data;
-      };
+    const createToken = async (sessionId) => {
+      const response = await axios.post(APPLICATION_SERVER_URL + 'api/sessions/' + sessionId + '/connections', {}, {
+        headers: { 'Content-Type': 'application/json' },
+      });
+      return response.data;
+    };
   };
 
 
@@ -615,7 +638,12 @@ const Play = () => {
           {
             playState === 6 &&
             <SelectScreen>
-              <gameResultView></gameResultView>
+              <GameResultView
+                roomName={sessionStorage.getItem("roomName")}
+                playerSequence={playerSequence}
+                gameInfoHandler={gameInfoHandler}
+                loserPsq={loserPsq}
+              ></GameResultView>
             </SelectScreen>
           }
           {/* 플레이어 표현 부분 */}
@@ -648,7 +676,7 @@ const Play = () => {
               <h1>Chat Application</h1>
               <div className="message-list">
                 {messages.map((msg, index) => (
-                  <div key={index} className="message">{msg}</div>
+                  <div key={index} className="message">[{msg}]</div>
                 ))}
               </div>
               <div className="message-input">
@@ -658,14 +686,14 @@ const Play = () => {
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Type a message..."
                 />
-                <Button onClick={/*sendMessage*/() => { console.log(roomInfo) }}>Send</Button>
+                <Button onClick={sendMessage}>Send</Button>
               </div>
             </div>
             <Button className={(playState === 0) ? '' : 'hidden'} disabled={!isAdmin} color="success" onClick={start}>start</Button>
             <Button color="success" onClick={leaveRoom}>방 나가기</Button>
           </div>
         </div>
-      </div>
+      </div >
 
     </>
   );
