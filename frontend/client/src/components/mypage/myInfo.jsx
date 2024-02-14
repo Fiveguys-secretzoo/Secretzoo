@@ -203,7 +203,7 @@ const MyInfo = () => {
           onClick={() => setOpenProfileImageModal(true)}>변경</button>
       </div>
       <div className='flex flex-col'>
-        <p>닉네임 : {user.name}</p>
+        <p>이름 : {user.name}</p>
         <div className='flex items-center justify-end'>
           <p>닉네임 : {user.nickname}</p>
           <button className='m-2 p-2 bg-blue-500 rounded' onClick={() => setOpenNicknameModal(true)}
