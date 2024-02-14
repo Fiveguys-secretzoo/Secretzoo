@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Sidebar, Button  } from 'flowbite-react';
 import { IoGameController, IoTrophy  } from 'react-icons/io5';
 import { HiUser } from 'react-icons/hi'
@@ -12,6 +12,14 @@ import axios from "axios";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const activeText = (path) => {
+    return location.pathname === path ? "flex items-center p-2 text-base font-normal text-[#FF9800] rounded-lg hover:bg-gray-100 cursor-pointer" : "flex items-center p-2 text-base font-normal text-gray-500 rounded-lg hover:bg-gray-100 cursor-pointer"
+  };
+  const activeIcon = (path) => {
+    return location.pathname === path ? "h-6 w-6 text-[#FF9800]'" : "h-6 w-6 text-gray-500'"
+  };
   const CustomSidebar = ({icon : Icon, children, to}) => {
 
     const link = () => {
@@ -20,9 +28,9 @@ const Navbar = () => {
 
     return (
       <div
-        className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100 cursor-pointer"
+        className={activeText(to)}
         onClick={link}>
-        {Icon && <Icon className='h-6 w-6 text-gray-500' aria-hidden='true'></Icon>}
+        {Icon && <Icon className={activeIcon(to)} aria-hidden='true'></Icon>}
         <span className="ml-3">{children}</span>
       </div>
     )

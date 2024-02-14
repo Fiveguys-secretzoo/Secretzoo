@@ -5,7 +5,7 @@ const MypageNav = () => {
   const location = useLocation();
 
   const active = (path) => {
-    return location.pathname === path ? "px-6 text-blue-500 font-bold" : "px-6 text-white font-bold"
+    return location.pathname === path ? "px-6 text-[#5F8670] font-bold" : "px-6 text-white font-bold"
   };
   return (
     <>
