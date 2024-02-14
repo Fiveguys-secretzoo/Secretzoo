@@ -330,7 +330,7 @@ const Play = () => {
 
 
   const sendMessage = () => {
-    socket.emit('chat message', input, sessionStorage.getItem(''));
+    socket.emit('chat message', input, localStorage.getItem(''));
     setInput('');
   };
 
@@ -354,23 +354,10 @@ const Play = () => {
           psq = player;
           playerName = playerArr[player].pn;
           activate = true;
-          console.log(subscribers);
-          if(subscribers.length!==0){
-            for(let i=0;i<subscribers.length;i++){
-              
-                console.log(JSON.parse(subscribers[i].stream.connection.data).clientData===psq);
-                // console.log(subs);
-                video.current= <UserVideoComponent streamManager={subscribers[i]}/>
-                count++;
-                break;
-              
-              
-            }
-          }
         }
-        // video.current = <UserVideoComponent streamManager={subscribers[count]} />
-        // console.log(subscribers[count]);
-        
+        video.current = <UserVideoComponent streamManager={subscribers[count]} />
+        console.log(subscribers);
+        count ++ ;
         slotArr.push(
           <PlayerView
             psq={psq}
@@ -400,9 +387,6 @@ const Play = () => {
       activate = true;
     }
     video.current = <UserVideoComponent streamManager={publisher} />
-    if(publisher !== undefined){
-      console.log(JSON.parse(publisher.stream.connection.data).clientData);
-    }
     slotArr.push(
       <PlayerView
         psq={psq}
@@ -417,24 +401,28 @@ const Play = () => {
     return slotArr;
   }
 
-  const [myUserName, setMyUserName] = useState(sessionStorage.getItem('userSeq'));
+  const [myUserName, setMyUserName] = useState(sessionStorage.getItem('userNickname'));
   const [publisher, setPublisher] = useState(undefined);
-  const [subscribers, setSubscribers] = useState([]); 
+  const [subscribers, setSubscribers] = useState([]);
   const session = useRef(undefined);
   const prevPlayerListRef = useRef({});
 
   const App = () => {
       useEffect(() => {
-        
+        // if(Object.keys(prevPlayerListRef.current).length<Object.keys(playerList).length){
           console.log('$$$$$$$$$$$$$$$$$$$$$$$4');
-            joinSession();
+          // console.log(Object.keys(playerList));
+          // console.log(Object.keys(playerList).length);
+          // console.log(Object.keys(prevPlayerListRef.current).length);
+
             window.addEventListener('beforeunload', onbeforeunload);  
+            joinSession();
             console.log(subscribers);
           return () => {
               window.removeEventListener('beforeunload', onbeforeunload);
               leaveSession();
           };
-        
+        // }
         
           prevPlayerListRef.current = {...playerList};
         
@@ -447,7 +435,7 @@ const Play = () => {
       const deleteSubscriber = (streamManager) => {
           
           setSubscribers((prevSubscribers) => prevSubscribers.filter((sub) => sub !== streamManager));
-        
+       
       };
 
       const joinSession = async () => {
@@ -470,7 +458,7 @@ const Play = () => {
           
           try {
               const token = await getToken(sessionStorage.getItem('roomName'));
-              setMyUserName(sessionStorage.getItem('userSeq'));
+              setMyUserName(sessionStorage.getItem('userNickname'));
               
               mySession.connect(token, { clientData: myUserName })
               .then(async () => {
@@ -509,6 +497,7 @@ const Play = () => {
           
           session.current=undefined;
           setSubscribers([]);
+          setMyUserName(sessionStorage.getItem('userNickname'));
           setPublisher(undefined);
       };
 
