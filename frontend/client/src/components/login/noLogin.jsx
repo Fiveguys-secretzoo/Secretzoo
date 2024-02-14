@@ -1,18 +1,26 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Label, TextInput } from 'flowbite-react';
+import { useDispatch} from 'react-redux';
+import { setNoLoginUserInfo } from '../../store/userSlice';
+import Swal from 'sweetalert2';
 
 const NoLogin = () => {
   const [name, setName] = useState("");
   const navigate = useNavigate();
-
+  
+  const dispatch = useDispatch();
   const saveName = () => {
     if (name.length > 0) {
       sessionStorage.setItem('noLogin', true);
       sessionStorage.setItem('userNickname', name);
+      dispatch(setNoLoginUserInfo());
       navigate("/lobby");
     } else {
-      alert('닉네임은 필수입니다.')
+      Swal.fire({
+        "text" : '닉네임은 필수입니다.',
+        "confirmButtonColor" : '#3085d6'
+      });
     }
   };
 

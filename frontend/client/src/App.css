@@ -1,5 +1,6 @@
 
 .App {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   text-align: center;
   width: 100%;
 }
@@ -14,6 +15,9 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
+@font-face{
+  font-family:'DNFBitBitv2';
+  src:url('//cdn.df.nexon.com/img/common/font/DNFBitBitv2.otf')format('opentype')}
 
 .App-header {
   background-color: #282c34;

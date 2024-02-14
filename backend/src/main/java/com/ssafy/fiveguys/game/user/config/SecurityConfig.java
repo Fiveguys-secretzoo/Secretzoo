@@ -1,15 +1,12 @@
 package com.ssafy.fiveguys.game.user.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.fiveguys.game.user.handler.JwtAccessDeniedHandler;
 import com.ssafy.fiveguys.game.user.jwt.JwtAuthenticationEntryPoint;
 import com.ssafy.fiveguys.game.user.jwt.JwtTokenProvider;
 import com.ssafy.fiveguys.game.user.filter.JwtAuthenticationFilter;
 import com.ssafy.fiveguys.game.user.handler.OAuth2LoginFailureHandler;
 import com.ssafy.fiveguys.game.user.handler.OAuth2LoginSuccessHandler;
-import com.ssafy.fiveguys.game.user.repository.UserRepositoy;
 import com.ssafy.fiveguys.game.user.service.security.CustomOAuth2UserService;
-import com.ssafy.fiveguys.game.user.service.security.GameUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +17,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 

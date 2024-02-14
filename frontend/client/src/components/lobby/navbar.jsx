@@ -1,12 +1,18 @@
-import React from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Sidebar } from 'flowbite-react';
-import { IoGameController, IoTrophy } from 'react-icons/io5';
+import { Sidebar, Button  } from 'flowbite-react';
+import { IoGameController, IoTrophy  } from 'react-icons/io5';
 import { HiUser } from 'react-icons/hi'
+import { IoMdSearch } from "react-icons/io";
+import { GiSoundOff, GiSoundOn  } from "react-icons/gi";
+import bg from "../../assets/sound/bg.mp3";
+import { axiosLogout, resetUserInfo } from "../../store/userSlice";
+import { useDispatch } from "react-redux";
+import axios from "axios";
 
 const Navbar = () => {
-  const CustomSidebar = ({ icon: Icon, children, to }) => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const CustomSidebar = ({icon : Icon, children, to}) => {
 
     const link = () => {
       navigate(to);
@@ -21,6 +27,31 @@ const Navbar = () => {
       </div>
     )
   };
+  const dispatch = useDispatch();
+
+  const logout = async () => {
+    await dispatch(axiosLogout());
+    dispatch(resetUserInfo);
+    sessionStorage.clear();
+    localStorage.clear();
+    navigate('/');
+  }
+
+  const audioRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  useEffect(() => {
+    if (isPlaying) {
+      audioRef.current.play();
+    } else {
+      audioRef.current.pause();
+    }
+  }, [isPlaying]);
+
+  const togglePlay = () => {
+    setIsPlaying(!isPlaying);
+    audioRef.current.play();
+  }
 
   return (
     <>
@@ -36,9 +67,19 @@ const Navbar = () => {
             <CustomSidebar to='/lobby/mypage' icon={HiUser}>
               내 정보
             </CustomSidebar>
+            <CustomSidebar to='/lobby/searchPlayer' icon={IoMdSearch}>
+              플레이어 검색
+            </CustomSidebar>
           </Sidebar.ItemGroup>
         </Sidebar.Items>
       </Sidebar>
+      <Button color='warning' onClick={() => logout()}>{sessionStorage.getItem('noLogin')? '나가기':'로그아웃'}</Button>
+      {
+        isPlaying ? <GiSoundOff className='w-10 h-10 hover:cursor-pointer' onClick={togglePlay}></GiSoundOff> : <GiSoundOn className='w-10 h-10 hover:cursor-pointer' onClick={togglePlay}></GiSoundOn>   
+      }
+      <audio ref={audioRef} className='hidden'>
+        <source src={bg} type="audio/mp3"/>
+      </audio>
     </>
   );
 };

@@ -21,4 +21,11 @@ public class PlayerAnimalTest {
         List<PlayerAnimal> byUserSequence = playerAnimalRepository.findByUserSequence(101L);
         System.out.println("byUserSequence = " + byUserSequence);
     }
+
+    @Transactional
+    @Test
+    void findByUserSequence() {
+        PlayerAnimal playerAnimal = playerAnimalRepository.findByPlayerSequenceAndAnimalId(1L, "TIGER01");
+        System.out.println("playerAnimal = " + playerAnimal);
+    }
 }
