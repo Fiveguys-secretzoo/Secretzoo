@@ -49,7 +49,7 @@ const SearchPlayer = () => {
             {searchCondition}<FaChevronDown></FaChevronDown>
           </Button>
         )}>
-            <Dropdown.Item onClick={() => setSearchCondition('닉네임')}>닉네임</Dropdown.Item>
+            <Dropdown.Item onClick={() => setSearchCondition('닉네임')} >닉네임</Dropdown.Item>
             <Dropdown.Item onClick={() => setSearchCondition('아이디')}>아이디</Dropdown.Item>
             <Dropdown.Item onClick={() => setSearchCondition('이름')}>이름</Dropdown.Item>
         </Dropdown>
@@ -67,9 +67,10 @@ const SearchPlayer = () => {
         <div>
             {searchResult ? (
             <div>
-              <div className='h-[30em]'>
+              <div className='h-[33em]'>
                 {searchResult.data.map((element, index) => (
                   <Card 
+                  className='m-3 p-1'
                   href='#' 
                   key={index}
                   onClick={(e) => { e.preventDefault(); goToDetail(element.userSequence)}}>
@@ -84,7 +85,7 @@ const SearchPlayer = () => {
                 totalPages={Math.floor(searchResult.totalPlayer/4)+1} 
                 onPageChange={onPageChange} showIcons/>
               </div>
-            </div> ): ( <div>조회된 플레이어가 없습니다.</div>)}
+            </div> ): ( <div className='text-white'>조회된 플레이어가 없습니다.</div>)}
         </div>
     </>
   );

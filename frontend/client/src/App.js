@@ -22,8 +22,8 @@ import SearchPlayerDetail from './pages/searchPlayerDetail';
 
 
 //노드 서버
-// const socket = io("http://localhost:3001");
-const socket = io('https://secretzoo.site'); // 노드 서버 URL 
+const socket = io("http://localhost:3001");
+// const socket = io('https://secretzoo.site'); // 노드 서버 URL 
 export const SocketContext = createContext();
 
 function App() {
@@ -41,7 +41,7 @@ function App() {
   return (
     <BrowserRouter>
       <SocketContext.Provider value={socket}>
-        <div className="App font-DNFBitBitv2">
+        <div className="App font-Maplestory">
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="*" element={<Page404 />} />
