@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 const Login = () => {
   const navigate = useNavigate();
   useEffect(() => {
-    if(localStorage.getItem('access-token')){
+    if(sessionStorage.getItem('access-token')){
       navigate('lobby');      
     }
   });
