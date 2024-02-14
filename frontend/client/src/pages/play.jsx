@@ -354,10 +354,23 @@ const Play = () => {
           psq = player;
           playerName = playerArr[player].pn;
           activate = true;
+          console.log(subscribers);
+          if(subscribers.length!==0){
+            for(let i=0;i<subscribers.length;i++){
+              
+                console.log(JSON.parse(subscribers[i].stream.connection.data).clientData===psq);
+                // console.log(subs);
+                video.current= <UserVideoComponent streamManager={subscribers[i]}/>
+                count++;
+                break;
+              
+              
+            }
+          }
         }
-        video.current = <UserVideoComponent streamManager={subscribers[count]} />
+        // video.current = <UserVideoComponent streamManager={subscribers[count]} />
         // console.log(subscribers[count]);
-        count++;
+        
         slotArr.push(
           <PlayerView
             psq={psq}
@@ -388,7 +401,7 @@ const Play = () => {
     }
     video.current = <UserVideoComponent streamManager={publisher} />
     if(publisher !== undefined){
-      console.log(publisher.stream.connection.data.clientData);
+      console.log(JSON.parse(publisher.stream.connection.data).clientData);
     }
     slotArr.push(
       <PlayerView
@@ -404,9 +417,9 @@ const Play = () => {
     return slotArr;
   }
 
-  const [myUserName, setMyUserName] = useState(sessionStorage.getItem('userNickname'));
+  const [myUserName, setMyUserName] = useState(sessionStorage.getItem('userSeq'));
   const [publisher, setPublisher] = useState(undefined);
-  const [subscribers, setSubscribers] = useState([]);
+  const [subscribers, setSubscribers] = useState([]); 
   const session = useRef(undefined);
   const prevPlayerListRef = useRef({});
 
@@ -414,14 +427,12 @@ const Play = () => {
       useEffect(() => {
         
           console.log('$$$$$$$$$$$$$$$$$$$$$$$4');
-         
-
             joinSession();
             window.addEventListener('beforeunload', onbeforeunload);  
             console.log(subscribers);
           return () => {
               window.removeEventListener('beforeunload', onbeforeunload);
-              // leaveSession();
+              leaveSession();
           };
         
         
@@ -459,7 +470,7 @@ const Play = () => {
           
           try {
               const token = await getToken(sessionStorage.getItem('roomName'));
-              setMyUserName(sessionStorage.getItem('userNickname'));
+              setMyUserName(sessionStorage.getItem('userSeq'));
               
               mySession.connect(token, { clientData: myUserName })
               .then(async () => {

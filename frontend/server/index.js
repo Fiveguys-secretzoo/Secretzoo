@@ -14,7 +14,7 @@ async function main() {
   const app = express();
 
   const roomMethods = roomSocketMethods();
-  const playMethods = playSocketMethods();
+  const playMethods = playSocketMethods();  
   const {
     sendRoomInfo,
     createRoom,
