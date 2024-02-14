@@ -87,7 +87,7 @@ const Ranking = () => {
   }
   return (
     <>
-      <div className="bg-ranking-bg py-4 px-16 rounded">
+      <div className="bg-ranking-bg py-4 px-16 rounded bg-cover">
         <nav className="px-4 py-2 text-center rounded shadow-md">
           <div className="flex space-x-2 justify-center">
             <button className='px-6 rounded-md hover:bg-gray-200'

@@ -61,6 +61,7 @@ export const getUserInfo = createAsyncThunk(
       };
       sessionStorage.setItem('userName',data1.userId);
       sessionStorage.setItem('userNickname', data1.nickname);
+      sessionStorage.setItem('userSequence', data1.userSequence.toString());
       return userData
 
     } catch (error) {

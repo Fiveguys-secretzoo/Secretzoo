@@ -355,7 +355,8 @@ const Play = () => {
           playerName = playerArr[player].pn;
           activate = true;
         }
-        video.current = <UserVideoComponent streamManager={subscribers[count]} />
+        video.current = <UserVideoComponent streamManager={subscribers.get(player)} />
+        console.log("@###@#@#@##sub")
         console.log(subscribers);
         count ++ ;
         slotArr.push(
@@ -402,8 +403,9 @@ const Play = () => {
   }
 
   const [myUserName, setMyUserName] = useState(sessionStorage.getItem('userNickname'));
+  const [myUserSequence, setMyUserSequence] = useState(sessionStorage.getItem('userSequence'));
   const [publisher, setPublisher] = useState(undefined);
-  const [subscribers, setSubscribers] = useState([]);
+  const [subscribers, setSubscribers] = useState(new Map());
   const session = useRef(undefined);
   const prevPlayerListRef = useRef({});
 
@@ -434,7 +436,8 @@ const Play = () => {
 
       const deleteSubscriber = (streamManager) => {
           
-          setSubscribers((prevSubscribers) => prevSubscribers.filter((sub) => sub !== streamManager));
+          // setSubscribers((prevSubscribers) => prevSubscribers.filter((sub) => sub !== streamManager));
+          setSubscribers((prevSubscribers) => new Map([...prevSubscribers].filter(([key, value]) => value !== streamManager)));
        
       };
 
@@ -443,11 +446,20 @@ const Play = () => {
 
           const mySession = OV.initSession();
           
+          // mySession.on('streamCreated', (event) => {
+          //     const subscriber = mySession.subscribe(event.stream, undefined);
+          //     setSubscribers((prevSubscribers) => [...prevSubscribers, subscriber]);
+          // });
           mySession.on('streamCreated', (event) => {
-              const subscriber = mySession.subscribe(event.stream, undefined);
-              setSubscribers((prevSubscribers) => [...prevSubscribers, subscriber]);
+            const subscriber = mySession.subscribe(event.stream, undefined);
+            setSubscribers((prevSubscribers) => {
+              const newSubscribers = new Map(prevSubscribers);
+              if (!newSubscribers.has(JSON.parse(event.stream.connection.data).clientData2)) {
+                  newSubscribers.set(JSON.parse(event.stream.connection.data).clientData2, subscriber);
+              }
+              return newSubscribers;
+            });
           });
-          
           mySession.on('streamDestroyed', (event) => {
               deleteSubscriber(event.stream.streamManager);
           });
@@ -459,8 +471,10 @@ const Play = () => {
           try {
               const token = await getToken(sessionStorage.getItem('roomName'));
               setMyUserName(sessionStorage.getItem('userNickname'));
+              setMyUserSequence(sessionStorage.getItem('userSequence'));
               
-              mySession.connect(token, { clientData: myUserName })
+              
+              mySession.connect(token, { clientData: myUserName, clientData2: myUserSequence})
               .then(async () => {
                   let newPublisher = await OV.initPublisherAsync(undefined, {
                       audioSource: undefined,
@@ -496,8 +510,9 @@ const Play = () => {
           }
           
           session.current=undefined;
-          setSubscribers([]);
+          setSubscribers(new Map());
           setMyUserName(sessionStorage.getItem('userNickname'));
+          setMyUserSequence(sessionStorage.getItem('userSequence'));
           setPublisher(undefined);
       };
 
