@@ -111,7 +111,11 @@
 <img src="https://img.shields.io/badge/Lottie-00c1a2?style=for-the-badge">
 <img src="https://img.shields.io/badge/flowbite-1b61ea?style=for-the-badge">
 
-
+#### 상세스택
+    React.js 18.2.0
+    redux 4.2.1
+    redux-persist: 6.0.0
+    openvidu-browser 2.29.1
 
 <br>
 
@@ -119,13 +123,23 @@
 <img src="https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white"> 
 ![Intellij IDEA](https://img.shields.io/badge/Intellij%20IDEA-000000.svg?&style=for-the-badge&logo=IntelliJ%20IDEA&logoColor=white) <br/>
 <img src="https://img.shields.io/badge/spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> 
-<img src="https://img.shields.io/badge/Spring Security-6DB33F.svg?style=for-the-badge&logo=Spring Security&logoColor=white"> <br/>
+<img src="https://img.shields.io/badge/Node.js-%2343853D.svg?style=for-the-badge&logo=node.js&logoColor=white"> 
+<img src="https://img.shields.io/badge/Spring Security-6DB33F.svg?style=for-the-badge&logo=Spring Security&logoColor=white">
 <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> 
 <img src="https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white">
 <img src="https://img.shields.io/badge/Gradle-02303A.svg?style=for-the-badge&logo=Gradle&logoColor=white"> 
-<img src="https://img.shields.io/badge/Node.js-%2343853D.svg?style=for-the-badge&logo=node.js&logoColor=white">
 
-<br>
+#### 상세 스택
+    Spring boot 3.2.1
+    Spring-boot-starter-data-jpa
+    Spring security 6.2.1
+    Lombok 1.18.30
+    Azul-17
+    MySQL 5.7.43
+    Redis 7.0.4
+    Swagger3
+    Gradle
+<br/>
 
 ### 🖱 CI/CD
 <img src="https://img.shields.io/badge/jenkins-%232C5263.svg?style=for-the-badge&logo=jenkins&logoColor=white">
