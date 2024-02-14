@@ -431,7 +431,6 @@ const Play = () => {
           
           // setSubscribers((prevSubscribers) => prevSubscribers.filter((sub) => sub !== streamManager));
           setSubscribers((prevSubscribers) => new Map([...prevSubscribers].filter(([key, value]) => value !== streamManager)));
-       
       };
 
     const joinSession = async () => {
@@ -507,18 +506,6 @@ const Play = () => {
           setMyUserSequence(sessionStorage.getItem('userSequence'));
           setPublisher(undefined);
       };
-
-    const leaveSession = () => {
-      const mySession = session.current;
-      if (mySession) {
-        mySession.disconnect();
-      }
-
-      session.current = undefined;
-      setSubscribers([]);
-      setMyUserName(sessionStorage.getItem('userNickname'));
-      setPublisher(undefined);
-    };
 
     const getToken = async (sid) => {
       const safeid = encodeURIComponent(sid).replace(/[%]/g, '');
