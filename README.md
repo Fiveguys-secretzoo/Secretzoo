@@ -1,7 +1,7 @@
 # 🐯SECRET ZOO (온라인 화상 블러핑 카드 게임🎮)
 
 ### SSAFY 10기 공통 프로젝트 서울 4반 🍔FIVE GUYS🍔
-
+![secretzoo](/uploads/14475d21eaccf0ae00911153872495fc/secretzoo.jpg)
 #### 주제: 🎮 바퀴벌레 포커 온라인 리메이크 SECRET ZOO 🐯
 <br/>
 
