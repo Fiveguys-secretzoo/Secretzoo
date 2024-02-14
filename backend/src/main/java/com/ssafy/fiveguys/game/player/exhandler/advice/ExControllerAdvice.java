@@ -11,20 +11,20 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Slf4j
-@RestControllerAdvice(basePackages = "com.example.game.api")
+@RestControllerAdvice(basePackages = "com.ssafy.fiveguys.game")
 public class ExControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(IllegalArgumentException.class)
     public ErrorResult illegalExHandler(IllegalArgumentException e) {
         log.error("[exceptionHandler] ex", e);
-        return new ErrorResult("BAD", e.getMessage());
+        return new ErrorResult("BAD_REQUEST", e.getMessage());
     }
 
     @ExceptionHandler
     public ResponseEntity<ErrorResult> userExHandler(UserException e) {
         log.error("[exceptionHandler] ex", e);
-        ErrorResult errorResult = new ErrorResult("EXAMPLE", e.getMessage());
+        ErrorResult errorResult = new ErrorResult("NO_USER", "해당하는 유저가 없습니다");
         return new ResponseEntity<>(errorResult, HttpStatus.BAD_REQUEST);
     }
 
@@ -32,7 +32,7 @@ public class ExControllerAdvice {
     @ExceptionHandler
     public ErrorResult exHandler(Exception e) {
         log.error("[exceptionHandler] ex", e);
-        return new ErrorResult("SERVER", "서버 내부 오류");
+        return new ErrorResult("SERVER_ERROR", "서버 내부 오류");
     }
 
 }

@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Progress } from 'flowbite-react';
+import { useSelector, useDispatch } from 'react-redux';
+import { axiosGetTotalRewards } from '../../store/userSlice';
+
 
 
 const MyReward = () => {
-  const [myRewards, setMyrewards] = useState(null);
-  axios.defaults.headers.common['Authorization'] = sessionStorage.getItem('authorization');
+  const user = useSelector((state) => state.user.userInfo);
+  const dispatch = useDispatch();
+ 
 
-  const authHeader = sessionStorage.getItem('authorization');
+  const [myRewards, setMyrewards] = useState(null);
+  axios.defaults.headers.common['Authorization'] = localStorage.getItem('token_type') + ' ' + localStorage.getItem('access-token');
+
+  const authHeader = localStorage.getItem('access-token');
   const token = authHeader.split(' ')[1];
   const parts = token.split('.');
   const payloadInBase64 = parts[1];
@@ -16,16 +23,17 @@ const MyReward = () => {
 
   console.log(payload);
 
-  const getRewrds = (playerSequence) => {
-    axios.get(`https://secretzoo.site/api/rewards/total/101`)
-      .then(response => {
-        console.log(response);
-        setMyrewards(response.data);
-      });
+  const getRewards = async () => {
+    if(user.userSequence){
+      dispatch(axiosGetTotalRewards(user.userSequence))
+        .then(Response => {
+          setMyrewards(Response.payload);
+        });
+    }
   };
   useEffect(() => {
-    getRewrds();
-  }, []);
+    getRewards();
+  }, [user]);
 
   if (!myRewards) {
     return <div>Loading...</div>;
@@ -37,7 +45,7 @@ const MyReward = () => {
 
         <Progress progress={Object.keys(myRewards.data).filter(reward => myRewards.data[reward].done).length / myRewards.count * 100} />
       </div>
-      <div className='container p-2 my-4 overflow-y-auto h-[35%] shadow-md'>
+      <div className='container p-2 my-4 overflow-y-auto h-[35%] shadow-md custom-scrollbar'>
         <p className='mb-2'>달성한 과제</p>
         {
           Object.keys(myRewards.data).filter(reward => myRewards.data[reward].done).map((reward) => (

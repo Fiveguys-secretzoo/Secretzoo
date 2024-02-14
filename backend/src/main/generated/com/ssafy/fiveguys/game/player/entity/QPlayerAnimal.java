@@ -22,17 +22,17 @@ public class QPlayerAnimal extends EntityPathBase<PlayerAnimal> {
 
     public static final QPlayerAnimal playerAnimal = new QPlayerAnimal("playerAnimal");
 
-    public final com.ssafy.fiveguys.game.player.entity.base.QBaseTimeEntity _super = new com.ssafy.fiveguys.game.player.entity.base.QBaseTimeEntity(this);
+    public final com.ssafy.fiveguys.game.common.entity.QBaseTimeEntity _super = new com.ssafy.fiveguys.game.common.entity.QBaseTimeEntity(this);
 
     public final QAnimal animal;
 
-    public final QAnimalScore animalScore;
+    public final com.ssafy.fiveguys.game.player.entity.embeddedType.QAnimalScore animalScore;
 
     //inherited
-    public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
+    public final DateTimePath<java.sql.Timestamp> createdDate = _super.createdDate;
 
     //inherited
-    public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
+    public final DateTimePath<java.sql.Timestamp> lastModifiedDate = _super.lastModifiedDate;
 
     public final QPlayer player;
 
@@ -57,7 +57,7 @@ public class QPlayerAnimal extends EntityPathBase<PlayerAnimal> {
     public QPlayerAnimal(Class<? extends PlayerAnimal> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.animal = inits.isInitialized("animal") ? new QAnimal(forProperty("animal")) : null;
-        this.animalScore = inits.isInitialized("animalScore") ? new QAnimalScore(forProperty("animalScore")) : null;
+        this.animalScore = inits.isInitialized("animalScore") ? new com.ssafy.fiveguys.game.player.entity.embeddedType.QAnimalScore(forProperty("animalScore")) : null;
         this.player = inits.isInitialized("player") ? new QPlayer(forProperty("player"), inits.get("player")) : null;
     }
 
