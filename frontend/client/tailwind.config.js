@@ -8,6 +8,7 @@ module.exports = {
     extend: {
       fontFamily: {
         DNFBitBitv2: ["DNFBitBitv2"],
+        Maplestory: ["Maplestory"]
       },
       backgroundColor: {
         'custom-opacity': 'rgba(0, 0, 0, 0.7)',

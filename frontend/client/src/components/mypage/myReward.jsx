@@ -27,7 +27,7 @@ const MyReward = () => {
   }, [user]);
 
   if (!myRewards) {
-    return <div>Loading...</div>;
+    return <div className='text-white'>Loading...</div>;
   }
   return (
     <div className='h-[90%] text-white'>
