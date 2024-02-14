@@ -45,6 +45,10 @@ public class RedisService {
                 TimeUnit.MINUTES);
     }
 
+    public boolean hasRefreshToken(String userId){
+        return Boolean.TRUE.equals(refreshTokenRedisTemplate.hasKey(RT_PREFIX + userId + SUFFIX));
+    }
+
     public String getVerificationCode(String email) {
         return verificationCodeRedisTemplate.opsForValue().get(VC_PREFIX + email + SUFFIX);
     }
@@ -52,7 +56,6 @@ public class RedisService {
     public void deleteVerificationCode(String email) {
         verificationCodeRedisTemplate.delete(VC_PREFIX + email + SUFFIX);
     }
-
     public void saveJwtBlackList(String accessToken) {
         long expirationTime = jwtTokenProvider.getTokenExpiration(accessToken);
         jwtBlackListRedisTemplate.opsForValue()

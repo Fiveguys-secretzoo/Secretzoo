@@ -109,8 +109,21 @@ public class UserController {
 
     @Operation(summary = "아이디 중복체크 API")
     @PostMapping("/check/{userId}")
-    public ResponseEntity<?> checkUserId(@PathVariable String userId) throws Exception {
+    public ResponseEntity<?> checkUserId(@PathVariable String userId) {
         userService.idDuplicated(userId);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @Operation(summary = "동시 로그인 체크 API")
+    @GetMapping("/check-concurrent-login")
+    public ResponseEntity<?> detectConcurrentLogin(HttpServletRequest request) {
+        log.debug("now running detect concurrent login function.");
+        String accessToken = request.getHeader(HttpHeaders.AUTHORIZATION);
+        log.debug("access token = {}",accessToken);
+        String refreshToken = request.getHeader(JwtProperties.REFRESH_TOKEN);
+        log.debug("refresh token = {}",refreshToken);
+        userService.detectConcurrentUser(accessToken, refreshToken);
+        log.info("User is unique.");
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

@@ -139,4 +139,34 @@ public class UserService {
         }
     }
 
+    public void detectConcurrentUser(String requestAccessToken, String requestRefreshToken) {
+        String accessToken = jwtTokenProvider.resolveToken(requestAccessToken);
+        if (!jwtTokenProvider.validateToken(accessToken)) {
+            log.error("access token is invalidate.");
+            throw new JwtException("자격 증명이 필요한 토큰입니다.");
+        }
+        log.debug("case 1 : access token is validate.");
+
+        if (redisService.hasJwtBlackList(accessToken)) {
+            log.error("access token is in black list.");
+            throw new JwtBlackListException("로그아웃 처리된 토큰입니다.");
+        }
+        log.debug("case 2 : access token is not blocking.");
+
+        String userId = jwtTokenProvider.extractUserId(requestAccessToken);
+        log.debug("user id= {}", userId);
+
+        if (!redisService.hasRefreshToken(userId)) {
+            User user = userRepositoy.findByUserId(userId).orElseThrow(
+                UserNotFoundException::new);
+            String refreshToken = user.getRefreshToken();
+            log.debug("detectConcurrentUser.requestRefreshToken = {}", requestRefreshToken);
+            log.debug("detectConcurrentUser.refreshToken = {}", refreshToken);
+            if (!refreshToken.equals(requestRefreshToken)) {
+                log.error("refresh token does not match in Database.");
+                throw new RefreshTokenException("Refresh Token 값이 일치하지 않습니다.");
+            }
+        }
+        log.debug("2. refresh token is identical.");
+    }
 }
