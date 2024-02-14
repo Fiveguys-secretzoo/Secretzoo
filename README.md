@@ -100,7 +100,7 @@
             <a href="https://github.com/hyeounguk2">
               <img src="https://avatars.githubusercontent.com/u/80465980?v=4" width="100">
               <br />
-              <b>👨🏻전형욱👑</b>
+              <b>👑전형욱</b>
             </a> 
         </td>
      <td style="min-width: 250px;">
@@ -168,7 +168,7 @@
         <br/>
         </td>
         <td>
-        0️⃣ 👨🏻Back-end<br>
+        0️⃣ Back-end <br>
         1️⃣ Spring Security 담당<br>
         2️⃣ 유저 API 개발, QA <br>
         3️⃣ 소셜 로그인(구글, 네이버, 카카오) <br>
