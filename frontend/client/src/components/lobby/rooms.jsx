@@ -225,8 +225,8 @@ const Rooms = () => {
             <Card href="#" className="w-[47%] h-[30%] m-2"
               onClick={(e) => { e.preventDefault(); setSelectedRoomName(rooms[key].roomName); setOpenEnterModal(true); }}>
               {rooms[key].isLocked ? <CiLock></CiLock> : null}
-              <p className='truncate text-sm'>{rooms[key].roomName}</p>
-              <p>{rooms[key].players[0].playerName}</p>
+              <p className='text'>{rooms[key].roomName}</p>
+              <p className='text-sm'>{rooms[key].adminPlayer}</p>
               <p className="text-sm">{rooms[key].playerCount}/6</p>
               <p className="text-sm">{rooms[key].status === 1 ? '플레이중' : rooms[key].playerCount === 6 ? '꽉찬방' : '대기중'}</p>
             </Card >

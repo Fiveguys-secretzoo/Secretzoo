@@ -116,7 +116,7 @@ const getRoomInfoForLobby = (rooms) => {
       'status': info['status'],
       'createdDate': info['cdt'],
       'playerCount': info['pc'],
-      'adminPlayer': info['adm'],
+      'adminPlayer': info.ps[info['adm']].pn,
       'isLocked' : false,
     };
     if(info['rpw'] !== ''){
@@ -208,7 +208,7 @@ const roomSocketMethods = () => {
     socket.on('enterRoom', (roomName, rpw="", psq, pn, callback) => {
 
       if (roomName === undefined || rooms[roomName] === undefined) { // 방이 사라진 경우...
-        callback(false)
+        callback(1)
         return;
       }
 
@@ -217,15 +217,21 @@ const roomSocketMethods = () => {
         
         // 인원수 체크
         if (rooms[roomName] && rooms[roomName].pc >= 6) {
-          callback(false);
+          callback(2);
           return;
         }
 
         if(rooms[roomName].rpw !== ''){
           if(rooms[roomName].rpw !==  rpw){
-            callback(false);
+            callback(3);
             return;
           }
+        }
+
+        if(rooms[roomName].status === 1){
+            callback(4);
+            return;
+          
         }
         // 기존방 나가기
         for (let nowRoom of socket.rooms) {
@@ -243,20 +249,26 @@ const roomSocketMethods = () => {
           }
         }
       }
-      
+
       if(rooms[roomName].rpw !== ''){
         if(rooms[roomName].rpw !==  rpw){
-          callback(false);
+          callback(3);
           return;
         }
       }
+
+      if(rooms[roomName].status === 1){
+        callback(4);
+        return;
+      
+    }
       // 입력받은 방 들어가기
       socket.join(roomName);
 
       // console.log(io.of('/').adapter.rooms);
       socket.emit('updateRoom', rooms);
       addPlayer(io, socket, rooms, roomName, psq, socket.id, pn)
-      callback(true)
+      callback(0)
       console.log(`##### [enterRoom] player ${socket.id} join room : ${roomName}`);
 
     });
