@@ -81,9 +81,11 @@ const Navbar = () => {
         </Sidebar.Items>
       </Sidebar>
       <Button className="m-3" color='warning' onClick={() => logout()}>{sessionStorage.getItem('noLogin')? '나가기':'로그아웃'}</Button>
+      <div className="flex justify-center">
       {
-        isPlaying ? <GiSoundOff className='w-10 h-10 hover:cursor-pointer' fill='white' onClick={togglePlay}></GiSoundOff> : <GiSoundOn className='w-10 h-10 hover:cursor-pointer' fill='white' onClick={togglePlay}></GiSoundOn>   
+        isPlaying ? <GiSoundOn className='w-20 h-20 hover:cursor-pointer' fill='white' onClick={togglePlay}></GiSoundOn> : <GiSoundOff className='w-20 h-20 hover:cursor-pointer' fill='white' onClick={togglePlay}></GiSoundOff>   
       }
+      </div>
       <audio ref={audioRef} className='hidden'>
         <source src={bg} type="audio/mp3"/>
       </audio>
