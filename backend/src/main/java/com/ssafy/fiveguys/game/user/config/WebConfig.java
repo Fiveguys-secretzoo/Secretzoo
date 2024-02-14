@@ -7,10 +7,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+
+
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-            .allowedOrigins("https://secretzoo.site", "http://localhost:3000")
-            .allowedMethods("HEAD", "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS");
+            .allowedOriginPatterns("https://secretzoo.site", "http://localhost:3000")
+            .allowedMethods("HEAD", "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
+            .allowedHeaders("Authorization", "Authorization-refresh", "Cache-Control", "Content-Type","refresh-token")
+            .exposedHeaders("*")
+            .allowCredentials(true)
+            .maxAge(3600);
     }
 }
