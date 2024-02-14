@@ -30,7 +30,7 @@ const PlayerView = ({ roomName, psq, key, pn="빈 플레이어", activate = fals
 
   return (
     <>
-      <div className={(c===6)?`bg-white rounded w-96 h-52 m-2 item item${c}`:`bg-white rounded w-96 h-52 m-2 item item${c}`}
+      <div className={(c===6)?`bg-white border-4 border-red-700 rounded w-96 h-52 m-2 item item${c}`:`bg-white rounded w-96 h-52 m-2 item item${c}`}
         key={key}
         onDragStart={(e)=>e.preventDefault()}
         onDragEnter={(e) => dragEnterHandler(e, psq)}
@@ -38,9 +38,9 @@ const PlayerView = ({ roomName, psq, key, pn="빈 플레이어", activate = fals
         onDrop={(e) => dropHandler(e, psq, setCards)}
       >
         <div>
-          <p className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white text-center">
+          <p className="text-2xl font-bold tracking-tight text-gray-900 dark:text-blue text-center">
             {(c===6)?'YOUR VIDEO!':pn} 
-          </p>  
+          </p>
         </div>
         <div className="flex flex-1">
           <div className="w-2/3 h-2/3 pb-5">
