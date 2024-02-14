@@ -580,7 +580,7 @@ const Play = () => {
           {
             playState === 2 && !isMyTurn &&
             <SelectScreen>
-              <DropSelectNotTurn></DropSelectNotTurn>
+              <DropSelectNotTurn p1={players[fromP]?.pn}></DropSelectNotTurn>
             </SelectScreen>
           }
           {/* 방어 시도  */}
@@ -642,7 +642,7 @@ const Play = () => {
           {
             playState === 5 &&
             <SelectScreen>
-              <AnswerRevealView gameResult={gameResult}>
+              <AnswerRevealView gameResult={gameResult} p2={players[toP]?.pn} realCard={card}>
               </AnswerRevealView>
             </SelectScreen>
           }
