@@ -149,7 +149,7 @@ public class UserService {
 
         if (redisService.hasJwtBlackList(accessToken)) {
             log.error("access token is in black list.");
-            throw new JwtBlackListException("로그아웃 처리된 토큰입니다.");
+            throw new JwtBlackListException("블랙 리스트 토큰입니다.");
         }
         log.debug("case 2 : access token is not blocking.");
 
