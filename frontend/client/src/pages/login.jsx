@@ -19,7 +19,7 @@ const Login = () => {
     <>
     {/* <img class="inline-block rounded-full w-14 h-14 ring-2 ring-white" alt="" src="https://i.namu.wiki/i/y_8CP6TQvUWkf-mKet9Kefa-FNIMuQDw8TYTRsbO8TVHd7SULotm7kClNqwVm4DeqTRAcHqBRNZJEBaiUeIOWsJVfd3SEq6QqtYpOr_r0LIqXiIIQ17tDu4A7fZjLpC0NBG2ELipm58uS4w_S9HDwA.webp"></img> */}
       <div className="flex flex-col items-center justify-center h-screen opacity-[90%]">
-        <div className="bg-main-logo logo ml-40 w-[32em] h-[20em] bg-contain bg-no-repeat p-2"></div>
+        <div className="bg-main-logo logo w-[32em] h-[20em] bg-contain bg-no-repeat p-2"></div>
         <div className="flex">
           <div className="p-6 max-w-sm mx-2 min-h-[32em] min-w-[24em] bg-white rounded-xl shadow-md">
             <div className="space-y-5">
