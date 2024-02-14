@@ -97,8 +97,7 @@
 <br/>
 
 <div align=left><h2>💻TECH STACKS</h2></div>
-### 📌 Overview
-#### "놀랄 만큼 쉽고 믿기 힘들 만큼 재밌습니다."
+
 <div align=center> 
 
 <img src="https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB">
