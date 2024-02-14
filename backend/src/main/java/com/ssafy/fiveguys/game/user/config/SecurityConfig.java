@@ -72,8 +72,8 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/", "/css/**", "/images/**", "/js/**", "/favicon.ico", "/error")
                 .permitAll() // '인증' 무시
-                .requestMatchers("/auth/**", "/verify-email/**","/users/check/**").permitAll()
-                .requestMatchers("/players/**", "/rank/**").permitAll()
+                .requestMatchers("/auth/**", "/verify-email/**", "/users/check/**").permitAll()
+                .requestMatchers("/players/**", "/rank/**", "/rewards/save").permitAll()
                 .requestMatchers("/users/**").hasAnyRole("USER", "ADMIN")
                 .requestMatchers(swaggerURL).permitAll()
                 .anyRequest().authenticated());
