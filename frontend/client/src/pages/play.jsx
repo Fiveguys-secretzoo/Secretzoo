@@ -592,6 +592,7 @@ const Play = () => {
                 setIsMyTurn={setIsMyTurn}
                 playerCount={playerCount}
                 tpCount={turnedPlayer.length}
+                animal={animalList[bCard]}
               ></AnswerSelectMyTurn>
             </SelectScreen>
           }
