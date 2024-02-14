@@ -76,7 +76,7 @@ const Play = () => {
   const [input, setInput] = useState('');
   const [isMyTurn, setIsMyTurn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [cards, setCards] = useState([0, 1, 2, 3]); // 손에 들고 있는 카드 관리
+  const [cards, setCards] = useState([0, 1, 2, 3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]); // 손에 들고 있는 카드 관리
   const [isRight, setIsRight] = useState(false);
   const [gameResult, setGameResult] = useState(false);
   // 0 대기 1 시작 2 카드 드롭 후 동물 선택 3 동물 선택 후 방어 턴 4 넘기는 턴 드래그 5 넘기는 턴 동물 선택 6 결과 확인
@@ -350,7 +350,7 @@ const Play = () => {
           activate = true;
         }
         if(count==4){slotArr.push(
-            <div className="bg-white rounded w-96 h-60 m-2 flex flex-col p-2 mx-5 invisible">
+            <div className="bg-white rounded w-96 h-60 m-2 flex flex-col p-2 mx-5 invisible ">
             </div>
           );
           count++;
@@ -649,10 +649,11 @@ const Play = () => {
           }
           {/* <img className="" src={require(`../assets/img/card/00/000.png`)} alt="" /> */}
 
-          <div className='flex absolute left-[35%] w-[65%] bottom-[100px]'>
-
+        {/* <div className="max-w-[55%] h-60">
+          <div className='flex max-w-[55%] h-60 content-center justify-start'> */}
+            
             {/* 카드 표현 부분 */}
-            <div className='flex max-w-[55%] max-h-[10em]'>
+            <div className='flex max-w-[33%] max-h-[8em] content-center justify-center m-5 absolute bottom-0 left-1/2 transform -translate-x-1/2'>
               {cards &&
                 cards.map((i, index) => (
                   <CardView
@@ -685,11 +686,13 @@ const Play = () => {
                 />
                 <Button onClick={/*sendMessage*/() => { console.log(roomInfo) }}>Send</Button>
               </div>
-            </div>
-            <Button className={(playState === 0) ? '' : 'hidden'} disabled={!isAdmin} color="success" onClick={start}>start</Button>
+              
+            <Button className="" disabled={!isAdmin || playerCount < 4 || playState === 0} color="success" onClick={start}>start</Button>
             <Button color="success" onClick={leaveRoom}>방 나가기</Button>
+            </div>
           </div>
-        </div>
+        {/* </div>
+        </div> */}
       </div >
 
     </>
