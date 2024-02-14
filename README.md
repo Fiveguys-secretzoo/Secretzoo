@@ -103,50 +103,7 @@
               <b>전형욱</b>
             </a> 
         </td>
-        <td style="min-width: 250px;">
-            <a href="https://github.com/hyunsoo10">
-              <img src="https://avatars.githubusercontent.com/u/139304756?v=4" width="100">
-              <br />
-              <b>조현수</b>
-            </a> 
-        </td>
-        <td style="min-width: 250px;">
-            <a href="https://github.com/jaeyun1723">
-              <img src="https://avatars.githubusercontent.com/u/84389492?v=4" width="100">
-              <br />
-              <b>김재윤</b>
-            </a>
-        </td>
-    </tr>
-    <tr align="left">
-        <td>
-        0️⃣ 👨🏻Front-end(팀장👑)<br> 
-        1️⃣ Web-RTC(Openvidu) 전담<br>
-        2️⃣ 게임 플레이 화면 구현
-        <br/>
-        </td>
-        <td>
-        0️⃣ 👨🏻Back-end <br> 
-        1️⃣ 인프라 담당<br>
-        2️⃣ 게임 Ranking API 개발, QA <br>
-        3️⃣ 플레이어 Rewards API 개발 <br>
-        <br/>
-        </td>
-        <td>
-        0️⃣ 👨🏻Back-end<br>
-        1️⃣ Spring Security 담당<br>
-        2️⃣ 유저 API 개발, QA <br>
-        3️⃣ 소셜 로그인(구글, 네이버, 카카오) <br>
-        <br/>
-        </td>
-    </tr>
-</div>
-</table>
-
-<table align=center>
-<div align=center> 
-    <tr align=center>
-        <td style="min-width: 250px;">
+     <td style="min-width: 250px;">
             <a href="https://github.com/gwanu-dev">
               <img src="https://avatars.githubusercontent.com/u/26521521?v=4" width="100">
               <br />
@@ -163,6 +120,12 @@
     </tr>
     <tr align="left">
         <td>
+        0️⃣ 👨🏻Front-end(팀장👑)<br> 
+        1️⃣ Web-RTC(Openvidu) 전담<br>
+        2️⃣ 게임 플레이 화면 구현
+        <br/>
+        </td>
+       <td>
         0️⃣ 👨🏻Front-end<br> 
         1️⃣ 게임 플레이 구현<br>
         2️⃣ 프론트 소켓 서버 담당 <br>
@@ -172,6 +135,43 @@
         0️⃣ 👨🏻Front-end<br> 
         1️⃣ UI/UX 담당 <br>
         2️⃣ 메인 페이지 구현 <br>
+        <br/>
+        </td>
+    </tr>
+</div>
+</table>
+
+<table align=center>
+<div align=center> 
+    <tr align=center>
+          <td style="min-width: 250px;">
+            <a href="https://github.com/hyunsoo10">
+              <img src="https://avatars.githubusercontent.com/u/139304756?v=4" width="100">
+              <br />
+              <b>조현수</b>
+            </a> 
+        </td>
+        <td style="min-width: 250px;">
+            <a href="https://github.com/jaeyun1723">
+              <img src="https://avatars.githubusercontent.com/u/84389492?v=4" width="100">
+              <br />
+              <b>김재윤</b>
+            </a>
+        </td>
+    </tr>
+    <tr align="left">
+          <td>
+        0️⃣ 👨🏻Back-end <br> 
+        1️⃣ 인프라 담당<br>
+        2️⃣ 게임 Ranking API 개발, QA <br>
+        3️⃣ 플레이어 Rewards API 개발 <br>
+        <br/>
+        </td>
+        <td>
+        0️⃣ 👨🏻Back-end<br>
+        1️⃣ Spring Security 담당<br>
+        2️⃣ 유저 API 개발, QA <br>
+        3️⃣ 소셜 로그인(구글, 네이버, 카카오) <br>
         <br/>
         </td>
     </tr>
