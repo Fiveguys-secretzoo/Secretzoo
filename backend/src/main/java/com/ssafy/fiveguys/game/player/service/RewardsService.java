@@ -244,13 +244,13 @@ public class RewardsService {
         //플레이어의 전적 정보가 있으면 업데이트 해주기
         if (playerWhale != null) {
             playerWhale.updateAnimalScore(playerWhale.getAnimalScore(),
-                animalDto.getSheep().getAnimalScore());
+                animalDto.getWhale().getAnimalScore());
         }
 
         //만약 해당 플레이어가 동물에 대한 전적 정보가 없다면 새롭게 만들어 주기
         else {
             PlayerAnimal playerAnimal = new PlayerAnimal(player, whale,
-                animalDto.getSheep().getAnimalScore());
+                animalDto.getWhale().getAnimalScore());
             log.debug("playerAnimal= {}", playerAnimal);
             em.persist(playerAnimal);
         }
