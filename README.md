@@ -1,9 +1,8 @@
-# 🍔FIVE GUYS🍔
+# SECRET ZOO🐯(온라인 화상 블러핑 카드 게임🎮)
 
-### SSAFY 10기 공통 프로젝트 서울 4반 A406
+### SSAFY 10기 공통 프로젝트 서울 4반 A406. 🍔FIVE GUYS🍔
 
-#### 주제: 바퀴벌레 포커 온라인 리메이크 SECRET ZOO 🐯
-
+#### 주제: 🎮 바퀴벌레 포커 온라인 리메이크 SECRET ZOO 🐯
 <br/>
 
 ## 🤲🏻 팀원 구성 및 역할 분담 🤲🏻
@@ -96,7 +95,7 @@
 <br/>
 <br/>
 
-# 🖥 개발 환경 
+# 5️⃣🖥 개발 환경 
 ### 🖱 Frontend
 <img src="https://img.shields.io/badge/JavaScript(es6)-F7DF1E.svg?style=for-the-badge&logo=javascript&logoColor=black">
 ![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-007ACC.svg?&style=for-the-badge&logo=Visual%20Studio%20Code&logoColor=white) <br/>
@@ -112,11 +111,14 @@
 <img src="https://img.shields.io/badge/flowbite-1b61ea?style=for-the-badge">
 
 #### 상세스택
-    React.js 18.2.0
-    redux 4.2.1
-    redux-persist: 6.0.0
-    openvidu-browser 2.29.1
 
+    react 18.2.0,
+    redux 5.0.1
+    redux-persist 6.0.0
+    flowbite-react 0.7.2
+    tailwindcss 3.4.1
+    socket.io 4.7.4
+    openvidu-browser 2.29.1
 <br>
 
 #### 🖱 Backend
@@ -162,8 +164,10 @@
 
 ##### 1️⃣ 서비스 소개
 ##### 2️⃣ 서비스 화면
-##### 3️⃣ 프로젝트 산출물
-##### 4️⃣ 개발 회고
+##### 3️⃣ 팀원 소개와 역할
+##### 4️⃣ 개발 환경
+##### 5️⃣ 프로젝트 산출물
+##### 6️⃣ 개발 회고
 
 <br>
 
