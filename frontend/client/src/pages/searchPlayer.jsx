@@ -45,7 +45,7 @@ const SearchPlayer = () => {
         <div className='container flex mb-2'>
           <Dropdown label={searchCondition}  
           renderTrigger={({ isOpen }) => (
-          <Button className='w-24' >
+          <Button className='w-24 mr-2' >
             {searchCondition}<FaChevronDown></FaChevronDown>
           </Button>
         )}>
@@ -58,7 +58,7 @@ const SearchPlayer = () => {
             value={searchContent}
             onChange={(e) =>setSearchContent(e.target.value)}
             ></TextInput>
-            <Button type='submit' onClick={(e) => {e.preventDefault(); search(1)}}>
+            <Button className='ml-2' type='submit' onClick={(e) => {e.preventDefault(); search(1)}}>
               검색 
               <IoMdSearch className='ml-2'></IoMdSearch>
             </Button>
@@ -70,7 +70,7 @@ const SearchPlayer = () => {
               <div className='h-[33em]'>
                 {searchResult.data.map((element, index) => (
                   <Card 
-                  className='m-3 p-1'
+                  className='m-3 p-1 border-2 shadow-lg rounded-lg text-white bg-transparent hover:bg-[#352F44]'
                   href='#' 
                   key={index}
                   onClick={(e) => { e.preventDefault(); goToDetail(element.userSequence)}}>
