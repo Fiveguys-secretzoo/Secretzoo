@@ -1,8 +1,9 @@
-import { useDispatch, useContext } from 'react-redux';
+import { useContext } from 'react'
+import { useDispatch } from 'react-redux';
 import { Button } from 'flowbite-react';
 import { changePlayState } from '../../store/playSlice'
 
-import { SocketContext } from '../App';
+import { SocketContext } from '../../App';
 const GameResultView = ({ roomName, playerSequence, gameInfoHandler }) => {
 
   const dispatch = useDispatch();

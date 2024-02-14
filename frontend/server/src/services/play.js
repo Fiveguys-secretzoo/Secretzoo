@@ -288,7 +288,7 @@ const playSocketMethods = () => {
         console.log(`##### [sendScore] reward sends`)
         console.log(rewardData);
         axios
-          .post('http://secretzoo.site/rewards/save', rewardData).then((res) => {
+          .post('https://spring.secretzoo.site/rewards/save', rewardData).then((res) => {
             console.log(res);
           })
           .catch((err) => {
@@ -307,7 +307,7 @@ const playSocketMethods = () => {
         console.log(`##### [sendScore] rank sends`)
         console.log(rankData);
         axios
-          .post('http://secretzoo.site/rank/save', rankData).then((res) => {
+          .post('https://spring.secretzoo.site/rank/save', rankData).then((res) => {
             console.log(res);
           })
           .catch((err) => {
