@@ -33,7 +33,6 @@ const Navbar = () => {
     await dispatch(axiosLogout());
     dispatch(resetUserInfo);
     sessionStorage.clear();
-    localStorage.clear();
     navigate('/');
   }
 

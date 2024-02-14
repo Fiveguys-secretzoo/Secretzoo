@@ -32,7 +32,7 @@ function App() {
 
   useEffect(() => {
     const loadData = async () => {
-      if (localStorage.getItem('access-token')) {
+      if (sessionStorage.getItem('access-token')) {
         dispatch(getUserInfo());
       }
     };
