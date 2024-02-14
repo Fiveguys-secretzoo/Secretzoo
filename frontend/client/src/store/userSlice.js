@@ -7,33 +7,56 @@ import Swal from 'sweetalert2';
 const axiosInstance = axios.create();
 
 axiosInstance.interceptors.request.use(async config => {
-  const expiresAt = parseInt(localStorage.getItem('expires_at'), 10);
+  const expiresAt = parseInt(sessionStorage.getItem('expires_at'), 10);
   if (Date.now() > expiresAt) {
-    const refresh_Token = localStorage.getItem('refresh-token');
-    const access_token = localStorage.getItem('access-token');
+    const refresh_Token = sessionStorage.getItem('refresh-token');
+    const access_token = sessionStorage.getItem('access-token');
     try {
       const response = await axios.post('https://spring.secretzoo.site/auth/token/refresh', {} ,{
         headers: {
-          "Authorization" : localStorage.getItem('token_type') + ' ' + access_token,
+          "Authorization" : sessionStorage.getItem('token_type') + ' ' + access_token,
           "refresh-token" : refresh_Token,
         }
       });
-      localStorage.setItem('Authorization', response.data['access-token']);
-      localStorage.setItem('refresh-token', response.data['refresh-token']);
-      axiosInstance.defaults.headers.common['Authorization'] = localStorage.getItem('token_type') + ' ' + localStorage.getItem('access-token');
+      const expiresIn = response.data['expires_in'] - 600000; 
+      const expiresAt = Date.now() + expiresIn;
+      sessionStorage.setItem('Authorization', response.data['access-token']);
+      sessionStorage.setItem('refresh-token', response.data['refresh-token']);
+      sessionStorage.setItem('expires_at', expiresAt.toString());
+      config.headers.Authorization = sessionStorage.getItem('token_type') + ' ' + sessionStorage.getItem('access-token');
       return config;
     } catch (refreshError) {
       Swal.fire({
         "text" : '다시 로그인 해주세요',
         "confirmButtonColor" : '#3085d6'
       });
-      localStorage.clear();
+      sessionStorage.clear();
       window.location.href = 'https://secretzoo.site';
+      return;
     }
-    return;
   }
+  axios.get('https://spring.secretzoo.site/users/check-concurrent-login', {
+    headers: {
+      "Authorization" : sessionStorage.getItem('token_type') + ' ' + sessionStorage.getItem('access-token'),
+      "refresh-token" : sessionStorage.getItem('refresh-token'),
+    }
+  }).then(Response => {
+    config.headers.Authorization = sessionStorage.getItem('token_type') + ' ' + sessionStorage.getItem('access-token');
+    return config;
+  }).catch(error => {
+    console.log(error) 
+    Swal.fire({
+      "text" : '유효하지 않은 접근입니다.',
+      "confirmButtonColor" : '#3085d6'
+    });
+    sessionStorage.clear();
+    setTimeout(() => {
+      window.location.href = 'https://secretzoo.site';
+    },500);
+  })
+
   
-  config.headers.Authorization = localStorage.getItem('token_type') + ' ' + localStorage.getItem('access-token');
+  config.headers.Authorization = sessionStorage.getItem('token_type') + ' ' + sessionStorage.getItem('access-token');
   return config;
 });
 
@@ -61,6 +84,7 @@ export const getUserInfo = createAsyncThunk(
       };
       sessionStorage.setItem('userName',data1.userId);
       sessionStorage.setItem('userNickname', data1.nickname);
+      sessionStorage.setItem('userSequence', data1.userSequence.toString());
       return userData
 
     } catch (error) {
@@ -150,7 +174,7 @@ export const axiosLogout = createAsyncThunk(
     try {
      const response =  axios.post('https://spring.secretzoo.site/auth/logout', {} ,{
       headers: {
-        "Authorization" : localStorage.getItem('token_type') + ' ' + localStorage.getItem('access-token'),
+        "Authorization" : sessionStorage.getItem('token_type') + ' ' + sessionStorage.getItem('access-token'),
       }
     });
       return response.data;
@@ -181,6 +205,7 @@ const userSlice = createSlice({
         level: '0',
         userSequence: uuidv4(),
       };
+      sessionStorage.setItem('userSequence', state.userInfo.userSequence.toString());
       state.isLoading = false;
       state.isAuthenticated = true;
     },

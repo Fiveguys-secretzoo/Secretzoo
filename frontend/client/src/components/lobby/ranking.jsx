@@ -87,62 +87,64 @@ const Ranking = () => {
   }
   return (
     <>
-      <div className="bg-ranking-bg py-4 px-16 rounded">
-        <nav className="px-4 py-2 text-center rounded shadow-md">
-          <div className="flex space-x-2 justify-center">
-            <button className='px-6 rounded-md hover:bg-gray-200'
-              onClick={getAttack}>공격</button>
-            <button className='px-6 rounded-md hover:bg-gray-200'
-              onClick={getDefense}>수비</button>
-            <button className='px-6 rounded-md hover:bg-gray-200'
-              onClick={getPass}>패스</button>
+      <div className="rounded text-white z-10 after::bg-custom-opacity">
+        <div className='w-full h-full py-4 px-16 rounded'>
+          <nav className="px-4 py-2 text-center rounded shadow-md">
+            <div className="flex space-x-2 justify-center">
+              <button className='px-6 rounded-md hover:bg-gray-600'
+                onClick={getAttack}>공격</button>
+              <button className='px-6 rounded-md hover:bg-gray-600'
+                onClick={getDefense}>수비</button>
+              <button className='px-6 rounded-md hover:bg-gray-600'
+                onClick={getPass}>패스</button>
+            </div>
+          </nav>
+          { ranking[0] ?
+          (<div><div className={`py-1 px-4  my-2 w-[518px] mx-auto border-1 rounded transition-opacity duration-1000  ${isLoaded ? 'rotate-y' : ''} shadow flex items-center border-2`}
+                style={{
+                  animationDelay: `${1 * 0.2}s`
+                }}>
+            <div className='bg-gold-medal w-10 h-10 bg-contain bg-no-repeat'></div>
+            <div className='flex-grow'>{ranking[0].nickname}</div>
+            <div className='mr-10'>점수 : {ranking[0].score.toFixed(2)}</div>
           </div>
-        </nav>
-        { ranking[0] ?
-        (<div><div className={`py-1 px-4  my-2 w-[518px] mx-auto border-1 rounded transition-opacity duration-1000  ${isLoaded ? 'rotate-y' : ''} shadow flex items-center border-2`}
-              style={{
-                animationDelay: `${1 * 0.2}s`
-              }}>
-          <div className='bg-gold-medal w-10 h-10 bg-contain bg-no-repeat'></div>
-          <div className='flex-grow'>닉네임 : {ranking[0].nickname}</div>
-          <div className='mr-10'>점수 : {ranking[0].score}</div>
-        </div>
-        <div className={`py-1 px-4 my-2 w-[518px] mx-auto border-1 rounded transition-opacity duration-1000  ${isLoaded ? 'rotate-y' : ''} shadow flex items-center border-2`}
-              style={{
-                animationDelay: `${2 * 0.2}s`
-              }}>
-          <div className='bg-silver-medal w-10 h-10 bg-contain bg-no-repeat'></div>
-          <div className='flex-grow'>닉네임 : {ranking[1].nickname}</div>
-          <div className='mr-10'>점수 : {ranking[1].score}</div>
-        </div>
-        <div className={`py-1 px-4 my-2 w-[518px] mx-auto border-1 rounded transition-opacity duration-1000  ${isLoaded ? 'rotate-y' : ''} shadow flex items-center border-2`}
-            style={{
-              animationDelay: `${3 * 0.2}s`
-            }}>
-          <div className='bg-bronze-medal w-10 h-10 bg-contain bg-no-repeat'></div>
-          <div className='flex-grow'>닉네임 : {ranking[2].nickname}</div>
-          <div className='mr-10'>점수 : {ranking[2].score}</div>
-        </div></div>)
-         : (<div>isLoaded</div>)}
-        {
-          ranking.slice(3).map((item, index) => (
-            <div className={`py-1 px-4 my-2 w-[518px] mx-auto border-1 rounded transition-opacity duration-1000  ${isLoaded ? 'rotate-y' : ''} shadow flex items-center`}
-              style={{
-                animationDelay: `${(index+3) * 0.2}s`
-              }}>
-          <div className='w-10 h-8'>{index + 4}위</div>
-          <div className='flex-grow'>닉네임 :  {item.nickname} </div>
-          <div className='mr-10'>점수 : {item.score}</div>
+          <div className={`py-1 px-4 my-2 w-[518px] mx-auto border-1 rounded transition-opacity duration-1000  ${isLoaded ? 'rotate-y' : ''} shadow flex items-center border-2`}
+                style={{
+                  animationDelay: `${2 * 0.2}s`
+                }}>
+            <div className='bg-silver-medal w-10 h-10 bg-contain bg-no-repeat'></div>
+            <div className='flex-grow'>{ranking[1].nickname}</div>
+            <div className='mr-10'>점수 : {ranking[1].score.toFixed(2)}</div>
           </div>
-          ))
-        }
-        { sessionStorage.getItem('noLogin') ? (<div className='p-1 my-2 ml-10'>랭킹 서비스를 이용하시려면 로그인 하세요</div>) :
-          (<div className={`py-1 px-4  my-2 w-[518px] mx-auto border-1 rounded transition-opacity duration-1000  ${isLoaded ? 'rotate-y' : ''} shadow flex items-center`}
+          <div className={`py-1 px-4 my-2 w-[518px] mx-auto border-1 rounded transition-opacity duration-1000  ${isLoaded ? 'rotate-y' : ''} shadow flex items-center border-2`}
               style={{
-                animationDelay: `${10 * 0.2}s`
-              }}>내 순위 : {myRank.data.rank+1}위 내 점수 : {myRank.data.score}</div>) 
-        }
-      </div>
+                animationDelay: `${3 * 0.2}s`
+              }}>
+            <div className='bg-bronze-medal w-10 h-10 bg-contain bg-no-repeat'></div>
+            <div className='flex-grow'>{ranking[2].nickname}</div>
+            <div className='mr-10'>점수 : {ranking[2].score.toFixed(2)}</div>
+          </div></div>)
+          : (<div>isLoaded</div>)}
+          {
+            ranking.slice(3).map((item, index) => (
+              <div className={`py-1 px-4 my-2 w-[518px] mx-auto border-1 rounded transition-opacity duration-1000  ${isLoaded ? 'rotate-y' : ''} shadow flex items-center`}
+                style={{
+                  animationDelay: `${(index+3) * 0.2}s`
+                }}>
+            <div className='w-10 h-8'>{index + 4}위</div>
+            <div className='flex-grow'>{item.nickname} </div>
+            <div className='mr-10'>점수 : {item.score.toFixed(2)}</div>
+            </div>
+            ))
+          }
+          { sessionStorage.getItem('noLogin') ? (<div className='p-1 my-2 ml-10 text-center'>랭킹 서비스를 이용하시려면 로그인 하세요</div>) :
+            (<div className={`py-1 px-4  my-2 w-[518px] mx-auto border-1 rounded transition-opacity duration-1000  ${isLoaded ? 'rotate-y' : ''} shadow flex items-center`}
+                style={{
+                  animationDelay: `${10 * 0.2}s`
+                }}>내 순위 : {myRank.data.rank+1}위 내 점수 : {myRank.data.score}</div>) 
+          }
+        </div>
+      </div>  
     </>
   );
 };

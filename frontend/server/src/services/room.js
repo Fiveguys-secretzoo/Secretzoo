@@ -44,12 +44,13 @@ const shuffleArray = (rooms, roomName) => {
 /**
  * 방 생성 (방이 존재하지 않는 경우)
  */
-const addRoom = (rooms, roomName, playerSequence, socketId, playerNickName) => {
+const addRoom = (rooms, roomName, rpw, playerSequence,  socketId, playerNickName) => {
 
   rooms[roomName] = JSON.parse(JSON.stringify(roomInfo)); // 깊은 복사로 수정 완료
   rooms[roomName].rnm = roomName;
   rooms[roomName].ps[playerSequence] = { ...Player(playerSequence, socketId, playerNickName) };
   rooms[roomName].adm = playerSequence;
+  rooms[roomName].rpw = rpw;
   console.log(`##### [addRoom] player ${playerSequence} socket ${socketId} playerNN ${playerNickName} created Room ${roomName}`);
   /*TODO - send room data to backend server!!! */
   console.log(rooms[roomName]);
@@ -115,8 +116,12 @@ const getRoomInfoForLobby = (rooms) => {
       'status': info['status'],
       'createdDate': info['cdt'],
       'playerCount': info['pc'],
-      'adminPlayer': info['adm'],
+      'adminPlayer': info.ps[info['adm']].pn,
+      'isLocked' : false,
     };
+    if(info['rpw'] !== ''){
+      lobbyInfo[room].isLocked = true;
+    }
   }
   return lobbyInfo;
 }
@@ -135,6 +140,18 @@ const removePlayer = (io, socket, rooms, roomName, psq) => {
   console.log(rooms[roomName]);
   console.log(roomName);
   delete rooms[roomName].ps[psq];
+  if (rooms[roomName].adm === psq) {
+    for (let player in rooms[roomName].ps) {
+      rooms[roomName].adm = player;
+      break;
+    }
+  }
+  if (rooms[roomName].nt === psq) {
+    for (let player in rooms[roomName].ps) {
+      rooms[roomName].nt = player;
+      break;
+    }
+  }
   rooms[roomName].pc -= 1;
   io.to(roomName).emit('playerLeave', rooms[roomName].ps);
   if (rooms[roomName].pc === 0) {
@@ -163,7 +180,7 @@ const roomSocketMethods = () => {
 
   /* 방 생성 이벤트 */
   const createRoom = async (socket, io, rooms) => {
-    socket.on('createRoom', (roomName, psq, pn, callback) => {
+    socket.on('createRoom', (roomName, rpw="", psq, pn, callback) => {
       if (Object.keys(rooms).includes(roomName)) {
         callback(false);
       } else {
@@ -175,7 +192,7 @@ const roomSocketMethods = () => {
           }
         }
 
-        addRoom(rooms, roomName, psq, socket.id, pn);
+        addRoom(rooms, roomName, rpw, psq, socket.id, pn);
         console.log(`##### [createRoom] player [${socket.id}], make room ${roomName}`)
 
         // 입력받은 방 들어가기
@@ -188,17 +205,33 @@ const roomSocketMethods = () => {
 
   /* 방 입장 이벤트 */
   const enterRoom = async (socket, io, rooms) => {
-    socket.on('enterRoom', (roomName, psq, pn, callback) => {
+    socket.on('enterRoom', (roomName, rpw="", psq, pn, callback) => {
 
       if (roomName === undefined || rooms[roomName] === undefined) { // 방이 사라진 경우...
-        callback(false)
+        callback(1)
+        return;
       }
 
       const matchingKey = Object.keys(rooms[roomName].ps).find(key => rooms[roomName].ps[key].psq === psq);
       if (matchingKey === undefined) {
+        
         // 인원수 체크
         if (rooms[roomName] && rooms[roomName].pc >= 6) {
-          callback(false);
+          callback(2);
+          return;
+        }
+
+        if(rooms[roomName].rpw !== ''){
+          if(rooms[roomName].rpw !==  rpw){
+            callback(3);
+            return;
+          }
+        }
+
+        if(rooms[roomName].status === 1){
+            callback(4);
+            return;
+          
         }
         // 기존방 나가기
         for (let nowRoom of socket.rooms) {
@@ -208,6 +241,7 @@ const roomSocketMethods = () => {
           }
         }
       }
+
       for (let rn in rooms) {
         for (let p in rooms[rn].ps) {
           if (p === psq) {
@@ -216,13 +250,25 @@ const roomSocketMethods = () => {
         }
       }
 
+      if(rooms[roomName].rpw !== ''){
+        if(rooms[roomName].rpw !==  rpw){
+          callback(3);
+          return;
+        }
+      }
+
+      if(rooms[roomName].status === 1){
+        callback(4);
+        return;
+      
+    }
       // 입력받은 방 들어가기
       socket.join(roomName);
 
       // console.log(io.of('/').adapter.rooms);
       socket.emit('updateRoom', rooms);
       addPlayer(io, socket, rooms, roomName, psq, socket.id, pn)
-      callback(true)
+      callback(0)
       console.log(`##### [enterRoom] player ${socket.id} join room : ${roomName}`);
 
     });
@@ -262,15 +308,9 @@ const roomSocketMethods = () => {
 
   /* 채팅 메세지 이벤트 */
   const chatMessage = async (socket, io, rooms) => {
-    socket.on('chatMessage', async (msg, user) => {
-      let room;
-      for (let nowRoom of socket.rooms) {
-        if (nowRoom !== socket.id) {
-          room = nowRoom;
-        }
-      }
-      console.log(`##### chat message : ${msg} + " / room : " + ${room}`);
-      io.to(room).emit('chatMessage', user + " : " + msg + "," + room);
+    socket.on('chatMessage', async (msg, user, roomName) => {
+      console.log(`##### chat message : ${msg} / room : ${roomName}`);
+      io.to(roomName).emit('chatMessage', user , msg );
     });
   }
 

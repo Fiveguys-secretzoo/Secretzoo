@@ -11,6 +11,7 @@ const LoginForm = () => {
   const requsetLogin = () => {
     if(id.length  === 0){
       Swal.fire({
+        
       "text" : '아이디를 입력하세요',
       "confirmButtonColor" : '#3085d6'
     });
@@ -33,10 +34,10 @@ const LoginForm = () => {
     ).then(response => {
       const expiresIn = response.data['expires_in'] - 600000; 
       const expiresAt = Date.now() + expiresIn;
-      localStorage.setItem('access-token', response.data['access-token']);
-      localStorage.setItem('refresh-token', response.data['refresh-token']);
-      localStorage.setItem('token_type', response.data['token_type']);
-      localStorage.setItem('expires_at', expiresAt.toString());
+      sessionStorage.setItem('access-token', response.data['access-token']);
+      sessionStorage.setItem('refresh-token', response.data['refresh-token']);
+      sessionStorage.setItem('token_type', response.data['token_type']);
+      sessionStorage.setItem('expires_at', expiresAt.toString());
       navigate('lobby');
     }).catch(e => {
       Swal.fire({

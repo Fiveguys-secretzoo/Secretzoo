@@ -12,16 +12,7 @@ const MyReward = () => {
  
 
   const [myRewards, setMyrewards] = useState(null);
-  axios.defaults.headers.common['Authorization'] = localStorage.getItem('token_type') + ' ' + localStorage.getItem('access-token');
-
-  const authHeader = localStorage.getItem('access-token');
-  const token = authHeader.split(' ')[1];
-  const parts = token.split('.');
-  const payloadInBase64 = parts[1];
-  const decodedPayload = atob(payloadInBase64);
-  const payload = JSON.parse(decodedPayload);
-
-  console.log(payload);
+  axios.defaults.headers.common['Authorization'] = sessionStorage.getItem('token_type') + ' ' + sessionStorage.getItem('access-token');
 
   const getRewards = async () => {
     if(user.userSequence){
@@ -36,10 +27,10 @@ const MyReward = () => {
   }, [user]);
 
   if (!myRewards) {
-    return <div>Loading...</div>;
+    return <div className='text-white'>Loading...</div>;
   }
   return (
-    <div className='h-[90%]'>
+    <div className='h-[90%] text-white'>
       <div className='container p-2 my-4 shadow-md'>
         <p>도전과제 {myRewards.count}개중 {Object.keys(myRewards.data).filter(reward => myRewards.data[reward].done).length}개 달성</p>
 
@@ -50,7 +41,12 @@ const MyReward = () => {
         {
           Object.keys(myRewards.data).filter(reward => myRewards.data[reward].done).map((reward) => (
             <div className='flex justify-center space-x-10 space-y-2 shadow-md'>
-              <div className='w-[3em] h-[3em] bg-blue-100 m-2'></div>
+              <img
+              key={myRewards.data[reward].rewardsId}
+              // src={require(`../../assets//img/reward/${myRewards.data[reward].rewardsId}.png`)}
+              alt={`업적 이미지 ${myRewards.data[reward].rewardsId}`}
+              className="w-16 m-2 rounded-full hover:cursor-pointer border-2 hover:border-blue-500"
+              />
               <div className='min-w-[20em]'>
                 <p className='font-bold'>{myRewards.data[reward].rewardsName}</p>
                 <p className='w-[25em]'>{(myRewards.data[reward].donePlayerCount / myRewards.totalPlayer * 100).toFixed(2)}%의 플레이어가 이 업적을 달성했습니다.</p>
@@ -67,7 +63,12 @@ const MyReward = () => {
         {
           Object.keys(myRewards.data).filter(reward => !myRewards.data[reward].done).map((reward) => (
             <div className='flex justify-center space-x-10 my-2 shadow-md'>
-              <div className='w-[3em] h-[3em] bg-gray-100 m-2'></div>
+               <img
+              key={myRewards.data[reward].rewardsId}
+              // src={require(`../../assets//img/reward/${myRewards.data[reward].rewardsId}.png`)}
+              alt={`업적 이미지 ${myRewards.data[reward].rewardsId}`}
+              className="w-16 m-2 rounded-full hover:cursor-pointer border-2 hover:border-blue-500"
+              />
               <div className='min-w-[27em]'>
                 <p className='font-bold'>{myRewards.data[reward].rewardsName}</p>
                 <p className='w-[31.7em]'>{(myRewards.data[reward].donePlayerCount / myRewards.totalPlayer * 100).toFixed(2)}%의 플레이어가 이 업적을 달성했습니다.</p>

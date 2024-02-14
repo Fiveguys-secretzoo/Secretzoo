@@ -1,18 +1,19 @@
 import { Server } from 'socket.io';
 import models from '../models/models.js';
+import axios from 'axios';
+
 
 const model = models();
-
 const { animals,
   score,
   Player,
   roomInfo,
   animalIds } = model;
 
-  
+
 const playSocketMethods = () => {
 
-  // 방에 처음 입장할 때 실행하게 되는 함수
+  /* 방에 처음 입장할 때 실행하게 되는 함수 */
   const getRoomInfoForGame = (socket, rooms, roomName, psq) => {
     let extractedData = {};
     let roomInfo = rooms[roomName];
@@ -127,9 +128,24 @@ const playSocketMethods = () => {
       // 지금 턴 진행 플레이어 변경
       rooms[roomName].game.nt = rooms[roomName].game.to;
 
-      rooms[roomName].ps[from].sc.atka +=1 ;
+      // 스코어 추가
+      console.log(`##### [addScore]`)
+      rooms[roomName].ps[from].sc.atka += 1;
       rooms[roomName].ps[from].sc.t += 1;
-      
+      let cKind = Math.floor(rooms[roomName].game.c / 8);
+      let bcKind = bCard % 8;
+      if (cKind === bcKind) {
+        console.log('truth')
+        rooms[roomName].ps[from].sc[animals[cKind]].animalScore.atkt += 1;
+      } else {
+        console.log('lie')
+        rooms[roomName].ps[from].sc[animals[cKind]].animalScore.atkl += 1;
+      }
+
+
+
+
+
       console.log(`##### card Bluffed to ${bCard}, to room ${roomName}`)
 
       io.to(roomName).emit('cardBluffSelect', rooms[roomName].game.state, rooms[roomName].game.tp, from, to, bCard);
@@ -139,13 +155,23 @@ const playSocketMethods = () => {
   // 패스 선택시 
   const passingTurnStart = (socket, io, rooms) => {
     socket.on('cardPass', (roomName, callback) => {
+
+      // score 기록
+      rooms[roomName].ps[rooms[roomName].game.to].sc.p += 1;
+
+      // PASSING TURN
       rooms[roomName].game.state = 4;
+
+      // 턴을 보낸 플레이어에 추가
       if (!rooms[roomName].game.tp.includes(rooms[roomName].game.from)) {
         rooms[roomName].game.tp.push(rooms[roomName].game.from);
       }
+
+      // to, from, nt 바꾸기 
       rooms[roomName].game.from = rooms[roomName].game.to;
       rooms[roomName].game.nt = rooms[roomName].game.from;
       rooms[roomName].game.to = '';
+
       io.to(roomName).emit('cardPass', rooms[roomName].game.state, rooms[roomName].game.tp, rooms[roomName].game.from, rooms[roomName].game.to, rooms[roomName].game.nt);
       callback(rooms[roomName].game.c);
     })
@@ -166,26 +192,70 @@ const playSocketMethods = () => {
       addPenalty(io, rooms, roomName, result.nowTurn);
 
       io.to(roomName).emit('cardReveal', rooms[roomName].game.state, rooms[roomName].game.card, result.ans, result.nowTurn);
+      checkLoser(socket, io, rooms, roomName);
     })
   }
 
-  const checkCardReveal = (rooms, room, answer) => {
+  // 카드 def 시도 시 정답 확인 
+  const checkCardReveal = (rooms, roomName, answer) => {
     let card, bCard;
-    if (rooms && rooms[room] && rooms[room].game) {
-      card = rooms[room].game.c;
-      bCard = rooms[room].game.bc;
+    let cKind, bcKind;
+    if (rooms && rooms[roomName] && rooms[roomName].game) {
+      card = rooms[roomName].game.c;
+      bCard = rooms[roomName].game.bc;
+      cKind = Math.floor(card / 8);
+      bcKind = (bCard % 8);
     }
     let isSame = (Math.floor(card / 8) === bCard);
     let nowTurnPlayer;
+
+    // 정답을 맞춘 경우
     if ((answer === 0 && isSame) || (answer === 2 && !isSame)) {
-      nowTurnPlayer = rooms[room].game.from;
+
+      let fromP = rooms[roomName].game.from;
+      let toP = rooms[roomName].game.to;
+      // score 기록
+
+      console.log(`##### [addScore] fromP : ${fromP} / toP : ${toP}`);
+      rooms[roomName].ps[fromP].sc[animals[cKind]].animalScore.atkf += 1;
+      rooms[roomName].ps[toP].sc.t += 1;
+      rooms[roomName].ps[toP].sc.defa += 1;
+      rooms[roomName].ps[toP].sc.defs += 1;
+
+      rooms[roomName].ps[toP].sc[animals[bcKind]].animalScore.defs += 1;
+      if (cKind === bcKind) {
+        rooms[roomName].ps[toP].sc[animals[bcKind]].animalScore.deft += 1;
+      } else {
+        rooms[roomName].ps[toP].sc[animals[bcKind]].animalScore.defd += 1;
+      }
+
+      nowTurnPlayer = rooms[roomName].game.from;
       return { 'ans': true, 'nowTurn': nowTurnPlayer };
     }
+
+    // 정답을 틀린 경우
     else {
-      nowTurnPlayer = rooms[room].game.to;
-      rooms[room].game.from = rooms[room].game.to;
-      rooms[room].nt = rooms[room].game.to;
-      rooms[room].game.tp = [];
+      let fromP = rooms[roomName].game.from;
+      let toP = rooms[roomName].game.to;
+      // score 기록 
+      console.log(`##### [addScore] fromP : ${fromP} / toP : ${toP}`);
+
+      rooms[roomName].ps[fromP].sc[animals[cKind]].animalScore.atks += 1;
+      rooms[roomName].ps[toP].sc.t += 1;
+      rooms[roomName].ps[toP].sc.defa += 1;
+
+      rooms[roomName].ps[toP].sc[animals[bcKind]].animalScore.deff += 1;
+      if (cKind === bcKind) {
+        rooms[roomName].ps[toP].sc[animals[bcKind]].animalScore.defd += 1;
+      } else {
+        rooms[roomName].ps[toP].sc[animals[bcKind]].animalScore.deft += 1;
+      }
+
+      // 턴 바꾸기 
+      nowTurnPlayer = rooms[roomName].game.to;
+      rooms[roomName].game.from = rooms[roomName].game.to;
+      rooms[roomName].nt = rooms[roomName].game.to;
+      rooms[roomName].game.tp = [];
       return { 'ans': false, 'nowTurn': nowTurnPlayer };
     }
   }
@@ -202,18 +272,115 @@ const playSocketMethods = () => {
     io.to(roomName).emit('penaltyAdd', { psq: nowTurnPlayer, pen: rooms[roomName].ps[nowTurnPlayer].pen });
   }
 
-  const checkLoser = (socket, io, rooms) => {
-    socket.on("isTurnEnd", (roomName, callback) => {
-      for (let player in rooms[roomName].ps) {
-        for (let k = 0; k < 8; k++) {
-          if (rooms[roomName].ps[player].pen[k] === 4) {
-            callback(rooms[roomName].ps[player].psq);
+  // 서버에 스코어 전송 
+  const sendScore = (rooms, roomName) => {
+    for (let player in rooms[roomName].ps) {
+      if (player.length < 10) {
+        let rewardData = {
+          'userSequence': Number(player),
+          'round': rooms[roomName].ps[player].sc.r,
+          'turn': rooms[roomName].ps[player].sc.t,
+        };
+
+        for (let animal of animals) {
+          rewardData[animal] = {
+            "animalId": rooms[roomName].ps[player].sc[animal].animalId,
+            "animalScore": {
+              "attackSuccess": rooms[roomName].ps[player].sc[animal].animalScore.atks ,
+              "attackFail": rooms[roomName].ps[player].sc[animal].animalScore.atkf ,
+              "defenseSuccess": rooms[roomName].ps[player].sc[animal].animalScore.defs ,
+              "defenseFail": rooms[roomName].ps[player].sc[animal].animalScore.deff ,
+              "trust": rooms[roomName].ps[player].sc[animal].animalScore.deft ,
+              "distrust": rooms[roomName].ps[player].sc[animal].animalScore.defd ,
+              "truth": rooms[roomName].ps[player].sc[animal].animalScore.atkt ,
+              "lie": rooms[roomName].ps[player].sc[animal].animalScore.atkl ,
+            }
+          };
+        }
+
+        console.log(`##### [sendScore] reward sends`)
+        console.log(rewardData);
+        axios
+          .post('https://spring.secretzoo.site/rewards/save', rewardData).then((res) => {
+            console.log(res);
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+        let rankData = {
+          'userSequence': Number(player),
+          'round': rooms[roomName].ps[player].sc.r,
+          'turn': rooms[roomName].ps[player].sc.t,
+          'attackAttempt': rooms[roomName].ps[player].sc.atka ,
+          'attackSuccess': rooms[roomName].ps[player].sc.atks ,
+          'defenseAttempt': rooms[roomName].ps[player].sc.defa,
+          'defenseSuccess': rooms[roomName].ps[player].sc.defs,
+          'passCount': rooms[roomName].ps[player].sc.p,
+        }
+        console.log(`##### [sendScore] rank sends`)
+        console.log(rankData);
+        axios
+          .post('https://spring.secretzoo.site/rank/save', rankData).then((res) => {
+            console.log(res);
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+      }
+
+
+    }
+  }
+
+  // 방 정보 초기화
+  const initRoomInfo = (rooms, roomName) => {
+    rooms[roomName].status = 0;
+    rooms[roomName].card = Array.from({ length: 64 }, (_, i) => i);
+    // 손 초기화 
+    for (let player in rooms[roomName].ps) {
+      rooms[roomName].ps[player].hand = [];
+      rooms[roomName].ps[player].pen = [0, 0, 0, 0, 0, 0, 0, 0];
+      rooms[roomName].ps[player].sc = {
+        'r': 1, // round Count
+        't': 0, // turn Count 
+        'p': 0, // pass Count
+        'atka': 0, // attack Attempt
+        'atks': 0, // attack Success
+        'defa': 0, // defence Attempt
+        'defs': 0, // defence Success
+      }
+      let count = 0;
+      for (let animal of animals) {
+
+        rooms[roomName].ps[player].sc[animal] = { 'animalScore': { ...score } };
+        rooms[roomName].ps[player].sc[animal] = { ...rooms[roomName].ps[player].sc[animal], 'animalId': animalIds[count++] }
+      }
+    }
+    rooms[roomName].game.state = 0;
+    rooms[roomName].game.from = '';
+    rooms[roomName].game.to = '';
+    rooms[roomName].game.bc = '';
+    rooms[roomName].game.c = '';
+    rooms[roomName].game.tp = [];
+
+
+  }
+
+  const checkLoser = (socket, io, rooms, roomName) => {
+    for (let player in rooms[roomName].ps) {
+      for (let k = 0; k < 8; k++) {
+        if (rooms[roomName].ps[player].pen[k] === 4) {
+          setTimeout( () => {
+            sendScore(rooms, roomName);
+            // 방 정보 초기화입니다.
+            initRoomInfo(rooms, roomName);
+            io.to(roomName).emit("gameEnd", player);
             return;
-          }
+          }, 2700)
+          // 점수 전송
         }
       }
-      callback(false);
-    });
+    }
   }
 
   return {
@@ -225,7 +392,6 @@ const playSocketMethods = () => {
     passingTurnStart,
     cardReveal,
     passingTurnSelect,
-    checkLoser,
   }
 }
 

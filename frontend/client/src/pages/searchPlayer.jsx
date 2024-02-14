@@ -45,11 +45,11 @@ const SearchPlayer = () => {
         <div className='container flex mb-2'>
           <Dropdown label={searchCondition}  
           renderTrigger={({ isOpen }) => (
-          <Button className='w-24' >
+          <Button className='w-24 mr-2' >
             {searchCondition}<FaChevronDown></FaChevronDown>
           </Button>
         )}>
-            <Dropdown.Item onClick={() => setSearchCondition('닉네임')}>닉네임</Dropdown.Item>
+            <Dropdown.Item onClick={() => setSearchCondition('닉네임')} >닉네임</Dropdown.Item>
             <Dropdown.Item onClick={() => setSearchCondition('아이디')}>아이디</Dropdown.Item>
             <Dropdown.Item onClick={() => setSearchCondition('이름')}>이름</Dropdown.Item>
         </Dropdown>
@@ -58,7 +58,7 @@ const SearchPlayer = () => {
             value={searchContent}
             onChange={(e) =>setSearchContent(e.target.value)}
             ></TextInput>
-            <Button type='submit' onClick={(e) => {e.preventDefault(); search(1)}}>
+            <Button className='ml-2' type='submit' onClick={(e) => {e.preventDefault(); search(1)}}>
               검색 
               <IoMdSearch className='ml-2'></IoMdSearch>
             </Button>
@@ -67,14 +67,21 @@ const SearchPlayer = () => {
         <div>
             {searchResult ? (
             <div>
-              <div className='h-[30em]'>
+              <div className='h-[33em]'>
                 {searchResult.data.map((element, index) => (
                   <Card 
+                  className='m-3 p-1 border-2 shadow-lg rounded-lg text-white bg-transparent hover:bg-[#352F44]'
                   href='#' 
                   key={index}
                   onClick={(e) => { e.preventDefault(); goToDetail(element.userSequence)}}>
-                    <div> 아이디 : {element.userId} 닉네임  : {element.nickname}</div>
-                    <div> 레벨 : {element.level} 대표업적 : {element.mainReward} </div>
+                    <div>
+                      <span className='font-bold'> 아이디 :  </span>  {element.userId} &nbsp;
+                      <span className='font-bold'>닉네임  : </span> {element.nickname} &nbsp;
+                    </div>
+                    <div>
+                      <span className='font-bold'> 레벨 : </span> {element.level} &nbsp;
+                      <span className='font-bold'>대표업적 : </span> {element.mainReward} &nbsp;
+                    </div>
                   </Card>
                 ))}
               </div>
@@ -84,7 +91,7 @@ const SearchPlayer = () => {
                 totalPages={Math.floor(searchResult.totalPlayer/4)+1} 
                 onPageChange={onPageChange} showIcons/>
               </div>
-            </div> ): ( <div>조회된 플레이어가 없습니다.</div>)}
+            </div> ): ( <div className='text-white'>조회된 플레이어가 없습니다.</div>)}
         </div>
     </>
   );
