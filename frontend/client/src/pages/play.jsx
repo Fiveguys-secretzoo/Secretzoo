@@ -356,7 +356,7 @@ const Play = () => {
           activate = true;
         }
         video.current = <UserVideoComponent streamManager={subscribers[count]} />
-        console.log(subscribers[count].session.connection.clientData);
+        console.log(subscribers[count]);
         count ++ ;
         slotArr.push(
           <PlayerView
@@ -387,7 +387,6 @@ const Play = () => {
       activate = true;
     }
     video.current = <UserVideoComponent streamManager={publisher} />
-    console.log(publisher.session.connection.clientData);
     slotArr.push(
       <PlayerView
         psq={psq}
