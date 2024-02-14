@@ -86,7 +86,7 @@
         </td>
         <td>
         0️⃣ 👨🏻Front-end<br> 
-        1️⃣ 백엔드 API 화면 구현 담당 <br>
+        1️⃣ UI/UX 담당 <br>
         <br/>
         </td>
     </tr>
