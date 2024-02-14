@@ -135,7 +135,6 @@ const Play = () => {
   // 방을 나간다. 나는 나간다.
   const leaveRoom = () => {
     socket.emit("leaveRoom", roomName, playerSequence);
-    dispatch(modifyPlayers({}));
     navigate('/lobby')
   }
 
@@ -350,9 +349,11 @@ const Play = () => {
           playerName = playerArr[player].pn;
           activate = true;
         }
-        video.current = <UserVideoComponent streamManager={subscribers[count]} />
 
-        count++;
+        video.current = <UserVideoComponent streamManager={subscribers.get(player)} />
+        console.log("@###@#@#@##sub")
+        console.log(subscribers);
+        count ++ ;
         slotArr.push(
           <PlayerView
             psq={psq}
@@ -366,7 +367,7 @@ const Play = () => {
         )
       }
     }
-    // video.current=undefined;
+    video.current=undefined;
     for (let k = count; k < 6; k++) {
       slotArr.push(
         <div className="bg-white rounded w-96 h-60 m-2 flex flex-col p-2 mx-5"
@@ -397,89 +398,115 @@ const Play = () => {
   }
 
   const [myUserName, setMyUserName] = useState(sessionStorage.getItem('userNickname'));
+  const [myUserSequence, setMyUserSequence] = useState(sessionStorage.getItem('userSequence'));
   const [publisher, setPublisher] = useState(undefined);
-  const [subscribers, setSubscribers] = useState([]);
+  const [subscribers, setSubscribers] = useState(new Map());
   const session = useRef(undefined);
   const prevPlayerListRef = useRef({});
 
   const App = () => {
-    useEffect(() => {
-      if (Object.keys(prevPlayerListRef.current).length < Object.keys(playerList).length) {
-        console.log('$$$$$$$$$$$$$$$$$$$$$$$4');
-        console.log(playerList);
-        window.addEventListener('beforeunload', onbeforeunload);
-        joinSession();
-        console.log('!!!!!!!!!!!!!!!!!!');
-        console.log(subscribers);
-        return () => {
-          window.removeEventListener('beforeunload', onbeforeunload);
-          leaveSession();
-        };
-      }
-      else {
-        prevPlayerListRef.current = { ...playerList };
-      }
-    }, [playerList]);
+      useEffect(() => {
+        // if(Object.keys(prevPlayerListRef.current).length<Object.keys(playerList).length){
+          console.log('$$$$$$$$$$$$$$$$$$$$$$$4');
+          // console.log(Object.keys(playerList));
+          // console.log(Object.keys(playerList).length);
+          // console.log(Object.keys(prevPlayerListRef.current).length);
 
+            window.addEventListener('beforeunload', onbeforeunload);  
+            joinSession();
+            console.log(subscribers);
+          return () => {
+              window.removeEventListener('beforeunload', onbeforeunload);
+              leaveSession();
+          };
+        // }
+        
+      }, []);//playerlist 지움
+      
     const onbeforeunload = () => {
       leaveSession();
     };
-
-    const deleteSubscriber = (streamManager) => {
-      setSubscribers((prevSubscribers) => prevSubscribers.filter((sub) => sub !== streamManager));
-    };
+      
+      const deleteSubscriber = (streamManager) => {
+          
+          // setSubscribers((prevSubscribers) => prevSubscribers.filter((sub) => sub !== streamManager));
+          setSubscribers((prevSubscribers) => new Map([...prevSubscribers].filter(([key, value]) => value !== streamManager)));
+       
+      };
 
     const joinSession = async () => {
       const OV = new OpenVidu();
-
-      const mySession = OV.initSession();
-
-      mySession.on('streamCreated', (event) => {
-        const subscriber = mySession.subscribe(event.stream, undefined);
-        setSubscribers((prevSubscribers) => [...prevSubscribers, subscriber]);
-        console.log("is created!!!!!!!!!!!!!!");
-      });
-
-      mySession.on('streamDestroyed', (event) => {
-        deleteSubscriber(event.stream.streamManager);
-      });
-
-      mySession.on('exception', (exception) => {
-        console.warn(exception);
-      });
-
-      try {
-        const token = await getToken(sessionStorage.getItem('roomName'));
-        setMyUserName(sessionStorage.getItem('userNickname'));
-
-        mySession.connect(token, { clientData: myUserName })
-          .then(async () => {
-            let newPublisher = await OV.initPublisherAsync(undefined, {
-              audioSource: undefined,
-              videoSource: undefined,
-              publishAudio: true,
-              publishVideo: true,
-              resolution: '600x480',
-              frameRate: 30,
-              insertMode: 'APPEND',
-              mirror: false,
+          const mySession = OV.initSession();
+          
+          // mySession.on('streamCreated', (event) => {
+          //     const subscriber = mySession.subscribe(event.stream, undefined);
+          //     setSubscribers((prevSubscribers) => [...prevSubscribers, subscriber]);
+          // });
+          mySession.on('streamCreated', (event) => {
+            const subscriber = mySession.subscribe(event.stream, undefined);
+            setSubscribers((prevSubscribers) => {
+              const newSubscribers = new Map(prevSubscribers);
+              if (!newSubscribers.has(JSON.parse(event.stream.connection.data).clientData2)) {
+                  newSubscribers.set(JSON.parse(event.stream.connection.data).clientData2, subscriber);
+              }
+              return newSubscribers;
             });
-
-            await mySession.publish(newPublisher);
-
-            setPublisher(newPublisher);
-            console.log(session);
-
-            console.log(publisher);
-          })
-          .catch((error) => {
-            console.log('There was an error connecting to the session:', error.code, error.message);
           });
-      } catch (error) {
-        console.error(error);
-      }
-      session.current = mySession;
-    };
+          mySession.on('streamDestroyed', (event) => {
+              deleteSubscriber(event.stream.streamManager);
+          });
+          
+          mySession.on('exception', (exception) => {
+              console.warn(exception);
+          });
+          
+          try {
+              const token = await getToken(sessionStorage.getItem('roomName'));
+              setMyUserName(sessionStorage.getItem('userNickname'));
+              setMyUserSequence(sessionStorage.getItem('userSequence'));
+              
+              
+              mySession.connect(token, { clientData: myUserName, clientData2: myUserSequence})
+              .then(async () => {
+                  let newPublisher = await OV.initPublisherAsync(undefined, {
+                      audioSource: undefined,
+                      videoSource: undefined,
+                      publishAudio: true,
+                      publishVideo: true,
+                      resolution: '600x480',
+                      frameRate: 30,
+                      insertMode: 'APPEND',
+                      mirror: false,
+                  });
+                  
+                  await mySession.publish(newPublisher);
+                  
+                  setPublisher(newPublisher);
+                  console.log(session);
+                  
+                  console.log(publisher);
+              })
+              .catch((error) => {
+                  console.log('There was an error connecting to the session:', error.code, error.message);
+              });
+          } catch (error) {
+              console.error(error);
+          }
+          session.current = mySession;
+      };
+      
+      const leaveSession = () => {
+          const mySession = session.current;
+          if (mySession) {
+              mySession.disconnect();
+          }
+          
+          session.current=undefined;
+          setSubscribers(new Map());
+          setMyUserName(sessionStorage.getItem('userNickname'));
+          setMyUserSequence(sessionStorage.getItem('userSequence'));
+          setPublisher(undefined);
+      };
 
     const leaveSession = () => {
       const mySession = session.current;

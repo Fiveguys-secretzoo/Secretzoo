@@ -106,6 +106,12 @@ const Rooms = () => {
     });
   }
 
+  const noFilter = () => {
+    socket.emit('requestRoomsInfo', (roomsInfo) => {
+      setRooms(roomsInfo);
+    });
+  }
+
   // 검색
   const [searchRoomName, setSearchRoomName] = useState();
   const searchRoom = () => {
@@ -136,6 +142,7 @@ const Rooms = () => {
               <Button color="gray" onClick={filterPlaying}>플레이중</Button>
               <Button color="gray" onClick={filterWait}>대기중</Button>
               <Button color="gray" onClick={filterFull}>꽉찬방</Button>
+              <Button color="gray" onClick={noFilter}>모든방</Button>
             </Button.Group>
           </div>
           <form className="flex justify-end"
@@ -167,16 +174,18 @@ const Rooms = () => {
       </div>
       {/* 모달 */}
       <Modal show={openModal} size="md" onClose={() => setOpenModal(false)}>
+        <form action="#" onSubmit={e => e.preventDefault()}>
         <Modal.Body>
           <Label>방 제목</Label>
           <TextInput value={roomName} onChange={(e) => setRoomName(e.target.value)}></TextInput>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={() => createRoom()}>방 만들기</Button>
+          <Button type="submit" onClick={() => createRoom()}>방 만들기</Button>
           <Button color="gray" onClick={() => setOpenModal(false)}>
             취소
           </Button>
         </Modal.Footer>
+        </form>
       </Modal>
     </>
   );

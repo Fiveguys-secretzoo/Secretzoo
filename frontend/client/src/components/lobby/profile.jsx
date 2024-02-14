@@ -18,26 +18,27 @@ const Profile = () => {
     }
   }, [dispatch])
   
-  // useEffect(() => {
-  //   if(!user.nickname){
-  //     setOpenNicknameModal(true);
-  //   }
-  // },[])
+  useEffect(() => {
+    if(user){
+      if(user.nickname === null){
+        setOpenNicknameModal(true);
+      }
+    }
+  },[user])
   const [openNicknameModal, setOpenNicknameModal] = useState(false);
   const NicknameModal = () => {    
     const [changeNickname, setChangeNickname] = useState('');
     return (
       <Modal show={openNicknameModal} size="md" onClose={() => setOpenNicknameModal(false)}>
-        <Modal.Body>
-          <Label>바꿀 닉네임</Label>
-          <TextInput value={changeNickname} onChange={(e) => setChangeNickname(e.target.value)}></TextInput>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={() => { dispatch(axiosUpdateNickname(changeNickname)); setOpenNicknameModal(false) }}>수정</Button>
-          <Button color="gray" onClick={() => setOpenNicknameModal(false)}>
-            취소
-          </Button>
-        </Modal.Footer>
+        <form action="#" onSubmit={e => e.preventDefault()}>
+          <Modal.Body>
+            <Label>사용할 닉네임을 입력하세요</Label>
+            <TextInput value={changeNickname} onChange={(e) => setChangeNickname(e.target.value)}></TextInput>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button type="submit" onClick={() => { dispatch(axiosUpdateNickname(changeNickname)); setOpenNicknameModal(false) }}>수정</Button>
+          </Modal.Footer>
+        </form>
       </Modal>
     )
   }

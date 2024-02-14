@@ -16,41 +16,41 @@ const SignupForm = () => {
     return regex.test(password);
   };
   const requsetLogin = () => {
-    // if (!idCheck) {
-    //   Swal.fire({
-    //     "text" : 'id 중복체크하세요.',
-    //     "confirmButtonColor" : '#3085d6'
-    //   });
-    //   return;
-    // }
-    // if(!validatePassword(pass)){
-    //   Swal.fire({
-    //     "text" : '비밀번호가 너무 약합니다',
-    //     "confirmButtonColor" : '#3085d6'
-    //   });
-    //   return;
-    // }
-    // if (pass != passCheck) {
-    //   Swal.fire({
-    //     "text" : '비밀번호가 잃치하지 않습니다.',
-    //     "confirmButtonColor" : '#3085d6'
-    //   });
-    //   return;
-    // }
-    // if(name.length <= 0){
-    //   Swal.fire({
-    //     "text" : '이름을 입력해주세요',
-    //     "confirmButtonColor" : '#3085d6'
-    //   });
-    //   return;
-    // }
-    // if (!emailCheckSate) {
-    //   Swal.fire({
-    //     "text" : '아직 이메일 인증이 되지 않았습니다.',
-    //     "confirmButtonColor" : '#3085d6'
-    //   });
-    //   return;
-    // }
+    if (!idCheck) {
+      Swal.fire({
+        "text" : 'id 중복체크하세요.',
+        "confirmButtonColor" : '#3085d6'
+      });
+      return;
+    }
+    if(!validatePassword(pass)){
+      Swal.fire({
+        "text" : '비밀번호가 너무 약합니다',
+        "confirmButtonColor" : '#3085d6'
+      });
+      return;
+    }
+    if (pass != passCheck) {
+      Swal.fire({
+        "text" : '비밀번호가 잃치하지 않습니다.',
+        "confirmButtonColor" : '#3085d6'
+      });
+      return;
+    }
+    if(name.length <= 0){
+      Swal.fire({
+        "text" : '이름을 입력해주세요',
+        "confirmButtonColor" : '#3085d6'
+      });
+      return;
+    }
+    if (!emailCheckSate) {
+      Swal.fire({
+        "text" : '아직 이메일 인증이 되지 않았습니다.',
+        "confirmButtonColor" : '#3085d6'
+      });
+      return;
+    }
     axios.post('https://spring.secretzoo.site/auth/signup',
       {
         "userId": id,
@@ -88,27 +88,34 @@ const SignupForm = () => {
     };
     return (
       <Modal show={openIdCheckModal} size="2xl" onClose={() => setOpenIdCheckModal(false)}>
-        <Modal.Body className='flex flex-wrap'>
-          <Label>아이디</Label>
-          <TextInput value={checkIdInput} onChange={(e) => { setCheckIdInput(e.target.value); setIdCheck(false) }}></TextInput>
-          <Button onClick={() => { checkid(checkIdInput) }}>조회</Button>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={() => {
-            if (idCheckState) {
-              setOpenIdCheckModal(false); setId(checkIdInput); setIdCheck(true);
-            } else {
-              Swal.fire({
-                "text" : '중복체크하세요.',
-                "confirmButtonColor" : '#3085d6'
-              });
-            }
-          }}
-          >사용</Button>
-          <Button color="gray" onClick={() => { setOpenIdCheckModal(false); setIdCheck(false) }}>
-            취소
-          </Button>
-        </Modal.Footer>
+        <form action="#">
+          <Modal.Body>
+            <Label>아이디</Label>
+            <div className='flex'>
+              <TextInput value={checkIdInput} onChange={(e) => { setCheckIdInput(e.target.value); setIdCheck(false) }}></TextInput>
+              <Button onClick={() => { checkid(checkIdInput) }}>조회</Button>
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button type='submit' onClick={(e) => {
+              if (idCheckState) {
+                e.preventDefault(); 
+                setOpenIdCheckModal(false);
+                setId(checkIdInput); 
+                setIdCheck(true);
+              } else {
+                Swal.fire({
+                  "text" : '중복체크하세요.',
+                  "confirmButtonColor" : '#3085d6'
+                });
+              }
+            }}
+            >사용</Button>
+            <Button color="gray" onClick={(e) => { setOpenIdCheckModal(false); setIdCheck(false) }}>
+              취소
+            </Button>
+          </Modal.Footer>
+        </form>
       </Modal>
     )
   }

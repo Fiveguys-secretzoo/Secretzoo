@@ -7,53 +7,41 @@ import Swal from 'sweetalert2';
 const axiosInstance = axios.create();
 
 axiosInstance.interceptors.request.use(async config => {
-  // if(!localStorage.getItem('access-token')){
-  //   Swal.fire({
-  //     "text" : '로그인 해요',
-  //     "confirmButtonColor" : '#3085d6'
-  //   });
-  //   // window.location.href = 'https://secretzoo.site';
-  //   return;
-  // }
-  const expiresAt = parseInt(localStorage.getItem('expires_at'), 10);
+  const expiresAt = parseInt(sessionStorage.getItem('expires_at'), 10);
   if (Date.now() > expiresAt) {
-    const refresh_Token = localStorage.getItem('refresh-token');
-    const access_token = localStorage.getItem('access-token');
+    const refresh_Token = sessionStorage.getItem('refresh-token');
+    const access_token = sessionStorage.getItem('access-token');
     try {
       const response = await axios.post('https://spring.secretzoo.site/auth/token/refresh', {} ,{
         headers: {
-          "Authorization" : localStorage.getItem('token_type') + ' ' + access_token,
+          "Authorization" : sessionStorage.getItem('token_type') + ' ' + access_token,
           "refresh-token" : refresh_Token,
         }
       });
-      localStorage.setItem('Authorization', response.data['access-token']);
-      localStorage.setItem('refresh-token', response.data['refresh-token']);
-      axiosInstance.defaults.headers.common['Authorization'] = localStorage.getItem('token_type') + ' ' + localStorage.getItem('access-token');
+      const expiresIn = response.data['expires_in'] - 600000; 
+      const expiresAt = Date.now() + expiresIn;
+      sessionStorage.setItem('Authorization', response.data['access-token']);
+      sessionStorage.setItem('refresh-token', response.data['refresh-token']);
+      sessionStorage.setItem('expires_at', expiresAt.toString());
+      config.headers.Authorization = sessionStorage.getItem('token_type') + ' ' + sessionStorage.getItem('access-token');
       return config;
     } catch (refreshError) {
       Swal.fire({
         "text" : '다시 로그인 해주세요',
         "confirmButtonColor" : '#3085d6'
       });
-      // localStorage.clear();
-      // window.location.href = 'https://secretzoo.site';
+      sessionStorage.clear();
+      window.location.href = 'https://secretzoo.site';
+      return;
     }
-    return;
   }
-  console.log(config);
-  
-  const refresh_Token = localStorage.getItem('refresh-token');
-  const access_token = localStorage.getItem('access-token');
-  const token_type = localStorage.getItem('token_type')
-
   axios.get('https://spring.secretzoo.site/users/check-concurrent-login', {
     headers: {
-      "Authorization" : token_type + ' ' + access_token,
-      "refresh-token" : refresh_Token,
+      "Authorization" : sessionStorage.getItem('token_type') + ' ' + sessionStorage.getItem('access-token'),
+      "refresh-token" : sessionStorage.getItem('refresh-token'),
     }
   }).then(Response => {
-    const access_token = localStorage.getItem('access-token');
-    config.headers.Authorization = access_token ? localStorage.getItem('token_type') + ' ' + access_token : '';
+    config.headers.Authorization = sessionStorage.getItem('token_type') + ' ' + sessionStorage.getItem('access-token');
     return config;
   }).catch(error => {
     console.log(error) 
@@ -61,39 +49,15 @@ axiosInstance.interceptors.request.use(async config => {
       "text" : '유효하지 않은 접근입니다.',
       "confirmButtonColor" : '#3085d6'
     });
-    // localStorage.clear();
-    // window.location.href = 'https://secretzoo.site';
+    sessionStorage.clear();
+    window.location.href = 'https://secretzoo.site';
   })
-  config.headers.Authorization = localStorage.getItem('token_type') + ' ' + localStorage.getItem('access-token');
+
+  
+  config.headers.Authorization = sessionStorage.getItem('token_type') + ' ' + sessionStorage.getItem('access-token');
   return config;
 });
 
-// axiosInstance.interceptors.response.use(response => {
-//   return response;
-// }, async (error) => {
-//   const originalRequest = error.config;
-//   if (error.response.status === 401 && !originalRequest._retry) {
-//     originalRequest._retry = true;
-//     console.log('토큰 재발급');
-//     const refresh_Token = localStorage.getItem('refresh-token');
-//     const access_token = localStorage.getItem('access-token');
-//     try {
-//       const response = await axiosInstance.post('https://spring.secretzoo.site/auth/token/refresh', {} ,{
-//         headers: {
-//           "Authorization" : localStorage.getItem('token_type') + ' ' + access_token,
-//           "refresh-token" : refresh_Token,
-//         }
-//       });
-//       localStorage.setItem('access-token', response.data['access-token']);
-//       localStorage.setItem('refresh-token', response.data['refresh-token']);
-//       axiosInstance.defaults.headers.common['Authorization'] = localStorage.getItem('token_type') + ' ' + localStorage.getItem('access-token');
-//       return axiosInstance(originalRequest);
-//     } catch (refreshError) {
-      
-//     }
-//   }
-//   return Promise.reject(error);
-// });
 
 export const getUserInfo = createAsyncThunk(
   'user/getUserInfo',
@@ -118,6 +82,7 @@ export const getUserInfo = createAsyncThunk(
       };
       sessionStorage.setItem('userName',data1.userId);
       sessionStorage.setItem('userNickname', data1.nickname);
+      sessionStorage.setItem('userSequence', data1.userSequence.toString());
       return userData
 
     } catch (error) {
@@ -207,7 +172,7 @@ export const axiosLogout = createAsyncThunk(
     try {
      const response =  axios.post('https://spring.secretzoo.site/auth/logout', {} ,{
       headers: {
-        "Authorization" : localStorage.getItem('token_type') + ' ' + localStorage.getItem('access-token'),
+        "Authorization" : sessionStorage.getItem('token_type') + ' ' + sessionStorage.getItem('access-token'),
       }
     });
       return response.data;
