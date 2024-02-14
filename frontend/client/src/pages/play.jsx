@@ -356,8 +356,8 @@ const Play = () => {
           activate = true;
         }
         video.current = <UserVideoComponent streamManager={subscribers[count]} />
-        console.log(subscribers);
-        count ++ ;
+        // console.log(subscribers[count]);
+        count++;
         slotArr.push(
           <PlayerView
             psq={psq}
@@ -387,6 +387,9 @@ const Play = () => {
       activate = true;
     }
     video.current = <UserVideoComponent streamManager={publisher} />
+    if(publisher !== undefined){
+      console.log(publisher.stream.connection.data.clientData);
+    }
     slotArr.push(
       <PlayerView
         psq={psq}
@@ -409,20 +412,18 @@ const Play = () => {
 
   const App = () => {
       useEffect(() => {
-        // if(Object.keys(prevPlayerListRef.current).length<Object.keys(playerList).length){
+        
           console.log('$$$$$$$$$$$$$$$$$$$$$$$4');
-          // console.log(Object.keys(playerList));
-          // console.log(Object.keys(playerList).length);
-          // console.log(Object.keys(prevPlayerListRef.current).length);
+         
 
-            window.addEventListener('beforeunload', onbeforeunload);  
             joinSession();
+            window.addEventListener('beforeunload', onbeforeunload);  
             console.log(subscribers);
           return () => {
               window.removeEventListener('beforeunload', onbeforeunload);
-              leaveSession();
+              // leaveSession();
           };
-        // }
+        
         
           prevPlayerListRef.current = {...playerList};
         
@@ -435,7 +436,7 @@ const Play = () => {
       const deleteSubscriber = (streamManager) => {
           
           setSubscribers((prevSubscribers) => prevSubscribers.filter((sub) => sub !== streamManager));
-       
+        
       };
 
       const joinSession = async () => {
@@ -497,7 +498,6 @@ const Play = () => {
           
           session.current=undefined;
           setSubscribers([]);
-          setMyUserName(sessionStorage.getItem('userNickname'));
           setPublisher(undefined);
       };
 
