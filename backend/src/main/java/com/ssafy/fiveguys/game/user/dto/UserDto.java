@@ -3,6 +3,7 @@ package com.ssafy.fiveguys.game.user.dto;
 import java.sql.Timestamp;
 
 import com.ssafy.fiveguys.game.user.entity.User;
+import java.time.LocalDateTime;
 import lombok.*;
 
 @Getter
@@ -25,8 +26,8 @@ public class UserDto {
     private String providerId;
     private String refreshToken;
     private boolean connection;
-    private Timestamp creationDate;
-    private Timestamp lastModifiedDate;
+    private LocalDateTime creationDate;
+    private LocalDateTime lastModifiedDate;
 
     public static UserDto getUser(User user) {
         return UserDto.builder()
