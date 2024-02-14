@@ -435,7 +435,7 @@ const Play = () => {
       const deleteSubscriber = (streamManager) => {
           
           setSubscribers((prevSubscribers) => prevSubscribers.filter((sub) => sub !== streamManager));
-       
+        
       };
 
       const joinSession = async () => {
@@ -460,7 +460,7 @@ const Play = () => {
               const token = await getToken(sessionStorage.getItem('roomName'));
               setMyUserName(sessionStorage.getItem('userNickname'));
               
-              mySession.connect(token, { clientData: myUserName })
+              mySession.connect(token, { myUserName })
               .then(async () => {
                   let newPublisher = await OV.initPublisherAsync(undefined, {
                       audioSource: undefined,
