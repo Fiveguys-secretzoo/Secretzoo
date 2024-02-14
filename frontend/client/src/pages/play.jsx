@@ -369,11 +369,19 @@ const Play = () => {
     }
     video.current=undefined;
     for (let k = count; k < 6; k++) {
-      slotArr.push(
-        <div className="bg-white rounded w-96 h-60 m-2 flex flex-col p-2 mx-5"
-        >
-        </div>
-      )
+      if(k !== 4 ){
+        slotArr.push(
+          <div className="bg-white rounded w-96 h-60 m-2 flex flex-col p-2 mx-5"
+          >
+          </div>
+        )
+      }else{
+        slotArr.push(
+          <div className="ounded w-96 h-60 m-2 flex flex-col p-2 mx-5"
+          >
+          </div>
+        )
+      }
     }
     let psq = "", playerName = "";
     let activate = false;

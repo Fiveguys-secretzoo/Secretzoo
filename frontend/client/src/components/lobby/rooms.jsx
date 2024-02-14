@@ -37,11 +37,19 @@ const Rooms = () => {
       if (callback) {
         dispatch(initRoomName(roomName));
         sessionStorage.setItem("roomName", roomName);
-        alert("생성 완료! 게임으로 이동합니다.");
+        Swal.fire({
+          "icon": 'success',
+          'title': '방 생성 완료!',
+          "text": '방에 입장 중입니다...',
+          "timer" : 1500,
+          'showConfirmButton': false,
+        });
         navigate("/play");
       } else {
         setOpenModal(false);
         Swal.fire({
+          "icon": 'error',
+          "title" : '방 입장 오류',
           "text": '이미 있는 방제입니다. 다른방제를 선택해주세요',
           "confirmButtonColor": '#3085d6'
         });
@@ -56,12 +64,15 @@ const Rooms = () => {
         dispatch(initRoomName(name));
         sessionStorage.setItem("roomName", name);
         Swal.fire({
-          "text": '입장',
-          "confirmButtonColor": '#3085d6'
+          "title": '입장 중입니다...',
+          "timer" : 1500,
+          'showConfirmButton': false,
         });
         navigate("/play");
       } else {
         Swal.fire({
+          'icon' : 'error',
+          'title' : '방 입장 오류!',
           "text": '방이 가득찼습니다. 다른 방을 이용해주세요.',
           "confirmButtonColor": '#3085d6'
         });
