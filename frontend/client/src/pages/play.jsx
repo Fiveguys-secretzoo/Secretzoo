@@ -139,9 +139,12 @@ const Play = () => {
   }
 
   // 메시지를 처리한다. 그런 함수다.
-  const messageHandler = (msg) => {
-    console.log(1)
-    setMessages((msgs) => [...msgs, msg]);
+  const messageHandler = (user, msg) => {
+    console.log(user) 
+    console.log(msg)
+    
+    let imsg = user + " : " + msg;
+    setMessages((msgs) => [...msgs, imsg]);
   };
 
 
@@ -324,7 +327,7 @@ const Play = () => {
 
 
   const sendMessage = () => {
-    socket.emit('chat message', input, localStorage.getItem(''));
+    socket.emit('chatMessage', input, sessionStorage.getItem('userNickname'), sessionStorage.getItem('roomName'));
     setInput('');
   };
 
@@ -673,7 +676,7 @@ const Play = () => {
               <h1>Chat Application</h1>
               <div className="message-list">
                 {messages.map((msg, index) => (
-                  <div key={index} className="message">{msg}</div>
+                  <div key={index} className="message">[{msg}]</div>
                 ))}
               </div>
               <div className="message-input">
@@ -683,7 +686,7 @@ const Play = () => {
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Type a message..."
                 />
-                <Button onClick={/*sendMessage*/() => { console.log(roomInfo) }}>Send</Button>
+                <Button onClick={sendMessage}>Send</Button>
               </div>
             </div>
             <Button className={(playState === 0) ? '' : 'hidden'} disabled={!isAdmin} color="success" onClick={start}>start</Button>

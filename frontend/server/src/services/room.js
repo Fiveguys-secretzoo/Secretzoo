@@ -308,15 +308,9 @@ const roomSocketMethods = () => {
 
   /* 채팅 메세지 이벤트 */
   const chatMessage = async (socket, io, rooms) => {
-    socket.on('chatMessage', async (msg, user) => {
-      let room;
-      for (let nowRoom of socket.rooms) {
-        if (nowRoom !== socket.id) {
-          room = nowRoom;
-        }
-      }
-      console.log(`##### chat message : ${msg} + " / room : " + ${room}`);
-      io.to(room).emit('chatMessage', user + " : " + msg + "," + room);
+    socket.on('chatMessage', async (msg, user, roomName) => {
+      console.log(`##### chat message : ${msg} / room : ${roomName}`);
+      io.to(roomName).emit('chatMessage', user , msg );
     });
   }
 
