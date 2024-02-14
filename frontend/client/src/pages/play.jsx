@@ -356,7 +356,7 @@ const Play = () => {
           activate = true;
         }
         video.current = <UserVideoComponent streamManager={subscribers[count]} />
-        console.log(subscribers);
+        console.log(subscribers[count].session.connection.clientData);
         count ++ ;
         slotArr.push(
           <PlayerView
@@ -387,6 +387,7 @@ const Play = () => {
       activate = true;
     }
     video.current = <UserVideoComponent streamManager={publisher} />
+    console.log(publisher.session.connection.clientData);
     slotArr.push(
       <PlayerView
         psq={psq}
@@ -409,20 +410,18 @@ const Play = () => {
 
   const App = () => {
       useEffect(() => {
-        // if(Object.keys(prevPlayerListRef.current).length<Object.keys(playerList).length){
+        
           console.log('$$$$$$$$$$$$$$$$$$$$$$$4');
-          // console.log(Object.keys(playerList));
-          // console.log(Object.keys(playerList).length);
-          // console.log(Object.keys(prevPlayerListRef.current).length);
+         
 
-            window.addEventListener('beforeunload', onbeforeunload);  
             joinSession();
+            window.addEventListener('beforeunload', onbeforeunload);  
             console.log(subscribers);
           return () => {
               window.removeEventListener('beforeunload', onbeforeunload);
-              leaveSession();
+              // leaveSession();
           };
-        // }
+        
         
           prevPlayerListRef.current = {...playerList};
         
