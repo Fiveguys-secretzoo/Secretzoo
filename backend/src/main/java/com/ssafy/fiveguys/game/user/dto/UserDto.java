@@ -17,7 +17,7 @@ public class UserDto {
     private String email;
     private String name;
     private String nickname;
-    private String mainReward;
+    private String mainAchievement;
     private Role role;
     private String profileNumber;
     private String provider;
@@ -34,13 +34,13 @@ public class UserDto {
                 .email(user.getEmail())
                 .name(user.getName())
                 .nickname(user.getNickname())
-                .mainReward(user.getMainReward())
+                .mainAchievement(user.getMainAchievement())
                 .role(user.getRole())
                 .profileNumber(user.getProfileNumber())
                 .provider(user.getProvider())
                 .providerId(user.getProviderId())
                 .refreshToken(user.getRefreshToken())
-                .creationDate(user.getCreatedDate())
+                .creationDate(user.getCreationDate())
                 .lastModifiedDate(user.getLastModifiedDate())
                 .build();
     }

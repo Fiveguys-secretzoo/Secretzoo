@@ -31,14 +31,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
         FilterChain chain) throws ServletException, IOException {
+        System.out.println("JwtAuthenticationFilter.doFilter - start");
         // Request Header에서 JWT Token 추출
         String token = resolveToken(request);
         // validateToken으로 토큰 유효성 검사
-        if (jwtTokenProvider.validateToken(token) || token != null) {
+        if (token != null || jwtTokenProvider.validateToken(token)) {
             // 토큰이 유효할 경우 토큰에서 Authentication 객체를 가지고 와서 SecurityContext 에 저장
             Authentication authentication = jwtTokenProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
-        chain.doFilter(request, response); // 버그 수정때 if문 안으로 넣기
+        System.out.println("JwtAuthenticationFilter.doFilter - finish");
+        chain.doFilter(request, response);
     }
 }

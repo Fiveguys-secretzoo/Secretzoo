@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RewardsRepository extends JpaRepository<Rewards, String> {
 
-    public List<Rewards> findByAnimal_animalId(String animalId);
+    public List<Rewards> findByAnimalId(String animalId);
 
 }
