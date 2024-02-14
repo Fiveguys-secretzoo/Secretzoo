@@ -74,8 +74,14 @@ const SearchPlayer = () => {
                   href='#' 
                   key={index}
                   onClick={(e) => { e.preventDefault(); goToDetail(element.userSequence)}}>
-                    <div> 아이디 : {element.userId} 닉네임  : {element.nickname}</div>
-                    <div> 레벨 : {element.level} 대표업적 : {element.mainReward} </div>
+                    <div>
+                      <span className='font-bold'> 아이디 :  </span>  {element.userId} &nbsp;
+                      <span className='font-bold'>닉네임  : </span> {element.nickname} &nbsp;
+                    </div>
+                    <div>
+                      <span className='font-bold'> 레벨 : </span> {element.level} &nbsp;
+                      <span className='font-bold'>대표업적 : </span> {element.mainReward} &nbsp;
+                    </div>
                   </Card>
                 ))}
               </div>

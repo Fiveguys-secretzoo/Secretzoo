@@ -53,10 +53,10 @@ const MyRanking = () => {
             <div>
               <h3 className='text-2xl font-semibold mb-2'>나의 공격 랭킹</h3>
               <div>
-                <p className='mb-1'>순위: {myRanking.data.attackRank.rank + 1} (상위 {(myRanking.data.attackRank.rank / myRanking.totalPlayer * 100).toFixed(2)}%)</p>
-                <p className='mb-1'>공격 시도 횟수: {myRanking.data.animalScore.attackSuccess + myRanking.data.animalScore.attackFail}</p>
-                <p className='mb-1'>공격 성공 횟수: {myRanking.data.animalScore.attackSuccess}</p>
-                <p>공격 성공률: {(myRanking.data.animalScore.attackSuccess / (myRanking.data.animalScore.attackSuccess + myRanking.data.animalScore.attackFail) * 100).toFixed(2)}%</p>
+                <p className='mb-1'> <span className='font-bold'>순위 : </span>{myRanking.data.attackRank.rank + 1} (상위 {(myRanking.data.attackRank.rank / myRanking.totalPlayer * 100).toFixed(2)}%)</p>
+                <p className='mb-1'><span className='font-bold'> 공격 시도 횟수 : </span>{myRanking.data.animalScore.attackSuccess + myRanking.data.animalScore.attackFail}</p>
+                <p className='mb-1'><span className='font-bold'> 공격 성공 횟수 : </span> {myRanking.data.animalScore.attackSuccess}</p>
+                <p><span className='font-bold'>공격 성공률 : </span> {(myRanking.data.animalScore.attackSuccess / (myRanking.data.animalScore.attackSuccess + myRanking.data.animalScore.attackFail) * 100).toFixed(2)}%</p>
               </div>
             </div>
             <GiAncientSword  className="text-gray-500 w-20 h-20" color="red"/>
@@ -65,10 +65,10 @@ const MyRanking = () => {
             <div>
               <h3 className='text-2xl font-semibold mb-2'>나의 수비 랭킹</h3>
               <div>
-                <p className='mb-1'>순위: {myRanking.data.defenseRank.rank + 1} (상위 {(myRanking.data.defenseRank.rank / myRanking.totalPlayer * 100).toFixed(2)}%)</p>
-                <p className='mb-1'>수비 시도 횟수: {myRanking.data.animalScore.defenseSuccess + myRanking.data.animalScore.defenseFail}</p>
-                <p className='mb-1'>수비 성공 횟수: {myRanking.data.animalScore.defenseSuccess}</p>
-                <p>수비 성공률: {(myRanking.data.animalScore.defenseSuccess / (myRanking.data.animalScore.defenseSuccess + myRanking.data.animalScore.defenseFail) * 100).toFixed(2)}%</p>
+                <p className='mb-1' ><span className='font-bold'>순위 : </span>{myRanking.data.defenseRank.rank + 1} (상위 {(myRanking.data.defenseRank.rank / myRanking.totalPlayer * 100).toFixed(2)}%)</p>
+                <p className='mb-1'><span className='font-bold'>수비 시도 횟수 : </span>{myRanking.data.animalScore.defenseSuccess + myRanking.data.animalScore.defenseFail}</p>
+                <p className='mb-1'><span className='font-bold'>수비 성공 횟수 : </span>{myRanking.data.animalScore.defenseSuccess}</p>
+                <p><span className='font-bold'>수비 성공률 : </span>{(myRanking.data.animalScore.defenseSuccess / (myRanking.data.animalScore.defenseSuccess + myRanking.data.animalScore.defenseFail) * 100).toFixed(2)}%</p>
               </div>
             </div>
             <GiMagicShield  className="text-gray-500 w-20 h-20" color="green"/>
@@ -77,8 +77,8 @@ const MyRanking = () => {
             <div>
               <h3 className='text-2xl font-semibold mb-2'>나의 패스 랭킹</h3>
               <div>
-                <p className='mb-1'>순위: {myRanking.data.passRank.rank + 1} (상위 {(myRanking.data.passRank.rank / myRanking.totalPlayer * 100).toFixed(2)}%)</p>
-                <p>패스 시도 횟수: {myRanking.data.passCount}</p>
+                <p className='mb-1'><span className='font-bold'>순위 : </span>{myRanking.data.passRank.rank + 1} (상위 {(myRanking.data.passRank.rank / myRanking.totalPlayer * 100).toFixed(2)}%)</p>
+                <p><span className='font-bold'>패스 시도 횟수 : </span> {myRanking.data.passCount}</p>
               </div>
             </div>
             <GiRunningShoe   className="text-gray-500 w-20 h-20" color='yellow' />
