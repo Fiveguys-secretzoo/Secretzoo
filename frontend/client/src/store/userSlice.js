@@ -203,6 +203,7 @@ const userSlice = createSlice({
         level: '0',
         userSequence: uuidv4(),
       };
+      sessionStorage.setItem('userSequence', state.userInfo.userSequence.toString());
       state.isLoading = false;
       state.isAuthenticated = true;
     },

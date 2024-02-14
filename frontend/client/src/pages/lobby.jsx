@@ -19,11 +19,11 @@ const Lobby = () => {
   return (
     <>
       <div className='flex flex-row items-center justify-center h-screen w-screen'>
-        <div className='flex flex-col min-h-[90%] min-w-[20em] p-4 mx-4 bg-white rounded-md '>
+        <div className='flex flex-col min-h-[90%] min-w-[20em] p-4 mx-4 rounded-md '>
           <Profile></Profile>
           <Navbar></Navbar>
         </div>
-        <div className='h-[90%] min-w-[50em] px-20 py-5 bg-white rounded-md'>
+        <div className='h-[90%] min-w-[50em] max-w-[50em] bg-custom-opacity2 px-20 py-5 rounded-md'>
           <Outlet></Outlet>
         </div>
       </div>

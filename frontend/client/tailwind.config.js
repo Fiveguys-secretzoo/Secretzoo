@@ -9,6 +9,10 @@ module.exports = {
       fontFamily: {
         DNFBitBitv2: ["DNFBitBitv2"],
       },
+      backgroundColor: {
+        'custom-opacity': 'rgba(0, 0, 0, 0.7)',
+        'custom-opacity2': 'rgba(62, 50, 50, 0.7)',
+      },
     },
     backgroundImage: {
       "gold-medal" : 'url(./assets/img/ranking/gold-medal.png)',

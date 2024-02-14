@@ -30,7 +30,7 @@ const MyReward = () => {
     return <div>Loading...</div>;
   }
   return (
-    <div className='h-[90%]'>
+    <div className='h-[90%] text-white'>
       <div className='container p-2 my-4 shadow-md'>
         <p>도전과제 {myRewards.count}개중 {Object.keys(myRewards.data).filter(reward => myRewards.data[reward].done).length}개 달성</p>
 
