@@ -387,7 +387,9 @@ const Play = () => {
       activate = true;
     }
     video.current = <UserVideoComponent streamManager={publisher} />
-    console.log(publisher.stream);
+    if(publisher !== undefined){
+      console.log(publisher.stream);
+    }
     slotArr.push(
       <PlayerView
         psq={psq}
