@@ -1,64 +1,40 @@
 package com.ssafy.fiveguys.game.player.entity;
 
-import com.ssafy.fiveguys.game.common.entity.BaseTimeEntity;
-import com.ssafy.fiveguys.game.player.entity.embeddedType.RankingScore;
+import com.ssafy.fiveguys.game.player.entity.base.BaseTimeEntity;
 import com.ssafy.fiveguys.game.user.entity.User;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import java.util.List;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Getter
-@Setter
-@Builder
-@ToString(of = {"playerSequence", "totalRound", "totalTurn", "totalPass", "exp", "playerLevel"})
+@Getter @Setter @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 public class Player extends BaseTimeEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "player_sequence")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long playerSequence;
+    @Column(name = "user_sequence", unique = true)
+    private Long userSequence;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_sequence")
-    private User user;
+    private Long totalRound;
+    private Long totalTurn;
+    private Long totalPass;
 
-    @Column(name = "total_round")
-    private long totalRound;
-    @Column(name = "total_turn")
-    private long totalTurn;
-    @Column(name = "total_pass")
-    private long totalPass;
+    //player_id도 고유한 값이므로 unique = true 설정을 통해 중복 값을 방지해준다.
+//    @Column(name = "player_id",  unique = true)
+//    private String playerId;
 
-    @Embedded
     private RankingScore rankingScore;
 
-    @Column(name = "exp")
-    private long exp;
-    @Column(name = "player_level")
+    private Long exp;
     private int playerLevel;
 
-    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
-    private List<PlayerRewards> playerRewards;
+
 }
-
-
-

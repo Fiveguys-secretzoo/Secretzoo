@@ -7,7 +7,6 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
-import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -25,8 +24,6 @@ public class QAnimal extends EntityPathBase<Animal> {
     public final StringPath animalId = createString("animalId");
 
     public final StringPath animalKorName = createString("animalKorName");
-
-    public final ListPath<Rewards, QRewards> rewards = this.<Rewards, QRewards>createList("rewards", Rewards.class, QRewards.class, PathInits.DIRECT2);
 
     public QAnimal(String variable) {
         super(Animal.class, forVariable(variable));

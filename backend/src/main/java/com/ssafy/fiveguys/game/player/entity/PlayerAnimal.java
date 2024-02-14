@@ -1,8 +1,7 @@
 package com.ssafy.fiveguys.game.player.entity;
 
 
-import com.ssafy.fiveguys.game.common.entity.BaseTimeEntity;
-import com.ssafy.fiveguys.game.player.entity.embeddedType.AnimalScore;
+import com.ssafy.fiveguys.game.player.entity.base.BaseTimeEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -18,8 +17,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Getter @Setter
-@ToString(of = {"playerAnimalSequence", "animalScore"})
+@Getter @Setter @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class PlayerAnimal extends BaseTimeEntity {
@@ -29,12 +27,10 @@ public class PlayerAnimal extends BaseTimeEntity {
     private Long playerAnimalSequence;
 
     @ManyToOne(fetch = FetchType.LAZY)
-//    @JsonIgnore
     @JoinColumn(name = "player_sequence")
     private Player player;
 
     @ManyToOne(fetch = FetchType.LAZY)
-//    @JsonIgnore
     @JoinColumn(name = "animal_id")
     private Animal animal;
 

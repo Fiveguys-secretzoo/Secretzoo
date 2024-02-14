@@ -1,79 +1,78 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { axiosGetDoneRewards, axiosUpdateProfileImage, axiosUpdateNickname, axiosUpdateMainAchievement, axiosCheckPassword, axiosUpdatePassword } from '../../store/userSlice';
 import axios from 'axios';
 import { Button, TextInput, Modal, Label, Card } from 'flowbite-react';
-import Swal from 'sweetalert2';
 
 
 const MyInfo = () => {
 
-  const dispatch = useDispatch();
-
-  const user = useSelector((state) => state.user.userInfo);
+  const [user, setUser] = useState(null);
+  const getUserInfo = () => {
+    const headers = {
+      'Authorization': sessionStorage.getItem('authorization')
+    };
+    axios.get('https://secretzoo.site/api/users/user', { headers })
+      .then(response => {
+        console.log(response.data)
+        setUser(response.data)
+      });
+  }
 
   useEffect(() => {
-    getRewards();
-  }, [user])
+    getRewrds();
+    getUserInfo();
+  }, [])
 
+  axios.defaults.headers.common['Authorization'] = sessionStorage.getItem('authorization');
   const updateProfileImage = (number) => {
-    dispatch(axiosUpdateProfileImage(number));
+    axios.put('https://secretzoo.site/api/users/profile-number', number)
+      .then(response => {
+        getUserInfo();
+      });
   };
 
   const updateNickname = (nickname) => {
-    dispatch(axiosUpdateNickname(nickname));
+    axios.put('https://secretzoo.site/api/users/nickname', nickname)
+      .then(response => {
+        getUserInfo();
+      });
   };
 
   const updateMainAchievement = (mainAchievement) => {
-    dispatch(axiosUpdateMainAchievement(mainAchievement));
+    axios.put('https://secretzoo.site/api/users/main-achievement', mainAchievement)
+      .then(response => {
+        getUserInfo();
+      });
   };
 
   const [passwordCheckState, setPasswordCheckState] = useState(false);
-  const checkPassword = async (password) => {
-    try { 
-      const actionResult = await dispatch(axiosCheckPassword(password));
-      if (actionResult.error) {
-        throw new Error(actionResult.error.message);
-      }
-      setOpenUpdatePasswordModal(true);
-      setPasswordCheckState(true);
-    } catch (error) { 
-      Swal.fire({
-        "text" : '비밀번호가 옳지 않습니다.',
-        "confirmButtonColor" : '#3085d6'
+  const checkPassword = (password) => {
+    console.log("hi")
+    axios.post('https://secretzoo.site/api/users/password', password)
+      .then(response => {
+        setOpenUpdatePasswordModal(true);
+        setPasswordCheckState(true);
+      }).catch(e => {
+        alert('비밀번호가 옳지 않습니다.');
       });
-    }
   };
 
-  const updatePassword = async (password, passwordCheck) => {
-    if (password!==passwordCheck) {
-      Swal.fire({
-        "text" : '비밀번호가 일치하지 않습니다.',
-        "confirmButtonColor" : '#3085d6'
-      });
-      return;
-    }
+  const updatePassword = (password) => {
     if (passwordCheckState) {
-        try { 
-        const actionResult = await dispatch(axiosUpdatePassword(password));
-        if (actionResult.error) {
-          throw new Error(actionResult.error.message);
-        }
-        setOpenUpdatePasswordModal(false);
-      } catch (error) {
-
-      }
+      axios.put('https://secretzoo.site/api/users/password', password)
+        .then(response => {
+          getUserInfo();
+          alert('변경 선공')
+        });
     }
   };
 
   const [myRewards, setMyrewards] = useState(null);
-  const getRewards = async () => {
-    if(user.userSequence){
-      dispatch(axiosGetDoneRewards(user.userSequence))
-        .then(Response => {
-          setMyrewards(Response.payload);
+  const getRewrds = (playerSequence) => {
+    axios.get(`https://secretzoo.site/api/rewards/done/101`)
+      .then(response => {
+        setMyrewards(response.data);
+        getUserInfo();
       });
-    }
   };
 
   const [openProfileImageModal, setOpenProfileImageModal] = useState(false);
@@ -81,13 +80,13 @@ const MyInfo = () => {
     const imageNumbers = Array.from({ length: 74 - 38 + 1 }, (_, i) => i + 38);
     return (
       <Modal show={openProfileImageModal} size="2xl" onClose={() => setOpenProfileImageModal(false)}>
-        <Modal.Body className='flex flex-wrap justify-around'>
+        <Modal.Body className='flex flex-wrap'>
           {imageNumbers.map((number) => (
             <img
               key={number}
               src={require(`../../assets//img/profile/Untitled ${number}.png`)}
               alt={`프로필 이미지 ${number}`}
-              className="w-28 m-2 rounded-full hover:cursor-pointer border-2 hover:border-blue-500"
+              className="w-32 rounded-full"
               onClick={() => { updateProfileImage(number); setOpenProfileImageModal(false) }}
             />
           ))}
@@ -168,12 +167,12 @@ const MyInfo = () => {
       <Modal show={openUpdatePasswordModal} size="md" onClose={() => setOpenUpdatePasswordModal(false)}>
         <Modal.Body>
           <Label>바꿀 비밀번호</Label>
-          <TextInput value={changePassword} onChange={(e) => setChangePassword(e.target.value)} type='password'></TextInput>
+          <TextInput value={changePassword} onChange={(e) => setChangePassword(e.target.value)}></TextInput>
           <Label>비밀번호 확인</Label>
-          <TextInput value={changePasswordCheck} onChange={(e) => setChangePasswordCheck(e.target.value)} type='password'></TextInput>
+          <TextInput value={changePasswordCheck} onChange={(e) => setChangePasswordCheck(e.target.value)}></TextInput>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={() => updatePassword(changePassword, changePasswordCheck) }>수정</Button>
+          <Button onClick={() => { updatePassword(changePassword); setOpenUpdatePasswordModal(false) }}>수정</Button>
           <Button color="gray" onClick={() => { setOpenUpdatePasswordModal(false); setPasswordCheckState(false) }}>
             취소
           </Button>
@@ -204,7 +203,7 @@ const MyInfo = () => {
           >변경</button>
         </div>
         <div className='flex items-center justify-end'>
-          <p>업적 : {user.mainReward}</p>
+          <p>업적 : {user.mainAchievement}</p>
           <button className='m-2 p-2 bg-blue-500 rounded'
             onClick={() => setOpenRewardsModal(true)}>변경</button>
         </div>
