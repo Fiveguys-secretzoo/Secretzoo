@@ -357,7 +357,7 @@ const Play = () => {
     App();
     // const aaa = undefined;
 
-    let count = 0;
+    let count = 1;
     for (let player in playerArr) {
       if (player !== playerSequence) {
         let psq = "", playerName = "";
@@ -393,7 +393,7 @@ const Play = () => {
       }
     }
     video.current=undefined;
-    let k = count+1;
+    let k = count;
     for (; k < 6; k++) {
         slotArr.push(
           <div className={`bg-white rounded w-96 h-52 m-2 item item${k}`}
