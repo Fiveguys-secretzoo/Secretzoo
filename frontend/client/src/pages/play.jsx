@@ -4,6 +4,8 @@ import { OpenVidu } from 'openvidu-browser';
 import axios from 'axios';
 import './openvidu/App.css';
 import UserVideoComponent from './openvidu/UserVideoComponent';
+
+import '../components/play/playerView.css'
 // openvidu react import 끝
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import ReactDOM from 'react-dom';
@@ -147,6 +149,14 @@ const Play = () => {
     setMessages((msgs) => [...msgs, imsg]);
   };
 
+  const messageListRef = useRef(null);
+
+  useEffect(() => {
+    // 메시지가 추가될 때마다 스크롤을 가장 아래로 내립니다.
+    if (messageListRef.current) {
+      messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   // socket.io drag handle
   const cardDragResponseHandler = (from, to) => {
@@ -330,6 +340,11 @@ const Play = () => {
     socket.emit('chatMessage', input, sessionStorage.getItem('userNickname'), sessionStorage.getItem('roomName'));
     setInput('');
   };
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      sendMessage();
+    }
+  };
 
   // 게임시작 이벤트 호출
   const start = () => {
@@ -352,16 +367,16 @@ const Play = () => {
           playerName = playerArr[player].pn;
           activate = true;
         }
-        if(count==4){slotArr.push(
-            <div className="bg-white rounded w-96 h-60 m-2 flex flex-col p-2 mx-5 invisible">
-            </div>
-          );
-          count++;
-        }
+        // if(count==4){slotArr.push(
+        //     <div className="bg-white rounded w-96 h-60 m-2 flex flex-col p-2 mx-5 invisible">
+        //     </div>
+        //   );
+        //   count++;
+        // }
         video.current = <UserVideoComponent streamManager={subscribers.get(player)} />
         console.log("@###@#@#@##sub")
         console.log(subscribers);
-        count ++ ;
+        
         slotArr.push(
           <PlayerView
             psq={psq}
@@ -370,27 +385,22 @@ const Play = () => {
             activate={activate}
             setCards={setCards}
             animalList={animalList}
-            video={video.current}>
+            video={video.current}
+            count={count}>
           </PlayerView>
         )
+        count ++ ;
       }
     }
     video.current=undefined;
-    for (let k = count; k < 6; k++) {
-      if(k==4){
+    let k = count+1;
+    for (; k < 6; k++) {
         slotArr.push(
-          <div className="bg-white rounded w-96 h-60 m-2 flex flex-col p-2 mx-5 invisible"
+          <div className={`bg-white rounded w-96 h-52 m-2 item item${k}`}
           >
           </div>
         )
-      }
-      else{
-        slotArr.push(
-          <div className="bg-white rounded w-96 h-60 m-2 flex flex-col p-2 mx-5"
-          >
-          </div>
-        )
-      }
+      
     }
     let psq = "", playerName = "";
     let activate = false;
@@ -408,7 +418,8 @@ const Play = () => {
         activate={activate}
         setCards={setCards}
         animalList={animalList}
-        video={video.current}>
+        video={video.current}
+        count={k}>
       </PlayerView>
     )
     return slotArr;
@@ -489,7 +500,7 @@ const Play = () => {
                       videoSource: undefined,
                       publishAudio: true,
                       publishVideo: true,
-                      resolution: '600x480',
+                      resolution: '600x400',
                       frameRate: 30,
                       insertMode: 'APPEND',
                       mirror: false,
@@ -544,13 +555,13 @@ const Play = () => {
       return response.data;
     };
   };
-
+  
 
 
   return (
     <>
       <div className="h-screen">
-        <div className='w-screen h-[60%] flex flex-wrap justify-between'>
+        <div className='w-screen h-[100%] flex flex-wrap justify-between container'>
           {/* 내 턴 아닐 때 드래그 공유 */}
 
           {/* 내 턴일 때 드롭 시 버튼 */}
@@ -652,7 +663,7 @@ const Play = () => {
           }
           {/* <img className="" src={require(`../assets/img/card/00/000.png`)} alt="" /> */}
 
-          <div className='flex absolute left-[35%] w-[65%] bottom-[100px]'>
+          <div className='rounded w-96 h-52 m-2 item item7 '>
 
             {/* 카드 표현 부분 */}
             <div className='flex max-w-[55%] max-h-[10em]'>
@@ -671,29 +682,43 @@ const Play = () => {
                 ))
               }
             </div>
-
-            <div className='flex flex-col'>
+          </div>
+            <div className='flex bg-white rounded-lg w-96 h-52 m-2 item item8'>
+              <div className='flex-col w-[90%]'>
               <h1>Chat Application</h1>
-              <div className="message-list">
-                {messages.map((msg, index) => (
-                  <div key={index} className="message">[{msg}]</div>
-                ))}
+                <div className="message-list bg-white"  
+                  style={{height: '68%',width: '100%', overflowY: 'auto', border: '1px solid #ccc' }}
+                  ref={messageListRef}>
+                  {messages.map((msg, index) => (
+                    <div key={index} className="message">[{msg}]</div>
+                  ))}
+                </div>
+                <div className='flex w-[100%]'>
+                  <div className="message-input w-[90%]" >
+                    <input
+                      type="text"
+                      value={input}
+                      onChange={(e) => setInput(e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      placeholder="Type a message..."
+                      style={{width: '100%'}}
+                    />
+                  </div>
+                  <Button onClick={sendMessage}>Send</Button>
+                </div>
               </div>
-              <div className="message-input">
-                <input
-                  type="text"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  placeholder="Type a message..."
-                />
-                <Button onClick={sendMessage}>Send</Button>
+              <div className='flex-col'>
+                <Button className="" color="success" style={{height:"50%" ,width:"100%"}} onClick={leaveRoom}>exit</Button>
+                <Button className={(playState === 0) ? "" : " hidden"} disabled={!isAdmin} color="success" style={{height:"50%"}} onClick={start}>start</Button>
               </div>
             </div>
-            <Button className={(playState === 0) ? '' : 'hidden'} disabled={!isAdmin} color="success" onClick={start}>start</Button>
-            <Button color="success" onClick={leaveRoom}>방 나가기</Button>
+            
+              
+            
+            
           </div>
         </div>
-      </div >
+      
 
     </>
   );
