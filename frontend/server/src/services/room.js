@@ -208,6 +208,7 @@ const roomSocketMethods = () => {
 
       const matchingKey = Object.keys(rooms[roomName].ps).find(key => rooms[roomName].ps[key].psq === psq);
       if (matchingKey === undefined) {
+        
         // 인원수 체크
         if (rooms[roomName] && rooms[roomName].pc >= 6) {
           callback(false);

@@ -82,6 +82,7 @@ const Play = () => {
   // 0 대기 1 시작 2 카드 드롭 후 동물 선택 3 동물 선택 후 방어 턴 4 넘기는 턴 드래그 5 넘기는 턴 동물 선택 6 결과 확인
   const [images, setImages] = useState([]);
   const [answerCard, setAnswerCard] = useState(64); // 정답 공개 시 카드
+  const [loserPsq, setLoserPsq] = useState('');
 
   const animalList = [
     '호랑이',
@@ -212,8 +213,12 @@ const Play = () => {
 
   // socket.io 게임 종료 handler 
   const gameEndResponseHandler = (loserpsq) => {
+    setLoserPsq(loserpsq);
+    setCards([]);
+    dispatch(changePlayState(6));
 
   }
+
 
   // 게임 시작 버튼을 눌렀을 때 작동하는 함수
   const gameStart = (state, cards) => {
@@ -280,6 +285,7 @@ const Play = () => {
 
     socket.on("penaltyAdd", penaltyAddResponseHandler);
 
+    socket.on("gameEnd", gameEndResponseHandler);
     // socket.on("gameEnd", gameEndResponseHandler);
 
     return () => {
@@ -290,19 +296,6 @@ const Play = () => {
   }, []);
 
   // playState 추적 
-  useEffect(() => {
-    console.log(`check playState : ${playState}`);
-    if (playState === 1) {
-      socket.emit("isTurnEnd", roomName, (loserpsq) => {
-        if (loserpsq !== false) {
-          alert(`Loser is ${loserpsq}`);
-          dispatch(initTurnedPlayer());
-          dispatch(changePlayState(6));
-        }
-      })
-    }
-
-  }, [playState]);
 
   //nowTurn, adminPlayer 추적
   useEffect(() => {
@@ -376,7 +369,7 @@ const Play = () => {
     // video.current=undefined;
     for (let k = count; k < 6; k++) {
       slotArr.push(
-        <div className="bg-white rounded w-[30%] m-2"
+        <div className="bg-white rounded w-96 h-60 m-2 flex flex-col p-2 mx-5"
         >
         </div>
       )
@@ -618,6 +611,7 @@ const Play = () => {
                 roomName={sessionStorage.getItem("roomName")}
                 playerSequence={playerSequence}
                 gameInfoHandler={gameInfoHandler}
+                loserPsq={loserPsq}
               ></GameResultView>
             </SelectScreen>
           }
