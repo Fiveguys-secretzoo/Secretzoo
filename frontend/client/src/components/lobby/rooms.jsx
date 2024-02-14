@@ -1,11 +1,14 @@
 import React, { useState, useContext, useEffect } from "react";
 import { SocketContext } from "../../App";
 import { useNavigate } from "react-router-dom";
-import { Button, TextInput, Modal, Label, Card } from 'flowbite-react';
+import { Button, TextInput, Modal, Label, Card, Checkbox } from 'flowbite-react';
 import Swal from 'sweetalert2';
 import { useSelector, useDispatch } from 'react-redux';
 import { initRoomName } from '../../store/playSlice'
 import { getUserInfo } from "../../store/userSlice";
+import { IoMdRefresh } from "react-icons/io";
+import { CiLock } from "react-icons/ci";
+
 const Rooms = () => {
   const navigate = useNavigate();
   // 소켓
@@ -29,11 +32,9 @@ const Rooms = () => {
     }
   }, [dispatch])
 
-  // 방제목
-  const [roomName, setRoomName] = useState('');
   // 방만들기
-  const createRoom = () => {
-    socket.emit('createRoom', roomName, user.userSequence, sessionStorage.getItem('userNickname'), (callback) => {
+  const createRoom = (roomName, roomPassword) => {
+    socket.emit('createRoom', roomName, roomPassword, user.userSequence, sessionStorage.getItem('userNickname'), (callback) => {
       if (callback) {
         dispatch(initRoomName(roomName));
         sessionStorage.setItem("roomName", roomName);
@@ -46,7 +47,7 @@ const Rooms = () => {
         });
         navigate("/play");
       } else {
-        setOpenModal(false);
+        setOpenMakeRoomModal(false);
         Swal.fire({
           "icon": 'error',
           "title" : '방 입장 오류',
@@ -58,8 +59,8 @@ const Rooms = () => {
   }
 
   // 방입장 
-  const enterRoom = (name) => {
-    socket.emit('enterRoom', name, user.userSequence, sessionStorage.getItem('userNickname'), (callback) => {
+  const enterRoom = (name, password) => {
+    socket.emit('enterRoom', name, password, user.userSequence, sessionStorage.getItem('userNickname'), (callback) => {
       if (callback) {
         dispatch(initRoomName(name));
         sessionStorage.setItem("roomName", name);
@@ -70,6 +71,7 @@ const Rooms = () => {
         });
         navigate("/play");
       } else {
+        setOpenEnterModal(false);
         Swal.fire({
           'icon' : 'error',
           'title' : '방 입장 오류!',
@@ -142,7 +144,54 @@ const Rooms = () => {
 
   }
 
-  const [openModal, setOpenModal] = useState(false);
+  const [openMakeRoomModal, setOpenMakeRoomModal] = useState(false);
+  const MakeRoomModal = () => {
+    const [roomName, setRoomName] = useState('');
+    const [roomPassword, setRoomPassword] = useState('');   
+    const [isChecked, setIsChecked] = useState(false);
+    return (
+      <Modal show={openMakeRoomModal} size="md" onClose={() => setOpenMakeRoomModal(false)}>
+      <form action="#" onSubmit={e => e.preventDefault()}>
+      <Modal.Body>
+        <Label>방 제목</Label>
+        <TextInput value={roomName} onChange={(e) => setRoomName(e.target.value)}></TextInput>
+        <Label>비밀번호</Label>
+        <Checkbox checked={isChecked} onChange={() => setIsChecked(!isChecked)}></Checkbox>
+        {isChecked ? 
+        <TextInput value={roomPassword} onChange={(e) => setRoomPassword(e.target.value)}></TextInput> : ''}
+      </Modal.Body>
+      <Modal.Footer>
+        <Button type="submit" onClick={() => createRoom(roomName, roomPassword)}>방 만들기</Button>
+        <Button color="gray" onClick={() => setOpenMakeRoomModal(false)}>
+          취소
+        </Button>
+      </Modal.Footer>
+      </form>
+    </Modal>
+    )
+  }
+  const [openEnterModal, setOpenEnterModal] = useState(false);
+  const [selectedRoomName, setSelectedRoomName] = useState('');
+  const EnterModal = () => {
+    const [roomPassword, setRoomPassword] = useState('');   
+    return (
+      <Modal show={openEnterModal} size="md" onClose={() => setOpenEnterModal(false)}>
+      <form action="#" onSubmit={e => e.preventDefault()}>
+      <Modal.Body>
+        <Label>비밀번호</Label>
+        <TextInput value={roomPassword} onChange={(e) => setRoomPassword(e.target.value)}></TextInput>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button type="submit" onClick={() => enterRoom(selectedRoomName,roomPassword)}>입장</Button>
+        <Button color="gray" onClick={() => setOpenEnterModal(false)}>
+          취소
+        </Button>
+      </Modal.Footer>
+      </form>
+    </Modal>
+    )
+  }
+  
 
   return (
     <>
@@ -153,7 +202,7 @@ const Rooms = () => {
               <Button color="gray" onClick={filterPlaying}>플레이중</Button>
               <Button color="gray" onClick={filterWait}>대기중</Button>
               <Button color="gray" onClick={filterFull}>꽉찬방</Button>
-              <Button color="gray" onClick={noFilter}>모든방</Button>
+              <Button color="gray" onClick={noFilter}><IoMdRefresh className="w-6 h-6 text-bold"></IoMdRefresh></Button>
             </Button.Group>
           </div>
           <form className="flex justify-end"
@@ -169,35 +218,23 @@ const Rooms = () => {
         </div>
         <div className="flex space-x-2 justify-end ">
           <Button color="gray"
-            onClick={() => setOpenModal(true)}>방만들기</Button>
+            onClick={() => setOpenMakeRoomModal(true)}>방만들기</Button>
         </div>
         <div className="flex flex-wrap  my-2 border-2 overflow-y-auto h-[30em] w-[40em] content-start">
           {Object.keys(rooms).map((key) => (
             <Card href="#" className="w-[47%] h-[30%] m-2"
-              onClick={(e) => { e.preventDefault(); enterRoom(rooms[key].roomName) }}>
+              onClick={(e) => { e.preventDefault(); setSelectedRoomName(rooms[key].roomName); setOpenEnterModal(true); }}>
+              {rooms[key].isLocked ? <CiLock></CiLock> : null}
               <p className='truncate text-sm'>{rooms[key].roomName}</p>
-              {/* <p>{rooms[key].players[0].playerName}</p> */}
+              <p>{rooms[key].players[0].playerName}</p>
               <p className="text-sm">{rooms[key].playerCount}/6</p>
-              <p className="text-sm">{rooms[key].status === 0 ? '대기중' : rooms[key].playerCount === 6 ? '꽉찬방' : '플레이중'}</p>
+              <p className="text-sm">{rooms[key].status === 1 ? '플레이중' : rooms[key].playerCount === 6 ? '꽉찬방' : '대기중'}</p>
             </Card >
           ))}
         </div>
       </div>
-      {/* 모달 */}
-      <Modal show={openModal} size="md" onClose={() => setOpenModal(false)}>
-        <form action="#" onSubmit={e => e.preventDefault()}>
-        <Modal.Body>
-          <Label>방 제목</Label>
-          <TextInput value={roomName} onChange={(e) => setRoomName(e.target.value)}></TextInput>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button type="submit" onClick={() => createRoom()}>방 만들기</Button>
-          <Button color="gray" onClick={() => setOpenModal(false)}>
-            취소
-          </Button>
-        </Modal.Footer>
-        </form>
-      </Modal>
+      <MakeRoomModal></MakeRoomModal>
+      <EnterModal></EnterModal>
     </>
   );
 };
