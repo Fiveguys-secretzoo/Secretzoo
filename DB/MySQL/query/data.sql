@@ -8,7 +8,8 @@ VALUES
 ("PIG05", "pig", "돼지"),
 ("FOX06", "fox", "여우"),
 ("SHEEP07", "sheep", "양"),
-("WHALE08", "whale", "혹등고래");
+("WHALE08", "whale", "혹등고래"),
+('GEN01', 'general', '일반');
 
 INSERT INTO player_level (`level`, `exp`)
 VALUES
@@ -33,22 +34,22 @@ VALUES
 (20, 10000);
 
 -- user 초기 데이터
-INSERT INTO `user` (`user_sequence`, `email`, `name`, `nickname`, `password`, `role`, `profile_number`, `user_id`,`connection`)
-VALUES (101, 'test1@test.com', '이상혁', 'FAKER', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '000','test1',false),
-(102, 'test2@test.com', '김중광', '미칠광 가운데중', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '37', 'test2',false),
-(103, 'test3@test.com', '구마적', '구마유시', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '38', 'test3',false),
-(104, 'test4@test.com', '김김김', 'kim kim', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '39', 'test4',false),
-(105, 'test5@test.com', '이상혁', 'hide on bush', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W','USER', '40', 'test5',false),
-(106, 'test6@test.com', '정지훈', 'chovy', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '41','test6',false),
-(107, 'test7@test.com', '김기인', 'kiin', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '42','test7',false),
-(108, 'test8@test.com', '곰돌이', '곰돌이 푸우', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '43', 'test8',false),
-(109, 'test9@test.com', '제니', '블랙핑크', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '44','test9',false),
-(110, 'test10@test.com', '오지혜', '헤일리', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '45','test10',false),
-(111, 'test11@test.com', '유승호', '호승이', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '46','test11',false),
-(112, 'test12@test.com', '유재영', '구월동 휴그랜트', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '47','test12',false),
-(113, 'test13@test.com', '조용환', '아빠 안잔다', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '48', 'test13',false),
-(114, 'test14@test.com', '박준형', '풀무원', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '49','test14',false),
-(115, 'test15@test.com', '이선철', '배곧최수종', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '50','test15',false);
+INSERT INTO `user` (`user_sequence`, `email`, `name`, `nickname`, `password`, `role`, `profile_number`, `user_id`)
+VALUES (101, 'test1@test.com', '이상혁', 'FAKER', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '000','test1'),
+(102, 'test2@test.com', '김중광', '미칠광 가운데중', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '37', 'test2'),
+(103, 'test3@test.com', '구마적', '구마유시', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '38', 'test3'),
+(104, 'test4@test.com', '김김김', 'kim kim', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '39', 'test4'),
+(105, 'test5@test.com', '이상혁', 'hide on bush', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W','USER', '40', 'test5'),
+(106, 'test6@test.com', '정지훈', 'chovy', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '41','test6'),
+(107, 'test7@test.com', '김기인', 'kiin', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '42','test7'),
+(108, 'test8@test.com', '곰돌이', '곰돌이 푸우', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '43', 'test8'),
+(109, 'test9@test.com', '제니', '블랙핑크', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '44','test9'),
+(110, 'test10@test.com', '오지혜', '헤일리', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '45','test10'),
+(111, 'test11@test.com', '유승호', '호승이', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '46','test11'),
+(112, 'test12@test.com', '유재영', '구월동 휴그랜트', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '47','test12'),
+(113, 'test13@test.com', '조용환', '아빠 안잔다', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '48', 'test13'),
+(114, 'test14@test.com', '박준형', '풀무원', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '49','test14'),
+(115, 'test15@test.com', '이선철', '배곧최수종', '$2a$10$GwlIO8E9M0WdZuRskEBcqOmjNDfl4oqZA76YQ1.hmEpdXjoBlaf7W', 'USER', '50','test15');
 
 -- player 테이블 초기 데이터
 INSERT INTO player (player_sequence, attack_score, defense_score, pass_score, total_round, total_turn, total_pass, exp, player_level, user_sequence)
@@ -109,6 +110,7 @@ VALUES
 -- 업적 데이터 
 INSERT INTO rewards(rewards_id, animal_id, rewards_name, rewards_key, rewards_value)
 VALUES
+('G001', 'GEN01', '수습 조련사', 'attackSuccess', 0),
 ('T001',"TIGER01", "호랑이 제왕", "attackSuccess", 100),('T002',"TIGER01", "호랑나비", "attackFail", 100),
 ('T003',"TIGER01", "햇님달님", "defenseSuccess", 100),('T004',"TIGER01", "호랑이 패배자", "defenseFail", 100),
 ('T005',"TIGER01", "호랑이 신봉자", "trust", 100),('T006',"TIGER01", "호랑이 혐오자", "distrust", 100),
@@ -145,14 +147,6 @@ VALUES
 -- 플레이어-업적 데이터 
 INSERT INTO player_rewards(player_sequence, rewards_id)
 VALUES
-(1, "T001"), (1, "T002"), (1, "T003"), (1, "T004"), (1, "T005"), (1, "T006"), (1, "T007"), (1, "T008"),
-(1, "C001"), (1, "C002"), (1, "C003"), (1, "C004"), (1, "C005"), (1, "C006"), (1, "C007"), (1, "C008"),
-(1, "D001"), (1, "D002"), (1, "D003"), (1, "D004"), (1, "D005"), (1, "D006"), (1, "D007"), (1, "D008"),
-(1, "DE01"), (1, "DE02"), (1, "DE03"), (1, "DE04"), (1, "DE05"), (1, "DE06"), (1, "DE07"), (1, "DE08"),
-(1, "P001"), (1, "P002"), (1, "P003"), (1, "P004"), (1, "P005"), (1, "P006"), (1, "P007"), (1, "P008"),
-(1, "F001"), (1, "F002"), (1, "F003"), (1, "F004"), (1, "F005"), (1, "F006"), (1, "F007"), (1, "F008"),
-(1, "S001"), (1, "S002"), (1, "S003"), (1, "S004"), (1, "S005"), (1, "S006"), (1, "S007"), (1, "S008"),
-(1, "W001"), (1, "W002"), (1, "W003"), (1, "W004"), (1, "W005"), (1, "W006"), (1, "W007"), (1, "W008"),
 (2, "T001"), (2, "T002"), (2, "T003"), (2, "T004"), (2, "T005"), (2, "T006"), (2, "T007"), (2, "T008"),
 (2, "C001"), (2, "C002"), (2, "C003"), (2, "C004"), (2, "C005"), (2, "C006"), (2, "C007"), (2, "C008"),
 (2, "D001"), (2, "D002"), (2, "D003"), (2, "D004"), (2, "D005"), (2, "D006"), (2, "D007"), (2, "D008"),
@@ -264,6 +258,20 @@ VALUES
 (15, "S001"), (15, "S002"), (15, "S003"), (15, "S004"), (15, "S005"), (15, "S006"), (15, "S007"), (15, "S008"),
 (15, "W001"), (15, "W002"), (15, "W003"), (15, "W004"), (15, "W005"), (15, "W006"), (15, "W007"), (15, "W008");
 
+INSERT INTO player_rewards(player_sequence, rewards_id, is_done)
+VALUES 
+(1, "T001", true), (1, "T002", true), (1, "T003", true), (1, "T004", true), (1, "T005", true), (1, "T006", true), (1, "T007", true), (1, "T008", true), 
+(1, "C001", true), (1, "C002", true), (1, "C003", true), (1, "C004", true), (1, "C005", true), (1, "C006", true), (1, "C007", true), (1, "C008", true),
+(1, "D001", true), (1, "D002", true), (1, "D003", true), (1, "D004", true), (1, "D005", true), (1, "D006", true), (1, "D007", true), (1, "D008", true),
+(1, "DE01", true), (1, "DE02", true), (1, "DE03", true), (1, "DE04", true), (1, "DE05", true), (1, "DE06", true), (1, "DE07", true), (1, "DE08", true),
+(1, "P001", true), (1, "P002", true), (1, "P003", true), (1, "P004", true), (1, "P005", true), (1, "P006", true), (1, "P007", true), (1, "P008", true),
+(1, "F001", true), (1, "F002", true), (1, "F003", true), (1, "F004", true), (1, "F005", true), (1, "F006", true), (1, "F007", true), (1, "F008", true),
+(1, "S001", true), (1, "S002", true), (1, "S003", true), (1, "S004", true), (1, "S005", true), (1, "S006", true), (1, "S007", true), (1, "S008", true),
+(1, "W001", true), (1, "W002", true), (1, "W003", true), (1, "W004", true), (1, "W005", true), (1, "W006", true), (1, "W007", true), (1, "W008", true),
+
+(1, "G001", true), (2, "G001", true), (3, "G001", true), (4, "G001", true), (5, "G001", true), (6, "G001", true),
+(7, "G001", true), (8, "G001", true), (9, "G001", true), (10, "G001", true), (11, "G001", true), (12, "G001", true),
+(13, "G001", true), (14, "G001", true), (15, "G001", true);
 
 
 

@@ -175,8 +175,16 @@ public class PlayerService {
         playerRepository.save(player);
         log.debug("player 생성 성공");
         List<Rewards> allRewards = rewardsRepository.findAll();
-        List<PlayerRewards> playerRewards = allRewards.stream()
-            .map(rewards -> new PlayerRewards(player, rewards, false))
+//        List<PlayerRewards> playerRewards = allRewards.stream()
+//            .map(rewards -> new PlayerRewards(player, rewards, false))
+//            .collect(Collectors.toList());
+        List<PlayerRewards> playerRewards = rewardsRepository.findAll().stream()
+            .map(rewards -> {
+                PlayerRewards playerReward = new PlayerRewards(player, rewards, false);
+                //회원 가입시 바로 달성되는 업적이 있음
+                if (rewards.getRewardsId().equals("G001")) playerReward.setDone(true);
+                return playerReward;
+            })
             .collect(Collectors.toList());
         player.setPlayerRewards(playerRewards);
         //레디스 랭킹에 새로운 유저 정보 초기화
