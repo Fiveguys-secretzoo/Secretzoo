@@ -106,6 +106,12 @@ const Rooms = () => {
     });
   }
 
+  const noFilter = () => {
+    socket.emit('requestRoomsInfo', (roomsInfo) => {
+      setRooms(roomsInfo);
+    });
+  }
+
   // 검색
   const [searchRoomName, setSearchRoomName] = useState();
   const searchRoom = () => {
@@ -136,6 +142,7 @@ const Rooms = () => {
               <Button color="gray" onClick={filterPlaying}>플레이중</Button>
               <Button color="gray" onClick={filterWait}>대기중</Button>
               <Button color="gray" onClick={filterFull}>꽉찬방</Button>
+              <Button color="gray" onClick={noFilter}>모든방</Button>
             </Button.Group>
           </div>
           <form className="flex justify-end"
