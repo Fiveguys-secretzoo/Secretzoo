@@ -460,7 +460,7 @@ const Play = () => {
               const token = await getToken(sessionStorage.getItem('roomName'));
               setMyUserName(sessionStorage.getItem('userNickname'));
               
-              mySession.connect(token, { myUserName })
+              mySession.connect(token, { clientData: myUserName })
               .then(async () => {
                   let newPublisher = await OV.initPublisherAsync(undefined, {
                       audioSource: undefined,
@@ -497,7 +497,6 @@ const Play = () => {
           
           session.current=undefined;
           setSubscribers([]);
-          setMyUserName(sessionStorage.getItem('userNickname'));
           setPublisher(undefined);
       };
 
