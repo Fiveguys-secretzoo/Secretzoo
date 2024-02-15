@@ -1,5 +1,5 @@
 import { useContext, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'flowbite-react';
 import { changePlayState } from '../../store/playSlice'
 import { SocketContext } from '../../App';
@@ -8,7 +8,7 @@ import { FaRegFaceGrinTongueSquint  } from "react-icons/fa6";
 import { GiTigerHead, GiSniffingDog, GiDeer, GiPig, GiFox, GiSheep, GiSpermWhale} from "react-icons/gi";
 import { FaCat } from "react-icons/fa";
 
-const AnswerSelectMyTurn = ({ roomName, setIsMyTurn, playerCount, tpCount, animal }) => {
+const AnswerSelectMyTurn = ({ roomName, setIsMyTurn, playerCount, tp, animal }) => {
 
   const socket = useContext(SocketContext);
   const dispatch = useDispatch();
@@ -40,7 +40,7 @@ const AnswerSelectMyTurn = ({ roomName, setIsMyTurn, playerCount, tpCount, anima
   }
 
   useEffect(() => {
-    console.log(`##### [answerSelect] ${playerCount} / ${tpCount}`)
+    console.log(`##### [answerSelect] ${playerCount} / ${tp.length}`)
   })
   return (
     <>
@@ -65,10 +65,11 @@ const AnswerSelectMyTurn = ({ roomName, setIsMyTurn, playerCount, tpCount, anima
             </Button>
             
 
-            <Button className='m-1 bg-[#1B1A55] hover:!bg-[#535C91] text-white font-bold rounded-full shadow-lg' disabled={(tpCount === playerCount) ? true : false} onClick={() => handleAnswer(1)}>
+            <Button className='m-1 bg-[#1B1A55] hover:!bg-[#535C91] text-white font-bold rounded-full shadow-lg' disabled={(tp.length === playerCount) ? true : false} onClick={() => handleAnswer(1)}>
             <span className='text-xl'>패스</span>
             <FaRegFaceGrinTongueSquint  className='ml-3 w-10 h-10' color='orange' />
             </Button>
+
             <Button className='m-1 bg-[#1B1A55] hover:!bg-[#535C91] text-white font-bold rounded-full shadow-lg' onClick={() => handleAnswer(2)} >
             <span className='text-xl'>아니다</span>
             <FaRegAngry className='ml-3 w-10 h-10' color='red' />

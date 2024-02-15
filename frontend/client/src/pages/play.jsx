@@ -14,6 +14,8 @@ import { useNavigate } from "react-router-dom";
 import { motion, useDragControls } from 'framer-motion';
 import { Button } from 'flowbite-react';
 
+import { 
+  HiOutlineArrowRight} from "react-icons/hi";
 import { useSelector, useDispatch } from 'react-redux';
 import {
   initRoomInfo,
@@ -121,14 +123,14 @@ const Play = () => {
 
   // player enter socket event handle
   const playerEnterHandler = (players) => {
-    console.log(`##### player entered...`);
-    console.log(players);
+    // console.log(`##### player entered...`);
+    // console.log(players);
     dispatch(modifyPlayers(players));
   }
 
   // player leave socket event handle
   const playerLeaveHandler = (players) => {
-    console.log(`##### player leaved...`);
+    // console.log(`##### player leaved...`);
     dispatch(modifyPlayers(players));
   }
 
@@ -142,10 +144,10 @@ const Play = () => {
 
   // 메시지를 처리한다. 그런 함수다.
   const messageHandler = (user, msg) => {
-    console.log(user)
-    console.log(msg)
+    // console.log(user)
+    // console.log(msg)
 
-    let imsg = user + " : " + msg;
+    let imsg = `[${user}] ${msg}`;
     setMessages((msgs) => [...msgs, imsg]);
   };
 
@@ -160,21 +162,21 @@ const Play = () => {
 
   // socket.io drag handle
   const cardDragResponseHandler = (from, to) => {
-    console.log(`[cardDrag] [${from}] to [${to}]`);
+    // console.log(`[cardDrag] [${from}] to [${to}]`);
     dispatch(changeCardDrag({ from: from, to: to }))
   };
   // socket.io drag handle
   const cardDropResponseHandler = (state, from, to) => {
-    console.log(`[cardDrop] [${from}] to [${to}]`);
+    // console.log(`[cardDrop] [${from}] to [${to}]`);
     dispatch(changePlayState(state));
     dispatch(changeCardDrop({ from: from, to: to }))
-    console.log(`[cardDrop] nowTurn : ${nowTurn} / psq : ${playerSequence}`);
-    console.log(`[cardDrop] playState is ${playState} / isMyTurn : ${isMyTurn}`)
+    // console.log(`[cardDrop] nowTurn : ${nowTurn} / psq : ${playerSequence}`);
+    // console.log(`[cardDrop] playState is ${playState} / isMyTurn : ${isMyTurn}`)
   };
 
   // socket.io handleBluff Response
   const cardBluffResponseHandler = (state, turnedPlayer, from, to, bCard) => {
-    console.log(`card Bluffed [${from}] to [${to}] by [${bCard}]`);
+    // console.log(`card Bluffed [${from}] to [${to}] by [${bCard}]`);
     if (to === playerSequence) {
       setIsMyTurn(true);
     } else {
@@ -189,7 +191,7 @@ const Play = () => {
 
   // socket.io handle Pass Res
   const cardPassResponseHandler = (state, turnedPlayer, from, to, nowTurnPlayer) => {
-    console.log(`##### [cardPass] card Pass Response!`)
+    // console.log(`##### [cardPass] card Pass Response!`)
     dispatch(changePlayState(state))
     dispatch(changeNowTurn(nowTurnPlayer));
     dispatch(changeCardStatus({ 'from': from, 'card': card }));
@@ -198,8 +200,8 @@ const Play = () => {
     } else {
       setIsMyTurn(false);
     }
-    console.log(`[cardpass] ${playState}, ${isMyTurn}`)
-    console.log(`[cardPass] draggable [${(playState === 4 && isMyTurn)}]`)
+    // console.log(`[cardpass] ${playState}, ${isMyTurn}`)
+    // console.log(`[cardPass] draggable [${(playState === 4 && isMyTurn)}]`)
   }
 
   const cardRevealResponseHandler = (state, card, ans, nowTurnPlayer) => {
@@ -213,7 +215,7 @@ const Play = () => {
     setAnswerCard(card);
     dispatch(changeNowTurn(nowTurnPlayer))
     dispatch(initTurnedPlayer());
-    console.log(`card Answer Response!`);
+    // console.log(`card Answer Response!`);
   }
 
 
@@ -234,11 +236,11 @@ const Play = () => {
 
   // 게임 시작 버튼을 눌렀을 때 작동하는 함수
   const gameStart = (state, cards) => {
-    console.log("##### Game Started ! #####");
+    // console.log("##### Game Started ! #####");
     setCards(cards);
     dispatch(changePlayState(state));
-    console.log("##### [gameStart] Card Set");
-    console.log(cards);
+    // console.log("##### [gameStart] Card Set");
+    // console.log(cards);
   }
   // 게임 종료 시 사용
   // playState 1 으로 정의 
@@ -246,8 +248,8 @@ const Play = () => {
 
   // game Info 변경 시 사용
   const gameInfoHandler = (game) => {
-    console.log("##### [gameInfoHandler] game info arrived");
-    console.log(game);
+    // console.log("##### [gameInfoHandler] game info arrived");
+    // console.log(game);
     dispatch(initRoomInfo(game));
   }
 
@@ -260,7 +262,7 @@ const Play = () => {
 
     // 서버 닫혔을 때 유저를 대방출
     socket.on("serverClosed", (e) => {
-      console.log("serverClosed");
+      // console.log("serverClosed");
       navigate('/');
     });
 
@@ -281,7 +283,7 @@ const Play = () => {
     socket.on('playerLeave', playerLeaveHandler);
     //test, and get the every room info
     // socket.emit('testRoomsInfo', (rooms) => {
-    //   console.log(rooms);
+    //   // console.log(rooms);
     // })
 
     // 카드 드래그 시 
@@ -317,8 +319,8 @@ const Play = () => {
     if (adminPlayer === playerSequence) {
       setIsAdmin(true);
     }
-    console.log(`isMyTurn : ${isAdmin}`);
-    console.log(`isAdmin : ${isAdmin}`);
+    // console.log(`isMyTurn : ${isAdmin}`);
+    // console.log(`isAdmin : ${isAdmin}`);
     // checkMyTurn(roomInfo.adminPlayer);
     // checkIsAdmin(roomInfo.nowTurn);
   }, [adminPlayer, nowTurn, isAdmin])
@@ -374,8 +376,8 @@ const Play = () => {
         //   count++;
         // }
         video.current = <UserVideoComponent streamManager={subscribers.get(player)} />
-        console.log("@###@#@#@##sub")
-        console.log(subscribers);
+        // console.log("@###@#@#@##sub")
+        // console.log(subscribers);
 
         slotArr.push(
           <PlayerView
@@ -435,14 +437,14 @@ const Play = () => {
   const App = () => {
     useEffect(() => {
       // if(Object.keys(prevPlayerListRef.current).length<Object.keys(playerList).length){
-      console.log('$$$$$$$$$$$$$$$$$$$$$$$4');
-      // console.log(Object.keys(playerList));
-      // console.log(Object.keys(playerList).length);
-      // console.log(Object.keys(prevPlayerListRef.current).length);
+      // console.log('$$$$$$$$$$$$$$$$$$$$$$$4');
+      // // console.log(Object.keys(playerList));
+      // // console.log(Object.keys(playerList).length);
+      // // console.log(Object.keys(prevPlayerListRef.current).length);
 
       window.addEventListener('beforeunload', onbeforeunload);
       joinSession();
-      console.log(subscribers);
+      // console.log(subscribers);
       return () => {
         window.removeEventListener('beforeunload', onbeforeunload);
         leaveSession();
@@ -509,12 +511,12 @@ const Play = () => {
             await mySession.publish(newPublisher);
 
             setPublisher(newPublisher);
-            console.log(session);
+            // console.log(session);
 
-            console.log(publisher);
+            // console.log(publisher);
           })
           .catch((error) => {
-            console.log('There was an error connecting to the session:', error.code, error.message);
+            // console.log('There was an error connecting to the session:', error.code, error.message);
           });
       } catch (error) {
         console.error(error);
@@ -591,7 +593,7 @@ const Play = () => {
                 roomName={roomName}
                 setIsMyTurn={setIsMyTurn}
                 playerCount={playerCount}
-                tpCount={turnedPlayer.length}
+                tp={turnedPlayer}
                 animal={animalList[bCard]}
               ></AnswerSelectMyTurn>
             </SelectScreen>
@@ -684,33 +686,42 @@ const Play = () => {
               }
             </div>
           </div>
-          <div className='flex bg-white rounded-lg w-96 h-52 m-2 item item8'>
-            <div className='flex-col w-[90%]'>
-              <h1>Chat Application</h1>
-              <div className="message-list bg-white"
-                style={{ height: '68%', width: '100%', overflowY: 'auto', border: '1px solid #ccc' }}
+          <div className='flex bg-white rounded w-96 h-52 m-2 item item8'>
+            <div className='flex-col w-[86%]'>
+              <div className="message-list bg-white rounded-tl"
+                style={{ height: '79%', width: '100%', overflowY: 'auto', border: '1px solid #ccc' }}
                 ref={messageListRef}>
                 {messages.map((msg, index) => (
-                  <div key={index} className="message">[{msg}]</div>
+                  <div key={index} className="message mt-1 ml-1">[{msg}]</div>
                 ))}
               </div>
-              <div className='flex w-[100%]'>
-                <div className="message-input w-[90%]" >
+              <div className='flex w-[100%] bg-green-500 rounded-bl'>
+                <div className="message-input w-[90%] h-[90%]" >
                   <input
+                  className="rounded-l-lg bg-green-600 w-[75%] h-[80%] m-1 text-slate-50 placeholder-gray-300 "
                     type="text"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={handleKeyDown}
-                    placeholder="Type a message..."
+                    placeholder="채팅을 입력하세요..."
                     style={{ width: '100%' }}
                   />
                 </div>
-                <Button onClick={sendMessage}>Send</Button>
+                <Button className="m-1 rounded-none rounded-r-lg" color="success" onClick={sendMessage}>
+                  <HiOutlineArrowRight className="h-3 w-3" /> 
+                </Button>
               </div>
             </div>
             <div className='flex-col'>
-              <Button className="" color="success" style={{ height: "50%", width: "100%" }} onClick={leaveRoom}>exit</Button>
-              <Button className={(playState === 0) ? "" : " hidden"} disabled={(!isAdmin || playerCount < 4)} color="success" style={{ height: "50%" }} onClick={start}>start</Button>
+            <Button className={((playState === 0) ? "" : "p-1 hidden") + " text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm  text-center m-1"} 
+              disabled={(!isAdmin || playerCount < 4)} 
+              style={{ height: "50%", width: "90%" }} 
+              onClick={start}>게임시작</Button>
+            <Button 
+              color="failure" 
+              className="m-1" 
+              style={{ height: "45%", width: "90%" }} 
+              onClick={leaveRoom}>퇴장</Button>
             </div>
           </div>
         </div>

@@ -13,6 +13,8 @@ import pinkCircle from '../../assets/lottie/pinkCircle.json'
 import whiteCircle from '../../assets/lottie/whiteCircle.json'
 import greenCircle from '../../assets/lottie/greenCircle.json'
 import blueCircle from '../../assets/lottie/blueCircle.json'
+import { GiTigerHead, GiSniffingDog, GiDeer, GiPig, GiFox, GiSheep, GiSpermWhale} from "react-icons/gi";
+import { FaCat } from "react-icons/fa";
 
 import '../../style/playerView.css'
 
@@ -26,17 +28,26 @@ const PlayerView = ({ roomName, psq, key, pn = "빈 플레이어", activate = fa
   const players = useSelector(state => state.plays.players);
   const [penalty, setPenalty] = useState([0, 0, 0, 0, 0, 0, 0, 0]);
   const prevPen = useRef((players && players[psq])?.pen ?? [0, 0, 0, 0, 0, 0, 0, 0]);
-
+  const animalIconList = [
+    <GiTigerHead className='w-5 h-5 ml-1' color='#FF8911'/> ,
+    <FaCat className='w-5 h-5 ml-1' color='black'/>,
+    <GiSniffingDog  className='w-5 h-5 ml-1' color='#B2A59B'/>,
+    <GiDeer className='w-5 h-5 ml-1' color='#9B4444'/>,
+    <GiPig className='w-5 h-5 ml-1' color='#FFB0B0'/>,
+    <GiFox className='w-5 h-5 ml-1' color='#FC6736'/>,
+    <GiSheep className='w-5 h-5 ml-1' color='#A7D397'/>,
+    <GiSpermWhale className='w-5 h-5 ml-1' color='#0766AD'/> ,
+  ]
   useEffect(() => {
     const currentPen = (players && players[psq])?.pen ?? [0, 0, 0, 0, 0, 0, 0, 0];
-    console.log(`[currentPen]`);
-    console.log(currentPen);
+    // console.log(`[currentPen]`);
+    // console.log(currentPen);
     if (psq && prevPen.current !== currentPen) {
       setPenalty(currentPen);
       prevPen.current = currentPen;
     }
-    console.log(prevPen.current);
-    console.log(penalty);
+    // console.log(prevPen.current);
+    // console.log(penalty);
   }, [psq, players, players?.[psq]?.pen]);
 
   const lottieArray =
@@ -91,6 +102,7 @@ const PlayerView = ({ roomName, psq, key, pn = "빈 플레이어", activate = fa
             {penalty.map((key, value) => ( /*value : 동물 index */
               <>
                 <div className="animationContainer">
+                  {animalIconList[value]}
                   {Array.from({ length: key }, (_, i) => (
                     <div className="animation" key={i}>
                       <Lottie

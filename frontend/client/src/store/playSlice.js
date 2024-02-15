@@ -129,6 +129,8 @@ export const playSlice = createSlice({
 
     // 턴 보냈던 플레이어 추가
     changeTurnedPlayer: (state, action) => {
+      console.log(`[turnedPlayer] changed`)
+      console.log(action.payload)
       state.game.tp = [...action.payload]
     },
 
