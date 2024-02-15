@@ -191,7 +191,7 @@ const playSocketMethods = () => {
       console.log(result);
       addPenalty(io, rooms, roomName, result.nowTurn);
 
-      io.to(roomName).emit('cardReveal', rooms[roomName].game.state, rooms[roomName].game.card, result.ans, result.nowTurn);
+      io.to(roomName).emit('cardReveal', rooms[roomName].game.state, rooms[roomName].game.c, result.ans, result.nowTurn);
       checkLoser(socket, io, rooms, roomName);
     })
   }

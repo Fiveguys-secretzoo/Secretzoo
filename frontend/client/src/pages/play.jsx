@@ -212,6 +212,7 @@ const Play = () => {
     }
     dispatch(changePlayState(5)); // state 5 // 받는 건 1이지만 확인 후에 1로 가는 걸로 변경
     setGameResult(ans);
+    console.log("card : " + card);
     setAnswerCard(card);
     dispatch(changeNowTurn(nowTurnPlayer))
     dispatch(initTurnedPlayer());
@@ -644,7 +645,7 @@ const Play = () => {
           {
             playState === 5 &&
             <SelectScreen>
-              <AnswerRevealView gameResult={gameResult} p2={players[toP]?.pn} realCard={card}>
+              <AnswerRevealView gameResult={gameResult} p2={players[toP]?.pn} realCard={answerCard}>
               </AnswerRevealView>
             </SelectScreen>
           }
