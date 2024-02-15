@@ -1,6 +1,7 @@
 package com.ssafy.fiveguys.game.user.entity;
 
 import com.ssafy.fiveguys.game.common.entity.BaseTimeEntity;
+import com.ssafy.fiveguys.game.player.entity.Player;
 import com.ssafy.fiveguys.game.user.dto.Role;
 import com.ssafy.fiveguys.game.user.dto.UserDto;
 import jakarta.persistence.*;
@@ -36,11 +37,11 @@ public class User extends BaseTimeEntity {
     @Column
     private String name;
 
-    @Column(nullable = false)
+    @Column
     private String nickname;
 
-    @Column(name = "main_achievement")
-    private String mainAchievement;
+    @Column(name = "main_reward")
+    private String mainReward;
 
     @Enumerated(EnumType.STRING)
     @Builder.Default
@@ -56,8 +57,11 @@ public class User extends BaseTimeEntity {
     @Column(name = "provider_id")
     private String providerId;
 
-    @Column(name = "refresh-token")
+    @Column(name = "refresh_token")
     private String refreshToken;
+
+    @OneToOne(mappedBy = "user")
+    private Player player;
 
     public void authorizeUser() {
         this.role = Role.USER;
@@ -69,18 +73,18 @@ public class User extends BaseTimeEntity {
 
     public static User getUserDto(UserDto userDto) {
         return User.builder()
-                .userSequence(userDto.getUserSequence())
-                .userId(userDto.getUserId())
-                .password(userDto.getPassword())
-                .email(userDto.getEmail())
-                .name(userDto.getName())
-                .nickname(userDto.getNickname())
-                .mainAchievement(userDto.getMainAchievement())
-                .role(userDto.getRole())
-                .profileNumber(userDto.getProfileNumber())
-                .provider(userDto.getProvider())
-                .providerId(userDto.getProviderId())
-                .refreshToken(userDto.getRefreshToken())
-                .build();
+            .userSequence(userDto.getUserSequence())
+            .userId(userDto.getUserId())
+            .password(userDto.getPassword())
+            .email(userDto.getEmail())
+            .name(userDto.getName())
+            .nickname(userDto.getNickname())
+            .mainReward(userDto.getMainReward())
+            .role(userDto.getRole())
+            .profileNumber(userDto.getProfileNumber())
+            .provider(userDto.getProvider())
+            .providerId(userDto.getProviderId())
+            .refreshToken(userDto.getRefreshToken())
+            .build();
     }
 }

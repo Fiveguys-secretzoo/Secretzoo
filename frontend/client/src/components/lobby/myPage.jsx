@@ -7,6 +7,7 @@ const myPage = () => {
   if (sessionStorage.getItem('noLogin')) {
     return <div>로그인하시면 이용할 수 있습니다.</div>;
   }
+
   return (
     <>
       <MypageNav></MypageNav>

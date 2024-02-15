@@ -1,5 +1,6 @@
 package com.ssafy.fiveguys.game.user.service;
 
+import com.ssafy.fiveguys.game.user.jwt.JwtTokenProvider;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,9 +16,12 @@ public class RedisService {
 
     private final RedisTemplate<String, String> refreshTokenRedisTemplate;
     private final RedisTemplate<String, String> verificationCodeRedisTemplate;
+    private final RedisTemplate<String, String> jwtBlackListRedisTemplate;
+    private final JwtTokenProvider jwtTokenProvider;
     private final String RT_PREFIX = "rt:{";
     private final String VC_PREFIX = "vc:{";
     private final String SUFFIX = "}";
+    private final String BL_PREFIX = "bl:{";
     private final Long RT_EXPIREATION_TIME = 60 * 24L; // 1day
     private final Long VC_EXPIREATION_TIME = 10L; // 10분
 
@@ -41,11 +45,25 @@ public class RedisService {
                 TimeUnit.MINUTES);
     }
 
+    public boolean hasRefreshToken(String userId){
+        return Boolean.TRUE.equals(refreshTokenRedisTemplate.hasKey(RT_PREFIX + userId + SUFFIX));
+    }
+
     public String getVerificationCode(String email) {
         return verificationCodeRedisTemplate.opsForValue().get(VC_PREFIX + email + SUFFIX);
     }
 
     public void deleteVerificationCode(String email) {
         verificationCodeRedisTemplate.delete(VC_PREFIX + email + SUFFIX);
+    }
+    public void saveJwtBlackList(String accessToken) {
+        long expirationTime = jwtTokenProvider.getTokenExpiration(accessToken);
+        jwtBlackListRedisTemplate.opsForValue()
+            .set(BL_PREFIX + jwtTokenProvider.resolveToken(accessToken) + SUFFIX, "logout", expirationTime,
+                TimeUnit.MILLISECONDS);
+    }
+
+    public boolean hasJwtBlackList(String token) {
+        return Boolean.TRUE.equals(jwtBlackListRedisTemplate.hasKey(BL_PREFIX + token + SUFFIX));
     }
 }
