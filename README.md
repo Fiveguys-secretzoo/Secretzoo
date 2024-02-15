@@ -94,6 +94,9 @@
 #### 회원 정보 수정
 
 #### 실시간 랭킹
+<div align="center">
+<img src="/uploads/5675f0b90adb9783ed6c2e8ea940b36a/랭킹.gif" alt="랭킹" width="70%" height="70%">
+</div>
 
 #### 게임 업적
 
