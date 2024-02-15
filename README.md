@@ -96,7 +96,6 @@
 
 
 # Ⅲ. 팀원 소개 및 역할 (🍔FIVE GUYS🍔)
-<div align="center">
 <table align=center>
 <div align=center> 
     <tr align=center>
@@ -181,7 +180,7 @@
     </tr>
 </div>
 </table>
-</div>
+
 <br/>
 <br/>
 
