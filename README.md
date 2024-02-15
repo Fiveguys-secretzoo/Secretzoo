@@ -91,6 +91,35 @@
 </div>
 
 #### 게임플레이
+- 방 대기 화면
+![image](/uploads/5cd3bb10d424b6bcacb301d5f58b39a6/image.png)
+
+- 게임 시작
+<div align="center">
+<img src="/uploads/1521477e917093852bc8575b34f21cb3/게임시작.gif" alt="게임시작" width="70%" height="70%">
+</div>
+
+- 공격
+
+  - 공격 성공
+<div align="center">
+<img src="/uploads/27b9adf2ff3a947a200bc1c0a7eb3f4a/공격성공.gif" alt="공격성공" width="70%" height="70%">
+</div>
+
+- 수비
+
+  - 수비 성공
+  <div align="center"><img src="/uploads/57f6cc47e352599f3a6225ed93a26aa9/수비성공.gif" alt="수비성공" width="70%" height="70%"></div>
+
+  - 수비 실패
+  <div align="center"><img src="/uploads/0bfdb06f1192d0d48f366a3112bc9e40/수비실패.gif" alt="수비실패" width="70%" height="70%"></div>
+
+- 패스
+
+
+- 게임 진행 중 다른 유저들에게 보이는 화면
+  <div align="center">
+<img src="/uploads/c2ca6f535556ff97e353bbfd1e557ec2/게임진행화면.gif" alt="게임진행화면" width="70%" height="70%">
 
 #### 회원 정보
 - 회원 정보, 랭킹, 업적을 확인할 수 있습니다.
@@ -294,9 +323,6 @@
 ## 2. Spring Security와 JWT
 서비스 회원가입, 로그인을 Spring Security와 JWT를 활용하여 구현하였습니다. Spring Security Oauth2.0을 통해 소셜 로그인(구글/네이버/카카오)을 백엔드에서 구현하였고, JWT를 사용하기 위해 Security Stateless 세션 정책을 사용하였습니다. 그러다보니 중복 로그인을 직접 막아야하는 문제가 발생하였습니다. 해당 서비스가 게임이라는 특성상 중복 로그인 방지는 필수 요소이므로 저희는 JWT 토큰을 통해 중복 로그인을 방지하였습니다. 프론트엔드에서는 세션 스토리지를 사용하였고, 백엔드에서는 Redis를 이용해 엑세스 토큰 블랙리스트를 생성하여 비정상적인 접근의 엑세스 토큰을 저장하여 관리하였습니다.
 ## 3. Web Socket
-## 4. Redux
-redux toolkit 을 사용하여 유저의 정보를 관리하고 토큰을 포함하는 api 요청을 관리 하였습니다.유저 정보를 여러 컴포넌트에서 사용하고 있었기 때문에 상태 업데이트의 동기화를 위해 redux 를 통한 관리가 필요했습니다.그래서 리덕스를 통해 유저정보를 관리하여 컴포넌트별 유저 정보의 일관성을 유지하였습니다.헤더에 jwt 토큰을 담아야하는 요청들이 많았고 그러한 요청들은 토큰의 만료시간에 따라 재발급 받거나, 중복로그인을 사전에 확인 하는 작업이 필요했습니다.jwt토큰을 요하는 요청들을 redux에서 관리하고 axios 인터셉터를 통해 간소화 하였습니다.
-
 <br>
 <br>
 
