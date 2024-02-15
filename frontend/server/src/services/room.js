@@ -233,6 +233,9 @@ const roomSocketMethods = () => {
             return;
           
         }
+
+        
+
         // 기존방 나가기
         for (let nowRoom of socket.rooms) {
           if (nowRoom !== socket.id) {
@@ -248,6 +251,11 @@ const roomSocketMethods = () => {
             removePlayer(io, socket, rooms, rn, psq);
           }
         }
+      }
+
+      if (roomName === undefined || rooms[roomName] === undefined) { // 방이 사라진 경우...
+        callback(1)
+        return;
       }
 
       if(rooms[roomName].rpw !== ''){

@@ -369,13 +369,60 @@ const playSocketMethods = () => {
     for (let player in rooms[roomName].ps) {
       for (let k = 0; k < 8; k++) {
         if (rooms[roomName].ps[player].pen[k] === 4 || rooms[roomName].ps[rooms[roomName].nt].hand.length === 0) {
+           // 보내기 
+          let bestAttackPlayer = '';
+          let bestDefencePlayer = '';
+          let bestPassPlayer = '';
+
+          let maxAttackSuccess = 0;
+          let maxDefenceSuccess = 0;
+          let maxPass = 0;
+          let players = rooms[roomName].ps;
+          for(let player in players){
+            if(players[player].sc.atks > maxAttackSuccess){
+              maxAttackSuccess = players[player].sc.atks;
+              bestAttackPlayer = player;
+            }else if(players[player].sc.atks === maxAttackSuccess){
+              if(players[bestAttackPlayer].sc.atka > players[player].sc.atka){
+                maxAttackSuccess = players[player].sc.atks;
+                bestAttackPlayer = player;
+              }
+            }
+
+            if(players[player].sc.atks > maxDefenceSuccess){
+              maxDefenceSuccess = players[player].sc.atks;
+              bestDefencePlayer = player;
+            }else if(players[player].sc.atks === maxDefenceSuccess){
+              if(players[bestDefencePlayer].sc.atka > players[player].sc.atka){
+                maxDefenceSuccess = players[player].sc.atks;
+                bestDefencePlayer = player;
+              }
+            }
+
+            if(players[player].sc.atks > maxPass){
+              maxPass = players[player].sc.atks;
+              bestPassPlayer = player;
+            }else if(players[player].sc.atks === maxPass){
+              if(players[bestPassPlayer].sc.atka > players[player].sc.atka){
+                maxPass = players[player].sc.atks;
+                bestPassPlayer = player;
+              }
+            }
+          }
+          sendScore(rooms, roomName);
+
+          
           setTimeout(() => {
-            sendScore(rooms, roomName);
-            // 방 정보 초기화입니다.
-            initRoomInfo(rooms, roomName);
-            io.to(roomName).emit("gameEnd", player);
+          // 방 정보 초기화입니다.
+          initRoomInfo(rooms, roomName);
+            io.to(roomName).emit("gameEnd", {
+              loser:player, 
+              bestAttackPlayer:bestAttackPlayer, maxAttackSuccess:maxAttackSuccess, 
+              bestDefencePlayer:bestDefencePlayer, maxDefenceSuccess:maxDefenceSuccess, 
+              bestPassPlayer:bestPassPlayer, maPass:maxPass, 
+            });
             return;
-          }, 2500)
+          }, 2000)
           // 점수 전송
         }
       }

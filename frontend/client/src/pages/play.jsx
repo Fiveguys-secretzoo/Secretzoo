@@ -88,6 +88,13 @@ const Play = () => {
   const [answerCard, setAnswerCard] = useState(64); // 정답 공개 시 카드
   const [loserPsq, setLoserPsq] = useState('');
 
+  const [bestAttackPlayer, setBestAttackPlayer] = useState('');
+  const [bestDefencePlayer, setBestDefencePlayer] = useState('');
+  const [bestPassPlayer, setBestPassPlayer] = useState('');
+  const [maxAttackSuccess, setMaxAttackSuccess] = useState(0);
+  const [maxDefenceSuccess, setMaxDefenceSuccess] = useState(0);
+  const [maxPass, setMaxPass] = useState(0);
+
   const animalList = [
     '호랑이',
     '고양이',
@@ -236,10 +243,20 @@ const Play = () => {
   }
 
   // socket.io 게임 종료 handler 
-  const gameEndResponseHandler = (loserpsq) => {
+  const gameEndResponseHandler = ({loserpsq, 
+    bestAttackPlayer, maxAttackSuccess, 
+    bestDefencePlayer, maxDefenceSuccess, 
+    bestPassPlayer, maPass,  }) => {
     setLoserPsq(loserpsq);
     setCards([]);
     dispatch(changePlayState(6));
+
+    setBestAttackPlayer(bestAttackPlayer);
+    setBestDefencePlayer(bestDefencePlayer)
+    setBestPassPlayer(bestPassPlayer)
+    setMaxAttackSuccess(maxAttackSuccess)
+    setMaxDefenceSuccess(maxDefenceSuccess)
+    setMaxPass(maxPass)
 
   }
 
@@ -310,7 +327,6 @@ const Play = () => {
     socket.on("penaltyAdd", penaltyAddResponseHandler);
 
     socket.on("gameEnd", gameEndResponseHandler);
-    // socket.on("gameEnd", gameEndResponseHandler);
 
     return () => {
       socket.off('gameInfo', gameInfoHandler);
@@ -675,6 +691,12 @@ const Play = () => {
                 playerSequence={playerSequence}
                 gameInfoHandler={gameInfoHandler}
                 loserPsq={loserPsq}
+                bestAttackPlayer={bestAttackPlayer}
+                bestDefencePlayer={bestDefencePlayer}
+                bestPassPlayer={bestPassPlayer}
+                maxAttackSuccess={maxAttackSuccess}
+                maxDefenceSuccess={maxDefenceSuccess}
+                maxPass={maxPass}
               ></GameResultView>
             </SelectScreen>
           }
