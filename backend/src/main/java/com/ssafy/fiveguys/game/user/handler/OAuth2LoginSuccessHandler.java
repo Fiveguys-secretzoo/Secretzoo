@@ -1,8 +1,10 @@
 package com.ssafy.fiveguys.game.user.handler;
 
+import com.ssafy.fiveguys.game.player.service.PlayerService;
 import com.ssafy.fiveguys.game.user.dto.JwtTokenDto;
 import com.ssafy.fiveguys.game.user.dto.UserDto;
 import com.ssafy.fiveguys.game.user.entity.RefreshToken;
+import com.ssafy.fiveguys.game.user.entity.User;
 import com.ssafy.fiveguys.game.user.jwt.JwtProperties;
 import com.ssafy.fiveguys.game.user.jwt.JwtTokenProvider;
 import com.ssafy.fiveguys.game.user.service.RedisService;
@@ -31,7 +33,8 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                                        Authentication authentication) throws IOException, ServletException {
+        Authentication authentication) throws IOException, ServletException {
+
         JwtTokenDto tokenSet = jwtTokenProvider.generateToken(authentication);
         // DB에 Refreshtoken 저장
         UserDto user = userService.findUserById(authentication.getName());
@@ -39,15 +42,17 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         userService.saveUser(user);
         // Redis에 Refreshtoken 저장
         RefreshToken refreshToken = RefreshToken.builder()
-                .userId(authentication.getName())
-                .refreshToken(tokenSet.getRefreshToken())
-                .build();
+            .userId(authentication.getName())
+            .refreshToken(tokenSet.getRefreshToken())
+            .build();
         redisService.saveRefreshToken(refreshToken.getUserId(), refreshToken.getRefreshToken());
         // token 쿼리스트링
         String targetUrl = UriComponentsBuilder.fromUriString(CALLBACK_URL)
-                .queryParam(JwtProperties.ACCESS_TOKEN, tokenSet.getAccessToken())
-                .queryParam(JwtProperties.REFRESH_TOKEN, tokenSet.getRefreshToken())
-                .build().toUriString();
+            .queryParam(JwtProperties.TOKEN_TYPE, JwtProperties.TOKEN_PREFIX.substring(0, 6))
+            .queryParam(JwtProperties.ACCESS_TOKEN, tokenSet.getAccessToken())
+            .queryParam(JwtProperties.EXPRIES_IN, JwtProperties.ACCESS_TOKEN_EXPIRATION_TIME)
+            .queryParam(JwtProperties.REFRESH_TOKEN, tokenSet.getRefreshToken())
+            .build().toUriString();
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 

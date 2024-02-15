@@ -1,23 +1,27 @@
 package com.ssafy.fiveguys.game.common.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+@EntityListeners(AuditingEntityListener.class)
+@MappedSuperclass
 @Getter
-@MappedSuperclass // 상속한 엔티티들은 아래 필드를 칼럼으로 인식
-@EntityListeners(AuditingEntityListener.class) // 자동 값 매핑 기능 추가
-public abstract class BaseTimeEntity {
+public class BaseTimeEntity {
 
-    @CreationTimestamp
-    private Timestamp creationDate;
-
+    //생성일은 수정되면 안되기 때문에 updatable = false 설정
+    @CreatedDate
+    @Column(updatable = false, columnDefinition = "TIMESTAMP DEFAULT now()")
+    private LocalDateTime createdDate;
     @LastModifiedDate
-    private Timestamp lastModifiedDate;
-
+    @Column(columnDefinition = "TIMESTAMP DEFAULT now()")
+    private LocalDateTime lastModifiedDate;
 }

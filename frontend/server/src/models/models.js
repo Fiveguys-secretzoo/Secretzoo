@@ -24,7 +24,7 @@ const models = () => {
     let playerName = '';
     let socketId = sid;
     let hand = [];
-    let penalty = [0,0,0,0,0,0,0,0];
+    let penalty = [0, 0, 0, 0, 0, 0, 0, 0];
     let datas = {}
     let scores = {
       'round': 0,

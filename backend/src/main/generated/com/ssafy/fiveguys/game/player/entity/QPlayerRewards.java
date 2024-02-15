@@ -22,15 +22,15 @@ public class QPlayerRewards extends EntityPathBase<PlayerRewards> {
 
     public static final QPlayerRewards playerRewards = new QPlayerRewards("playerRewards");
 
-    public final com.ssafy.fiveguys.game.player.entity.base.QBaseTimeEntity _super = new com.ssafy.fiveguys.game.player.entity.base.QBaseTimeEntity(this);
+    public final com.ssafy.fiveguys.game.common.entity.QBaseTimeEntity _super = new com.ssafy.fiveguys.game.common.entity.QBaseTimeEntity(this);
 
     //inherited
-    public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
+    public final DateTimePath<java.sql.Timestamp> createdDate = _super.createdDate;
 
     public final BooleanPath isDone = createBoolean("isDone");
 
     //inherited
-    public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
+    public final DateTimePath<java.sql.Timestamp> lastModifiedDate = _super.lastModifiedDate;
 
     public final QPlayer player;
 
@@ -57,7 +57,7 @@ public class QPlayerRewards extends EntityPathBase<PlayerRewards> {
     public QPlayerRewards(Class<? extends PlayerRewards> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.player = inits.isInitialized("player") ? new QPlayer(forProperty("player"), inits.get("player")) : null;
-        this.rewards = inits.isInitialized("rewards") ? new QRewards(forProperty("rewards")) : null;
+        this.rewards = inits.isInitialized("rewards") ? new QRewards(forProperty("rewards"), inits.get("rewards")) : null;
     }
 
 }

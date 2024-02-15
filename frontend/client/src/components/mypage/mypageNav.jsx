@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 const MypageNav = () => {
   const location = useLocation();
 
-  const active = (path) =>{
+  const active = (path) => {
     return location.pathname === path ? "px-6 text-blue-500 font-bold" : "px-6 text-black font-bold"
   };
   return (

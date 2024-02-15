@@ -2,6 +2,8 @@ package com.ssafy.fiveguys.game.user.controller;
 
 import com.ssafy.fiveguys.game.user.dto.UserDto;
 import com.ssafy.fiveguys.game.user.dto.UserInfoDto;
+import com.ssafy.fiveguys.game.user.jwt.JwtProperties;
+import com.ssafy.fiveguys.game.user.jwt.JwtTokenProvider;
 import com.ssafy.fiveguys.game.user.service.AuthService;
 import com.ssafy.fiveguys.game.user.service.UserService;
 
@@ -21,16 +23,16 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/users")
 @Tag(name = "UserController", description = "회원 관련 서비스 컨트롤러")
-@CrossOrigin(origins = {"https://secretzoo.site","http://localhost:3000"}, exposedHeaders = "*")
+@CrossOrigin(origins = {"https://secretzoo.site", "http://localhost:3000"}, exposedHeaders = "*")
 public class UserController {
 
     private final UserService userService;
-    private final AuthService authService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Operation(summary = "회원 정보 API")
     @GetMapping("/user")
     public ResponseEntity<?> getUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken) {
-        String userId = authService.extractUserId(accessToken);
+        String userId = jwtTokenProvider.extractUserId(accessToken);
         log.debug("userId = {}", userId);
         UserDto userDto = userService.findUserById(userId);
         return ResponseEntity.status(HttpStatus.OK).body(userDto);
@@ -40,7 +42,7 @@ public class UserController {
     @GetMapping("/profile")
     public ResponseEntity<?> profileUser(
         @RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken) {
-        String userId = authService.extractUserId(accessToken);
+        String userId = jwtTokenProvider.extractUserId(accessToken);
         log.debug("userId = {}", userId);
         UserInfoDto userInfo = UserInfoDto.userInfoFromUserDto(userService.findUserById(userId));
         return ResponseEntity.status(HttpStatus.OK).body(userInfo);
@@ -50,9 +52,9 @@ public class UserController {
     @DeleteMapping("/user")
     public ResponseEntity<?> deleteUser(HttpServletRequest request, @RequestBody String password) {
         String accessToken = request.getHeader(HttpHeaders.AUTHORIZATION);
-        String userId = authService.extractUserId(accessToken);
+        String userId = jwtTokenProvider.extractUserId(accessToken);
         userService.deleteUser(userId, password);
-        return ResponseEntity.status(HttpStatus.OK).body("update Success");
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @Operation(summary = "비밀번호 재확인 API")
@@ -60,11 +62,9 @@ public class UserController {
     public ResponseEntity<?> confirmPassword(HttpServletRequest request,
         @RequestBody String password) {
         String accessToken = request.getHeader(HttpHeaders.AUTHORIZATION);
-        String userId = authService.extractUserId(accessToken);
-        if (userService.validatePassword(userId, password)) {
-            return ResponseEntity.status(HttpStatus.OK).body("password correct.");
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("password incorrect");
+        String userId = jwtTokenProvider.extractUserId(accessToken);
+        userService.validatePassword(userId, password);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @Operation(summary = "닉네임 변경 API")
@@ -72,19 +72,19 @@ public class UserController {
     public ResponseEntity<?> changeNickname(HttpServletRequest request,
         @RequestBody String nickname) {
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-        String userId = authService.extractUserId(token);
+        String userId = jwtTokenProvider.extractUserId(token);
         userService.changeNickname(userId, nickname);
-        return ResponseEntity.status(HttpStatus.OK).body("nickname update successfully");
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @Operation(summary = "업적 변경 API")
     @PutMapping("/main-achievement")
     public ResponseEntity<?> changeMainAchievement(HttpServletRequest request,
-        @RequestBody String mainAcheivement) {
+        @RequestBody String mainAchievement) {
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-        String userId = authService.extractUserId(token);
-        userService.changeMainAchievement(userId, mainAcheivement);
-        return ResponseEntity.status(HttpStatus.OK).body("main_achievement update successfully");
+        String userId = jwtTokenProvider.extractUserId(token);
+        userService.changeMainAchievement(userId, mainAchievement);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @Operation(summary = "프로필 사진 변경 API")
@@ -92,9 +92,9 @@ public class UserController {
     public ResponseEntity<?> changeProfileNumber(HttpServletRequest request,
         @RequestBody String profileNumber) {
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-        String userId = authService.extractUserId(token);
+        String userId = jwtTokenProvider.extractUserId(token);
         userService.changeProfileNumber(userId, profileNumber);
-        return ResponseEntity.status(HttpStatus.OK).body("main_achievement update successfully");
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @Operation(summary = "비밀번호 변경 API")
@@ -102,8 +102,29 @@ public class UserController {
     public ResponseEntity<?> changePassword(HttpServletRequest request,
         @RequestBody String password) {
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-        String userId = authService.extractUserId(token);
+        String userId = jwtTokenProvider.extractUserId(token);
         userService.changePassword(userId, password);
-        return ResponseEntity.status(HttpStatus.OK).body("main_achievement update successfully");
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
+
+    @Operation(summary = "아이디 중복체크 API")
+    @PostMapping("/check/{userId}")
+    public ResponseEntity<?> checkUserId(@PathVariable String userId) {
+        userService.idDuplicated(userId);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @Operation(summary = "동시 로그인 체크 API")
+    @GetMapping("/check-concurrent-login")
+    public ResponseEntity<?> detectConcurrentLogin(HttpServletRequest request) {
+        log.debug("now running detect concurrent login function.");
+        String accessToken = request.getHeader(HttpHeaders.AUTHORIZATION);
+        log.debug("access token = {}",accessToken);
+        String refreshToken = request.getHeader(JwtProperties.REFRESH_TOKEN);
+        log.debug("refresh token = {}",refreshToken);
+        userService.detectConcurrentUser(accessToken, refreshToken);
+        log.info("User is unique.");
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
 }
