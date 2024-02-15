@@ -4,13 +4,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import whoosh from '../../assets/sound/whoosh-6316.mp3';
 
+/* 랭킹 */
 const Ranking = () => {
   const [ranking, setRanking] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [myRank, setMyRank] = useState(null);
   const user = useSelector((state) => state.user.userInfo);
 
-  // 공격랭킹 가져오기
+  /* 공격랭킹 가져오기 */
   const getAttack = async () => {
     changeTab();
     axios.get('https://spring.secretzoo.site/rank/attack')
@@ -25,7 +26,7 @@ const Ranking = () => {
     });
   }
 
-  // 수비랭킹 가져오기
+  /* 수비랭킹 가져오기 */
   const getDefense = () => {
     changeTab();
     axios.get('https://spring.secretzoo.site/rank/defense')
@@ -40,7 +41,7 @@ const Ranking = () => {
     });
   }
 
-  // 패스랭킹 가져오기
+  /* 패스랭킹 가져오기 */
   const getPass = () => {
     changeTab();
     axios.get('https://spring.secretzoo.site/rank/pass')
@@ -54,7 +55,7 @@ const Ranking = () => {
       }
     });
   }
-
+  /* 애니메이션 */
   const changeTab = () => {
     setIsLoaded(false)
     setTimeout(() => {
@@ -62,7 +63,7 @@ const Ranking = () => {
     },);
   }
 
-  // 처음에 공격랭킹 가져오기
+  /* 처음에 공격랭킹 가져오기 */
   useEffect( () => {
     getAttack();
   }, [user])

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Label, TextInput } from 'flowbite-react';
 import Swal from 'sweetalert2';
 
+/* 로그인 */
 const LoginForm = () => {
   const [id, setId] = useState("");
   const [pass, setPass] = useState("");

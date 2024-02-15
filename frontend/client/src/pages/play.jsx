@@ -349,8 +349,15 @@ const Play = () => {
 
 
   const sendMessage = () => {
-    socket.emit('chatMessage', input, sessionStorage.getItem('userNickname'), sessionStorage.getItem('roomName'));
-    setInput('');
+    if(input.trim() !== "" && input.length <= 30 ) {
+      socket.emit('chatMessage', input, sessionStorage.getItem('userNickname'), sessionStorage.getItem('roomName'));
+      setInput('');
+    } else {
+      Swal.fire({
+        "text" : '공백이거나 30자 이상의 채팅은 전송 불가합니다.',
+        "confirmButtonColor" : '#3085d6'
+      });
+    }
   };
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
@@ -688,7 +695,6 @@ const Play = () => {
             {/* 카드 표현 부분 */}
             
             <div className='flex max-h-[10em]'>
-            <div className='flex max-h-[10em]'>
               {cards &&
                 cards.map((i, index) => (
                   <CardView
@@ -743,7 +749,6 @@ const Play = () => {
               onClick={leaveRoom}>퇴장</Button>
             </div>
           </div>
-        </div>
         </div>
       </div>
     </>

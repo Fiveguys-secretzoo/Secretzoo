@@ -9,6 +9,7 @@ import { getUserInfo } from "../../store/userSlice";
 import { IoMdRefresh } from "react-icons/io";
 import { CiLock } from "react-icons/ci";
 
+/* 방 목록 */
 const Rooms = () => {
   const navigate = useNavigate();
   // 소켓
@@ -156,7 +157,7 @@ const Rooms = () => {
     });
 
   }
-
+  /* 방만들기 모달 */
   const [openMakeRoomModal, setOpenMakeRoomModal] = useState(false);
   const MakeRoomModal = () => {
     const [roomName, setRoomName] = useState('');
@@ -183,6 +184,7 @@ const Rooms = () => {
     </Modal>
     )
   }
+  /* 입장시 패스워드 모달 */
   const [openEnterModal, setOpenEnterModal] = useState(false);
   const [selectedRoomName, setSelectedRoomName] = useState('');
   const EnterModal = () => {

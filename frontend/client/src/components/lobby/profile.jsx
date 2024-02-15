@@ -4,13 +4,13 @@ import { axiosUpdateNickname, getUserInfo ,setNoLoginUserInfo } from '../../stor
 import { Card, Progress, Label, Modal, Button, TextInput } from 'flowbite-react';
 import Swal from "sweetalert2";
 
-
+/* 프로필 카드 */
 const Profile = () => {
 
   const dispatch = useDispatch();
-
   const user = useSelector((state) => state.user.userInfo);
 
+  /* 유저정보 가져오기 */
   useEffect(() => {
     if (sessionStorage.getItem('noLogin')) {
     } else {
@@ -18,6 +18,7 @@ const Profile = () => {
     }
   }, [dispatch])
   
+  /* 최초로그인시 닉네임정하기 */
   useEffect(() => {
     if(user){
       if(user.nickname === null){
@@ -25,6 +26,8 @@ const Profile = () => {
       }
     }
   },[user])
+
+  /* 닉네임 정하는 모달 */
   const [openNicknameModal, setOpenNicknameModal] = useState(false);
   const NicknameModal = () => {    
     const [changeNickname, setChangeNickname] = useState('');

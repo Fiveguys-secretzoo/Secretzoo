@@ -6,6 +6,7 @@ const requsetKakaoLogin = () => {
   window.location.href = 'https://spring.secretzoo.site/oauth2/authorization/kakao';
 }
 
+/* 카카오로그인 */
 const KakaoLogin = () => {
   return (
     <>

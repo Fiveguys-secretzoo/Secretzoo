@@ -11,11 +11,16 @@ const NoLogin = () => {
   
   const dispatch = useDispatch();
   const saveName = () => {
-    if (name.length > 0) {
+    if (name.length > 0 && name.length <= 8) {
       sessionStorage.setItem('noLogin', true);
       sessionStorage.setItem('userNickname', name);
       dispatch(setNoLoginUserInfo());
       navigate("/lobby");
+    } else if(name.length> 8) {
+      Swal.fire({
+        "text" : '닉네임은 8자리 이하로 하여야 합니다.',
+        "confirmButtonColor" : '#3085d6'
+      });
     } else {
       Swal.fire({
         "text" : '닉네임은 필수입니다.',
