@@ -178,6 +178,12 @@
 <br/>
 <br/>
 
+| [![전형욱👑](https://avatars.githubusercontent.com/u/80465980?v=4)](https://github.com/hyeounguk2) | [![김관우👨🏻](https://avatars.githubusercontent.com/u/26521521?v=4)](https://github.com/gwanu-dev) | [![김중광👨🏻](https://avatars.githubusercontent.com/u/134460604?v=4)](https://github.com/kimjungkwang1) | [![조현수👨🏻](https://avatars.githubusercontent.com/u/139304756?v=4)](https://github.com/hyunsoo10) | [![김재윤👨🏻](https://avatars.githubusercontent.com/u/84389492?v=4)](https://github.com/jaeyun1723) |
+|---|---|---|---|---|
+| 전형욱👑 | 김관우👨🏻 | 김중광👨🏻 | 조현수👨🏻 | 김재윤👨🏻 |
+| 0️⃣ Front-end(팀장)<br> 1️⃣ Web-RTC(Openvidu) 전담<br> 2️⃣ 게임 플레이 화면 구현 | 0️⃣ Front-end<br> 1️⃣ 게임 플레이 구현<br> 2️⃣ 프론트 소켓 서버 담당 | 0️⃣ Front-end<br> 1️⃣ UI/UX 담당 <br> 2️⃣ 메인 페이지 구현 | 0️⃣ Back-end <br> 1️⃣ 인프라 담당<br> 2️⃣ 게임 Ranking API 개발, QA <br> 3️⃣ 플레이어 Rewards API 개발 | 0️⃣ Back-end <br> 1️⃣ Spring Security 담당<br> 2️⃣ 유저 API 개발, QA <br> 3️⃣ 소셜 로그인(구글, 네이버, 카카오) <br> |
+
+
 # Ⅳ. 개발 환경 🖥 
 ## 🖱 Frontend
 <img src="https://img.shields.io/badge/JavaScript(es6)-F7DF1E.svg?style=for-the-badge&logo=javascript&logoColor=black">
