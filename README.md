@@ -30,7 +30,7 @@
 <br/>
 
 ### 📌 서비스 아키택쳐
-
+![image](/uploads/38efa059276e24ca1841cef4e702388f/image.png)
 
 <br/>
 <br/>
