@@ -573,7 +573,7 @@ const Play = () => {
   return (
     <>
     <div className='bg-play-bg w-screen h-screen bg-cover z-[-10]'>
-      <div className="h-screen w-full bg-cutom-opacity">
+      <div className="h-screen w-full bg-custom-opacity">
         <div className='w-full h-screen flex flex-wrap justify-between'>
           {/* 내 턴 아닐 때 드래그 공유 */}
 
