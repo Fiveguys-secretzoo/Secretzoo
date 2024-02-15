@@ -14,8 +14,9 @@ import { useNavigate } from "react-router-dom";
 import { motion, useDragControls } from 'framer-motion';
 import { Button } from 'flowbite-react';
 import { GiCardPlay } from "react-icons/gi";
-import { 
-  HiOutlineArrowRight} from "react-icons/hi";
+import {
+  HiOutlineArrowRight
+} from "react-icons/hi";
 import { useSelector, useDispatch } from 'react-redux';
 import {
   initRoomInfo,
@@ -230,7 +231,7 @@ const Play = () => {
     }
     dispatch(changePlayState(5)); // state 5 // 받는 건 1이지만 확인 후에 1로 가는 걸로 변경
     setGameResult(ans);
-    console.log("card : " + card);
+    // console.log("card : " + card);
     setAnswerCard(card);
     dispatch(changeNowTurn(nowTurnPlayer))
     // console.log(`card Answer Response!`);
@@ -248,7 +249,7 @@ const Play = () => {
     bestAttackPlayer, maxAttackSuccess,
     bestDefencePlayer, maxDefenceSuccess,
     bestPassPlayer, maxPass }) => {
-    console.log(`[sendGameEnd] ${loserpsq} ${bestAttackPlayer} ${bestDefencePlayer} ${bestPassPlayer} ${maxAttackSuccess} ${maxDefenceSuccess} ${maxPass}`);
+    // console.log(`[sendGameEnd] ${loserpsq} ${bestAttackPlayer} ${bestDefencePlayer} ${bestPassPlayer} ${maxAttackSuccess} ${maxDefenceSuccess} ${maxPass}`);
     setLoserPsq(loserpsq);
     setCards([]);
     dispatch(changePlayState(6));
@@ -366,16 +367,17 @@ const Play = () => {
 
   useEffect(() => {
     if (playState === 1) {
+      // console.log(playState);
       if (isMyTurn) {
         Swal.fire({
           'html': '이제 <span class="text-lg text-green-500">내 턴</span>입니다! 준비하세요!',
-          'timer': 2000,
+          'timer': 1000,
           timerProgressBar: true,
         })
       } else if (!isRoundStart) {
         Swal.fire({
           'text': '이제 게임이 시작됩니다...!',
-          'timer': 2000,
+          'timer': 1000,
           timerProgressBar: true,
         })
       }
@@ -434,7 +436,9 @@ const Play = () => {
             setCards={setCards}
             animalList={animalList}
             video={video.current}
-            count={count}>
+            count={count}
+            tp={turnedPlayer}
+          >
           </PlayerView>
         )
         count++;
@@ -467,7 +471,9 @@ const Play = () => {
         setCards={setCards}
         animalList={animalList}
         video={video.current}
-        count={k}>
+        count={k}
+        tp={turnedPlayer}
+      >
       </PlayerView>
     )
     return slotArr;
@@ -484,9 +490,9 @@ const Play = () => {
     useEffect(() => {
       // if(Object.keys(prevPlayerListRef.current).length<Object.keys(playerList).length){
       // console.log('$$$$$$$$$$$$$$$$$$$$$$$4');
-      // // console.log(Object.keys(playerList));
-      // // console.log(Object.keys(playerList).length);
-      // // console.log(Object.keys(prevPlayerListRef.current).length);
+      // console.log(Object.keys(playerList));
+      // console.log(Object.keys(playerList).length);
+      // console.log(Object.keys(prevPlayerListRef.current).length);
 
       window.addEventListener('beforeunload', onbeforeunload);
       joinSession();
@@ -532,7 +538,7 @@ const Play = () => {
       });
 
       mySession.on('exception', (exception) => {
-        console.warn(exception);
+        // console.warn(exception);
       });
 
       try {
@@ -565,7 +571,7 @@ const Play = () => {
             // console.log('There was an error connecting to the session:', error.code, error.message);
           });
       } catch (error) {
-        console.error(error);
+        // console.error(error);
       }
       session.current = mySession;
     };
@@ -608,198 +614,199 @@ const Play = () => {
 
   return (
     <>
-    <div className='bg-play-bg w-screen h-screen bg-cover z-[-10]'>
-      <div className="h-screen w-full bg-custom-opacity">
-        <div className='w-full h-screen flex flex-wrap justify-between'>
-          {/* 내 턴 아닐 때 드래그 공유 */}
-          {playState === 6 &&
-            <Confetti
-              width={window.innerWidth}
-              height={window.innerHeight}
-              numberOfPieces="300"
-            />
-          }
-          {/* 내 턴일 때 드롭 시 버튼 */}
-          {
-            playState === 2 && isMyTurn &&
+      <div className='bg-play-bg w-screen h-screen bg-cover z-[-10]'>
+        <div className="h-screen w-full bg-custom-opacity">
+          <div className='w-full h-screen flex flex-wrap justify-between'>
+            {/* 내 턴 아닐 때 드래그 공유 */}
+            {playState === 6 ?
+              <Confetti
+                width={window.innerWidth}
+                height={window.innerHeight}
+                numberOfPieces="300"
+              />
+              : null
+            }
+            {/* 내 턴일 때 드롭 시 버튼 */}
+            {
+              playState === 2 && isMyTurn &&
 
-            <SelectScreen>
-              <DropSelectMyTurn
-                roomName={roomName}
-                animalList={animalList}
-              >
-              </DropSelectMyTurn>
-            </SelectScreen>
-          }
-          {/* 내 턴이 아닐 때 관전 */}
-          {
-            playState === 2 && !isMyTurn &&
-            <SelectScreen>
-              <DropSelectNotTurn p1={players[fromP]?.pn}></DropSelectNotTurn>
-            </SelectScreen>
-          }
-          {/* 방어 시도  */}
-          {
-            playState === 3 && isMyTurn &&
-            <SelectScreen>
-              <AnswerSelectMyTurn
-                roomName={roomName}
-                setIsMyTurn={setIsMyTurn}
-                playerCount={playerCount}
-                tp={turnedPlayer}
-                animal={animalList[bCard]}
-                setAnswerCard={setAnswerCard}
-                p1={players[fromP]?.pn}
-              ></AnswerSelectMyTurn>
-            </SelectScreen>
-          }
-          {/* 방어 시도 관전 */}
-          {
-            playState === 3 && !isMyTurn &&
-            <SelectScreen>
-              <AnswerSelectNotTurn
-                p1={players[fromP]?.pn}
-                p2={players[toP]?.pn}
-                animal={animalList[bCard]}
-              >
-              </AnswerSelectNotTurn>
-            </SelectScreen>
-          }
-          { //TODO 뒷면 동물 카드로 대체 필요
-            /* 넘기기 턴 (내턴, 카드)*/}
-          {
-            playState === 4 && isMyTurn &&
-            // <SelectScreen>
-            <div className='flex items-center justify-center w-96 h-52 m-2 item item9'>
-              <PassTurnCardView
-                bCard={bCard}
-                isMyTurn={isMyTurn}
-                img={images[64]}
-                psq={playerSequence}
-                playState={playState}
-                answerCard={answerCard}
-                images={images}
-              ></PassTurnCardView>
-            </div>
-            // </SelectScreen>
-          }
-
-
-          {/* 넘기는 턴 (내턴 아님, 카드) */}
-          {
-            playState === 4 && !isMyTurn &&
-
-            // <SelectScreen>
-            <div className='flex items-center justify-center w-96 h-52 m-2 item item9'>
-              <PassTurnCardView
-                bCard={bCard}
-                isMyTurn={isMyTurn}
-                img={images[64]}
-                psq={playerSequence}
-                playState={playState}
-              ></PassTurnCardView>
-            </div>
-            // </SelectScreen>
-          }
-          {/* 게임결과 */}
-          {
-            playState === 5 &&
-            <SelectScreen>
-              <AnswerRevealView gameResult={gameResult} p2={players[toP]?.pn} realCard={answerCard}>
-              </AnswerRevealView>
-            </SelectScreen>
-          }
-          {/* 게임결과 */}
-          {
-            playState === 6 &&
-            <>
               <SelectScreen>
-                <GameResultView
-                  roomName={sessionStorage.getItem("roomName")}
-                  playerSequence={playerSequence}
-                  gameInfoHandler={gameInfoHandler}
-                  loserPsq={loserPsq}
-                  bestAttackPlayer={bestAttackPlayer}
-                  bestDefencePlayer={bestDefencePlayer}
-                  bestPassPlayer={bestPassPlayer}
-                  maxAttackSuccess={maxAttackSuccess}
-                  maxDefenceSuccess={maxDefenceSuccess}
-                  maxPass={maxPass}
-                  setIsRoundStart={setIsRoundStart}
-                ></GameResultView>
+                <DropSelectMyTurn
+                  roomName={roomName}
+                  animalList={animalList}
+                >
+                </DropSelectMyTurn>
               </SelectScreen>
-            </>
-          }
-          {/* 플레이어 표현 부분 */}
-          {
-            playerSlot(playerList)
-          }
-          {/* <img className="" src={require(`../assets/img/card/00/000.png`)} alt="" /> */}
-                      
-    
-          <div className='flex flex-col justify-center items-center w-[40em] h-52 m-2 item item7'>
-            <div class="animate-bounce w-32 h-32 text-[#B3A398]">
-            <GiCardPlay className='w-24 h-24' />
-            </div>
-            {/* 카드 표현 부분 */}
+            }
+            {/* 내 턴이 아닐 때 관전 */}
+            {
+              playState === 2 && !isMyTurn &&
+              <SelectScreen>
+                <DropSelectNotTurn p1={players[fromP]?.pn}></DropSelectNotTurn>
+              </SelectScreen>
+            }
+            {/* 방어 시도  */}
+            {
+              playState === 3 && isMyTurn &&
+              <SelectScreen>
+                <AnswerSelectMyTurn
+                  roomName={roomName}
+                  setIsMyTurn={setIsMyTurn}
+                  playerCount={playerCount}
+                  tp={turnedPlayer}
+                  animal={animalList[bCard]}
+                  setAnswerCard={setAnswerCard}
+                  p1={players[fromP]?.pn}
+                ></AnswerSelectMyTurn>
+              </SelectScreen>
+            }
+            {/* 방어 시도 관전 */}
+            {
+              playState === 3 && !isMyTurn &&
+              <SelectScreen>
+                <AnswerSelectNotTurn
+                  p1={players[fromP]?.pn}
+                  p2={players[toP]?.pn}
+                  animal={animalList[bCard]}
+                >
+                </AnswerSelectNotTurn>
+              </SelectScreen>
+            }
+            { //TODO 뒷면 동물 카드로 대체 필요
+            /* 넘기기 턴 (내턴, 카드)*/}
+            {
+              playState === 4 && isMyTurn &&
+              // <SelectScreen>
+              <div className='flex items-center justify-center w-96 h-52 m-2 item item9'>
+                <PassTurnCardView
+                  bCard={bCard}
+                  isMyTurn={isMyTurn}
+                  img={images[64]}
+                  psq={playerSequence}
+                  playState={playState}
+                  answerCard={answerCard}
+                  images={images}
+                ></PassTurnCardView>
+              </div>
+              // </SelectScreen>
+            }
 
-            <div className='flex max-h-[10em] p-8'>
-              {cards &&
-                cards.map((i, index) => (
-                  <CardView
-                    key={index}
-                    src={images[i]}
-                    index={index}
-                    card={i}
-                    cardlength={cards.length}
-                    isMyTurn={isMyTurn}
-                    playState={playState}
-                    psq={playerSequence} >
-                  </CardView>
-                ))
-              }
-            </div>
-          </div>
-          <div className='flex bg-white rounded w-96 h-52 m-2 item item8 opacity-80'>
-            <div className='flex-col w-[86%]'>
-              <div className="message-list bg-white rounded-tl"
-                style={{ height: '79%', width: '100%', overflowY: 'auto', border: '1px solid #ccc' }}
-                ref={messageListRef}>
-                {messages.map((msg, index) => (
-                  <div key={index} className="message mt-1 ml-1">{msg}</div>
-                ))}
+
+            {/* 넘기는 턴 (내턴 아님, 카드) */}
+            {
+              playState === 4 && !isMyTurn &&
+
+              // <SelectScreen>
+              <div className='flex items-center justify-center w-96 h-52 m-2 item item9'>
+                <PassTurnCardView
+                  bCard={bCard}
+                  isMyTurn={isMyTurn}
+                  img={images[64]}
+                  psq={playerSequence}
+                  playState={playState}
+                ></PassTurnCardView>
               </div>
-              <div className='flex w-[100%] bg-green-500 rounded-bl'>
-                <div className="message-input w-[90%] h-[90%]" >
-                  <input
-                    className="rounded-l-lg bg-green-600 w-[75%] h-[80%] m-1 text-slate-50 placeholder-gray-300 "
-                    type="text"
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    placeholder="공백이거나 30자 이상의 채팅은 전송 불가합니다."
-                    style={{ width: '100%' }}
-                  />
+              // </SelectScreen>
+            }
+            {/* 게임결과 */}
+            {
+              playState === 5 &&
+              <SelectScreen>
+                <AnswerRevealView gameResult={gameResult} p2={players[toP]?.pn} realCard={answerCard}>
+                </AnswerRevealView>
+              </SelectScreen>
+            }
+            {/* 게임결과 */}
+            {
+              playState === 6 &&
+              <>
+                <SelectScreen>
+                  <GameResultView
+                    roomName={sessionStorage.getItem("roomName")}
+                    playerSequence={playerSequence}
+                    gameInfoHandler={gameInfoHandler}
+                    loserPsq={loserPsq}
+                    bestAttackPlayer={bestAttackPlayer}
+                    bestDefencePlayer={bestDefencePlayer}
+                    bestPassPlayer={bestPassPlayer}
+                    maxAttackSuccess={maxAttackSuccess}
+                    maxDefenceSuccess={maxDefenceSuccess}
+                    maxPass={maxPass}
+                    setIsRoundStart={setIsRoundStart}
+                  ></GameResultView>
+                </SelectScreen>
+              </>
+            }
+            {/* 플레이어 표현 부분 */}
+            {
+              playerSlot(playerList)
+            }
+            {/* <img className="" src={require(`../assets/img/card/00/000.png`)} alt="" /> */}
+
+
+            <div className='flex flex-col justify-center items-center w-[40em] h-52 m-2 item item7'>
+              <div class="animate-bounce w-32 h-32 text-[#B3A398]">
+                <GiCardPlay className='w-24 h-24' />
+              </div>
+              {/* 카드 표현 부분 */}
+
+              <div className='flex max-h-[10em] p-8'>
+                {cards &&
+                  cards.map((i, index) => (
+                    <CardView
+                      key={index}
+                      src={images[i]}
+                      index={index}
+                      card={i}
+                      cardlength={cards.length}
+                      isMyTurn={isMyTurn}
+                      playState={playState}
+                      psq={playerSequence} >
+                    </CardView>
+                  ))
+                }
+              </div>
+            </div>
+            <div className='flex bg-white rounded w-96 h-52 m-2 item item8 opacity-80'>
+              <div className='flex-col w-[86%]'>
+                <div className="message-list bg-white rounded-tl"
+                  style={{ height: '79%', width: '100%', overflowY: 'auto', border: '1px solid #ccc' }}
+                  ref={messageListRef}>
+                  {messages.map((msg, index) => (
+                    <div key={index} className="message mt-1 ml-1">{msg}</div>
+                  ))}
                 </div>
-                <Button className="m-1 rounded-none rounded-r-lg" color="success" onClick={sendMessage}>
-                  <HiOutlineArrowRight className="h-3 w-3" />
-                </Button>
+                <div className='flex w-[100%] bg-green-500 rounded-bl'>
+                  <div className="message-input w-[90%] h-[90%]" >
+                    <input
+                      className="rounded-l-lg bg-green-600 w-[75%] h-[80%] m-1 text-slate-50 placeholder-gray-300 "
+                      type="text"
+                      value={input}
+                      onChange={(e) => setInput(e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      placeholder="공백이거나 30자 이상의 채팅은 전송 불가합니다."
+                      style={{ width: '100%' }}
+                    />
+                  </div>
+                  <Button className="m-1 rounded-none rounded-r-lg" color="success" onClick={sendMessage}>
+                    <HiOutlineArrowRight className="h-3 w-3" />
+                  </Button>
+                </div>
               </div>
-            </div>
-            <div className='flex-col'>
-              <Button className={((playState === 0) ? "" : "p-1 hidden") + " text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm  text-center m-1"}
-                disabled={(!isAdmin || playerCount < 4)}
-                style={{ height: "50%", width: "90%" }}
-                onClick={start}>게임시작</Button>
-              <Button
-                color="failure"
-                className="m-1"
-                style={{ height: "45%", width: "90%" }}
-                onClick={leaveRoom}>퇴장</Button>
+              <div className='flex-col'>
+                <Button className={((playState === 0) ? "" : "p-1 hidden") + " text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm  text-center m-1"}
+                  disabled={(!isAdmin || playerCount < 4)}
+                  style={{ height: "50%", width: "90%" }}
+                  onClick={start}>게임시작</Button>
+                <Button
+                  color="failure"
+                  className="m-1"
+                  style={{ height: "45%", width: "90%" }}
+                  onClick={leaveRoom}>퇴장</Button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
       </div>
     </>
   );

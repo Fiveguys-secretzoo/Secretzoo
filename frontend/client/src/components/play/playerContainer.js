@@ -14,7 +14,7 @@ const PlayerContainer = () => {
   const roomName = useSelector(state => state.plays.roomName);
   // 플레이어 위에 드래그가 올라갔을 때 socket.io 로 emit
   const dragEnterHandler = (e, psq) => {
-    console.log(dragItem + " hover " + psq);
+    // console.log(dragItem + " hover " + psq);
     socket.emit("cardDrag", roomName, playerSequenceNumber, dragFrom, psq);
   };
 
@@ -27,17 +27,17 @@ const PlayerContainer = () => {
   // 플레이어 위에 드롭 했을 때 socket.io 로 emit
   const dropHandler = (e, psq, setCards) => {
     e.preventDefault();
-    console.log(`##### [drop Handler]`);
-    console.log(turnedPlayer);
-    console.log(psq);
+    // console.log(`##### [drop Handler]`);
+    // console.log(turnedPlayer);
+    // console.log(psq);
 
     if (turnedPlayer.includes(psq) || psq === playerSequenceNumber) {
-      console.log(`Cannot drop on Player ${psq}`);
+      // console.log(`Cannot drop on Player ${psq}`);
       return;
     }
 
     dispatch(changeCardDrop({ from: dragFrom, to: psq }));
-    console.log(`[dropHandler] [${dragItem}] drop [${dragTo}], psq : [${psq}]`);
+    // console.log(`[dropHandler] [${dragItem}] drop [${dragTo}], psq : [${psq}]`);
     // bluff 아닐 때
     if (dragItem < 64) {
       dropCard({ 'psq': psq, 'card': dragItem });
