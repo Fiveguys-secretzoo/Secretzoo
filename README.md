@@ -280,7 +280,7 @@
 ![image](/uploads/066e10011c715173ba0e1b275fa099d1/image.png)
 
 ## 📄ERD
-![image](/uploads/684cb7e94f88c87dc0e6aed8d3a9ec32/image.png)
+![image](/uploads/5f49919c14d5cef40949c7ed37334cae/image.png)
 
 ## 📄요구사항 정의서
 
