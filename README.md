@@ -80,6 +80,7 @@
 </div>
 
 #### 소셜 로그인
+- 구글, 네이버, 카카오 계정으로 회원가입, 로그인을 할 수 있습니다.
 <div align="center">
 <img src="/uploads/4bb726934215b393b420a0cfda8cce6d/소셜로그인.gif" alt="소셜로그인" width="70%" height="70%">
 </div>
@@ -98,11 +99,13 @@
 </div>
 
 #### 실시간 랭킹
+- 공격, 수비, 패스별로 실시간 랭킹을 확인할 수 있습니다.
 <div align="center">
 <img src="/uploads/5675f0b90adb9783ed6c2e8ea940b36a/랭킹.gif" alt="랭킹" width="70%" height="70%">
 </div>
 
 #### 유저 검색 및 조회
+- 유저 닉네임, 아이디로 전적 검색을 할 수 있습니다.
 <div align="center">
 <img src="/uploads/18b7aede7c7b340c23da122ae2887616/전적검색.gif" alt="전적검색" width="70%" height="70%">
 </div>
