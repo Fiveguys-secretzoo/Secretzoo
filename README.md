@@ -283,7 +283,8 @@
 ![image](/uploads/5f49919c14d5cef40949c7ed37334cae/image.png)
 
 ## 📄요구사항 정의서
-![요구사항정의서](/uploads/be34ef4ed9f453aff9f28ca16e76fc46/요구사항정의서.gif)
+![1](/uploads/947c0a3ef77b0b06fbba7cbaecf07cc0/1.PNG)
+![2](/uploads/c20752e880975cb43a55e34f2c4214f8/2.PNG)
 ## 📄API 명세서
 
 
