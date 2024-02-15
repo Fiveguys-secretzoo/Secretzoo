@@ -99,8 +99,8 @@
 
 <div align="center">
 <table>
-<div align="center"> 
-    <tr>
+<div> 
+    <tr align="center">
         <td style="min-width: 250px;">
             <a href="https://github.com/hyeounguk2">
               <img src="https://avatars.githubusercontent.com/u/80465980?v=4" width="100">
