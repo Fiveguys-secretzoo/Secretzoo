@@ -3,8 +3,12 @@ import { useDispatch } from 'react-redux';
 import { Button } from 'flowbite-react';
 import { changePlayState } from '../../store/playSlice'
 import { SocketContext } from '../../App';
+import { FaRegSmile, FaRegAngry} from "react-icons/fa";
+import { FaRegFaceGrinTongueSquint  } from "react-icons/fa6";
+import { GiTigerHead, GiSniffingDog, GiDeer, GiPig, GiFox, GiSheep, GiSpermWhale} from "react-icons/gi";
+import { FaCat } from "react-icons/fa";
 
-const AnswerSelectMyTurn = ({ roomName, setIsMyTurn, playerCount, tpCount }) => {
+const AnswerSelectMyTurn = ({ roomName, setIsMyTurn, playerCount, tpCount, animal }) => {
 
   const socket = useContext(SocketContext);
   const dispatch = useDispatch();
@@ -38,20 +42,39 @@ const AnswerSelectMyTurn = ({ roomName, setIsMyTurn, playerCount, tpCount }) => 
   useEffect(() => {
     console.log(`##### [answerSelect] ${playerCount} / ${tpCount}`)
   })
-
   return (
     <>
       <div className="overlay">
-        <Button onClick={() => handleAnswer(0)}>
-          맞다
-        </Button>
+        <div className='flex-column'>
+            <h1 className='text-white text-center' style={{ fontSize: '2.5em' }}>이거 <strong className='text-teal-300'> {animal} </strong> (이)야.</h1> 
+              <br></br>
+              <div className='flex justify-center'>
+              {animal=='호랑이'? <GiTigerHead className='w-48 h-48 mr-2' color='#FF8911'/> : ''}
+              {animal=='고양이'? <FaCat className='w-48 h-48 mr-2' color='black'/> : ''}
+              {animal=='강아지'? <GiSniffingDog  className='w-48 h-48 mr-2' color='#B2A59B'/> : ''}
+              {animal=='고라니'? <GiDeer className='w-48 h-48 mr-2' color='#9B4444'/> : ''}
+              {animal=='돼지'? <GiPig className='w-48 h-48 mr-2' color='#FFB0B0'/> : ''}
+              {animal=='여우'? <GiFox className='w-48 h-48 mr-2' color='#FC6736'/> : ''}
+              {animal=='양'? <GiSheep className='w-48 h-48 mr-2' color='#A7D397'/> : ''}
+              {animal=='고래'? <GiSpermWhale className='w-48 h-48 mr-2' color='#0766AD'/> : ''}
+              </div>
+          <div className='m-1 flex'>
+            <Button className='m-1 bg-[#1B1A55] hover:!bg-[#535C91] text-white font-bold rounded-full shadow-lg' onClick={() => handleAnswer(0)}>
+              <span className='text-xl'>맞다</span>
+            <FaRegSmile className='ml-3 w-10 h-10' color='green'/>
+            </Button>
+            
 
-        <Button disabled={(tpCount === playerCount) ? true : false} onClick={() => handleAnswer(1)}>
-          패스
-        </Button>
-        <Button onClick={() => handleAnswer(2)} >
-          아니다
-        </Button>
+            <Button className='m-1 bg-[#1B1A55] hover:!bg-[#535C91] text-white font-bold rounded-full shadow-lg' disabled={(tpCount === playerCount) ? true : false} onClick={() => handleAnswer(1)}>
+            <span className='text-xl'>패스</span>
+            <FaRegFaceGrinTongueSquint  className='ml-3 w-10 h-10' color='orange' />
+            </Button>
+            <Button className='m-1 bg-[#1B1A55] hover:!bg-[#535C91] text-white font-bold rounded-full shadow-lg' onClick={() => handleAnswer(2)} >
+            <span className='text-xl'>아니다</span>
+            <FaRegAngry className='ml-3 w-10 h-10' color='red' />
+            </Button>
+          </div>
+        </div>
       </div >
     </>
   )

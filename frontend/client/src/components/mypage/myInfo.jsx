@@ -191,38 +191,76 @@ const MyInfo = () => {
   if (!user || !myRewards) {
     return <div>Loading...</div>;
   }
+  // return (
+  //   <div className='px-20 py-10 container bg-gray-200 flex items-center justify-between'>
+  //     <div className='flex flex-col items-center '>
+  //       <img
+  //         src={require(`../../assets//img/profile/Untitled ${user.profileNumber}.png`)}
+  //         alt="프로필 이미지"
+  //         className="w-32 rounded-full"
+  //       />
+  //       <button className='p-2 m-2 bg-blue-400 rounded'
+  //         onClick={() => setOpenProfileImageModal(true)}>변경</button>
+  //     </div>
+  //     <div className='flex flex-col'>
+  //       <p>이름 : {user.name}</p>
+  //       <div className='flex items-center justify-end'>
+  //         <p>닉네임 : {user.nickname}</p>
+  //         <button className='m-2 p-2 bg-blue-500 rounded' onClick={() => setOpenNicknameModal(true)}
+  //         >변경</button>
+  //       </div>
+  //       <div className='flex items-center justify-end'>
+  //         <p>업적 : {user.mainReward}</p>
+  //         <button className='m-2 p-2 bg-blue-500 rounded'
+  //           onClick={() => setOpenRewardsModal(true)}>변경</button>
+  //       </div>
+  //       <div className='flex items-center justify-end'>
+  //         <p>비밀번호 변경</p>
+  //         <button className='m-2 p-2 bg-blue-500 rounded'
+  //           onClick={() => setOpenCheckPasswordModal(true)}>변경</button>
+  //       </div>
+  //       <p className='m-2 p-2 text-right'
+  //       >level : {user.level}</p>
+  //       <p className='m-2 p-2 text-right'
+  //       >email : {user.email}</p>
+  //     </div>
+  //     <ProfileImageModal></ProfileImageModal>
+  //     <NicknameModal></NicknameModal>
+  //     <RewardsModal></RewardsModal>
+  //     <CheckPasswordModal></CheckPasswordModal>
+  //     <UpdataPasswordModal></UpdataPasswordModal>
+  //   </div>
+  // );
   return (
     <div className='px-20 py-10 container bg-gray-200 flex items-center justify-between'>
-      <div className='flex flex-col items-center '>
+      <div className='flex flex-col items-center'>
+      <p className='text-lg font-semibold'>이름: {user.name}</p>
+      <p className='mt-2 text-right font-semibold'>LV. {user.level}</p>
         <img
           src={require(`../../assets//img/profile/Untitled ${user.profileNumber}.png`)}
           alt="프로필 이미지"
           className="w-32 rounded-full"
         />
-        <button className='p-2 m-2 bg-blue-400 rounded'
-          onClick={() => setOpenProfileImageModal(true)}>변경</button>
+        <button className='mt-4 px-4 py-2 bg-blue-400 rounded-full text-white hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
+          onClick={() => setOpenProfileImageModal(true)}>프로필 변경</button>
       </div>
       <div className='flex flex-col'>
-        <p>이름 : {user.name}</p>
         <div className='flex items-center justify-end'>
-          <p>닉네임 : {user.nickname}</p>
-          <button className='m-2 p-2 bg-blue-500 rounded' onClick={() => setOpenNicknameModal(true)}
-          >변경</button>
+          <p><span className='text-lg font-semibold'>닉네임 : </span> {user.nickname}</p>
+          <button className='mb-1 ml-4 px-4 py-2 bg-blue-500 rounded-full text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
+            onClick={() => setOpenNicknameModal(true)}>변경</button>
         </div>
         <div className='flex items-center justify-end'>
-          <p>업적 : {user.mainReward}</p>
-          <button className='m-2 p-2 bg-blue-500 rounded'
+          <p><span className='text-lg font-semibold'>업적 : </span> {user.mainReward}</p>
+          <button className='mb-1 ml-4 px-4 py-2 bg-blue-500 rounded-full text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
             onClick={() => setOpenRewardsModal(true)}>변경</button>
         </div>
         <div className='flex items-center justify-end'>
           <p>비밀번호 변경</p>
-          <button className='m-2 p-2 bg-blue-500 rounded'
+          <button className='ml-4 px-4 py-2 bg-blue-500 rounded-full text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
             onClick={() => setOpenCheckPasswordModal(true)}>변경</button>
         </div>
-        <p className='m-2 p-2 text-right'
-        >level : {user.level}</p>
-        <p className='m-2 p-2 text-right'
-        >email : {user.email}</p>
+        <p className='mt-2 text-right'><span className='text-lg font-semibold'>이메일 : </span>  {user.email}</p>
       </div>
       <ProfileImageModal></ProfileImageModal>
       <NicknameModal></NicknameModal>
@@ -231,6 +269,7 @@ const MyInfo = () => {
       <UpdataPasswordModal></UpdataPasswordModal>
     </div>
   );
+  
 };
 
 export default MyInfo;
