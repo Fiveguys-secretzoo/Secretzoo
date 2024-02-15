@@ -85,7 +85,7 @@ const SearchPlayer = () => {
                   </Card>
                 ))}
               </div>
-              <div className="flex overflow-x-auto sm:justify-center">
+              <div className="flex overflow-x-auto sm:justify-center mt-5">
                 <Pagination 
                 currentPage={currentPage} 
                 totalPages={Math.floor(searchResult.totalPlayer/4)+1} 

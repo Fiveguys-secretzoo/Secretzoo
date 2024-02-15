@@ -151,15 +151,19 @@ const SignupForm = () => {
       Swal.close();
       if (error.response) {
         const statusCode = error.response.status;
-
-        if(statusCode === 400 ){
+        if(statusCode === 409 ){
           Swal.fire({
             "text" : '이미 가입된 이메일입니다.',
             "confirmButtonColor" : '#3085d6'
           });
-        } else if (statusCode === 500){
+        } else if (statusCode === 400){
           Swal.fire({
-            "text" : '유효하지 않은 이메일입니다.',
+            "text" : '이메일 형식이 옳바르지 않습니다.',
+            "confirmButtonColor" : '#3085d6'
+          });
+        } else {
+          Swal.fire({
+            "text" : '통신상태가 원활하지 않습니다 다시 시도해주세요',
             "confirmButtonColor" : '#3085d6'
           });
         }

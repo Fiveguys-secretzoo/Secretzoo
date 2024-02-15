@@ -31,7 +31,9 @@ axiosInstance.interceptors.request.use(async config => {
         "confirmButtonColor" : '#3085d6'
       });
       sessionStorage.clear();
-      window.location.href = 'https://secretzoo.site';
+      setTimeout(() => {
+        window.location.href = 'https://secretzoo.site';
+      },500);
       return;
     }
   }
