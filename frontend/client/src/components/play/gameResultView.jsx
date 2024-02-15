@@ -21,7 +21,8 @@ const GameResultView = ({
   bestPassPlayer,
   maxAttackSuccess,
   maxDefenceSuccess,
-  maxPass }) => {
+  maxPass,
+  setIsRoundStart }) => {
   const renderIconToString = (component) => {
     return ReactDOMServer.renderToStaticMarkup(component);
   }
@@ -31,6 +32,7 @@ const GameResultView = ({
   const players = useSelector(state => state.plays.players);
 
   useEffect(() => {
+    setIsRoundStart(false);
     Swal.fire({
       title: `${renderIconToString(<GiPartyPopper class="inline" />)} <strong> 게임 종료 <strong> ${renderIconToString(<GiPartyPopper class="inline" />)}`,
       html: `<span class="mr-2 font-bold text-pink-300 inline">${players[loserPsq]?.pn} </span> 님이 패배하셨습니다! <br></br> <br></br>
@@ -43,6 +45,7 @@ const GameResultView = ({
       `,
       timer: 10000,
       timerProgressBar: true,
+      closeOnClickOutside: false
     }).then(() => {
       dispatch(changePlayState(0));
       socket.emit('requestGameInfo', roomName, playerSequence, gameInfoHandler);
@@ -50,7 +53,7 @@ const GameResultView = ({
   })
   return (
     <>
-      
+
     </>
   )
 }

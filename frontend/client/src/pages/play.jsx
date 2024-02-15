@@ -89,7 +89,7 @@ const Play = () => {
   const [images, setImages] = useState([]);
   const [answerCard, setAnswerCard] = useState(64); // 정답 공개 시 카드
   const [loserPsq, setLoserPsq] = useState('');
-
+  const [isRoundStart, setIsRoundStart] = useState(false);
   const [bestAttackPlayer, setBestAttackPlayer] = useState('');
   const [bestDefencePlayer, setBestDefencePlayer] = useState('');
   const [bestPassPlayer, setBestPassPlayer] = useState('');
@@ -365,6 +365,24 @@ const Play = () => {
 
   }, [cards]);
 
+  useEffect(() => {
+    if (playState === 1) {
+      if (isMyTurn) {
+        Swal.fire({
+          'html': '이제 <span class="text-lg text-green-500">내 턴</span>입니다! 준비하세요!',
+          'timer': 2000,
+          timerProgressBar: true,
+        })
+      } else if (!isRoundStart) {
+        Swal.fire({
+          'text': '이제 게임이 시작됩니다...!',
+          'timer': 2000,
+          timerProgressBar: true,
+        })
+      }
+      setIsRoundStart(true);
+    }
+  }, [playState])
 
 
   const sendMessage = () => {
@@ -695,7 +713,6 @@ const Play = () => {
           {
             playState === 6 &&
             <>
-
               <SelectScreen>
                 <GameResultView
                   roomName={sessionStorage.getItem("roomName")}
@@ -708,6 +725,7 @@ const Play = () => {
                   maxAttackSuccess={maxAttackSuccess}
                   maxDefenceSuccess={maxDefenceSuccess}
                   maxPass={maxPass}
+                  setIsRoundStart={setIsRoundStart}
                 ></GameResultView>
               </SelectScreen>
             </>
