@@ -26,14 +26,6 @@
 - 아이스브레이킹과 함께 사람들끼리 친해지기 위한 방법이 필요한 사람들 (ex. 대학교 OT, 싸피데이, 심심풀이 게임)
 - 웃고 떠들며 재밌게 게임하고 싶은 사람들
 - 라이트하게 게임을 즐기고 싶은 모든 분들
-<br/>
-<br/>
-
-### 📌 서비스 아키택쳐
-![image](/uploads/38efa059276e24ca1841cef4e702388f/image.png)
-
-<br/>
-<br/>
 
 ### 📌 프로젝트 기능
 - 화상 카드 게임 서비스
@@ -43,9 +35,7 @@
 - 업적 서비스
   - 게임 플레이를 통해 동물 별로 있는 숨겨진 다양한 업적을 수집해볼 수 있습니다.
 
-### 📌 서비스 구현
-
-✅ : 구현 완료  ❌ : 미구현
+### 📌 서비스 구현(✅ : 구현 완료  ❌ : 미구현)
 
 #### 1️. 기본기능 ✅
 
@@ -258,13 +248,16 @@
 <br>
  
 ## 👨‍👩‍👧 협업 툴
-<img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white">
-<img src="https://img.shields.io/badge/gitlab-%23181717.svg?style=for-the-badge&logo=gitlab&logoColor=white">
-<br>
-<img src="https://img.shields.io/badge/jira-%230A0FFF.svg?style=for-the-badge&logo=jira&logoColor=white">
-![Notion](https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=Notion&logoColor=white)
-<br>
-![Mattermost](https://img.shields.io/badge/Mattermost-0072C6?style=for-the-badge&logo=mattermost&logoColor=white)
+- <strong>형상 관리<br>
+  <img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white">
+  <img src="https://img.shields.io/badge/gitlab-%23181717.svg?style=for-the-badge&logo=gitlab&logoColor=white">
+
+- <strong>이슈 관리<br>
+  <img src="https://img.shields.io/badge/jira-%230A0FFF.svg?style=for-the-badge&logo=jira&logoColor=white">
+
+- <strong>커뮤니케이션<br>
+  ![Notion](https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=Notion&logoColor=white)
+  ![Mattermost](https://img.shields.io/badge/Mattermost-0072C6?style=for-the-badge&logo=mattermost&logoColor=white)
 <br>
 
 
