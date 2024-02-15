@@ -123,7 +123,7 @@
             </a> 
         </td>
     </tr>
-    <tr align="left">
+    <tr>
         <td>
         0️⃣ Front-end(팀장)<br> 
         1️⃣ Web-RTC(Openvidu) 전담<br>
@@ -166,7 +166,7 @@
             </a>
         </td>
     </tr>
-    <tr align="left">
+    <tr>
           <td>
         0️⃣ Back-end <br> 
         1️⃣ 인프라 담당<br>
