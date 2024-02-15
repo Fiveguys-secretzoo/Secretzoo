@@ -283,13 +283,27 @@
 
 # VI. 프로젝트 산출물 📁
 
+### 🏛 서비스 아키택처
+![image](/uploads/066e10011c715173ba0e1b275fa099d1/image.png)
+<hr>
 
 ### 📄ERD
+<hr>
+
 ### 📄요구사항 정의서
+<hr>
+
 ### 📄API 명세서
+<hr>
+
 ### 📄FIGMA
+<hr>
+
 ### 📄Use Case
+<hr>
+
 ### 📄와이어 프레임
+<hr>
 
 <br>
 
