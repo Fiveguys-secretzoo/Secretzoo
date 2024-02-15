@@ -75,6 +75,9 @@
 </div>
 
 #### 로그인 / 로그아웃
+<div align="center">
+<img src="/uploads/4e8e0e8278b77290ff089f56676d89cd/로그인_로그아웃.gif" alt="로그인" width="70%" height="70%">
+</div>
 
 #### 소셜 로그인
 
