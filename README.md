@@ -70,7 +70,7 @@
 # Ⅱ. 서비스 화면🎬
 
 #### 회원가입
-<div style="display: flex; justify-content: center;">
+<div align="center">
 <img src="/uploads/a94fe901b04cb99ef068c16c43a22441/회원가입.gif" alt="회원가입" width="70%" height="70%">
 </div>
 
