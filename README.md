@@ -168,7 +168,7 @@
               <br />
               <b>김관우👨🏻</b>
             </a> 
-        </td>
+    </td>
         <td style="min-width: 250px;">
             <a href="https://github.com/kimjungkwang1">
               <img src="https://avatars.githubusercontent.com/u/134460604?v=4" width="100">
