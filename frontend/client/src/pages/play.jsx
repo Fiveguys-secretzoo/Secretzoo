@@ -146,7 +146,7 @@ const Play = () => {
   const messageHandler = (user, msg) => {
     // console.log(user)
     // console.log(msg)
-
+    
     let imsg = `[${user}] ${msg}`;
     setMessages((msgs) => [...msgs, imsg]);
   };
@@ -701,7 +701,7 @@ const Play = () => {
                 style={{ height: '79%', width: '100%', overflowY: 'auto', border: '1px solid #ccc' }}
                 ref={messageListRef}>
                 {messages.map((msg, index) => (
-                  <div key={index} className="message mt-1 ml-1">[{msg}]</div>
+                  <div key={index} className="message mt-1 ml-1">{msg}</div>
                 ))}
               </div>
               <div className='flex w-[100%] bg-green-500 rounded-bl'>
