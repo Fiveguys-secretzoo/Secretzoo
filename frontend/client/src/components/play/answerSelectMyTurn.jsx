@@ -8,7 +8,7 @@ import { FaRegFaceGrinTongueSquint  } from "react-icons/fa6";
 import { GiTigerHead, GiSniffingDog, GiDeer, GiPig, GiFox, GiSheep, GiSpermWhale} from "react-icons/gi";
 import { FaCat } from "react-icons/fa";
 
-const AnswerSelectMyTurn = ({ roomName, setIsMyTurn, playerCount, tp, animal, setAnswerCard }) => {
+const AnswerSelectMyTurn = ({ roomName, setIsMyTurn, playerCount, tp, animal, p1, setAnswerCard }) => {
 
   const socket = useContext(SocketContext);
   const dispatch = useDispatch();
@@ -47,7 +47,8 @@ const AnswerSelectMyTurn = ({ roomName, setIsMyTurn, playerCount, tp, animal, se
   return (
     <>
       <div className="overlay">
-        <div className='flex-column'>
+        <div className='flex-column text-xl text-center'>
+            <h2 style={{ fontSize: '1.5em' }} className='mb-4 text-white'><strong className='text-lime-300'>{p1}</strong>가 나를 공격했습니다</h2>
             <h1 className='text-white text-center' style={{ fontSize: '2.5em' }}>이거 <strong className='text-teal-300'> {animal} </strong> (이)야.</h1> 
               <br></br>
               <div className='flex justify-center'>
