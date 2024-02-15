@@ -98,9 +98,9 @@
 # Ⅲ. 팀원 소개 및 역할 (🍔FIVE GUYS🍔)
 
 <div align="center">
-<table align=center>
-<div align=center> 
-    <tr align=center>
+<table align="center">
+<div align="center"> 
+    <tr align="center">
         <td style="min-width: 250px;">
             <a href="https://github.com/hyeounguk2">
               <img src="https://avatars.githubusercontent.com/u/80465980?v=4" width="100">
@@ -148,9 +148,9 @@
 </div>
 
 <div align="center">
-<table align=center>
-<div align=center> 
-    <tr align=center>
+<table align="center">
+<div align="center"> 
+    <tr align="center">
           <td style="min-width: 250px;">
             <a href="https://github.com/hyunsoo10">
               <img src="https://avatars.githubusercontent.com/u/139304756?v=4" width="100">
