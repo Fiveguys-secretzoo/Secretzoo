@@ -10,10 +10,12 @@ import { axiosLogout, resetUserInfo } from "../../store/userSlice";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 
+/* 로비의 navbar 로비 랭킹 내정보 플레이어검색으로 이동 */
 const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  /* 활성화된 내브 글자색변경 */
   const activeText = (path) => {
     return location.pathname === path ? "flex items-center p-2 text-base font-normal text-[#FF9800] rounded-lg hover:bg-gray-100 cursor-pointer" : "flex items-center p-2 text-base font-normal text-gray-500 rounded-lg hover:bg-gray-100 cursor-pointer"
   };
@@ -37,6 +39,7 @@ const Navbar = () => {
   };
   const dispatch = useDispatch();
 
+  /* 로그아웃 */
   const logout = async () => {
     await dispatch(axiosLogout());
     dispatch(resetUserInfo);
@@ -47,6 +50,7 @@ const Navbar = () => {
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
+  /* 오디오 작동 함수 */
   useEffect(() => {
     if (isPlaying) {
       audioRef.current.play();
@@ -55,11 +59,13 @@ const Navbar = () => {
     }
   }, [isPlaying]);
 
+  /* 오디오 끄는거 */
   const togglePlay = () => {
     setIsPlaying(!isPlaying);
     audioRef.current.play();
   }
-
+  
+  /* ucc모달 */
   const [openUccModal, setOpenUccModal ] = useState(false);
   const UccModal = () => {
     return (
@@ -96,9 +102,12 @@ const Navbar = () => {
       </Sidebar>
       <Button className="m-3" color='warning' onClick={() => logout()}>{sessionStorage.getItem('noLogin')? '나가기':'로그아웃'}</Button>
       <div className="flex justify-around">
+        <div>
+          <div className='text-white text-center'>배경음악</div>
       {
-        isPlaying ? <GiSoundOn className='mt-3 w-20 h-20 hover:cursor-pointer' fill='white' onClick={togglePlay}></GiSoundOn> : <GiSoundOff className='w-20 h-20 hover:cursor-pointer' fill='white' onClick={togglePlay}></GiSoundOff>   
+        isPlaying ? <GiSoundOn className=' w-20 h-20 hover:cursor-pointer' fill='white' onClick={togglePlay}></GiSoundOn> : <GiSoundOff className='w-20 h-20 hover:cursor-pointer' fill='white' onClick={togglePlay}></GiSoundOff>   
       }
+      </div>
         <div onClick={() => setOpenUccModal(true)}>
           <div className='text-[#dcc59c] text-center'>룰 설명</div>
           <GiBlackBook className='w-16 h-16 hover:cursor-pointer' fill='#dcc59c'></GiBlackBook>

@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { axiosGetTotalRewards } from '../../store/userSlice';
 
 
-
+/* 내 업적 */
 const MyReward = () => {
   const user = useSelector((state) => state.user.userInfo);
   const dispatch = useDispatch();

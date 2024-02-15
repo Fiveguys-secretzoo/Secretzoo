@@ -6,6 +6,7 @@ const requsetGoogleLogin = () => {
   window.location.href='https://spring.secretzoo.site/oauth2/authorization/google';
 }
 
+/* 구글로그인 */
 const GoogleLogin = () => {
   return (
     <>

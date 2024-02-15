@@ -710,7 +710,6 @@ const Play = () => {
             {/* 카드 표현 부분 */}
             
             <div className='flex max-h-[10em]'>
-            <div className='flex max-h-[10em]'>
               {cards &&
                 cards.map((i, index) => (
                   <CardView
@@ -744,7 +743,7 @@ const Play = () => {
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={handleKeyDown}
-                    placeholder="채팅을 입력하세요..."
+                    placeholder="공백이거나 30자 이상의 채팅은 전송 불가합니다."
                     style={{ width: '100%' }}
                   />
                 </div>
@@ -765,7 +764,6 @@ const Play = () => {
               onClick={leaveRoom}>퇴장</Button>
             </div>
           </div>
-        </div>
         </div>
       </div>
     </>

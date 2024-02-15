@@ -4,18 +4,21 @@ import { useNavigate } from "react-router-dom";
 import { Button, Label, TextInput, Modal } from 'flowbite-react';
 import Swal from 'sweetalert2';
 
+/* 회원가입 */
 const SignupForm = () => {
   const [name, setName] = useState("");
   const [id, setId] = useState("");
   const [pass, setPass] = useState("");
   const [passCheck, setPassCheck] = useState("");
   const [email, setEmail] = useState("");
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
+  /* 비밀번호 유효성 검사 */
   const validatePassword = (password) => {
     const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
     return regex.test(password);
   };
-  const requsetLogin = () => {
+  /* 회원가입 */
+  const requsetSignup = () => {
     if (!idCheck) {
       Swal.fire({
         "text" : 'id 중복체크하세요.',
@@ -32,7 +35,7 @@ const SignupForm = () => {
     }
     if (pass != passCheck) {
       Swal.fire({
-        "text" : '비밀번호가 잃치하지 않습니다.',
+        "text" : '비밀번호가 서로 일치하지 않습니다.',
         "confirmButtonColor" : '#3085d6'
       });
       return;
@@ -286,7 +289,7 @@ const SignupForm = () => {
               </div>) : null}
             </div>
             <Button
-            type="submit" onClick={(e) => {e.preventDefault(); requsetLogin();}}>회원가입</Button>
+            type="submit" onClick={(e) => {e.preventDefault(); requsetSignup();}}>회원가입</Button>
           </form>
         </div>
         <IdCheckModal></IdCheckModal>

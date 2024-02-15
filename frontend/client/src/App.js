@@ -1,5 +1,5 @@
 import React, { createContext, useEffect } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 // import './App.css';
 import io from "socket.io-client";
 import { getUserInfo, } from './store/userSlice';
@@ -26,6 +26,9 @@ import SearchPlayerDetail from './pages/searchPlayerDetail';
 const socket = io('https://secretzoo.site'); // 노드 서버 URL 
 export const SocketContext = createContext();
 
+const ProtectedRoute = ({ children }) => {
+  return sessionStorage.getItem('userSequence') ? children : <Navigate to="/" replace />;
+};
 function App() {
   console.error = (error) => error.apply;
   const dispatch = useDispatch();
@@ -56,9 +59,9 @@ function App() {
                 <Route index element={<MyInfo />} />
                 <Route path="/lobby/myPage/myranking" element={<MyRanking />} />
                 <Route path="/lobby/myPage/myreward" element={<MyReward />} />
-              </Route>t
+              </Route>
             </Route>
-            <Route path="/play" element={<Play />} />
+            <Route path="/play" element={<ProtectedRoute><Play /></ProtectedRoute>} />
           </Routes>
         </div>
       </SocketContext.Provider>

@@ -5,7 +5,7 @@ import naverLoginImg from '../../assets/img/login/naverLoginImg.png';
 const requsetNaverLogin = () => {
   window.location.href = 'https://spring.secretzoo.site/oauth2/authorization/naver';
 }
-
+/* 네이버 로그인 */
 const NaverLogin = () => {
   return (
     <>
