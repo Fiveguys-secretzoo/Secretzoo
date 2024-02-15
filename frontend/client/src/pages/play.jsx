@@ -214,7 +214,7 @@ const Play = () => {
   }
 
   const cardRevealResponseHandler = (state, card, ans, nowTurnPlayer) => {
-    dispatch(initTurnedPlayer());
+    dispatch(initTurnedPlayer([]));
     if (nowTurnPlayer === playerSequence) {
       setIsMyTurn(true);
     } else {
