@@ -21,7 +21,7 @@ const MyInfo = () => {
   };
 
   const updateNickname = (nickname) => {
-    if(nickname>8){
+    if(nickname.length>8){
       Swal.fire({
         "text" : '닉네임은 8자리 이하로 하여야 합니다.',
         "confirmButtonColor" : '#3085d6'
