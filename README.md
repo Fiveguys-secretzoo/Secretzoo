@@ -277,7 +277,7 @@
 # VI. 프로젝트 산출물 📁
 
 ## 🏛 서비스 아키택처
-![image](/uploads/066e10011c715173ba0e1b275fa099d1/image.png)
+![image](/uploads/bd53de44e7f2b4a2d297c8060054d697/image.png)
 
 ## 🛢︎ ERD
 ![image](/uploads/5f49919c14d5cef40949c7ed37334cae/image.png)
