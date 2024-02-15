@@ -15,10 +15,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Slf4j
-@RestControllerAdvice(annotations = RestControllerAdvice.class)
+@RestControllerAdvice(annotations = RestController.class)
 public class RestControllerExceptionHandler {
 
     @ExceptionHandler(DuplicateIdentifierException.class) // 아이디, 이메일 중복 예외 처리
