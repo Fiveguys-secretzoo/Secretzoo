@@ -3,7 +3,7 @@ import './playerView.css';
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { IoPersonOutline } from "react-icons/io5";
-import { LuSwords } from "react-icons/lu";import Lottie from 'react-lottie';
+import { LuSwords } from "react-icons/lu"; import Lottie from 'react-lottie';
 
 import emptySlot from '../../assets/lottie/emptySlot.json'
 import orangeCircle from '../../assets/lottie/orangeCircle.json'
@@ -14,12 +14,12 @@ import pinkCircle from '../../assets/lottie/pinkCircle.json'
 import whiteCircle from '../../assets/lottie/whiteCircle.json'
 import greenCircle from '../../assets/lottie/greenCircle.json'
 import blueCircle from '../../assets/lottie/blueCircle.json'
-import { GiTigerHead, GiSniffingDog, GiDeer, GiPig, GiFox, GiSheep, GiSpermWhale} from "react-icons/gi";
+import { GiTigerHead, GiSniffingDog, GiDeer, GiPig, GiFox, GiSheep, GiSpermWhale } from "react-icons/gi";
 import { FaCat } from "react-icons/fa";
-
+import { TbCards } from "react-icons/tb";
 import '../../style/playerView.css'
 
-const PlayerView = ({ roomName, psq, key, pn = "빈 플레이어", activate = false, setCards, animalList, video = "", count }) => {
+const PlayerView = ({ roomName, psq, key, pn = "빈 플레이어", activate = false, setCards, animalList, video = "", count, tp }) => {
 
   const playerContainer = PlayerContainer();
   const { dragOver, dragEnterHandler, dropHandler } = playerContainer;
@@ -28,17 +28,18 @@ const PlayerView = ({ roomName, psq, key, pn = "빈 플레이어", activate = fa
   const turnedPlayer = useSelector(state => state.plays.game.tp);
   const players = useSelector(state => state.plays.players);
   const [penalty, setPenalty] = useState([0, 0, 0, 0, 0, 0, 0, 0]);
+  const [penaltySum, setPenaltySum] = useState(0);
   const prevPen = useRef((players && players[psq])?.pen ?? [0, 0, 0, 0, 0, 0, 0, 0]);
   const animalIconList = [
-    <GiTigerHead className='w-5 h-5 ml-1' color='#FF8911'/> ,
-    <FaCat className='w-5 h-5 ml-1' color='black'/>,
-    <GiSniffingDog  className='w-5 h-5 ml-1' color='#B2A59B'/>,
-    <GiDeer className='w-5 h-5 ml-1' color='#9B4444'/>,
-    <GiPig className='w-5 h-5 ml-1' color='#FFB0B0'/>,
-    <GiFox className='w-5 h-5 ml-1' color='#FC6736'/>,
-    <GiSheep className='w-5 h-5 ml-1' color='#A7D397'/>,
-    <GiSpermWhale className='w-5 h-5 ml-1' color='#0766AD'/> ,
-  ]  ;
+    <GiTigerHead className='w-5 h-5 ml-1' color='#FF8911' />,
+    <FaCat className='w-5 h-5 ml-1' color='black' />,
+    <GiSniffingDog className='w-5 h-5 ml-1' color='#B2A59B' />,
+    <GiDeer className='w-5 h-5 ml-1' color='#9B4444' />,
+    <GiPig className='w-5 h-5 ml-1' color='#FFB0B0' />,
+    <GiFox className='w-5 h-5 ml-1' color='#FC6736' />,
+    <GiSheep className='w-5 h-5 ml-1' color='#A7D397' />,
+    <GiSpermWhale className='w-5 h-5 ml-1' color='#0766AD' />,
+  ];
   const playState = useSelector(state => state.plays.game.state);
 
   useEffect(() => {
@@ -51,7 +52,23 @@ const PlayerView = ({ roomName, psq, key, pn = "빈 플레이어", activate = fa
     }
     // console.log(prevPen.current);
     // console.log(penalty);
+
   }, [psq, players, players?.[psq]?.pen]);
+
+  useEffect(() => {
+    let sum = 0;
+    for (let i of penalty) {
+      sum += i;
+    }
+
+    if (Object.keys(players).indexOf(psq) !== -1 && Object.keys(players).indexOf(psq) < (64 % Object.keys(players).length)) {
+      sum -= 1;
+    }
+
+    setPenaltySum(
+      Math.floor(64 / Object.keys(players).length) - sum
+    )
+  }, [penalty])
 
   const lottieArray =
     [orangeCircle,
@@ -85,18 +102,25 @@ const PlayerView = ({ roomName, psq, key, pn = "빈 플레이어", activate = fa
 
   return (
     <>
-      <div className={(c===6)?`bg-white border-2 border-yellow-400 rounded w-96 h-52 m-2 item item${c}`:`bg-white rounded w-96 h-52 m-2 item item${c}`}
+      <div className={`shadow shadow-md rounded w-96 h-52 m-2 item item${c} ` + ((c === 6) ? `bg-white border-3 border-blue-400 ` : (turnedPlayer.includes(psq)) ? `bg-white border-yellow-400 border-3` : `bg-white rounded`)}
         key={key}
         onDragStart={(e) => e.preventDefault()}
         onDragEnter={(e) => dragEnterHandler(e, psq)}
         onDragOver={(e) => dragOver(e, psq)}
         onDrop={(e) => dropHandler(e, psq, setCards)}
+      // 이 부분을 추가합니다.
       >
-        <div className={(playState>=1)&&(psq===nowTurnPlayer)?'border-4 border-red-700':''}>
+        <div className="overlay-top-right" style={{ position: 'absolute', top: '5px', right: '5px' }}>
+          총
+          <TbCards className="your-icon-class inline"></TbCards>
+          <span>{playState > 0 && penaltySum}</span>
+        </div>
+
+        <div className={(playState >= 1) && (psq === nowTurnPlayer) ? 'border-4 border-red-700' : ''}>
           <p className="text-2xl font-bold tracking-tight text-gray-900 dark:text-blue text-center">
-            {(psq===nowTurnPlayer)?<LuSwords className="inline-block"/>:''}
+            {(psq === nowTurnPlayer) ? <LuSwords className="inline-block" /> : ''}
             {pn}
-            {(psq===nowTurnPlayer)?<LuSwords className="inline-block"/>:''} 
+            {(psq === nowTurnPlayer) ? <LuSwords className="inline-block" /> : ''}
           </p>
         </div>
         <div className="flex flex-1">

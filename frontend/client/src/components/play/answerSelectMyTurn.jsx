@@ -14,7 +14,7 @@ const AnswerSelectMyTurn = ({ roomName, setIsMyTurn, playerCount, tp, animal, p1
   const dispatch = useDispatch();
   // 공격당한 플레이어의 선택지 발생 시 
   const handleAnswer = (val) => {
-    console.log(`[AnswerSelect] Answer : ${val}`);
+    // console.log(`[AnswerSelect] Answer : ${val}`);
     if (val === 1) {
       cardPassHandler();
       dispatch(changePlayState(4));
@@ -26,23 +26,23 @@ const AnswerSelectMyTurn = ({ roomName, setIsMyTurn, playerCount, tp, animal, p1
 
   // 카드 패스 선택시
   const cardPassHandler = () => {
-    console.log(`[cardPass] card Passed!`);
+    // console.log(`[cardPass] card Passed!`);
     socket.emit('cardPass', roomName, (result) => {
       setAnswerCard(result)
-      console.log(result)
-      console.log(`[cardPass] ${result}`)
+      // console.log(result)
+      // console.log(`[cardPass] ${result}`)
       setIsMyTurn(true);
     });
   }
 
   // 카드 정답 맞추기 
   const cardAnswerHandler = (answer) => {
-    console.log(`[cardAnswer] card Answered!`);
+    // console.log(`[cardAnswer] card Answered!`);
     socket.emit('cardReveal', roomName, answer);
   }
 
   useEffect(() => {
-    console.log(`##### [answerSelect] ${playerCount} / ${tp.length}`)
+    // console.log(`##### [answerSelect] ${playerCount} / ${tp.length}`)
   })
   return (
     <>

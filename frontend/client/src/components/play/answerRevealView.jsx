@@ -20,7 +20,7 @@ const AnswerRevealView = ({ gameResult, p2, realCard }) => {
   useEffect(() => {
     setTimeout(() => {
       thisTurnEnd();
-    }, 3500)
+    }, 2000)
   })
   const animals = [
     '호랑이', '고양이', '강아지', '고라니', '돼지', '여우', '양', '흑동고래'

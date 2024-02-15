@@ -96,7 +96,7 @@ const Rooms = () => {
       }
     });
   }).catch(error => {
-    console.log(error) 
+    // console.log(error) 
     Swal.fire({
       "text" : '유효하지 않은 접근입니다.',
       "confirmButtonColor" : '#3085d6'
@@ -185,7 +185,7 @@ const Rooms = () => {
       }
     });
   }).catch(error => {
-    console.log(error) 
+    // console.log(error) 
     Swal.fire({
       "text" : '유효하지 않은 접근입니다.',
       "confirmButtonColor" : '#3085d6'

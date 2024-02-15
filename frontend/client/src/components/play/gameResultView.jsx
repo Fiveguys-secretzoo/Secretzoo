@@ -44,7 +44,6 @@ const GameResultView = ({
       `,
       timer: 10000,
       timerProgressBar: true,
-      closeOnClickOutside: false
     }).then(() => {
       dispatch(changePlayState(0));
       setIsRoundStart(false);
