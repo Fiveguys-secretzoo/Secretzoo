@@ -120,6 +120,7 @@
 - 게임 진행 중 다른 유저들에게 보이는 화면
   <div align="center">
 <img src="/uploads/c2ca6f535556ff97e353bbfd1e557ec2/게임진행화면.gif" alt="게임진행화면" width="70%" height="70%">
+</div>
 
 #### 회원 정보
 - 회원 정보, 랭킹, 업적을 확인할 수 있습니다.
