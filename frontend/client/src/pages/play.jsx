@@ -744,6 +744,7 @@ const Play = () => {
             </div>
           </div>
         </div>
+        </div>
       </div>
     </>
   );
