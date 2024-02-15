@@ -35,6 +35,13 @@ const Rooms = () => {
 
   // 방만들기
   const createRoom = (roomName, roomPassword) => {
+    if(roomName.trim() === "" || roomName.length > 14){
+      Swal.fire({
+        "text": '방 제목 길이는 14자 이하이고 공백이 아니어야 합니다.',
+        "confirmButtonColor": '#3085d6'
+      });
+      return;
+    }
     if(sessionStorage.getItem('noLogin')){
       socket.emit('createRoom', roomName, roomPassword, user.userSequence, sessionStorage.getItem('userNickname'), (callback) => {
         if (callback) {

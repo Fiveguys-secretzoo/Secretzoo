@@ -13,10 +13,9 @@ import { SocketContext } from '../App';
 import { useNavigate } from "react-router-dom";
 import { motion, useDragControls } from 'framer-motion';
 import { Button } from 'flowbite-react';
-
-import {
-  HiOutlineArrowRight
-} from "react-icons/hi";
+import { GiCardPlay } from "react-icons/gi";
+import { 
+  HiOutlineArrowRight} from "react-icons/hi";
 import { useSelector, useDispatch } from 'react-redux';
 import {
   initRoomInfo,
@@ -609,7 +608,8 @@ const Play = () => {
 
   return (
     <>
-      <div className="h-screen w-full">
+    <div className='bg-play-bg w-screen h-screen bg-cover z-[-10]'>
+      <div className="h-screen w-full bg-custom-opacity">
         <div className='w-full h-screen flex flex-wrap justify-between'>
           {/* 내 턴 아닐 때 드래그 공유 */}
           {playState === 6 &&
@@ -735,11 +735,15 @@ const Play = () => {
             playerSlot(playerList)
           }
           {/* <img className="" src={require(`../assets/img/card/00/000.png`)} alt="" /> */}
-          <div className='flex items-center w-[40em] h-52 m-2 item item7 '>
-
+                      
+    
+          <div className='flex flex-col justify-center items-center w-[40em] h-52 m-2 item item7'>
+            <div class="animate-bounce w-32 h-32 text-[#B3A398]">
+            <GiCardPlay className='w-24 h-24' />
+            </div>
             {/* 카드 표현 부분 */}
 
-            <div className='flex max-h-[10em]'>
+            <div className='flex max-h-[10em] p-8'>
               {cards &&
                 cards.map((i, index) => (
                   <CardView
@@ -795,6 +799,7 @@ const Play = () => {
             </div>
           </div>
         </div>
+      </div>
       </div>
     </>
   );
