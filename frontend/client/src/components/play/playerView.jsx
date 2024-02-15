@@ -2,7 +2,8 @@ import PlayerContainer from './playerContainer';
 import './playerView.css';
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import Lottie from 'react-lottie';
+import { IoPersonOutline } from "react-icons/io5";
+import { LuSwords } from "react-icons/lu";import Lottie from 'react-lottie';
 
 import emptySlot from '../../assets/lottie/emptySlot.json'
 import orangeCircle from '../../assets/lottie/orangeCircle.json'
@@ -37,7 +38,9 @@ const PlayerView = ({ roomName, psq, key, pn = "빈 플레이어", activate = fa
     <GiFox className='w-5 h-5 ml-1' color='#FC6736'/>,
     <GiSheep className='w-5 h-5 ml-1' color='#A7D397'/>,
     <GiSpermWhale className='w-5 h-5 ml-1' color='#0766AD'/> ,
-  ]
+  ]  ;
+  const playState = useSelector(state => state.plays.game.state);
+
   useEffect(() => {
     const currentPen = (players && players[psq])?.pen ?? [0, 0, 0, 0, 0, 0, 0, 0];
     // console.log(`[currentPen]`);
@@ -82,16 +85,18 @@ const PlayerView = ({ roomName, psq, key, pn = "빈 플레이어", activate = fa
 
   return (
     <>
-      <div className={(c === 6) ? `bg-white border-4 border-red-700 rounded w-96 h-52 m-2 item item${c}` : `bg-white rounded w-96 h-52 m-2 item item${c}`}
+      <div className={(c===6)?`bg-white border-2 border-yellow-400 rounded w-96 h-52 m-2 item item${c}`:`bg-white rounded w-96 h-52 m-2 item item${c}`}
         key={key}
         onDragStart={(e) => e.preventDefault()}
         onDragEnter={(e) => dragEnterHandler(e, psq)}
         onDragOver={(e) => dragOver(e, psq)}
         onDrop={(e) => dropHandler(e, psq, setCards)}
       >
-        <div>
+        <div className={(playState>=1)&&(psq===nowTurnPlayer)?'border-4 border-red-700':''}>
           <p className="text-2xl font-bold tracking-tight text-gray-900 dark:text-blue text-center">
-            {(c === 6) ? 'YOUR VIDEO!' : pn}
+            {(psq===nowTurnPlayer)?<LuSwords className="inline-block"/>:''}
+            {pn}
+            {(psq===nowTurnPlayer)?<LuSwords className="inline-block"/>:''} 
           </p>
         </div>
         <div className="flex flex-1">

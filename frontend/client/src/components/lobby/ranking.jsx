@@ -106,7 +106,7 @@ const Ranking = () => {
                 }}>
             <div className='bg-gold-medal w-10 h-10 bg-contain bg-no-repeat'></div>
             <div className='flex-grow'>{ranking[0].nickname}</div>
-            <div className='mr-10'>점수 : {ranking[0].score.toFixed(2)}</div>
+            <div className='mr-10'><span className='text-[#B9B4C7]'>점수 : </span>{ranking[0].score.toFixed(2)}</div>
           </div>
           <div className={`py-1 px-4 my-2 w-[518px] mx-auto border-1 rounded transition-opacity duration-1000  ${isLoaded ? 'rotate-y' : ''} shadow flex items-center border-2`}
                 style={{
@@ -114,7 +114,7 @@ const Ranking = () => {
                 }}>
             <div className='bg-silver-medal w-10 h-10 bg-contain bg-no-repeat'></div>
             <div className='flex-grow'>{ranking[1].nickname}</div>
-            <div className='mr-10'>점수 : {ranking[1].score.toFixed(2)}</div>
+            <div className='mr-10'><span className='text-[#B9B4C7]'>점수 : </span> {ranking[1].score.toFixed(2)}</div>
           </div>
           <div className={`py-1 px-4 my-2 w-[518px] mx-auto border-1 rounded transition-opacity duration-1000  ${isLoaded ? 'rotate-y' : ''} shadow flex items-center border-2`}
               style={{
@@ -122,7 +122,7 @@ const Ranking = () => {
               }}>
             <div className='bg-bronze-medal w-10 h-10 bg-contain bg-no-repeat'></div>
             <div className='flex-grow'>{ranking[2].nickname}</div>
-            <div className='mr-10'>점수 : {ranking[2].score.toFixed(2)}</div>
+            <div className='mr-10'><span className='text-[#B9B4C7]'>점수 : </span> {ranking[2].score.toFixed(2)}</div>
           </div></div>)
           : (<div>isLoaded</div>)}
           {
@@ -131,17 +131,17 @@ const Ranking = () => {
                 style={{
                   animationDelay: `${(index+3) * 0.2}s`
                 }}>
-            <div className='w-10'>{index + 4}위</div>
+            <div className='w-10'><span className='text-[#B9B4C7]'>{index + 4}위</span></div>
             <div className='flex-grow'>{item.nickname} </div>
-            <div className='mr-10'>점수 : {item.score.toFixed(2)}</div>
+            <div className='mr-10'><span className='text-[#B9B4C7]'>점수 : </span>{item.score.toFixed(2)}</div>
             </div>
             ))
           }
           { sessionStorage.getItem('noLogin') ? (<div className='p-1 my-2 ml-10 text-center'>랭킹 서비스를 이용하시려면 로그인 하세요</div>) :
-            (<div className={`py-1 px-4  my-2 w-[518px] mx-auto border-2 border-red-500 rounded mt-10 transition-opacity duration-1000  ${isLoaded ? 'rotate-y' : ''} shadow flex items-center`}
+            (<div className={`py-1 px-4  my-2 w-[518px] mx-auto border-2 border-red-500 rounded mt-10 transition-opacity duration-1000  ${isLoaded ? 'rotate-y' : ''} shadow flex items-center justify-around`}
                 style={{
                   animationDelay: `${10 * 0.2}s`
-                }}><p>내 순위 : {myRank.data.rank+1}위 </p> <p>내 점수 : {myRank.data.score.toFixed(2)}</p></div>) 
+                }}><p><span className='text-[#B9B4C7]'>내 순위 : </span>{myRank.data.rank+1}위 </p> <p><span className='text-[#B9B4C7]'>내 점수: </span> {myRank.data.score.toFixed(2)}</p></div>) 
           }
         </div>
       </div>  
