@@ -8,7 +8,7 @@ import { initRoomName } from '../../store/playSlice'
 import { getUserInfo } from "../../store/userSlice";
 import { IoMdRefresh } from "react-icons/io";
 import { CiLock } from "react-icons/ci";
-
+import axios from "axios";
 /* 방 목록 */
 const Rooms = () => {
   const navigate = useNavigate();
@@ -35,6 +35,37 @@ const Rooms = () => {
 
   // 방만들기
   const createRoom = (roomName, roomPassword) => {
+    if(sessionStorage.getItem('noLogin')){
+      socket.emit('createRoom', roomName, roomPassword, user.userSequence, sessionStorage.getItem('userNickname'), (callback) => {
+        if (callback) {
+          dispatch(initRoomName(roomName));
+          sessionStorage.setItem("roomName", roomName);
+          Swal.fire({
+            "icon": 'success',
+            'title': '방 생성 완료!',
+            "text": '방에 입장 중입니다...',
+            "timer" : 1500,
+            'showConfirmButton': false,
+          });
+          navigate("/play");
+        } else {
+          setOpenMakeRoomModal(false);
+          Swal.fire({
+            "icon": 'error',
+            "title" : '방 입장 오류',
+            "text": '이미 있는 방제입니다. 다른방제를 선택해주세요',
+            "confirmButtonColor": '#3085d6'
+          });
+        }
+      });
+      return;
+    }
+    axios.get('https://spring.secretzoo.site/users/check-concurrent-login', {
+    headers: {
+      "Authorization" : sessionStorage.getItem('token_type') + ' ' + sessionStorage.getItem('access-token'),
+      "refresh-token" : sessionStorage.getItem('refresh-token'),
+    }
+  }).then(Response => {
     socket.emit('createRoom', roomName, roomPassword, user.userSequence, sessionStorage.getItem('userNickname'), (callback) => {
       if (callback) {
         dispatch(initRoomName(roomName));
@@ -57,10 +88,63 @@ const Rooms = () => {
         });
       }
     });
+  }).catch(error => {
+    console.log(error) 
+    Swal.fire({
+      "text" : '유효하지 않은 접근입니다.',
+      "confirmButtonColor" : '#3085d6'
+    });
+    sessionStorage.clear();
+    setTimeout(() => {
+      window.location.href = 'https://secretzoo.site';
+    },500);
+  })
+   
   }
 
   // 방입장 
   const enterRoom = (name, password) => {
+    if(sessionStorage.getItem('noLogin')){
+      socket.emit('enterRoom', name, password, user.userSequence, sessionStorage.getItem('userNickname'), (callback) => {
+        if (callback === 0) {
+          dispatch(initRoomName(name));
+          sessionStorage.setItem("roomName", name);
+          Swal.fire({
+            "title": '입장 중입니다...',
+            "timer" : 1500,
+            'showConfirmButton': false,
+          });
+          navigate("/play");
+        } else if(callback === 2){
+          setOpenEnterModal(false);
+          Swal.fire({
+            'icon' : 'error',
+            'title' : '방 입장 오류!',
+            "text": '방이 가득찼습니다. 다른 방을 이용해주세요.',
+            "confirmButtonColor": '#3085d6'
+          });
+        } else if(callback === 3){
+          setOpenEnterModal(false);
+          Swal.fire({
+            "text": '비밀번호가 틀렸습니다.',
+            "confirmButtonColor": '#3085d6'
+          });
+        } else if(callback === 4){
+          setOpenEnterModal(false);
+          Swal.fire({
+            "text": '이미 게임이 시작됐습니다.',
+            "confirmButtonColor": '#3085d6'
+          });
+        }
+      });
+      return;
+    }
+    axios.get('https://spring.secretzoo.site/users/check-concurrent-login', {
+    headers: {
+      "Authorization" : sessionStorage.getItem('token_type') + ' ' + sessionStorage.getItem('access-token'),
+      "refresh-token" : sessionStorage.getItem('refresh-token'),
+    }
+  }).then(Response => {
     socket.emit('enterRoom', name, password, user.userSequence, sessionStorage.getItem('userNickname'), (callback) => {
       if (callback === 0) {
         dispatch(initRoomName(name));
@@ -92,8 +176,19 @@ const Rooms = () => {
           "confirmButtonColor": '#3085d6'
         });
       }
-
     });
+  }).catch(error => {
+    console.log(error) 
+    Swal.fire({
+      "text" : '유효하지 않은 접근입니다.',
+      "confirmButtonColor" : '#3085d6'
+    });
+    sessionStorage.clear();
+    setTimeout(() => {
+      window.location.href = 'https://secretzoo.site';
+    },500);
+  })
+    
   }
 
   // 필터 
