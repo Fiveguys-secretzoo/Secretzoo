@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { axiosUpdateNickname, getUserInfo ,setNoLoginUserInfo } from '../../store/userSlice';
 import { Card, Progress, Label, Modal, Button, TextInput } from 'flowbite-react';
-
+import Swal from "sweetalert2";
 
 
 const Profile = () => {
@@ -36,7 +36,16 @@ const Profile = () => {
             <TextInput value={changeNickname} onChange={(e) => setChangeNickname(e.target.value)}></TextInput>
           </Modal.Body>
           <Modal.Footer>
-            <Button type="submit" onClick={() => { dispatch(axiosUpdateNickname(changeNickname)); setOpenNicknameModal(false) }}>수정</Button>
+            <Button type="submit" onClick={() => { 
+              if (changeNickname.length > 8) {
+                Swal.fire({
+                  "text" : '닉네임은 8자리 이하로 하여야 합니다.',
+                  "confirmButtonColor" : '#3085d6'
+                });
+                return;
+              }
+              dispatch(axiosUpdateNickname(changeNickname));
+              setOpenNicknameModal(false) }}>수정</Button>
           </Modal.Footer>
         </form>
       </Modal>
@@ -67,7 +76,7 @@ const Profile = () => {
           sessionStorage.getItem('noLogin') ? (<div></div>) :
           (<div className='exp'>
             <Label className='text-[0.7em]' value={'다음 레벨까지 남은 경험치 '+(user.nextExp-user.exp)+'('+(user.exp-user.prevExp)/(user.nextExp-user.prevExp)*100+')%'} />
-            <Progress progress={(user.exp-user.prevExp)/(user.nextExp-user.prevExp)*100} />
+            <Progress progress={((user.exp-user.prevExp)/(user.nextExp-user.prevExp)*100).toFixed(2)} />
           </div>)
         }
       </Card>

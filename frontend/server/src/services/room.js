@@ -309,7 +309,11 @@ const roomSocketMethods = () => {
   /* 채팅 메세지 이벤트 */
   const chatMessage = async (socket, io, rooms) => {
     socket.on('chatMessage', async (msg, user, roomName) => {
-      if(msg!==""){
+      // if(msg!==""){
+      //   console.log(`##### chat message : ${msg} / room : ${roomName}`);
+      //   io.to(roomName).emit('chatMessage', user , msg );
+      // }
+      if(msg.trim() !== "" && msg.length <= 30 ){
         console.log(`##### chat message : ${msg} / room : ${roomName}`);
         io.to(roomName).emit('chatMessage', user , msg );
       }
