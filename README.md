@@ -80,6 +80,9 @@
 </div>
 
 #### 소셜 로그인
+<div align="center">
+<img src="/uploads/4bb726934215b393b420a0cfda8cce6d/소셜로그인.gif" alt="소셜로그인" width="70%" height="70%">
+</div>
 
 #### 비회원 로그인
 
