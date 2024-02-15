@@ -102,10 +102,10 @@ const Navbar = () => {
       </Sidebar>
       <Button className="m-3" color='warning' onClick={() => logout()}>{sessionStorage.getItem('noLogin')? '나가기':'로그아웃'}</Button>
       <div className="flex justify-around">
-        <div onClick={() => setOpenUccModal(true)}>
+        <div>
           <div className='text-white text-center'>배경음악</div>
       {
-        isPlaying ? <GiSoundOn className='mt-3 w-20 h-20 hover:cursor-pointer' fill='white' onClick={togglePlay}></GiSoundOn> : <GiSoundOff className='w-20 h-20 hover:cursor-pointer' fill='white' onClick={togglePlay}></GiSoundOff>   
+        isPlaying ? <GiSoundOn className=' w-20 h-20 hover:cursor-pointer' fill='white' onClick={togglePlay}></GiSoundOn> : <GiSoundOff className='w-20 h-20 hover:cursor-pointer' fill='white' onClick={togglePlay}></GiSoundOff>   
       }
       </div>
         <div onClick={() => setOpenUccModal(true)}>

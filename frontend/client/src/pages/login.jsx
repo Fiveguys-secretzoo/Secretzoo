@@ -7,6 +7,7 @@ import NaverLogin from "../components/login/naverLogin";
 import '../style/login.css';
 import {css, keyframes} from '@emotion/react';
 import { useNavigate } from "react-router-dom";
+import { Alert } from "flowbite-react";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -37,6 +38,10 @@ const Login = () => {
         <div className="p-6 max-w-sm mx-2 min-h-[32em] min-w-[24em] bg-white rounded-xl shadow-md">
           <p className="text-center"> 비회원으로 참여하기</p>
           <NoLogin></NoLogin>
+          
+          <Alert color="info" className="mt-44">
+            <span className="font-medium">공지 : </span> 현재 네이버 로그인은 점검중입니다.
+          </Alert>
         </div>
         </div>
       </div>

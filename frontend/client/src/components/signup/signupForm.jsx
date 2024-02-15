@@ -35,7 +35,7 @@ const SignupForm = () => {
     }
     if (pass != passCheck) {
       Swal.fire({
-        "text" : '비밀번호가 잃치하지 않습니다.',
+        "text" : '비밀번호가 서로 일치하지 않습니다.',
         "confirmButtonColor" : '#3085d6'
       });
       return;
