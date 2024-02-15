@@ -47,17 +47,17 @@ const  SearchPlayerDetail = () => {
           <div>
           <GiAncientSword className="w-10 h-10 m-10" color='#B80000'></GiAncientSword>
             <p className="mb-2"><span className="font-bold">공격 점수:</span> {searchedUserRank.data.attackRank.score}</p>
-            <p className="mb-2"><span className="font-bold">공격 랭킹:</span> {searchedUserRank.data.attackRank.rank}</p>
+            <p className="mb-2"><span className="font-bold">공격 랭킹:</span> {searchedUserRank.data.attackRank.rank+1}</p>
           </div>
           <div>
           <GiMagicShield  className="w-10 h-10 m-10" color='#436850'></GiMagicShield>
             <p className="mb-2"><span className="font-bold">수비 점수:</span> {searchedUserRank.data.defenseRank.score}</p>
-            <p className="mb-2"><span className="font-bold">수비 랭킹:</span> {searchedUserRank.data.defenseRank.rank}</p>
+            <p className="mb-2"><span className="font-bold">수비 랭킹:</span> {searchedUserRank.data.defenseRank.rank+1}</p>
           </div>
           <div>
           <GiRunningShoe  className="w-10 h-10 m-10" color='#E36414'></GiRunningShoe>
             <p className="mb-2"><span className="font-bold">패스 점수:</span> {searchedUserRank.data.passRank.score}</p>
-            <p className="mb-2"><span className="font-bold">패스 랭킹:</span> {searchedUserRank.data.passRank.rank}</p>
+            <p className="mb-2"><span className="font-bold">패스 랭킹:</span> {searchedUserRank.data.passRank.rank+1}</p>
           </div>
         </div>
           <Button onClick={() => navigate('/lobby/searchPlayer')}> 뒤로가기</Button>
