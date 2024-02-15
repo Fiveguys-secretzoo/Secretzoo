@@ -92,6 +92,7 @@
 #### 게임플레이
 
 #### 회원 정보
+- 회원 정보, 회원 랭킹, 회원 업적
 <div align="center">
 <img src="/uploads/beb2898118c64b0ce56ab2f14ecdf310/내정보.gif" alt="내정보" width="70%" height="70%">
 </div>
