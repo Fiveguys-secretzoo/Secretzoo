@@ -131,17 +131,17 @@ const Ranking = () => {
                 style={{
                   animationDelay: `${(index+3) * 0.2}s`
                 }}>
-            <div className='w-10 h-8'>{index + 4}위</div>
+            <div className='w-10'>{index + 4}위</div>
             <div className='flex-grow'>{item.nickname} </div>
             <div className='mr-10'>점수 : {item.score.toFixed(2)}</div>
             </div>
             ))
           }
           { sessionStorage.getItem('noLogin') ? (<div className='p-1 my-2 ml-10 text-center'>랭킹 서비스를 이용하시려면 로그인 하세요</div>) :
-            (<div className={`py-1 px-4  my-2 w-[518px] mx-auto border-1 rounded transition-opacity duration-1000  ${isLoaded ? 'rotate-y' : ''} shadow flex items-center`}
+            (<div className={`py-1 px-4  my-2 w-[518px] mx-auto border-2 border-red-500 rounded mt-10 transition-opacity duration-1000  ${isLoaded ? 'rotate-y' : ''} shadow flex items-center`}
                 style={{
                   animationDelay: `${10 * 0.2}s`
-                }}>내 순위 : {myRank.data.rank+1}위 내 점수 : {myRank.data.score}</div>) 
+                }}><p>내 순위 : {myRank.data.rank+1}위 </p> <p>내 점수 : {myRank.data.score.toFixed(2)}</p></div>) 
           }
         </div>
       </div>  
