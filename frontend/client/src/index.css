@@ -27,12 +27,12 @@ body > iframe {
   src: url(https://cdn.jsdelivr.net/gh/webfontworld/NEXONGothic/MaplestoryBold.woff2) format('woff2');
   font-display: swap;
 }
-body {
+/* body {
   background-image: url("./assets/img/3.png");
   background-size: cover;
   margin: 0;
   font-family: Maplestory;
-}
+} */
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
