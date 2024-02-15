@@ -170,7 +170,7 @@ const playSocketMethods = () => {
       rooms[roomName].game.nt = rooms[roomName].game.from;
       rooms[roomName].game.to = '';
       io.to(roomName).emit('cardPass', rooms[roomName].game.state, rooms[roomName].game.tp, rooms[roomName].game.from, rooms[roomName].game.to, rooms[roomName].game.nt);
-      
+
     })
   }
 
@@ -207,7 +207,7 @@ const playSocketMethods = () => {
     let isSame = (Math.floor(card / 8) === bCard);
     let nowTurnPlayer;
 
-    
+
     rooms[roomName].game.tp = [];
     // 정답을 맞춘 경우
     if ((answer === 0 && isSame) || (answer === 2 && !isSame)) {
@@ -240,6 +240,7 @@ const playSocketMethods = () => {
       // score 기록 
       console.log(`##### [addScore] fromP : ${fromP} / toP : ${toP}`);
 
+      rooms[roomName].ps[fromP].sc.atks += 1;
       rooms[roomName].ps[fromP].sc[animals[cKind]].animalScore.atks += 1;
       rooms[roomName].ps[toP].sc.t += 1;
       rooms[roomName].ps[toP].sc.defa += 1;
@@ -369,13 +370,50 @@ const playSocketMethods = () => {
     for (let player in rooms[roomName].ps) {
       for (let k = 0; k < 8; k++) {
         if (rooms[roomName].ps[player].pen[k] === 4 || rooms[roomName].ps[rooms[roomName].nt].hand.length === 0) {
+          // 보내기 
+          let bestAttackPlayer = '';
+          let bestDefencePlayer = '';
+          let bestPassPlayer = '';
+
+          console.log(`[checkLoser] loser check... get best members...!`)
+          let maxAttackSuccess = 0;
+          let maxDefenceSuccess = 0;
+          let maxPass = 0;
+          let players = rooms[roomName].ps;
+          console.log(players);
+          for (let p in players) {
+            console.log(p);
+            console.log(players[p]);
+            if (players[p].sc.atks > maxAttackSuccess) {
+              maxAttackSuccess = players[p].sc.atks;
+              bestAttackPlayer = p;
+            }
+
+            if (players[p].sc.defs > maxDefenceSuccess) {
+              maxDefenceSuccess = players[p].sc.defs;
+              bestDefencePlayer = p;
+            }
+
+            if (players[p].sc.p > maxPass) {
+              maxPass = players[p].sc.p;
+              bestPassPlayer = p;
+            }
+          }
+          sendScore(rooms, roomName);
+
+
           setTimeout(() => {
-            sendScore(rooms, roomName);
             // 방 정보 초기화입니다.
             initRoomInfo(rooms, roomName);
-            io.to(roomName).emit("gameEnd", player);
+            console.log(`[sendGameEnd] ${player} ${bestAttackPlayer} ${bestDefencePlayer} ${bestPassPlayer} ${maxAttackSuccess} ${maxDefenceSuccess} ${maxPass}`);
+            io.to(roomName).emit("gameEnd", {
+              'loserpsq': player,
+              'bestAttackPlayer': bestAttackPlayer, 'maxAttackSuccess': maxAttackSuccess,
+              'bestDefencePlayer': bestDefencePlayer, 'maxDefenceSuccess': maxDefenceSuccess,
+              'bestPassPlayer': bestPassPlayer, 'maxPass': maxPass,
+            });
             return;
-          }, 2500)
+          }, 2000)
           // 점수 전송
         }
       }
