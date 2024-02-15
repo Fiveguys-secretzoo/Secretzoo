@@ -11,80 +11,75 @@ export const playSlice = createSlice({
     'createdDate': '',
     'card': [],
     'playerCount': 1,
-    'players': [], // 플레이어 정보 배열 
+    'players': {}, // 플레이어 정보 배열 
     'adminPlayer': '',
     'nowTurn': '',
-    'onBoard': {
-      "status": 0,  // 0 : 대기 , 1 : 주는 턴, 2 : 받는 턴, 3: 넘기는 턴 
+    'game': {
+      "state": 0,  // 0 : 대기 , 1 : 주는 턴, 2 : 받는 턴, 3: 넘기는 턴 
       "from": '',
       "to": '',
-      "cardBluff": '',
-      "card": '',
-      "turnedPlayer": [],
+      "bc": '',
+      "c": '',
+      "tp": [],
     }
   }, //TODO : change initialState
   reducers: {
+
+    // 게임 정보 초기화 
     initRoomInfo: (state, action) => {
       console.log(action);
       // state = JSON.parse(JSON.stringify(action.payload));
-      state.roomId = action.payload.roomId;
-      state.roomName = action.payload.roomName;
-      state.roomAddress = action.payload.roomAddess;
+      state.roomId = action.payload.rid;
+      state.roomName = action.payload.rnm;
+      state.roomAddress = action.payload.radr;
       state.status = action.payload.status;
-      state.createdDate = action.payload.createDate;
-      state.playerCount = action.payload.playerCount;
-      state.players = [...action.payload.players];
-      state.adminPlayer = action.payload.adminPlayer;
-      state.nowTurn = action.payload.nowTurn;
-      Object.keys(action.payload.onBoard).forEach(key => {
-        state.onBoard[key] = action.payload.onBoard[key];
+      state.createdDate = action.payload.cdt;
+      state.playerCount = action.payload.pc;
+      state.players = { ...action.payload.ps };
+      state.adminPlayer = action.payload.adm;
+      state.nowTurn = action.payload.nt;
+      Object.keys(action.payload.game).forEach(key => {
+        state.game[key] = action.payload.game[key];
       });
       console.log(state.roomName);
     },
 
-    initCardInfo: (state, action) => {
+    initRoomName: (state, action) => {
+      state.roomName = action.payload;
+      console.log(`##### [initRoomName] ${action.payload}`)
+    },
+
+    // 게임 카드 초기화 
+    initCardInfo: (state, action) => { // card 배열 
       state.card = [...action.payload];
     },
 
-    addPlayer: (state, action) => {
-      let isAlreadyIn = false;
-      for (let player of state.players) {
-        console.log(player);
-
-        if (player.playerId === action.payload.playerId) {
-          isAlreadyIn = true;
-          break;
-        }
-      }
-      if (!isAlreadyIn) {
-        state.players = [...state.players, action.payload];
-      }
-      console.log(`##### player added, ${action.payload}`)
-      console.log(state.players);
+    // player 입장
+    modifyPlayers: (state, action) => { // ps 배열
+      state.players = { ...action.payload };
+      state.playerCount = Object.keys(action.payload).length;
+      console.log(`[modifyPlayers] playerCount : ${Object.keys(action.payload).length}`)
     },
 
-    removePlayer: (state, action) => {
-      console.log(`remove player to store [${action.payload}]`);
-      state.players = [...state.players.filter((e) => (
-        e.playerId !== action.payload
-      ))]
-    },
-
+    // play State 변경
     changePlayState: (state, action) => {
       console.log(`change status to store [${action.payload}]`);
-      state.onBoard.status = action.payload;
+      state.game.state = action.payload;
     },
 
+    // 방장 변경
     changeAdmin: (state, action) => {
       console.log(`change admin to store [${action.payload}]`);
       state.adminPlayer = action.payload.adminPlayer;
     },
 
+    // now Turn 변경 
     changeNowTurn: (state, action) => {
       console.log(`Now Turn has been changed to ${action.payload}`);
       state.nowTurn = action.payload;
     },
 
+    // 손에서 카드 없애기
     removeCardFromHand: (state, action) => {
       console.log(`removed card ${action.payload.card} from ${action.payload.pid}`);
       state.players[state.players.indexOf(action.payload.pid)].hand
@@ -92,53 +87,77 @@ export const playSlice = createSlice({
           .filter((e) => e !== action.payload.card)
     },
 
+    // 카드 상태 변경
     changeCardStatus: (state, action) => {
       console.log(`change card drag to store [${action.payload.from}] [${action.payload.card}]`);
-      state.onBoard.from = action.payload.from;
-      state.onBoard.card = action.payload.card;
+      state.game.from = action.payload.from;
+      state.game.c = action.payload.card;
     },
 
+    // 카드 드래그 시 변경
     changeCardDrag: (state, action) => {
       console.log(`[cardDrag] changed / from : [${action.payload.from}] to : [${action.payload.to}]`)
-      state.onBoard.from = action.payload.from;
-      state.onBoard.to = action.payload.to;
+      state.game.from = action.payload.from;
+      state.game.to = action.payload.to;
     },
 
+    // 카드 드롭 시 변경
     changeCardDrop: (state, action) => {
       console.log(`[cardDrop] changed / from : [${action.payload.from}] to : [${action.payload.to}]`)
-      state.onBoard.from = action.payload.from;
-      state.onBoard.to = action.payload.to;
+      state.game.from = action.payload.from;
+      state.game.to = action.payload.to;
     },
 
+    // 카드 속이기 시 변경
     changeCardBluff: (state, action) => {
       console.log(`[cardBluff] bluffed to [${action.payload}]`)
-      state.onBoard.cardBluff = action.payload;
+      state.game.bc = action.payload;
     },
 
-    changeInitOnBoardCard: (state, action) => {
-      state.onBoard.from = '';
-      state.onBoard.to = '';
-      state.onBoard.cardBluff = -1;
-      state.onBoard.card = -1;
+    // 게임 카드 초기화 
+    changeInitgameCard: (state, action) => {
+      state.game.from = '';
+      state.game.to = '';
+      state.game.bc = -1;
+      state.game.c = -1;
     },
 
+    // 턴 보냈던 플레이어 초기화 
     initTurnedPlayer: (state, action) => {
-      state.onBoard.turnedPlayer = [];
+      state.game.tp = action.payload;
+      console.log(`[initTurnedPlayer]`)
+      console.log(state.game.tp);
     },
 
-    addTurnedPlayer: (state, action) => {
-      state.onBoard.turnedPlayer = [...state.onBoard.turnedPlayer, action.payload]
+    // 턴 보냈던 플레이어 추가
+    changeTurnedPlayer: (state, action) => {
+      console.log(`[turnedPlayer] changed`)
+      console.log(action.payload)
+      state.game.tp = [...action.payload]
     },
 
-    addPenalty: (state, action) => {
-      let playerIdx;
-      for (let k = 0; k < state.players.length; k++) {
-        if (state.players[k].playerId === action.payload.pid) {
-          playerIdx = k;
-          break;
-        }
-      }
-      state.players[playerIdx].penalty[action.payload.penalty]++;
+    // 패널티 추가
+    changePenalty: (state, action) => { // psq, penalty
+      console.log(`#####[changePenalty] payload`)
+      console.log(action.payload);
+      state.players[action.payload.psq].pen = [...action.payload.pen];
+      console.log(state.players[action.payload.psq].pen);
+    },
+
+    // 카드 드롭 // TODO 받은거 달아주기 
+    dropCard: (state, action) => {
+      let filtered = state.players[action.payload.pid].card.filter((e) => e !== action.payload.card);
+      state.players[action.payload.pid].hand = filtered;
+    },
+
+    changeCardFromHand: (state, action) => {
+      console.log(`##### [changeCardFromHand] activated.`)
+      console.log(action.payload.playerSequenceNumber);
+      console.log(state);
+      console.log(state.players);
+      console.log(state.players[action.payload.playerSequenceNumber].hand);
+      console.log(action.payload.hand);
+      state.players[action.payload.playerSequenceNumber].hand = [...action.payload.hand]
     }
 
 
@@ -151,8 +170,8 @@ export const playSlice = createSlice({
 export const {
   initRoomInfo,
   initCardInfo,
-  addPlayer,
-  removePlayer,
+  initRoomName,
+  modifyPlayers,
   changePlayState,
   changeAdmin,
   changeNowTurn,
@@ -161,9 +180,11 @@ export const {
   changeCardDrag,
   changeCardDrop,
   changeCardBluff,
-  changeInitOnBoardCard,
+  changeInitgameCard,
   initTurnedPlayer,
-  addTurnedPlayer,
-
+  changeTurnedPlayer,
+  dropCard,
+  changePenalty,
+  changeCardFromHand,
 } = playSlice.actions;
 export default playSlice.reducer;

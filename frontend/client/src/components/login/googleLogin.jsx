@@ -3,9 +3,10 @@ import axios from 'axios';
 import googleLoginImg from '../../assets/img/login/googleLoginImg.png';
 
 const requsetGoogleLogin = () => {
-  window.location.href='https://secretzoo.site/api/oauth2/authorization/google';
+  window.location.href='https://spring.secretzoo.site/oauth2/authorization/google';
 }
 
+/* 구글로그인 */
 const GoogleLogin = () => {
   return (
     <>

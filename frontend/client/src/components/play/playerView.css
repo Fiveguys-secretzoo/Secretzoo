@@ -1,0 +1,19 @@
+.container {
+    position: relative;
+  }
+  
+  .item {
+    position: absolute;
+  }
+  
+  .item1 { top: 0; left: 0; }
+  .item2 { top: 0; left: 36%; }
+  .item3 { top: 0; right: 0; }
+  .item4 { top: 33.33%; left: 0;}
+  .item5 { top: 33.33%; right: 0; }
+  .item6 { top: 66.66%; left: 0; }
+  .item7 { top: 66.66%; left: 30%; }
+  .item8 { top: 66.66%; right: 0; }
+  .item9 { top: 33.33%; left: 39%; }
+
+  

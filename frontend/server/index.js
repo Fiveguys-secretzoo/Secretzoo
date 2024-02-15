@@ -40,10 +40,10 @@ async function main() {
     checkLoser,
   } = playMethods;
 
+  const handleException = (socket) => { };
   //리액트 서버
-  const serverURL = "http://localhost:3000";
-  // const serverURL = 'http://react-app:3000'
-  // const serverURL = 'https://secretzoo.site'
+  // const serverURL = "http://localhost:3000";
+  const serverURL = 'https://secretzoo.site'
   // cors 설정
   app.use(
     cors({
@@ -65,13 +65,6 @@ async function main() {
   });
 
   const rooms = {};
-
-  const handleException = (io, err, message) => {
-    console.log(err);
-    console.log(message);
-    io.emit("serverClosed", "err");
-    process.exit(1);
-  };
   /* Socket 연결 후 부분 */
   io.on("connection", async (socket) => {
     let disconnectedTimeout;
@@ -93,20 +86,28 @@ async function main() {
     cardBluffSelect(socket, io, rooms);
     passingTurnStart(socket, io, rooms);
     cardReveal(socket, io, rooms);
-    checkLoser(socket, io, rooms);
 
     // test codes
     testRoomsInfo(socket, io, rooms);
     disconnected(socket, io, rooms);
 
     process.on("uncaughtException", (err) => {
-      handleException(io, err, "서버, 에러로 인한 죽음의 메아리 발동 ");
+      console.log(err);
+      console.log("서버, 죽음의 메아리 발동");
+      io.emit("serverClosed", "err");
+      process.exit(1);
     });
     process.on("exit", (err) => {
-      handleException(io, err, "서버, 죽음의 메아리 발동 ");
+      console.log(err);
+      console.log("서버, 죽음의 메아리 발동");
+      io.emit("serverClosed", "close");
+      process.exit(1);
     });
     process.on("SIGINT", (err) => {
-      handleException(io, err, "서버, 죽음의 메아리 명령어 발동 ");
+      console.log(err);
+      console.log("서버, 죽음의 메아리 발동");
+      io.emit("serverClosed", "close");
+      process.exit(1);
     });
   });
 
