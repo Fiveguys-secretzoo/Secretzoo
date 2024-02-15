@@ -24,6 +24,7 @@ public class RestControllerExceptionHandler {
     @ExceptionHandler(DuplicateIdentifierException.class) // 아이디, 이메일 중복 예외 처리
     public ResponseEntity<ErrorResponse> handleDuplicatedException(
         DuplicateIdentifierException exception) {
+        log.debug("DuplicateIdentifierException Handler 발동");
         return ResponseEntity.status(HttpStatus.CONFLICT).body(
             new ErrorResponse("ERROR_40901", exception.getMessage()));
     }
