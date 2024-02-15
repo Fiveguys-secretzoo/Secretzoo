@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { GiAncientSword, GiMagicShield, GiRunningShoe  } from "react-icons/gi";
+import { Button } from 'flowbite-react';
+
 const  SearchPlayerDetail = () => {
   const { userSequence } = useParams();
+  const navigate = useNavigate();
   const [searchedUserInfo, setSearchedUserInfo] = useState(null);
   const [searchedUserRank, setSearchUserRank] = useState(null);
 
@@ -23,29 +26,6 @@ const  SearchPlayerDetail = () => {
   if(!searchedUserInfo || !searchedUserRank){
     return(<div>로딩중...</div>)
   }
-  // return (
-  //   <div className='flex flex-col justify-center text-center text-white'>
-  //     {/* <h1>검색한 유저 정보</h1> */}
-  //     <img
-  //         src={require(`../assets/img/profile/Untitled ${searchedUserInfo.data.profileNumber}.png`)}
-  //         alt="프로필 이미지"
-  //         className="w-32 rounded-full mx-auto"
-  //       />
-  //       <p>닉네임 : {searchedUserInfo.data.nickname}</p>
-  //       <p>레벨 : {searchedUserInfo.data.level}</p>
-  //       <p>업적 : {searchedUserInfo.data.mainReward}</p>
-  //       <p>이름 : {searchedUserInfo.data.name}</p>
-  //       <p>공격점수 : {searchedUserRank.data.attackRank.score}</p>
-  //       <p>공격 랭킹 : {searchedUserRank.data.attackRank.rank}</p>
-  //       <p>수비점수 : {searchedUserRank.data.defenseRank.score}</p>
-  //       <p>수비 랭킹 : {searchedUserRank.data.defenseRank.rank}</p>
-  //       <p>패스점수 : {searchedUserRank.data.passRank.score}</p>
-  //       <p>패스 랭킹: {searchedUserRank.data.passRank.rank}</p>
-  //       <p>총 라운드 : {searchedUserInfo.data.totalRound}</p>
-  //       <p>총 턴 : {searchedUserInfo.data.totalTurn}</p>
-
-  //   </div>
-  // );
   return (
     <div className='flex flex-col items-center justify-center text-white py-10'>
       <h1 className="text-3xl font-bold mb-6">플레이어 정보</h1>
@@ -80,6 +60,7 @@ const  SearchPlayerDetail = () => {
             <p className="mb-2"><span className="font-bold">패스 랭킹:</span> {searchedUserRank.data.passRank.rank}</p>
           </div>
         </div>
+          <Button onClick={() => navigate('/lobby/searchPlayer')}> 뒤로가기</Button>
       </div>
 
   );

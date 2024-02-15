@@ -48,6 +48,7 @@ import AnswerSelectNotTurn from '../components/play/answerSelectNotTurn';
 import PassTurnCardView from '../components/play/passTurnCardView';
 import AnswerRevealView from '../components/play/answerRevealView';
 import GameResultView from '../components/play/gameResultView';
+import Swal from 'sweetalert2';
 
 const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'https://openvidu.secretzoo.site/';
 
@@ -57,7 +58,6 @@ const Play = () => {
   const socket = useContext(SocketContext);
   const dragItem = useRef();
   const navigate = useNavigate();
-
   const playerSequence = useSelector(state => state.user.userInfo.userSequence);
   // redux related const.
   const roomInfo = useSelector(state => state.plays);
@@ -99,6 +99,15 @@ const Play = () => {
     '고래',
   ];
 
+  useEffect(() => {
+    if(sessionStorage.getItem("userSequence")===null || sessionStorage.getItem('roomName')===null) {
+      Swal.fire({
+        "text" : '로그인하세요',
+        "confirmButtonColor" : '#3085d6'
+      });
+      navigate('/');
+    }
+  },[])
 
   const imageRoute = (i) => {
     return require(`../assets/img/card/0${Math.floor(i / 8)}/00${i % 8}.png`);
@@ -679,6 +688,7 @@ const Play = () => {
             {/* 카드 표현 부분 */}
             
             <div className='flex max-h-[10em]'>
+            <div className='flex max-h-[10em]'>
               {cards &&
                 cards.map((i, index) => (
                   <CardView
@@ -733,6 +743,7 @@ const Play = () => {
               onClick={leaveRoom}>퇴장</Button>
             </div>
           </div>
+        </div>
         </div>
       </div>
     </>
