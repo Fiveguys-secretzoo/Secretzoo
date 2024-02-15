@@ -58,6 +58,7 @@ export const playSlice = createSlice({
     modifyPlayers: (state, action) => { // ps 배열
       state.players = { ...action.payload };
       state.playerCount = Object.keys(action.payload).length;
+      console.log(`[modifyPlayers] playerCount : ${Object.keys(action.payload).length}`)
     },
 
     // play State 변경
@@ -128,6 +129,8 @@ export const playSlice = createSlice({
 
     // 턴 보냈던 플레이어 추가
     changeTurnedPlayer: (state, action) => {
+      console.log(`[turnedPlayer] changed`)
+      console.log(action.payload)
       state.game.tp = [...action.payload]
     },
 

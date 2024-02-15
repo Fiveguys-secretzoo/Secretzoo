@@ -43,7 +43,7 @@ const MyReward = () => {
             <div className='flex justify-center space-x-10 space-y-2 shadow-md'>
               <img
               key={myRewards.data[reward].rewardsId}
-              // src={require(`../../assets//img/reward/${myRewards.data[reward].rewardsId}.png`)}
+              src={require(`../../assets//img/reward/${myRewards.data[reward].rewardsId}.png`)}
               alt={`업적 이미지 ${myRewards.data[reward].rewardsId}`}
               className="w-16 m-2 rounded-full hover:cursor-pointer border-2 hover:border-blue-500"
               />
@@ -51,8 +51,8 @@ const MyReward = () => {
                 <p className='font-bold'>{myRewards.data[reward].rewardsName}</p>
                 <p className='w-[25em]'>{(myRewards.data[reward].donePlayerCount / myRewards.totalPlayer * 100).toFixed(2)}%의 플레이어가 이 업적을 달성했습니다.</p>
               </div>
-              <div>
-                <p>{myRewards.data[reward].date[0]}년 {myRewards.data[reward].date[1]}월{myRewards.data[reward].date[2]}일</p>
+              <div className='!ml-0 w-32'>
+                <p className='text-sm'>{myRewards.data[reward].date[0]}년 {myRewards.data[reward].date[1]}월{myRewards.data[reward].date[2]}일</p>
               </div>
             </div>
           ))
@@ -65,7 +65,7 @@ const MyReward = () => {
             <div className='flex justify-center space-x-10 my-2 shadow-md'>
                <img
               key={myRewards.data[reward].rewardsId}
-              // src={require(`../../assets//img/reward/${myRewards.data[reward].rewardsId}.png`)}
+              src={require(`../../assets//img/reward/${myRewards.data[reward].rewardsId}.png`)}
               alt={`업적 이미지 ${myRewards.data[reward].rewardsId}`}
               className="w-16 m-2 rounded-full hover:cursor-pointer border-2 hover:border-blue-500"
               />
