@@ -20,7 +20,7 @@ const PassTurnCardView = ({ bCard, isMyTurn, img, psq, playState, answerCard, im
 
   const SwalFire = (answerCard, images) => {
     dispatch(changeCardStatus({ 'from': psq, 'card': bCard + 64 }));
-    console.log(answerCard);
+    // console.log(answerCard);
     Swal.fire({
       iconHtml: `<img src="${images[answerCard]}"></img>`,
       text:`쉿... 받은 카드는 ${animals[Math.floor(answerCard/8)]} 입니다.`,

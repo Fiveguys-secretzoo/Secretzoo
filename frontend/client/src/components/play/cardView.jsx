@@ -17,7 +17,7 @@ const CardView = ({ key, src, index, card, cardlength, isMyTurn, playState, psq 
         onDragStart={(e) => dragStart(e, card)}
         key={index}
         draggable
-        className="w-full ml-[-2em] hover:scale(1.3) hover:-translate-y-20 hover:rotate-[20deg] hover:z-50 transition-transform duration-300"
+        className="w-full border-2 border-black ml-[-2em] hover:scale(1.3) hover:-translate-y-20 hover:rotate-[20deg] hover:z-50 transition-transform duration-300"
         style={{ zIndex: cardlength - index, userSelect: false, }}
       >
         <img key={index} className="rounded-md w-full" src={src} alt="" />

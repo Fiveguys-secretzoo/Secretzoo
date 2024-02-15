@@ -413,7 +413,7 @@ const playSocketMethods = () => {
               'bestPassPlayer': bestPassPlayer, 'maxPass': maxPass,
             });
             return;
-          }, 2000)
+          }, 2200)
           // 점수 전송
         }
       }
