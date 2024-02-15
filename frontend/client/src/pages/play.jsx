@@ -560,8 +560,8 @@ const Play = () => {
 
   return (
     <>
-      <div className="h-screen">
-        <div className='w-screen h-[100%] flex flex-wrap justify-between container'>
+      <div className="h-screen w-full">
+        <div className='w-full h-screen flex flex-wrap justify-between'>
           {/* 내 턴 아닐 때 드래그 공유 */}
 
           {/* 내 턴일 때 드롭 시 버튼 */}
@@ -684,7 +684,7 @@ const Play = () => {
               }
             </div>
           </div>
-            <div className='flex bg-white rounded-lg w-96 h-52 m-2 item item8'>
+            <div className='flex bg-white rounded-lg w-96 h-52 m-2 item item8 opacity-80'>
               <div className='flex-col w-[90%]'>
               <h1>Chat Application</h1>
                 <div className="message-list bg-white"  
