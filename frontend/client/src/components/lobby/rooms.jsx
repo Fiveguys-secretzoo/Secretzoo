@@ -100,7 +100,7 @@ const Rooms = () => {
     socket.emit('requestRoomsInfo', (roomsInfo) => {
       let newRooms = {};
       Object.keys(roomsInfo).forEach((key) => {
-        if (roomsInfo[key].status === 'playing') {
+        if (roomsInfo[key].status === 1) {
           newRooms[key] = roomsInfo[key];
         }
       });
@@ -112,7 +112,7 @@ const Rooms = () => {
     socket.emit('requestRoomsInfo', (roomsInfo) => {
       let newRooms = {};
       Object.keys(roomsInfo).forEach((key) => {
-        if (roomsInfo[key].status === 'wait') {
+        if (roomsInfo[key].status === 0) {
           newRooms[key] = roomsInfo[key];
         }
       });
