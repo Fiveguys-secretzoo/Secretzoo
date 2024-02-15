@@ -102,9 +102,10 @@
 <img src="/uploads/5675f0b90adb9783ed6c2e8ea940b36a/랭킹.gif" alt="랭킹" width="70%" height="70%">
 </div>
 
-
 #### 유저 검색 및 조회
-
+<div align="center">
+<img src="/uploads/18b7aede7c7b340c23da122ae2887616/전적검색.gif" alt="전적검색" width="70%" height="70%">
+</div>
 
 <br>
 <br>
