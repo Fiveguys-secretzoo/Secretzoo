@@ -123,8 +123,10 @@ export const playSlice = createSlice({
     },
 
     // 턴 보냈던 플레이어 초기화 
-    initTurnedPlayer: (state) => {
-      state.game.tp = [];
+    initTurnedPlayer: (state, action) => {
+      state.game.tp = action.payload;
+      console.log(`[initTurnedPlayer]`)
+      console.log(state.game.tp);
     },
 
     // 턴 보냈던 플레이어 추가

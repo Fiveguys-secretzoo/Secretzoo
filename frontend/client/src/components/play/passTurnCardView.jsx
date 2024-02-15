@@ -16,10 +16,10 @@ const PassTurnCardView = ({ bCard, isMyTurn, img, psq, playState, answerCard, im
     if (playState !== 4 || !isMyTurn) {
       event.preventDefault();
     }
-    dispatch(changeCardStatus({ 'from': psq, 'card': item }));
   }
 
   const SwalFire = (answerCard, images) => {
+    dispatch(changeCardStatus({ 'from': psq, 'card': bCard + 64 }));
     console.log(answerCard);
     Swal.fire({
       iconHtml: `<img src="${images[answerCard]}"></img>`,
@@ -36,6 +36,7 @@ const PassTurnCardView = ({ bCard, isMyTurn, img, psq, playState, answerCard, im
         SwalFire(answerCard, images)
       }
       <div
+        onClick={(e)=> e.preventDefault()}
         onDragStart={(event) => dragBluffStart(event, 64 + bCard)}
         draggable={isMyTurn}
         className="w-[8em] ml-[-4em] hover:scale(1.3) hover:-translate-y-20 hover:rotate-[20deg] hover:z-50 transition-transform duration-300 "

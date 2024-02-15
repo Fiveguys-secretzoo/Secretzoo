@@ -143,9 +143,6 @@ const playSocketMethods = () => {
       }
 
 
-
-
-
       console.log(`##### card Bluffed to ${bCard}, to room ${roomName}`)
 
       io.to(roomName).emit('cardBluffSelect', rooms[roomName].game.state, rooms[roomName].game.tp, from, to, bCard);
@@ -191,6 +188,7 @@ const playSocketMethods = () => {
       console.log(result);
       addPenalty(io, rooms, roomName, result.nowTurn);
 
+
       io.to(roomName).emit('cardReveal', rooms[roomName].game.state, rooms[roomName].game.c, result.ans, result.nowTurn);
       checkLoser(socket, io, rooms, roomName);
     })
@@ -209,6 +207,8 @@ const playSocketMethods = () => {
     let isSame = (Math.floor(card / 8) === bCard);
     let nowTurnPlayer;
 
+    
+    rooms[roomName].game.tp = [];
     // 정답을 맞춘 경우
     if ((answer === 0 && isSame) || (answer === 2 && !isSame)) {
 
@@ -255,7 +255,6 @@ const playSocketMethods = () => {
       nowTurnPlayer = rooms[roomName].game.to;
       rooms[roomName].game.from = rooms[roomName].game.to;
       rooms[roomName].nt = rooms[roomName].game.to;
-      rooms[roomName].game.tp = [];
       return { 'ans': false, 'nowTurn': nowTurnPlayer };
     }
   }

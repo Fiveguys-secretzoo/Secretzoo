@@ -42,7 +42,7 @@ const PlayerContainer = () => {
     if (dragItem < 64) {
       dropCard({ 'psq': psq, 'card': dragItem });
     }
-    alert(`${dragItem} drop to ${psq}`);
+    // alert(`${dragItem} drop to ${psq}`);
     socket.emit("cardDrop", roomName, playerSequenceNumber, dragFrom, psq, dragItem, (hand) => {
       dispatch(changeCardFromHand({ playerSequenceNumber: playerSequenceNumber, hand: hand }));
       setCards([...hand]);
