@@ -205,6 +205,7 @@ const Play = () => {
   }
 
   const cardRevealResponseHandler = (state, card, ans, nowTurnPlayer) => {
+    dispatch(initTurnedPlayer());
     if (nowTurnPlayer === playerSequence) {
       setIsMyTurn(true);
     } else {
@@ -215,7 +216,6 @@ const Play = () => {
     console.log("card : " + card);
     setAnswerCard(card);
     dispatch(changeNowTurn(nowTurnPlayer))
-    dispatch(initTurnedPlayer());
     // console.log(`card Answer Response!`);
   }
 
@@ -596,6 +596,7 @@ const Play = () => {
                 playerCount={playerCount}
                 tp={turnedPlayer}
                 animal={animalList[bCard]}
+                setAnswerCard={setAnswerCard}
               ></AnswerSelectMyTurn>
             </SelectScreen>
           }
@@ -622,6 +623,8 @@ const Play = () => {
                 img={images[64]}
                 psq={playerSequence}
                 playState={playState}
+                answerCard={answerCard}
+                images={images}
               ></PassTurnCardView>
             </SelectScreen>
           }

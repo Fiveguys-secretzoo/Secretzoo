@@ -167,13 +167,13 @@ const playSocketMethods = () => {
         rooms[roomName].game.tp.push(rooms[roomName].game.from);
       }
 
+      callback(rooms[roomName].game.c);
       // to, from, nt 바꾸기 
       rooms[roomName].game.from = rooms[roomName].game.to;
       rooms[roomName].game.nt = rooms[roomName].game.from;
       rooms[roomName].game.to = '';
-
       io.to(roomName).emit('cardPass', rooms[roomName].game.state, rooms[roomName].game.tp, rooms[roomName].game.from, rooms[roomName].game.to, rooms[roomName].game.nt);
-      callback(rooms[roomName].game.c);
+      
     })
   }
 

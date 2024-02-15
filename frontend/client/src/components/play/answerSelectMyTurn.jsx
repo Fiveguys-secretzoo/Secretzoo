@@ -8,7 +8,7 @@ import { FaRegFaceGrinTongueSquint  } from "react-icons/fa6";
 import { GiTigerHead, GiSniffingDog, GiDeer, GiPig, GiFox, GiSheep, GiSpermWhale} from "react-icons/gi";
 import { FaCat } from "react-icons/fa";
 
-const AnswerSelectMyTurn = ({ roomName, setIsMyTurn, playerCount, tp, animal }) => {
+const AnswerSelectMyTurn = ({ roomName, setIsMyTurn, playerCount, tp, animal, setAnswerCard }) => {
 
   const socket = useContext(SocketContext);
   const dispatch = useDispatch();
@@ -28,6 +28,8 @@ const AnswerSelectMyTurn = ({ roomName, setIsMyTurn, playerCount, tp, animal }) 
   const cardPassHandler = () => {
     console.log(`[cardPass] card Passed!`);
     socket.emit('cardPass', roomName, (result) => {
+      setAnswerCard(result)
+      console.log(result)
       console.log(`[cardPass] ${result}`)
       setIsMyTurn(true);
     });
