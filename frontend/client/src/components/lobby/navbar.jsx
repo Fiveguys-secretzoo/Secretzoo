@@ -1,10 +1,10 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Sidebar, Button  } from 'flowbite-react';
+import { Sidebar, Button, Label, Modal} from 'flowbite-react';
 import { IoGameController, IoTrophy  } from 'react-icons/io5';
 import { HiUser } from 'react-icons/hi'
 import { IoMdSearch } from "react-icons/io";
-import { GiSoundOff, GiSoundOn} from "react-icons/gi";
+import { GiSoundOff, GiSoundOn, GiBlackBook } from "react-icons/gi";
 import bg from "../../assets/sound/bg.mp3";
 import { axiosLogout, resetUserInfo } from "../../store/userSlice";
 import { useDispatch } from "react-redux";
@@ -60,6 +60,20 @@ const Navbar = () => {
     audioRef.current.play();
   }
 
+  const [openUccModal, setOpenUccModal ] = useState(false);
+  const UccModal = () => {
+    return (
+      <Modal show={openUccModal} size="5xl" onClose={() => setOpenUccModal(false)}>
+        <Modal.Body className="mx-auto">
+          <iframe width="840" height="472.5" src="https://www.youtube.com/embed/EUKl8jdUuB4?si=4f_YFYE8MhTV-Vwy" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </Modal.Body>
+        <Modal.Footer>
+        <Button color="gray" onClick={() => setOpenUccModal(false)}>닫기</Button>
+        </Modal.Footer>
+      </Modal>
+    )
+  }
+
   return (
     <>
       <Sidebar aria-label="Default sidebar example" className="w-full">
@@ -81,14 +95,19 @@ const Navbar = () => {
         </Sidebar.Items>
       </Sidebar>
       <Button className="m-3" color='warning' onClick={() => logout()}>{sessionStorage.getItem('noLogin')? '나가기':'로그아웃'}</Button>
-      <div className="flex justify-center">
+      <div className="flex justify-around">
       {
-        isPlaying ? <GiSoundOn className='w-20 h-20 hover:cursor-pointer' fill='white' onClick={togglePlay}></GiSoundOn> : <GiSoundOff className='w-20 h-20 hover:cursor-pointer' fill='white' onClick={togglePlay}></GiSoundOff>   
+        isPlaying ? <GiSoundOn className='mt-3 w-20 h-20 hover:cursor-pointer' fill='white' onClick={togglePlay}></GiSoundOn> : <GiSoundOff className='w-20 h-20 hover:cursor-pointer' fill='white' onClick={togglePlay}></GiSoundOff>   
       }
+        <div onClick={() => setOpenUccModal(true)}>
+          <div className='text-[#dcc59c] text-center'>룰 설명</div>
+          <GiBlackBook className='w-16 h-16 hover:cursor-pointer' fill='#dcc59c'></GiBlackBook>
+        </div>
       </div>
       <audio ref={audioRef} className='hidden'>
         <source src={bg} type="audio/mp3"/>
       </audio>
+      <UccModal></UccModal>
     </>
   );
 };
