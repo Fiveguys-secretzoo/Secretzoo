@@ -21,7 +21,7 @@ const PassTurnCardView = ({ bCard, isMyTurn, img, psq, playState }) => {
       <div
         onDragStart={(event) => dragBluffStart(event, 64 + bCard)}
         draggable={isMyTurn}
-        className="w-[8em] h-[13em] ml-[-4em] hover:scale(1.3) hover:-translate-y-20 hover:rotate-[20deg] hover:z-50 transition-transform duration-300 "
+        className="w-[8em] ml-[-4em] hover:scale(1.3) hover:-translate-y-20 hover:rotate-[20deg] hover:z-50 transition-transform duration-300 "
       >
         <img src={img} alt="" />
       </div>

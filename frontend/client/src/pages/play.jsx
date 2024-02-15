@@ -593,6 +593,7 @@ const Play = () => {
                 playerCount={playerCount}
                 tpCount={turnedPlayer.length}
                 animal={animalList[bCard]}
+                p1={players[fromP]?.pn}
               ></AnswerSelectMyTurn>
             </SelectScreen>
           }
@@ -612,7 +613,8 @@ const Play = () => {
             /* 넘기기 턴 (내턴, 카드)*/}
           {
             playState === 4 && isMyTurn &&
-            <SelectScreen>
+            // <SelectScreen>
+            <div className='flex items-center justify-center w-96 h-52 m-2 item item9'>
               <PassTurnCardView
                 bCard={bCard}
                 isMyTurn={isMyTurn}
@@ -620,7 +622,8 @@ const Play = () => {
                 psq={playerSequence}
                 playState={playState}
               ></PassTurnCardView>
-            </SelectScreen>
+              </div>
+            // </SelectScreen>
           }
 
 
@@ -628,7 +631,8 @@ const Play = () => {
           {
             playState === 4 && !isMyTurn &&
 
-            <SelectScreen>
+            // <SelectScreen>
+            <div className='flex items-center justify-center w-96 h-52 m-2 item item9'>
               <PassTurnCardView
                 bCard={bCard}
                 isMyTurn={isMyTurn}
@@ -636,7 +640,8 @@ const Play = () => {
                 psq={playerSequence}
                 playState={playState}
               ></PassTurnCardView>
-            </SelectScreen>
+            </div>
+            // </SelectScreen>
           }
           {/* 게임결과 */}
           {
@@ -663,11 +668,10 @@ const Play = () => {
             playerSlot(playerList)
           }
           {/* <img className="" src={require(`../assets/img/card/00/000.png`)} alt="" /> */}
-
-          <div className='rounded w-96 h-52 m-2 item item7 '>
+          <div className='flex items-center w-[40em] h-52 m-2 item item7 '>
 
             {/* 카드 표현 부분 */}
-            <div className='flex max-w-[55%] max-h-[10em]'>
+            <div className='flex max-h-[10em]'>
               {cards &&
                 cards.map((i, index) => (
                   <CardView
