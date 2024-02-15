@@ -92,7 +92,7 @@
 #### 게임플레이
 
 #### 회원 정보
-- 회원 정보, 회원 랭킹, 회원 업적
+- 회원 정보, 랭킹, 업적을 확인할 수 있습니다.
 <div align="center">
 <img src="/uploads/beb2898118c64b0ce56ab2f14ecdf310/내정보.gif" alt="내정보" width="70%" height="70%">
 </div>
@@ -102,7 +102,6 @@
 <img src="/uploads/5675f0b90adb9783ed6c2e8ea940b36a/랭킹.gif" alt="랭킹" width="70%" height="70%">
 </div>
 
-#### 게임 업적
 
 #### 유저 검색 및 조회
 
