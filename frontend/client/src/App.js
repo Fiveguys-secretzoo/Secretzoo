@@ -22,8 +22,8 @@ import SearchPlayerDetail from './pages/searchPlayerDetail';
 
 
 //노드 서버
-// const socket = io("http://localhost:3001");
-const socket = io('https://secretzoo.site'); // 노드 서버 URL 
+const socket = io("http://localhost:3001");
+// const socket = io('https://secretzoo.site'); // 노드 서버 URL 
 export const SocketContext = createContext();
 
 const ProtectedRoute = ({ children }) => {

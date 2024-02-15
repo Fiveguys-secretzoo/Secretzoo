@@ -14,8 +14,9 @@ import { useNavigate } from "react-router-dom";
 import { motion, useDragControls } from 'framer-motion';
 import { Button } from 'flowbite-react';
 
-import { 
-  HiOutlineArrowRight} from "react-icons/hi";
+import {
+  HiOutlineArrowRight
+} from "react-icons/hi";
 import { useSelector, useDispatch } from 'react-redux';
 import {
   initRoomInfo,
@@ -50,6 +51,7 @@ import AnswerRevealView from '../components/play/answerRevealView';
 import GameResultView from '../components/play/gameResultView';
 import Swal from 'sweetalert2';
 
+import Confetti from 'react-confetti'
 const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'https://openvidu.secretzoo.site/';
 
 // TODO passing Turn Player Exception Handle (!)  l
@@ -107,14 +109,14 @@ const Play = () => {
   ];
 
   useEffect(() => {
-    if(sessionStorage.getItem("userSequence")===null || sessionStorage.getItem('roomName')===null) {
+    if (sessionStorage.getItem("userSequence") === null || sessionStorage.getItem('roomName') === null) {
       Swal.fire({
-        "text" : '로그인하세요',
-        "confirmButtonColor" : '#3085d6'
+        "text": '로그인하세요',
+        "confirmButtonColor": '#3085d6'
       });
       navigate('/');
     }
-  },[])
+  }, [])
 
   const imageRoute = (i) => {
     return require(`../assets/img/card/0${Math.floor(i / 8)}/00${i % 8}.png`);
@@ -162,7 +164,7 @@ const Play = () => {
   const messageHandler = (user, msg) => {
     // console.log(user)
     // console.log(msg)
-    
+
     let imsg = `[${user}] ${msg}`;
     setMessages((msgs) => [...msgs, imsg]);
   };
@@ -243,10 +245,11 @@ const Play = () => {
   }
 
   // socket.io 게임 종료 handler 
-  const gameEndResponseHandler = ({loserpsq, 
-    bestAttackPlayer, maxAttackSuccess, 
-    bestDefencePlayer, maxDefenceSuccess, 
-    bestPassPlayer, maPass,  }) => {
+  const gameEndResponseHandler = ({ loserpsq,
+    bestAttackPlayer, maxAttackSuccess,
+    bestDefencePlayer, maxDefenceSuccess,
+    bestPassPlayer, maxPass }) => {
+    console.log(`[sendGameEnd] ${loserpsq} ${bestAttackPlayer} ${bestDefencePlayer} ${bestPassPlayer} ${maxAttackSuccess} ${maxDefenceSuccess} ${maxPass}`);
     setLoserPsq(loserpsq);
     setCards([]);
     dispatch(changePlayState(6));
@@ -591,7 +594,13 @@ const Play = () => {
       <div className="h-screen w-full">
         <div className='w-full h-screen flex flex-wrap justify-between'>
           {/* 내 턴 아닐 때 드래그 공유 */}
-
+          {playState === 6 &&
+            <Confetti
+              width={window.innerWidth}
+              height={window.innerHeight}
+              numberOfPieces="300"
+            />
+          }
           {/* 내 턴일 때 드롭 시 버튼 */}
           {
             playState === 2 && isMyTurn &&
@@ -653,7 +662,7 @@ const Play = () => {
                 answerCard={answerCard}
                 images={images}
               ></PassTurnCardView>
-              </div>
+            </div>
             // </SelectScreen>
           }
 
@@ -685,20 +694,23 @@ const Play = () => {
           {/* 게임결과 */}
           {
             playState === 6 &&
-            <SelectScreen>
-              <GameResultView
-                roomName={sessionStorage.getItem("roomName")}
-                playerSequence={playerSequence}
-                gameInfoHandler={gameInfoHandler}
-                loserPsq={loserPsq}
-                bestAttackPlayer={bestAttackPlayer}
-                bestDefencePlayer={bestDefencePlayer}
-                bestPassPlayer={bestPassPlayer}
-                maxAttackSuccess={maxAttackSuccess}
-                maxDefenceSuccess={maxDefenceSuccess}
-                maxPass={maxPass}
-              ></GameResultView>
-            </SelectScreen>
+            <>
+
+              <SelectScreen>
+                <GameResultView
+                  roomName={sessionStorage.getItem("roomName")}
+                  playerSequence={playerSequence}
+                  gameInfoHandler={gameInfoHandler}
+                  loserPsq={loserPsq}
+                  bestAttackPlayer={bestAttackPlayer}
+                  bestDefencePlayer={bestDefencePlayer}
+                  bestPassPlayer={bestPassPlayer}
+                  maxAttackSuccess={maxAttackSuccess}
+                  maxDefenceSuccess={maxDefenceSuccess}
+                  maxPass={maxPass}
+                ></GameResultView>
+              </SelectScreen>
+            </>
           }
           {/* 플레이어 표현 부분 */}
           {
@@ -708,7 +720,7 @@ const Play = () => {
           <div className='flex items-center w-[40em] h-52 m-2 item item7 '>
 
             {/* 카드 표현 부분 */}
-            
+
             <div className='flex max-h-[10em]'>
               {cards &&
                 cards.map((i, index) => (
@@ -738,7 +750,7 @@ const Play = () => {
               <div className='flex w-[100%] bg-green-500 rounded-bl'>
                 <div className="message-input w-[90%] h-[90%]" >
                   <input
-                  className="rounded-l-lg bg-green-600 w-[75%] h-[80%] m-1 text-slate-50 placeholder-gray-300 "
+                    className="rounded-l-lg bg-green-600 w-[75%] h-[80%] m-1 text-slate-50 placeholder-gray-300 "
                     type="text"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
@@ -748,20 +760,20 @@ const Play = () => {
                   />
                 </div>
                 <Button className="m-1 rounded-none rounded-r-lg" color="success" onClick={sendMessage}>
-                  <HiOutlineArrowRight className="h-3 w-3" /> 
+                  <HiOutlineArrowRight className="h-3 w-3" />
                 </Button>
               </div>
             </div>
             <div className='flex-col'>
-            <Button className={((playState === 0) ? "" : "p-1 hidden") + " text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm  text-center m-1"} 
-              disabled={(!isAdmin || playerCount < 4)} 
-              style={{ height: "50%", width: "90%" }} 
-              onClick={start}>게임시작</Button>
-            <Button 
-              color="failure" 
-              className="m-1" 
-              style={{ height: "45%", width: "90%" }} 
-              onClick={leaveRoom}>퇴장</Button>
+              <Button className={((playState === 0) ? "" : "p-1 hidden") + " text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm  text-center m-1"}
+                disabled={(!isAdmin || playerCount < 4)}
+                style={{ height: "50%", width: "90%" }}
+                onClick={start}>게임시작</Button>
+              <Button
+                color="failure"
+                className="m-1"
+                style={{ height: "45%", width: "90%" }}
+                onClick={leaveRoom}>퇴장</Button>
             </div>
           </div>
         </div>
