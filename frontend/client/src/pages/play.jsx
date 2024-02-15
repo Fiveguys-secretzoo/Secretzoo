@@ -13,7 +13,7 @@ import { SocketContext } from '../App';
 import { useNavigate } from "react-router-dom";
 import { motion, useDragControls } from 'framer-motion';
 import { Button } from 'flowbite-react';
-
+import { GiCardPlay } from "react-icons/gi";
 import { 
   HiOutlineArrowRight} from "react-icons/hi";
 import { useSelector, useDispatch } from 'react-redux';
@@ -684,11 +684,15 @@ const Play = () => {
             playerSlot(playerList)
           }
           {/* <img className="" src={require(`../assets/img/card/00/000.png`)} alt="" /> */}
-          <div className='flex items-center w-[40em] h-52 m-2 item item7 '>
-
+                      
+    
+          <div className='flex flex-col justify-center items-center w-[40em] h-52 m-2 item item7'>
+            <div class="animate-bounce w-32 h-32 text-[#B3A398]">
+            <GiCardPlay className='w-24 h-24' />
+            </div>
             {/* 카드 표현 부분 */}
-            
-            <div className='flex max-h-[10em]'>
+
+            <div className='flex max-h-[10em] p-8'>
               {cards &&
                 cards.map((i, index) => (
                   <CardView
