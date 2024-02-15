@@ -99,7 +99,7 @@
 
 <div align="center">
 <table>
-<div> 
+<div align="center"> 
     <tr>
         <td style="min-width: 250px;">
             <a href="https://github.com/hyeounguk2">
