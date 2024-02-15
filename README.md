@@ -110,6 +110,12 @@
 <img src="/uploads/18b7aede7c7b340c23da122ae2887616/전적검색.gif" alt="전적검색" width="70%" height="70%">
 </div>
 
+#### 서버 점검 페이지
+- 서버 점검시 미니 게임을 할 수 있습니다.
+<div align="center">
+<img src="/uploads/8bf7490c149bef4adedfdb23bd9779b6/서버점검페이지.gif" alt="서버점검페이지" width="70%" height="70%">
+</div>
+
 <br>
 <br>
 
