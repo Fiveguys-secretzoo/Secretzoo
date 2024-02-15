@@ -29,6 +29,24 @@ services:
       restart: always
       networks:
         - docker_nat
+  signal-server:
+    build:
+      context: ../toy/openvidu-basic-node
+      dockerfile: Dockerfile # 시그널링 서버를 위한 Dockerfile
+    container_name: signal-server
+    ports:
+    - "5000:5000"
+    expose:
+      - 5000
+    networks:
+      - docker_nat
+  openvidu:
+    image: openvidu/openvidu-dev:2.29.0
+    environment:
+      - OPENVIDU_SECRET=MY_SECRET
+    ports:
+      - "4443:4443"
+    restart: always
 networks:
   docker_nat:
     external: true

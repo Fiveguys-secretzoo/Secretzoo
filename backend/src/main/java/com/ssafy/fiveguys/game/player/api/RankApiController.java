@@ -1,16 +1,18 @@
 package com.ssafy.fiveguys.game.player.api;
 
+import com.ssafy.fiveguys.game.player.dto.api.ApiSimpleResponse;
 import com.ssafy.fiveguys.game.player.dto.rank.RankRequestDto;
+import com.ssafy.fiveguys.game.player.dto.rank.RankSimpleDto;
 import com.ssafy.fiveguys.game.player.dto.rank.TotalRankDto;
 import com.ssafy.fiveguys.game.player.dto.rank.RankResponseDto;
 import com.ssafy.fiveguys.game.player.dto.api.ApiResponse;
 import com.ssafy.fiveguys.game.player.entity.embeddedType.AnimalScore;
 import com.ssafy.fiveguys.game.player.entity.Player;
 import com.ssafy.fiveguys.game.player.entity.embeddedType.RankingScore;
-import com.ssafy.fiveguys.game.player.exception.UserException;
 import com.ssafy.fiveguys.game.player.service.PlayerService;
 import com.ssafy.fiveguys.game.player.service.RankService;
 import com.ssafy.fiveguys.game.player.service.RewardsService;
+import com.ssafy.fiveguys.game.user.exception.UserNotFoundException;
 import com.ssafy.fiveguys.game.user.repository.UserRepositoy;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -57,7 +59,7 @@ public class RankApiController {
     @Operation(summary = "랭킹 정보 저장 API")
     @PostMapping("/save")
     public ResponseEntity<String> saveRank(@RequestBody RankRequestDto rankRequestDto) {
-        log.info("rankRequestDto = {}", rankRequestDto);
+        log.debug("rankRequestDto = {}", rankRequestDto);
         //attack, defense, pass 점수 계산 로직으로 계산 후 Score 인스턴스로 만든 후에 rankService 에 저장해주기
         double attackScore = RankingScore.scoreCalculator(rankRequestDto.getAttackAttempt(),
             rankRequestDto.getAttackSuccess());
@@ -68,7 +70,7 @@ public class RankApiController {
             rankRequestDto.getPassCount());
         RankingScore rankingScore = new RankingScore(attackScore, defenseScore, passScore);
 
-        //redis 에 랭킹 정보 점수 저장
+        //랭킹 정보 점수 저장
         rankService.saveRank(rankRequestDto.getUserSequence(), rankingScore);
         //player 기타 정보 저장
         playerService.savePlayer(rankRequestDto.getUserSequence(), rankRequestDto);
@@ -158,8 +160,9 @@ public class RankApiController {
      */
     @Operation(summary = "유저 공격 랭킹 조회 API")
     @GetMapping("/attack/{userSequence}")
-    public int getPlayerRankingOfAttack(@PathVariable("userSequence") Long userSequence) {
-        return rankService.getPlayerRanking(userSequence, attackRankKey);
+    public ApiSimpleResponse<?> getPlayerRankingOfAttack(@PathVariable("userSequence") Long userSequence) {
+        RankSimpleDto rankSimple = rankService.getPlayerRanking(userSequence, attackRankKey);
+        return new ApiSimpleResponse<>(1, rankSimple);
     }
 
     /**
@@ -167,8 +170,9 @@ public class RankApiController {
      */
     @Operation(summary = "유저 방어 랭킹 조회 API")
     @GetMapping("/defense/{userSequence}")
-    public int getPlayerRankingOfDefense(@PathVariable("userSequence") Long userSequence) {
-        return rankService.getPlayerRanking(userSequence, defenseRankKey);
+    public ApiSimpleResponse<?> getPlayerRankingOfDefense(@PathVariable("userSequence") Long userSequence) {
+        RankSimpleDto rankSimple = rankService.getPlayerRanking(userSequence, defenseRankKey);
+        return new ApiSimpleResponse<>(1, rankSimple);
     }
 
     /**
@@ -176,19 +180,20 @@ public class RankApiController {
      */
     @Operation(summary = "유저 패스 랭킹 조회 API")
     @GetMapping("/pass/{userSequence}")
-    public int getPlayerRankingOfPass(@PathVariable("userSequence") Long userSequence) {
-        return rankService.getPlayerRanking(userSequence, passRankKey);
+    public ApiSimpleResponse<?> getPlayerRankingOfPass(@PathVariable("userSequence") Long userSequence) {
+        RankSimpleDto rankSimple = rankService.getPlayerRanking(userSequence, passRankKey);
+        return new ApiSimpleResponse<>(1, rankSimple);
     }
 
     @GetMapping("/total/{userSequence}")
     public ApiResponse<?> getPlayerTotalRanking(@PathVariable("userSequence") Long userSequence) {
 
-        int attack = rankService.getPlayerRanking(userSequence, attackRankKey);
-        int defense = rankService.getPlayerRanking(userSequence, defenseRankKey);
-        int pass = rankService.getPlayerRanking(userSequence, passRankKey);
+        RankSimpleDto attack = rankService.getPlayerRanking(userSequence, attackRankKey);
+        RankSimpleDto defense = rankService.getPlayerRanking(userSequence, defenseRankKey);
+        RankSimpleDto pass = rankService.getPlayerRanking(userSequence, passRankKey);
 
         Player player = playerService.getPlayerByUserSequence(userSequence);
-        if(player == null) throw new UserException();
+        if(player == null) throw new UserNotFoundException();
         AnimalScore totalAnimalScore = rewardsService.getTotalAnimalScore(userSequence);
         TotalRankDto totalRankDto = new TotalRankDto(attack, defense, pass, player.getTotalPass(),
             totalAnimalScore);

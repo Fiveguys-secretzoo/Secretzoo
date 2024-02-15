@@ -42,7 +42,7 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring()
-            .requestMatchers("/auth/**","/verify-email/**") // '인증','인가' 서비스 적용x
+            .requestMatchers("/auth/**", "/verify-email/**") // '인증','인가' 서비스 적용x
             .requestMatchers(swaggerURL)
             .requestMatchers(PathRequest.toStaticResources().atCommonLocations()); // 정적 리소스들
     }
@@ -61,7 +61,8 @@ public class SecurityConfig {
             .httpBasic(AbstractHttpConfigurer::disable)
             .sessionManagement(sessionManagement ->
                 sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
+                UsernamePasswordAuthenticationFilter.class)
             .exceptionHandling(exception -> exception
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .accessDeniedHandler(jwtAccessDeniedHandler));
@@ -71,19 +72,19 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/", "/css/**", "/images/**", "/js/**", "/favicon.ico", "/error")
                 .permitAll() // '인증' 무시
-                .requestMatchers("/auth/**","/verify-email/**","/users/**").permitAll()
-                .requestMatchers("/rewards/**").permitAll()
+                .requestMatchers("/auth/**", "/verify-email/**", "/users/check/**").permitAll()
+                .requestMatchers("/players/**", "/rank/**", "/rewards/save").permitAll()
+                .requestMatchers("/users/**").hasAnyRole("USER", "ADMIN")
                 .requestMatchers(swaggerURL).permitAll()
-                .anyRequest().permitAll());
-               // .anyRequest().authenticated());
+                .anyRequest().authenticated());
 
 //        // Oauth 로그인 설정
         http
-                .oauth2Login(oauth2Login->oauth2Login
-                        .successHandler(oAuth2LoginSuccessHandler)
-                        .failureHandler(oAuth2LoginFailureHandler)
-                        .userInfoEndpoint(userInfoEndpoint->
-                                userInfoEndpoint.userService(customOAuth2UserService)));
+            .oauth2Login(oauth2Login -> oauth2Login
+                .successHandler(oAuth2LoginSuccessHandler)
+                .failureHandler(oAuth2LoginFailureHandler)
+                .userInfoEndpoint(userInfoEndpoint ->
+                    userInfoEndpoint.userService(customOAuth2UserService)));
 
         return http.build();
     }

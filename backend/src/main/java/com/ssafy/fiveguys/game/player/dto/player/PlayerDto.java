@@ -14,6 +14,7 @@ public class PlayerDto {
     private String userId;
     private String name;
     private String nickname;
+    private String profileNumber;
     private String mainReward;
     private long totalRound;
     private long totalTurn;

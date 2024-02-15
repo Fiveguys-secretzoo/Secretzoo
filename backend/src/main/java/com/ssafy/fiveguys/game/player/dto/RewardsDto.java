@@ -17,11 +17,11 @@ public class RewardsDto {
     private Long userSequence;
     private String rewardsId;
     private String rewardsName;
-    private Timestamp date; //업적 달성 날짜
+    private LocalDateTime date; //업적 달성 날짜
     private boolean isDone;
     private int donePlayerCount;
 
-    public RewardsDto(Long playerSequence, Long userSequence, Rewards rewards, Timestamp date, Boolean isDone, int donePlayerCount) {
+    public RewardsDto(Long playerSequence, Long userSequence, Rewards rewards, LocalDateTime date, Boolean isDone, int donePlayerCount) {
         this.playerSequence = playerSequence;
         this.userSequence = userSequence;
         //지연 로딩 에러 -> entity 조회하면 자동으로 초기화 되므로 해결 가능

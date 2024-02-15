@@ -37,7 +37,7 @@ public class User extends BaseTimeEntity {
     @Column
     private String name;
 
-    @Column(nullable = false)
+    @Column
     private String nickname;
 
     @Column(name = "main_reward")
@@ -57,7 +57,7 @@ public class User extends BaseTimeEntity {
     @Column(name = "provider_id")
     private String providerId;
 
-    @Column(name = "refresh-token")
+    @Column(name = "refresh_token")
     private String refreshToken;
 
     @OneToOne(mappedBy = "user")
@@ -73,18 +73,18 @@ public class User extends BaseTimeEntity {
 
     public static User getUserDto(UserDto userDto) {
         return User.builder()
-                .userSequence(userDto.getUserSequence())
-                .userId(userDto.getUserId())
-                .password(userDto.getPassword())
-                .email(userDto.getEmail())
-                .name(userDto.getName())
-                .nickname(userDto.getNickname())
-                .mainReward(userDto.getMainReward())
-                .role(userDto.getRole())
-                .profileNumber(userDto.getProfileNumber())
-                .provider(userDto.getProvider())
-                .providerId(userDto.getProviderId())
-                .refreshToken(userDto.getRefreshToken())
-                .build();
+            .userSequence(userDto.getUserSequence())
+            .userId(userDto.getUserId())
+            .password(userDto.getPassword())
+            .email(userDto.getEmail())
+            .name(userDto.getName())
+            .nickname(userDto.getNickname())
+            .mainReward(userDto.getMainReward())
+            .role(userDto.getRole())
+            .profileNumber(userDto.getProfileNumber())
+            .provider(userDto.getProvider())
+            .providerId(userDto.getProviderId())
+            .refreshToken(userDto.getRefreshToken())
+            .build();
     }
 }

@@ -12,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import java.util.List;
@@ -27,7 +28,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @Builder
-@ToString(of = {"playerSequence", "totalRound", "totalTurn", "totalPass", "exp", "playerLevel"})
+@ToString(of = {"playerSequence", "totalRound", "totalTurn", "totalPass", "exp"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Player extends BaseTimeEntity {
@@ -53,8 +54,10 @@ public class Player extends BaseTimeEntity {
 
     @Column(name = "exp")
     private long exp;
-    @Column(name = "player_level")
-    private int playerLevel;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "player_level")
+    private PlayerLevel playerLevel;
 
     @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
     private List<PlayerRewards> playerRewards;

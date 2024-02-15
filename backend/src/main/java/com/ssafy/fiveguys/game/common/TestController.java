@@ -2,6 +2,8 @@ package com.ssafy.fiveguys.game.common;
 
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Controller;
@@ -19,11 +21,16 @@ public class TestController {
     public void error500() {
         throw new IllegalStateException();
     }
+
     @Operation(summary = "40X 서버 에러 페이지 조회")
     @GetMapping("/40X")
     public void error40X() throws BadRequestException {
         throw new BadRequestException();
     }
 
+    @GetMapping("/400")
+    public void error400(HttpServletResponse response) throws IOException {
+        response.sendError(400);
+    }
 }
 

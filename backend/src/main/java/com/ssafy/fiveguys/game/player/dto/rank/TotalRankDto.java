@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TotalRankDto {
 
-    private int attackRank;
-    private int defenseRank;
-    private int passRank;
+    private RankSimpleDto attackRank;
+    private RankSimpleDto defenseRank;
+    private RankSimpleDto passRank;
     private Long passCount;
 
     private AnimalScore animalScore;

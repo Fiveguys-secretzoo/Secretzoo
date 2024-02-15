@@ -2,11 +2,12 @@ package com.ssafy.fiveguys.game.player.service;
 
 
 import com.ssafy.fiveguys.game.player.dto.rank.RankResponseDto;
+import com.ssafy.fiveguys.game.player.dto.rank.RankSimpleDto;
 import com.ssafy.fiveguys.game.player.entity.Player;
 import com.ssafy.fiveguys.game.player.entity.embeddedType.RankingScore;
-import com.ssafy.fiveguys.game.player.exception.UserException;
 import com.ssafy.fiveguys.game.player.repository.PlayerRepository;
 import com.ssafy.fiveguys.game.user.entity.User;
+import com.ssafy.fiveguys.game.user.exception.UserNotFoundException;
 import com.ssafy.fiveguys.game.user.repository.UserRepositoy;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -118,7 +119,7 @@ public class RankService {
                         User user = userRepositoy.findByUserSequence(
                             player.getUser().getUserSequence());
                         return new RankResponseDto(user.getUserSequence(), user.getNickname(),
-                            player.getRankingScore().getAttackScore(), player.getPlayerLevel(),
+                            player.getRankingScore().getAttackScore(), player.getPlayerLevel().getLevel(),
                             player.getExp());
                     })
                     .toList();
@@ -130,7 +131,7 @@ public class RankService {
                         User user = userRepositoy.findByUserSequence(
                             player.getUser().getUserSequence());
                         return new RankResponseDto(user.getUserSequence(), user.getNickname(),
-                            player.getRankingScore().getAttackScore(), player.getPlayerLevel(),
+                            player.getRankingScore().getAttackScore(), player.getPlayerLevel().getLevel(),
                             player.getExp());
                     })
                     .toList();
@@ -142,7 +143,7 @@ public class RankService {
                         User user = userRepositoy.findByUserSequence(
                             player.getUser().getUserSequence());
                         return new RankResponseDto(user.getUserSequence(), user.getNickname(),
-                            player.getRankingScore().getAttackScore(), player.getPlayerLevel(),
+                            player.getRankingScore().getAttackScore(), player.getPlayerLevel().getLevel(),
                             player.getExp());
                     })
                     .toList();
@@ -156,7 +157,7 @@ public class RankService {
      */
     public List<RankResponseDto> getRanking(String rankKey) {
         ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
-        Set<ZSetOperations.TypedTuple<String>> top10 = zSetOperations.reverseRangeWithScores(rankKey, 0, maxRankingCount - 1);
+        Set<TypedTuple<String>> top10 = zSetOperations.reverseRangeWithScores(rankKey, 0, maxRankingCount - 1);
         assert top10 != null;
         //score -> level -> exp -> userSequence 순으로 내림차순 정렬(동점자 처리)
         Comparator<RankResponseDto> rankComparator = Comparator
@@ -180,15 +181,27 @@ public class RankService {
     /**
      * userSequence 랭킹 정보 조회
      */
-    public int getPlayerRanking(Long userSequence, String rankKey) {
+    public RankSimpleDto getPlayerRanking(Long userSequence, String rankKey) {
         ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
+        Player player = playerRepository.findByUser_UserSequence(userSequence);
         // userSequence 가 null 인 경우 기본값으로 Optional.ofNullable 을 사용하여 0으로 설정
         int userRank = Math.toIntExact(Optional.ofNullable(String.valueOf(userSequence))
             .map(seq -> zSetOperations.reverseRank(rankKey, seq))
             .orElse(-1L));
-        if(userRank == -1) throw new UserException();
+        if(userRank == -1) throw new UserNotFoundException();
+        return getRankSimpleDto(rankKey, userRank, player);
+    }
+
+    private RankSimpleDto getRankSimpleDto(String rankKey, int userRank, Player player) {
+        if(userRank == -1) throw new UserNotFoundException();
         //redis 자료의 인덱스가 0부터 시작하므로 1을 더해 실제 랭킹을 표시
-        return userRank+1;
+        double score = switch (rankKey) {
+            case attackRankKey -> player.getRankingScore().getAttackScore();
+            case defenseRankKey -> player.getRankingScore().getDefenseScore();
+            case passRankKey -> player.getRankingScore().getPassScore();
+            default -> 0;
+        };
+        return new RankSimpleDto(userRank, score);
     }
 
     /**
@@ -200,7 +213,7 @@ public class RankService {
     @Scheduled(cron = "0 59 23 * * *") // 특정 시간 기준 스케줄링 ex : 매월 매일 23시 59분 마다
     public void updateAllRanking() {
 
-        log.info("DB 랭킹 점수 갱신 시작");
+        log.debug("DB 랭킹 점수 갱신 시작");
         List<Player> players = playerRepository.findAll();
         //레디스의 점수 정보를 DB 정보에 업데이트
         ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
@@ -227,7 +240,7 @@ public class RankService {
                 findPlayer.getRankingScore().setPassScore(tuple.getScore());
             }
         }
-        log.info("DB 랭킹 점수 갱신 완료");
+        log.debug("DB 랭킹 점수 갱신 완료");
         updateRedisRanking(players);
     }
 
@@ -248,7 +261,14 @@ public class RankService {
             zSetOperations.add(defenseRankKey, String.valueOf(player.getUser().getUserSequence()), player.getRankingScore().getDefenseScore());
             zSetOperations.add(passRankKey, String.valueOf(player.getUser().getUserSequence()), player.getRankingScore().getPassScore());
         }
-        log.info("redis 캐싱 랭킹 갱신 완료");
+        log.debug("redis 캐싱 랭킹 갱신 완료");
+    }
+
+    public void addNewPlayerRanking(Player player){
+        ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
+        zSetOperations.add(attackRankKey, String.valueOf(player.getUser().getUserSequence()), 0.0);
+        zSetOperations.add(defenseRankKey, String.valueOf(player.getUser().getUserSequence()), 0.0);
+        zSetOperations.add(passRankKey, String.valueOf(player.getUser().getUserSequence()), 0.0);
     }
 
 
@@ -262,6 +282,6 @@ public class RankService {
         User user = userRepositoy.findByUserSequence(
             Long.parseLong(Objects.requireNonNull(key.getValue())));
         return new RankResponseDto(Long.parseLong(key.getValue()), user.getNickname(),
-            key.getScore(), user.getPlayer().getPlayerLevel(), user.getPlayer().getExp());
+            key.getScore(), user.getPlayer().getPlayerLevel().getLevel(), user.getPlayer().getExp());
     }
 }

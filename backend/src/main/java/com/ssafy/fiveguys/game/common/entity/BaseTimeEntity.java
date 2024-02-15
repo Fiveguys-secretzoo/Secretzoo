@@ -20,8 +20,8 @@ public class BaseTimeEntity {
     //생성일은 수정되면 안되기 때문에 updatable = false 설정
     @CreatedDate
     @Column(updatable = false, columnDefinition = "TIMESTAMP DEFAULT now()")
-    private Timestamp createdDate;
+    private LocalDateTime createdDate;
     @LastModifiedDate
     @Column(columnDefinition = "TIMESTAMP DEFAULT now()")
-    private Timestamp lastModifiedDate;
+    private LocalDateTime lastModifiedDate;
 }

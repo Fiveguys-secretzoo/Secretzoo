@@ -1,8 +1,10 @@
 package com.ssafy.fiveguys.game.player.api;
 
 
+import com.ssafy.fiveguys.game.player.dto.player.PlayerDetailDto;
 import com.ssafy.fiveguys.game.player.dto.player.PlayerDto;
 import com.ssafy.fiveguys.game.player.dto.api.ApiResponse;
+import com.ssafy.fiveguys.game.player.dto.player.PlayerResult;
 import com.ssafy.fiveguys.game.player.dto.player.PlayerSearch;
 import com.ssafy.fiveguys.game.player.service.PlayerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,7 +36,7 @@ public class PlayerApiController {
      * @return
      */
     @Operation(summary = "플레이어 한명 정보 조회 API")
-    @GetMapping("/player/{userSequence}")
+    @GetMapping("/players/{userSequence}")
     public ApiResponse<?> getOnePlayerInfo(@PathVariable("userSequence") Long userSequence) {
 //        Player player = playerService.getPlayerByUserSequence(userSequence);
 //        // player sequence 가 db에 없는 경우 null 반환 -> 비회원 정보 조회 X
@@ -42,14 +44,14 @@ public class PlayerApiController {
 //            return null;
 //        }
         int totalPlayerCount = playerService.playerTotalCount();
-        PlayerDto playerDto = playerService.getPlayer(userSequence);
+        PlayerDetailDto playerDto = playerService.getPlayer(userSequence);
         return new ApiResponse<>(1, playerDto, totalPlayerCount);
     }
 
     @Operation(summary = "전체 플레이어 정보 조회 API")
     @GetMapping("/players")
-    public ApiResponse<?> getAllPlayerInfo() {
-        List<PlayerDto> playerList = playerService.getAllPlayer();
+    public ApiResponse<?> getAllPlayerInfo(Pageable pageable) {
+        List<PlayerDto> playerList = playerService.getAllPlayer(pageable);
         if (playerList.isEmpty()) {
             return null;
         }
@@ -61,13 +63,12 @@ public class PlayerApiController {
     @GetMapping("/players/search")
     public ApiResponse<?> SearchPlayerInfo(
         @ModelAttribute("playerSearch") PlayerSearch playerSearch, Pageable pageable) {
-        log.info("controller : playerSearch={}", playerSearch);
-        List<PlayerDto> playerList = playerService.getAllPlayer(playerSearch, pageable);
-        if (playerList.isEmpty()) {
+        log.debug("controller : playerSearch={}", playerSearch);
+        PlayerResult playerList = playerService.getAllPlayer(playerSearch, pageable);
+        if (playerList.getPlayers().isEmpty()) {
             return null;
         }
-        int totalPlayerCount = playerService.playerTotalCount();
-        return new ApiResponse<>(playerList.size(), playerList, totalPlayerCount);
+        return new ApiResponse<>(playerList.getPlayers().size(), playerList.getPlayers(), playerList.getTotalCount());
     }
 
 }

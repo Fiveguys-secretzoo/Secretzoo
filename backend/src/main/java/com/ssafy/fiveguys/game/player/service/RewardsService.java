@@ -27,21 +27,6 @@ public class RewardsService {
     private final EntityManager em;
     private final AnimalRewardsService animalRewardsService;
 
-    /**
-     * 한번에 처리할 방안 생각하기 위해 주석으로 남겨두겠음
-     */
-//    @Transactional
-//    public void saveRewardsTest(AnimalDto animalDto) {
-//        //플레이어 찾기
-//        //select player 쿼리 1번
-//        Player findByPlayer = playerRepository.findByUser_UserSequence(animalDto.getUserSequence());
-//        //turn 과 round 누적 업데이트
-//        //update 쿼리 1번
-//        findByPlayer.setTotalRound(findByPlayer.getTotalRound() + animalDto.getRound());
-//        findByPlayer.setTotalTurn(findByPlayer.getTotalTurn() + animalDto.getTurn());
-//        System.out.println("animalDto = " + animalDto);
-//
-//    }
     @Transactional
     public void saveRewards(AnimalDto animalDto) {
 
@@ -65,7 +50,7 @@ public class RewardsService {
 
         PlayerAnimal playerTiger = playerAnimalRepository.findByPlayerSequenceAndAnimalId(
             player.getPlayerSequence(), animalDto.getTiger().getAnimalId());
-        log.info("playerTiger= {}", playerTiger);
+        log.debug("playerTiger= {}", playerTiger);
         //플레이어의 전적 정보가 있으면 업데이트 해주기
         if (playerTiger != null) {
             playerTiger.updateAnimalScore(playerTiger.getAnimalScore(),
@@ -76,7 +61,7 @@ public class RewardsService {
         else {
             PlayerAnimal playerAnimal = new PlayerAnimal(player, tiger,
                 animalDto.getTiger().getAnimalScore());
-            log.info("playerAnimal= {}", playerAnimal);
+            log.debug("playerAnimal= {}", playerAnimal);
             em.persist(playerAnimal);
         }
 
@@ -91,7 +76,7 @@ public class RewardsService {
 
         PlayerAnimal playerCat = playerAnimalRepository.findByPlayerSequenceAndAnimalId(
             player.getPlayerSequence(), animalDto.getCat().getAnimalId());
-        log.info("playerCat= {}", playerCat);
+        log.debug("playerCat= {}", playerCat);
         //플레이어의 전적 정보가 있으면 업데이트 해주기
         if (playerCat != null) {
             playerCat.updateAnimalScore(playerCat.getAnimalScore(),
@@ -102,7 +87,7 @@ public class RewardsService {
         else {
             PlayerAnimal playerAnimal = new PlayerAnimal(player, cat,
                 animalDto.getCat().getAnimalScore());
-            log.info("playerAnimal= {}", playerAnimal);
+            log.debug("playerAnimal= {}", playerAnimal);
             em.persist(playerAnimal);
             //playerCat 에 방금 생성한 entity 저장 후 담아주기 -> animalRewardsService 에서 확인 절차 들어가야 하기 때문에
             playerCat = playerAnimal;
@@ -120,7 +105,7 @@ public class RewardsService {
 
         PlayerAnimal playerDog = playerAnimalRepository.findByPlayerSequenceAndAnimalId(
             player.getPlayerSequence(), animalDto.getDog().getAnimalId());
-        log.info("playerDog= {}", playerDog);
+        log.debug("playerDog= {}", playerDog);
         //플레이어의 전적 정보가 있으면 업데이트 해주기
         if (playerDog != null) {
             playerDog.updateAnimalScore(playerDog.getAnimalScore(),
@@ -131,7 +116,7 @@ public class RewardsService {
         else {
             PlayerAnimal playerAnimal = new PlayerAnimal(player, dog,
                 animalDto.getDog().getAnimalScore());
-            log.info("playerAnimal= {}", playerAnimal);
+            log.debug("playerAnimal= {}", playerAnimal);
             em.persist(playerAnimal);
         }
 
@@ -147,7 +132,7 @@ public class RewardsService {
 
         PlayerAnimal playerDeer = playerAnimalRepository.findByPlayerSequenceAndAnimalId(
             player.getPlayerSequence(), animalDto.getDeer().getAnimalId());
-        log.info("playerDeer= {}", playerDeer);
+        log.debug("playerDeer= {}", playerDeer);
         //플레이어의 전적 정보가 있으면 업데이트 해주기
         if (playerDeer != null) {
             playerDeer.updateAnimalScore(playerDeer.getAnimalScore(),
@@ -158,7 +143,7 @@ public class RewardsService {
         else {
             PlayerAnimal playerAnimal = new PlayerAnimal(player, deer,
                 animalDto.getDeer().getAnimalScore());
-            log.info("playerAnimal= {}", playerAnimal);
+            log.debug("playerAnimal= {}", playerAnimal);
             em.persist(playerAnimal);
         }
 
@@ -174,7 +159,7 @@ public class RewardsService {
 
         PlayerAnimal playerPig = playerAnimalRepository.findByPlayerSequenceAndAnimalId(
             player.getPlayerSequence(), animalDto.getPig().getAnimalId());
-        log.info("playerPig= {}", playerPig);
+        log.debug("playerPig= {}", playerPig);
         //플레이어의 전적 정보가 있으면 업데이트 해주기
         if (playerPig != null) {
             playerPig.updateAnimalScore(playerPig.getAnimalScore(),
@@ -185,7 +170,7 @@ public class RewardsService {
         else {
             PlayerAnimal playerAnimal = new PlayerAnimal(player, pig,
                 animalDto.getPig().getAnimalScore());
-            log.info("playerAnimal= {}", playerAnimal);
+            log.debug("playerAnimal= {}", playerAnimal);
             em.persist(playerAnimal);
         }
 
@@ -201,7 +186,7 @@ public class RewardsService {
 
         PlayerAnimal playerFox = playerAnimalRepository.findByPlayerSequenceAndAnimalId(
             player.getPlayerSequence(), animalDto.getFox().getAnimalId());
-        log.info("playerFox= {}", playerFox);
+        log.debug("playerFox= {}", playerFox);
         //플레이어의 전적 정보가 있으면 업데이트 해주기
         if (playerFox != null) {
             playerFox.updateAnimalScore(playerFox.getAnimalScore(),
@@ -212,7 +197,7 @@ public class RewardsService {
         else {
             PlayerAnimal playerAnimal = new PlayerAnimal(player, fox,
                 animalDto.getFox().getAnimalScore());
-            log.info("playerAnimal= {}", playerAnimal);
+            log.debug("playerAnimal= {}", playerAnimal);
             em.persist(playerAnimal);
         }
 
@@ -228,7 +213,7 @@ public class RewardsService {
 
         PlayerAnimal playerSheep = playerAnimalRepository.findByPlayerSequenceAndAnimalId(
             player.getPlayerSequence(), animalDto.getSheep().getAnimalId());
-        log.info("playerSheep= {}", playerSheep);
+        log.debug("playerSheep= {}", playerSheep);
         //플레이어의 전적 정보가 있으면 업데이트 해주기
         if (playerSheep != null) {
             playerSheep.updateAnimalScore(playerSheep.getAnimalScore(),
@@ -239,7 +224,7 @@ public class RewardsService {
         else {
             PlayerAnimal playerAnimal = new PlayerAnimal(player, sheep,
                 animalDto.getSheep().getAnimalScore());
-            log.info("playerAnimal= {}", playerAnimal);
+            log.debug("playerAnimal= {}", playerAnimal);
             em.persist(playerAnimal);
         }
 
@@ -255,18 +240,18 @@ public class RewardsService {
 
         PlayerAnimal playerWhale = playerAnimalRepository.findByPlayerSequenceAndAnimalId(
             player.getPlayerSequence(), animalDto.getWhale().getAnimalId());
-        log.info("playerWhale= {}", playerWhale);
+        log.debug("playerWhale= {}", playerWhale);
         //플레이어의 전적 정보가 있으면 업데이트 해주기
         if (playerWhale != null) {
             playerWhale.updateAnimalScore(playerWhale.getAnimalScore(),
-                animalDto.getSheep().getAnimalScore());
+                animalDto.getWhale().getAnimalScore());
         }
 
         //만약 해당 플레이어가 동물에 대한 전적 정보가 없다면 새롭게 만들어 주기
         else {
             PlayerAnimal playerAnimal = new PlayerAnimal(player, whale,
-                animalDto.getSheep().getAnimalScore());
-            log.info("playerAnimal= {}", playerAnimal);
+                animalDto.getWhale().getAnimalScore());
+            log.debug("playerAnimal= {}", playerAnimal);
             em.persist(playerAnimal);
         }
 
@@ -291,7 +276,7 @@ public class RewardsService {
 
         //전체 animal score 합계
         for (PlayerAnimal playerAnimal : playerAnimals) {
-            log.info("playerAnimal.getAnimalScore = {}", playerAnimal.getAnimalScore());
+            log.debug("playerAnimal.getAnimalScore = {}", playerAnimal.getAnimalScore());
             attackSuccess += playerAnimal.getAnimalScore().getAttackSuccess();
             attackFail += playerAnimal.getAnimalScore().getAttackFail();
             defenseSuccess += playerAnimal.getAnimalScore().getDefenseSuccess();

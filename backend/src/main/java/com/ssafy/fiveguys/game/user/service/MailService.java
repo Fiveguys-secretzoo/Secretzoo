@@ -1,10 +1,10 @@
 package com.ssafy.fiveguys.game.user.service;
 
 import com.ssafy.fiveguys.game.user.entity.EmailVerification;
-import com.ssafy.fiveguys.game.user.entity.User;
+import com.ssafy.fiveguys.game.user.exception.DuplicateIdentifierException;
+import com.ssafy.fiveguys.game.user.exception.VerificationCodeException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import jakarta.mail.internet.MimeMessage.RecipientType;
 import jakarta.transaction.Transactional;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
@@ -51,16 +51,23 @@ public class MailService {
         }
         redisService.saveVerificationCode(email, verificationCode);
         javaMailSender.send(message);
+        log.info("request to send email successfully.");
     }
 
-    public boolean checkVerificationCode(EmailVerification emailVerification) {
+    public void checkVerificationCode(EmailVerification emailVerification) {
         String requestVerificationCode = emailVerification.getVerificationCode();
         String verificationCodeInRedis = redisService.getVerificationCode(
             emailVerification.getEmail());
-        return requestVerificationCode.equals(verificationCodeInRedis);
+        if (!requestVerificationCode.equals(verificationCodeInRedis)) {
+            throw new VerificationCodeException("인증 코드가 유효하지 않습니다.");
+        }
+        log.info("Email Verifictaion success.");
     }
 
-    public boolean isDuplicateEmail(String email) {
-        return !userService.verifyEmail(email);
+    public void isDuplicateEmail(String email) throws DuplicateIdentifierException {
+        if (userService.verifyEmail(email)) {
+            throw new DuplicateIdentifierException("이미 가입되어 있는 이메일입니다.");
+        }
+        log.info("Email verification successful.");
     }
 }

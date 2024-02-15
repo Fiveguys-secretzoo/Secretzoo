@@ -3,13 +3,19 @@ package com.ssafy.fiveguys.game.user.service;
 import com.ssafy.fiveguys.game.user.dto.LoginRequestDto;
 import com.ssafy.fiveguys.game.user.entity.RefreshToken;
 import com.ssafy.fiveguys.game.user.entity.User;
+import com.ssafy.fiveguys.game.user.exception.DuplicateIdentifierException;
+import com.ssafy.fiveguys.game.user.exception.JwtBlackListException;
+import com.ssafy.fiveguys.game.user.exception.RefreshTokenException;
 import com.ssafy.fiveguys.game.user.jwt.JwtProperties;
 import com.ssafy.fiveguys.game.user.jwt.JwtTokenProvider;
 import com.ssafy.fiveguys.game.user.dto.JwtTokenDto;
 import com.ssafy.fiveguys.game.user.dto.UserDto;
 import com.ssafy.fiveguys.game.user.exception.PasswordException;
-import com.ssafy.fiveguys.game.user.exception.UserIdNotFoundException;
+import com.ssafy.fiveguys.game.user.exception.UserNotFoundException;
 import com.ssafy.fiveguys.game.user.repository.UserRepositoy;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.transaction.Transactional;
 
 import java.util.Optional;
@@ -30,7 +36,6 @@ public class AuthService {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
-    private final UserRepositoy userRepositoy;
     private final RedisService redisService;
     private final BCryptPasswordEncoder passwordEncoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -38,7 +43,7 @@ public class AuthService {
     public JwtTokenDto login(LoginRequestDto loginDto) {
         UserDto user = userService.findUserById(loginDto.getUserId());
         if (user == null) {
-            throw new UserIdNotFoundException("아이디 또는 비밀번호가 일치하지 않습니다.");
+            throw new UserNotFoundException("아이디 또는 비밀번호가 일치하지 않습니다.");
         }
         if (!passwordEncoder.matches(loginDto.getPassword(), user.getPassword())) {
             throw new PasswordException("아이디 또는 비밀번호가 일치하지 않습니다.");
@@ -65,7 +70,6 @@ public class AuthService {
 
         redisService.saveRefreshToken(refreshToken.getUserId(), refreshToken.getRefreshToken());
 
-        log.debug("User Id = {}", refreshToken.getUserId());
         log.debug("RefreshToken in Redis = {}", refreshToken.getRefreshToken());
 
         return tokenSet;
@@ -75,26 +79,40 @@ public class AuthService {
 
     public JwtTokenDto reissueToken(String accessToken, String refreshToken) {
         Authentication authentication = jwtTokenProvider.getAuthentication(
-            resolveToken(accessToken));
+            jwtTokenProvider.resolveToken(accessToken));
         String principal = authentication.getName();
         String refreshTokenInDB = redisService.getRefreshToken(principal);
         log.debug("User Id = {}", principal);
-        log.debug("Get RefreshToken in Redis = {}", refreshTokenInDB);
         UserDto user = userService.findUserById(principal);
         if (refreshTokenInDB == null) { // Redis에 RT 없을 경우
+            log.debug("Refresh Token is not in Redis.");
             refreshTokenInDB = user.getRefreshToken();
+            if (refreshTokenInDB == null) { // MySQL에 RT 없을 경우
+                log.debug("Refresh Token is not in MySQL.");
+                throw new RefreshTokenException("refresh token 값이 존재하지 않습니다.");
+            }
         }
-        if (!refreshTokenInDB.equals(refreshToken) || !jwtTokenProvider.validateToken(
-            refreshToken)) {
+        log.debug("Refresh Token in DB = {}", refreshTokenInDB);
+
+        if (!refreshTokenInDB.equals(refreshToken)) {
             redisService.deleteRefreshToken(refreshToken);
             userService.deleteRefreshToken(principal);
-            log.info("Delete token potentially hijacking");
-            return null;
+            log.info("Refresh Token is not identical.");
+            throw new RefreshTokenException("Refresh Token 값이 일치하지 않습니다.");
+        }
+
+        if (!jwtTokenProvider.validateToken(refreshToken)) {
+            redisService.deleteRefreshToken(refreshToken);
+            userService.deleteRefreshToken(principal);
+            log.info("Refresh Token is invalidate.");
+            throw new MalformedJwtException("유효하지 않은 토큰입니다.");
         }
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        // Redis에 저장되어 있는 RT 삭제
-        redisService.deleteRefreshToken(refreshToken);
+        if (redisService.getRefreshToken(refreshToken) != null) {
+            // Redis에 저장되어 있는 RT 삭제
+            redisService.deleteRefreshToken(refreshToken);
+        }
         // 토큰 재발급
         JwtTokenDto reissueTokenDto = jwtTokenProvider.generateToken(authentication);
 
@@ -104,33 +122,20 @@ public class AuthService {
 
         log.debug("User Id = {}", principal);
         log.debug("RefreshToken save in Redis = {}", reissueTokenDto.getRefreshToken());
+
         user.setRefreshToken(reissueRefreshToken);
         userService.saveUser(user);
         return reissueTokenDto;
     }
 
     public void logout(String accessToken) {
-        String token = resolveToken(accessToken);
-        String principal = jwtTokenProvider.getAuthentication(token).getName();
+        String token = jwtTokenProvider.resolveToken(accessToken);
+        log.debug("token = {}", token);
+        String principal = jwtTokenProvider.extractUserId(accessToken);
+        log.debug("principal = {}", principal);
+        redisService.saveJwtBlackList(accessToken);
         redisService.deleteRefreshToken(principal);
         userService.deleteRefreshToken(principal);
-    }
-
-    public String extractUserId(String accessToken) {
-        String token = resolveToken(accessToken);
-        return jwtTokenProvider.parseClaims(token).getSubject();
-    }
-
-    public String resolveToken(String accessToken) {
-        if (accessToken != null && accessToken.startsWith(JwtProperties.TOKEN_PREFIX)) {
-            return accessToken.substring(7);
-        }
-        return null;
-    }
-
-    public boolean idDuplicated(String userId) {
-        Optional<User> optionalUser = userRepositoy.findByUserId(userId);
-        return optionalUser.isPresent();
     }
 
 }
