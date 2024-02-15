@@ -19,11 +19,10 @@ const {
 
 /**
  * 카드 셔플 후 분배
- * @param {Object} room 방 객체
- * @returns 
  */
 const shuffleArray = (rooms, roomName) => {
-  let array = rooms[roomName].card
+  rooms[roomName].card = Array.from({ length: 64 }, (_, i) => i);
+  let array = rooms[roomName].card;
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
@@ -33,75 +32,77 @@ const shuffleArray = (rooms, roomName) => {
 
   while (i > 0) {
     i--;
-    for (let k = 0; k < rooms[roomName].playerCount; k++) {
+    for (let psq in rooms[roomName].ps) {
       if (rooms[roomName].card.length === 0) {
         break;
       }
-      rooms[roomName].players[k].hand.push(rooms[roomName].card.pop());
+      rooms[roomName].ps[psq].hand.push(rooms[roomName].card.pop());
     }
   }
 }
 
 /**
  * 방 생성 (방이 존재하지 않는 경우)
- * @param {string} roomName 방 이름 
- * @param {string} id 유저 id 
  */
-const addRoom = (rooms, roomName, playerId, socketId) => {
+const addRoom = (rooms, roomName, rpw, playerSequence, socketId, playerNickName) => {
 
   rooms[roomName] = JSON.parse(JSON.stringify(roomInfo)); // 깊은 복사로 수정 완료
-  rooms[roomName].roomName = roomName;
-  rooms[roomName].players.push({ ...Player(playerId, socketId) });
-  rooms[roomName].adminPlayer = playerId;
-  console.log(`##### player ${playerId} socket ${socketId} created Room ${roomName}`);
+  rooms[roomName].rnm = roomName;
+  rooms[roomName].ps[playerSequence] = { ...Player(playerSequence, socketId, playerNickName) };
+  rooms[roomName].adm = playerSequence;
+  rooms[roomName].rpw = rpw;
+  console.log(`##### [addRoom] player ${playerSequence} socket ${socketId} playerNN ${playerNickName} created Room ${roomName}`);
   /*TODO - send room data to backend server!!! */
-
-  console.log(`##### create room : ${rooms[roomName].players}`);
+  console.log(rooms[roomName]);
+  console.log(`##### [addRoom] create room : ${roomName}`);
 }
 
 /**
  * 유저 추가 (방이 존재하는 경우)
- * @param {string} roomName 방 이름
- * @param {string} id 유저 id 
  */
-const addPlayer = (rooms, roomName, playerId, socketId, socket, io) => {
+const addPlayer = (io, socket, rooms, roomName, playerSequence, socketId, playerNickName) => {
   let isFirst = true;
   console.log(rooms[roomName]);
   // 이미 방에 들어가 있는지 체크 
-  try {
-    for (let player of rooms[roomName].players) {
-      if (player.playerId === playerId) {
-        isFirst = false;
-        break;
-      }
+
+  for (let player in rooms[roomName].ps) {
+    if (player === playerSequence) {
+      isFirst = false;
+      break;
     }
-  } catch (e) {
-    console.log("##### Error!!! players not Exist!!")
-    console.log(rooms[roomName])
   }
+
   if (isFirst) {
-    rooms[roomName].playerCount++;
-    let newPlayer = Player(playerId, socketId)
+    let newPlayer = { ...Player(playerSequence, socketId, playerNickName) }
     let playerData = {
-      'playerId': newPlayer.playerId,
-      'playerName': newPlayer.playerName
+      'psq': newPlayer.psq,
+      'pn': newPlayer.pn,
     }
-    console.log("##### player Enter Message emitted");
-    for (let k = 0; k < rooms[roomName].players.length; k++) {
-      io.to(rooms[roomName].players[k].socketId).emit('playerEnter', playerData)
-    }
-    rooms[roomName].players.push({ ...newPlayer });
+    rooms[roomName].pc++;
+    rooms[roomName].ps[playerSequence] = { ...newPlayer };
+
+    console.log("##### [addPlayer] player Enter Message emitted");
+    let playersData = Object.keys(rooms[roomName].ps).reduce((acc, id) => {
+      const player = rooms[roomName].ps[id];
+      acc[id] = {
+        'psq': player.psq,
+        'pn': player.pn,
+        'pen': player.pen,
+      };
+      return acc;
+    }, {});
+
+    io.to(roomName).emit('playerEnter', playersData);
   }
-  console.log(`##### player ${playerId} socket ${socketId} entered Room ${roomName}`);
+  console.log(`##### [addPlayer] p : ${playerSequence} s : ${socketId} pn : ${playerNickName} 
+      entered Room ${roomName}`);
+
   /*TODO - send room data and player data to backend server */
 
-  sendGameInfo(socket, io, rooms);
 }
 
 /**
  * 로비 데이터 보내기
- * @param {Object} rooms 
- * @returns 
  */
 const getRoomInfoForLobby = (rooms) => {
   let lobbyInfo = {};
@@ -109,14 +110,18 @@ const getRoomInfoForLobby = (rooms) => {
   for (let room in rooms) {
     let info = rooms[room];
     lobbyInfo[room] = {
-      'roomId': info['roomId'],
-      'roomName': info['roomName'],
-      'roomAddress': info['roomAddress'],
+      'roomId': info['rid'],
+      'roomName': info['rnm'],
+      'roomAddress': info['radr'],
       'status': info['status'],
-      'createdDate': info['createdDate'],
-      'playerCount': info['playerCount'],
-      'adminPlayer': info['adminPlayer'],
+      'createdDate': info['cdt'],
+      'playerCount': info['pc'],
+      'adminPlayer': info.ps[info['adm']].pn,
+      'isLocked': false,
     };
+    if (info['rpw'] !== '') {
+      lobbyInfo[room].isLocked = true;
+    }
   }
   return lobbyInfo;
 }
@@ -128,18 +133,29 @@ const removeRoom = (rooms, room) => {
 
 /**
  * 유저 퇴장 
- * @param {String} roomName 
- * @param {String} playerId 
  */
-const removePlayer = (rooms, room, id, socket, io) => {
-
-  for (let k = 0; k < rooms[room].players.length; k++) {
-    io.to(rooms[room].players[k].socketId).emit('playerLeave', id)
+const removePlayer = (io, socket, rooms, roomName, psq) => {
+  console.log(`##### [removePlayer]`);
+  console.log(rooms);
+  console.log(rooms[roomName]);
+  console.log(roomName);
+  delete rooms[roomName].ps[psq];
+  if (rooms[roomName].adm === psq) {
+    for (let player in rooms[roomName].ps) {
+      rooms[roomName].adm = player;
+      break;
+    }
   }
-  rooms[room].players = rooms[room].players.filter((e) => e.playerId !== id);
-  rooms[room].playerCount -= 1;
-  if (rooms[room].playerCount === 0) {
-    removeRoom(rooms, room);
+  if (rooms[roomName].nt === psq) {
+    for (let player in rooms[roomName].ps) {
+      rooms[roomName].nt = player;
+      break;
+    }
+  }
+  rooms[roomName].pc -= 1;
+  io.to(roomName).emit('playerLeave', rooms[roomName].ps);
+  if (rooms[roomName].pc === 0) {
+    removeRoom(rooms, roomName);
   }
 };
 
@@ -149,7 +165,6 @@ const handleDisconnect = (socket, io, rooms) => {
 
 
 const roomSocketMethods = () => {
-
   /**
    * Socket IO 관련 함수들 정의
    */
@@ -157,18 +172,16 @@ const roomSocketMethods = () => {
   /* 방 정보 전달 / 로비에서 사용 */
   const sendRoomInfo = async (socket, io, rooms) => {
     socket.on('requestRoomsInfo', (callback) => {
-      console.log("##### callback roomsInfo");
-
+      console.log("##### [sendRoomInfo] callback roomsInfo");
       // roomName, roomId, playerCount, roomAdmin, roomStatus 전달
-
       callback(getRoomInfoForLobby(rooms));
     });
   }
 
   /* 방 생성 이벤트 */
   const createRoom = async (socket, io, rooms) => {
-    socket.on('createRoom', (room, pid, callback) => {
-      if (Object.keys(rooms).includes(room)) {
+    socket.on('createRoom', (roomName, rpw = "", psq, pn, callback) => {
+      if (Object.keys(rooms).includes(roomName)) {
         callback(false);
       } else {
         // 기존방 나가기
@@ -179,12 +192,12 @@ const roomSocketMethods = () => {
           }
         }
 
-        addRoom(rooms, room, pid, socket.id);
-        console.log(`##### player [${socket.id}], make room ${room}`)
+        addRoom(rooms, roomName, rpw, psq, socket.id, pn);
+        console.log(`##### [createRoom] player [${socket.id}], make room ${roomName}`)
 
         // 입력받은 방 들어가기
-        socket.join(room);
-        rooms[room].nowTurn = pid;
+        socket.join(roomName);
+        rooms[roomName].nt = psq;
         callback(true);
       }
     });
@@ -192,52 +205,103 @@ const roomSocketMethods = () => {
 
   /* 방 입장 이벤트 */
   const enterRoom = async (socket, io, rooms) => {
-    socket.on('enterRoom', (room, pid, callback) => {
-      // 인원수 체크
-      if (rooms[room] && rooms[room].playerCount >= 6) {
-        callback(false);
-      } else {
-        // 기존방 나가기
-        for (let nowRoom of socket.rooms) {
-          if (nowRoom !== socket.id) {
-            socket.leave(nowRoom);
-            removePlayer(rooms, nowRoom, pid, socket, io);
+    socket.on('enterRoom', (roomName, rpw = "", psq, pn, callback) => {
+
+      if (roomName === undefined || rooms[roomName] === undefined) { // 방이 사라진 경우...
+        callback(1)
+        return;
+      }
+
+      const matchingKey = Object.keys(rooms[roomName].ps).find(key => rooms[roomName].ps[key].psq === psq);
+      if (matchingKey === undefined) {
+
+        // 인원수 체크
+        if (rooms[roomName] && rooms[roomName].pc >= 6) {
+          callback(2);
+          return;
+        }
+
+        if (rooms[roomName].rpw !== '') {
+          if (rooms[roomName].rpw !== rpw) {
+            callback(3);
+            return;
           }
         }
 
-        // 입력받은 방 들어가기
-        socket.join(room);
+        if (rooms[roomName].status === 1) {
+          callback(4);
+          return;
 
-        // console.log(io.of('/').adapter.rooms);
-        socket.emit('updateRoom', rooms);
-        addPlayer(rooms, room, pid, socket.id, socket, io)
-        callback(true)
-        console.log(`##### player ${socket.id} join room : ${room}`);
+        }
+
+
+
+        // 기존방 나가기
+        for (let nowRoom of socket.rooms) {
+          if (nowRoom !== socket.id && nowRoom !== roomName) {
+            socket.leave(nowRoom);
+            removePlayer(io, socket, rooms, nowRoom, psq);
+          }
+        }
       }
+
+      for (let rn in rooms) {
+        for (let p in rooms[rn].ps) {
+          if (p === psq && rn !== roomName) {
+            removePlayer(io, socket, rooms, rn, psq);
+          }
+        }
+      }
+
+      if (roomName === undefined || rooms[roomName] === undefined) { // 방이 사라진 경우...
+        callback(1)
+        return;
+      }
+
+      if (rooms[roomName].rpw !== '') {
+        if (rooms[roomName].rpw !== rpw) {
+          callback(3);
+          return;
+        }
+      }
+
+      if (rooms[roomName].status === 1) {
+        callback(4);
+        return;
+
+      }
+      // 입력받은 방 들어가기
+      socket.join(roomName);
+
+      // console.log(io.of('/').adapter.rooms);
+      socket.emit('updateRoom', rooms);
+      addPlayer(io, socket, rooms, roomName, psq, socket.id, pn)
+      callback(0)
+      console.log(`##### [enterRoom] player ${socket.id} join room : ${roomName}`);
+
     });
   }
 
   // 방 퇴장
   const leaveRoom = async (socket, io, rooms) => {
-    socket.on('leaveRoom', (room, id, callback) => {
-      console.log(`##### leave Room, ${room} and ${id}`)
-      removePlayer(rooms, room, id, socket, io);
-      socket.leave(room);
+    socket.on('leaveRoom', (roomName, psq) => {
+      console.log(`##### [leaveRoom] leave Room, ${roomName} and ${psq}`)
+      removePlayer(io, socket, rooms, roomName, psq);
+      socket.leave(roomName);
     })
-
   }
 
 
 
   /* 방 새로고침 이벤트 */
   const checkReconnection = async (socket, io, rooms) => {
-    socket.on('checkReconnection', (pid, callback) => {
-      console.log(`##### Checking Reconnection of User ${pid}`);
+    socket.on('checkReconnection', (psq, callback) => {
+      console.log(`##### [checkReconnection] Checking Reconnection of User ${psq}`);
       try {
         for (let room in rooms) {
-          for (let player of rooms[room].players) {
-            if (player.playerId === pid) {
-              player.socketId = socket.id;
+          for (let p in rooms[room].ps) {
+            if (p === psq) {
+              rooms[room].ps[p].sid = socket.id;
               socket.join(room);
               break;
             }
@@ -251,42 +315,31 @@ const roomSocketMethods = () => {
 
   /* 채팅 메세지 이벤트 */
   const chatMessage = async (socket, io, rooms) => {
-    socket.on('chatMessage', async (msg, user) => {
-      let room;
-      for (let nowRoom of socket.rooms) {
-        if (nowRoom !== socket.id) {
-          room = nowRoom;
-        }
+    socket.on('chatMessage', async (msg, user, roomName) => {
+      // if(msg!==""){
+      //   console.log(`##### chat message : ${msg} / room : ${roomName}`);
+      //   io.to(roomName).emit('chatMessage', user , msg );
+      // }
+      if (msg.trim() !== "" && msg.length <= 30) {
+        console.log(`##### chat message : ${msg} / room : ${roomName}`);
+        io.to(roomName).emit('chatMessage', user, msg);
       }
-      console.log(`##### chat message : ${msg} + " / room : " + ${room}`);
-      io.to(room).emit('chatMessage', user + " : " + msg + "," + room);
     });
   }
 
 
   /* 게임시작 카드 나눠주기 */
   const cardShare = async (socket, io, rooms) => {
-    socket.on('start', () => {
-      console.log(`##### card room : ${rooms}`);
-      let room;
-      let roomsKeys = Object.keys(rooms);
-      for (let roomName of roomsKeys) {
-        for (let player of rooms[roomName].players) {
-          if (player.socketId === socket.id) {
-            room = roomName;
-            break;
-          }
-        }
+    socket.on('start', (roomName) => {
+      console.log(`##### [cardShare] current Room : [${(roomName)}]`);
+      shuffleArray(rooms, roomName);
+      console.log('##### [cardShare] Shuffle End')
+      rooms[roomName].status = 1;
+      rooms[roomName].game.state = 1;
+      for (let psq in rooms[roomName].ps) {
+        io.to(rooms[roomName].ps[psq].sid).emit('gameStart', rooms[roomName].game.state, rooms[roomName].ps[psq].hand)
       }
-      console.log(`##### current Room : (${(rooms[room].roomName) ? rooms[room].roomName : "err"})`);
-      shuffleArray(rooms, room);
-      console.log('##### Shuffle End')
-
-      rooms[room].onBoard.status = 1;
-      for (let k = 0; k < rooms[room].players.length; k++) {
-        io.to(rooms[room].players[k].socketId).emit('gameStart', rooms[room].players[k].hand)
-      }
-      console.log(`#####  card ended : ${rooms}`);
+      console.log(`##### [cardShare] card ended : ${rooms}`);
     });
   }
 

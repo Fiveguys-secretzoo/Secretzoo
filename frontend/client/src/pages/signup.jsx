@@ -5,7 +5,11 @@ import '../style/play.css'
 const Signup = () => {
   return (
     <div>
-      <SignupForm></SignupForm>
+      <div className="bg-signup-bg w-screen h-screen bg-cover z-[-10]">
+        <div className="h-screen bg-custom-opacity">
+          <SignupForm></SignupForm>
+        </div>
+      </div>
     </div>
   );
 };

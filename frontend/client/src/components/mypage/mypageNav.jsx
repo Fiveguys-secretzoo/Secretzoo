@@ -1,11 +1,12 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
+/* 마이페이지서 내정보 내랭킹 내업적을 이동 */
 const MypageNav = () => {
   const location = useLocation();
 
   const active = (path) => {
-    return location.pathname === path ? "px-6 text-blue-500 font-bold" : "px-6 text-black font-bold"
+    return location.pathname === path ? "px-6 text-[#5F8670] font-bold" : "px-6 text-white font-bold"
   };
   return (
     <>
