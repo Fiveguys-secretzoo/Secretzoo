@@ -5,6 +5,7 @@ import { useDispatch} from 'react-redux';
 import { setNoLoginUserInfo } from '../../store/userSlice';
 import Swal from 'sweetalert2';
 
+/* 비회원 */
 const NoLogin = () => {
   const [name, setName] = useState("");
   const navigate = useNavigate();

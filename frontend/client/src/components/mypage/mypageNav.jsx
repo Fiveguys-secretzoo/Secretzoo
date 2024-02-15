@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
+/* 마이페이지서 내정보 내랭킹 내업적을 이동 */
 const MypageNav = () => {
   const location = useLocation();
 

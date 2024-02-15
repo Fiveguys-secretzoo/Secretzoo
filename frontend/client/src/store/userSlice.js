@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import Swal from 'sweetalert2';
 
 const axiosInstance = axios.create();
-
+/* 토큰재발급, 중복로그인 */
 axiosInstance.interceptors.request.use(async config => {
   const expiresAt = parseInt(sessionStorage.getItem('expires_at'), 10);
   if (Date.now() > expiresAt) {
@@ -62,7 +62,7 @@ axiosInstance.interceptors.request.use(async config => {
   return config;
 });
 
-
+/* 유저정보 */
 export const getUserInfo = createAsyncThunk(
   'user/getUserInfo',
   async (_, thunkAPI) => {
@@ -93,7 +93,7 @@ export const getUserInfo = createAsyncThunk(
     }
   }
 );
-
+/* 프로필 이미지 변경 */
 export const axiosUpdateProfileImage = createAsyncThunk(
   'user/axiosUpdateProfileImage',
   async (number, { dispatch, rejectWithValue }) => {
@@ -104,7 +104,7 @@ export const axiosUpdateProfileImage = createAsyncThunk(
     }
   }
 );
-
+/* 닉네임 */
 export const axiosUpdateNickname = createAsyncThunk(
   'user/axiosUpdateNickname',
   async (nickname, { dispatch, rejectWithValue }) => {
@@ -117,6 +117,7 @@ export const axiosUpdateNickname = createAsyncThunk(
   }
 );
 
+/* 메인 업적 변경 */
 export const axiosUpdateMainAchievement = createAsyncThunk(
   'user/axiosUpdateMainAchievement',
   async (mainAchievement, { dispatch, rejectWithValue }) => {
@@ -127,6 +128,8 @@ export const axiosUpdateMainAchievement = createAsyncThunk(
     }
   }
 );
+
+/* 비밀번호 체크 */
 export const axiosCheckPassword = createAsyncThunk(
   'user/axiosCheckPassword',
   async (password) => {
@@ -138,6 +141,7 @@ export const axiosCheckPassword = createAsyncThunk(
   }
 );
 
+/* 비밀번호 변경 */
 export const axiosUpdatePassword = createAsyncThunk(
   'user/axiosUpdatePassword',
   async (password) => {
@@ -148,6 +152,8 @@ export const axiosUpdatePassword = createAsyncThunk(
     }
   }
 );
+
+/* 완료업적 조회 */
 export const axiosGetDoneRewards= createAsyncThunk(
   'user/axiosGetDoneRewards',
   async (userSequence) => {
@@ -159,6 +165,8 @@ export const axiosGetDoneRewards= createAsyncThunk(
     }
   }
 );
+
+/* 모든 업적 조회 */
 export const axiosGetTotalRewards= createAsyncThunk(
   'user/axiosGetTotalRewards',
   async (userSequence) => {
@@ -170,6 +178,8 @@ export const axiosGetTotalRewards= createAsyncThunk(
     }
   }
 );
+
+/* 닉네임 */
 export const axiosLogout = createAsyncThunk(
   'user/axiosLogout',
    () => {
@@ -189,7 +199,7 @@ export const axiosLogout = createAsyncThunk(
   }
 );
 
-
+/* 유저 슬라이스 */
 const userSlice = createSlice({
   name: 'user',
   initialState: {
@@ -199,6 +209,7 @@ const userSlice = createSlice({
     isAuthenticated : false,
   },
   reducers: {
+    /* 비회원  */
     setNoLoginUserInfo(state) {
       state.userInfo = {
         name: 'noLoginUser',

@@ -78,8 +78,8 @@ const Profile = () => {
         {
           sessionStorage.getItem('noLogin') ? (<div></div>) :
           (<div className='exp'>
-            <Label className='text-[0.7em]' value={'다음 레벨까지 남은 경험치 '+(user.nextExp-user.exp)+'('+(user.exp-user.prevExp)/(user.nextExp-user.prevExp)*100+')%'} />
-            <Progress progress={((user.exp-user.prevExp)/(user.nextExp-user.prevExp)*100).toFixed(2)} />
+            <Label className='text-[0.7em]' value={'다음 레벨까지 남은 경험치 '+(user.nextExp-user.exp)+'('+((user.exp-user.prevExp)/(user.nextExp-user.prevExp)*100).toFixed(2)+')%'} />
+            <Progress progress={((user.exp-user.prevExp)/(user.nextExp-user.prevExp)*100)} />
           </div>)
         }
       </Card>

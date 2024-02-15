@@ -349,15 +349,8 @@ const Play = () => {
 
 
   const sendMessage = () => {
-    if(input.trim() !== "" && input.length <= 30 ) {
-      socket.emit('chatMessage', input, sessionStorage.getItem('userNickname'), sessionStorage.getItem('roomName'));
-      setInput('');
-    } else {
-      Swal.fire({
-        "text" : '공백이거나 30자 이상의 채팅은 전송 불가합니다.',
-        "confirmButtonColor" : '#3085d6'
-      });
-    }
+    socket.emit('chatMessage', input, sessionStorage.getItem('userNickname'), sessionStorage.getItem('roomName'));
+    setInput('');
   };
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
@@ -728,7 +721,7 @@ const Play = () => {
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={handleKeyDown}
-                    placeholder="채팅을 입력하세요..."
+                    placeholder="공백이거나 30자 이상의 채팅은 전송 불가합니다."
                     style={{ width: '100%' }}
                   />
                 </div>

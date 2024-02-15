@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { GiAncientSword, GiMagicShield, GiRunningShoe  } from "react-icons/gi";
 
+/* 내 랭킹  */
 const MyRanking = () => {
   const user = useSelector((state) => state.user.userInfo);
   

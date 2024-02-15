@@ -9,6 +9,8 @@ const LoginForm = () => {
   const [id, setId] = useState("");
   const [pass, setPass] = useState("");
   const navigate = useNavigate();
+
+  /* 유효성 검증 */
   const requsetLogin = () => {
     if(id.length  === 0){
       Swal.fire({
@@ -48,7 +50,7 @@ const LoginForm = () => {
       return;
     })
   }
-
+  /* 회원가입으로 이동 */
   const signup = () => {
     navigate("/signup");
   }

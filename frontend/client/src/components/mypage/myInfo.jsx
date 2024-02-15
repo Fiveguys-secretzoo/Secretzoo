@@ -5,7 +5,7 @@ import axios from 'axios';
 import { Button, TextInput, Modal, Label, Card } from 'flowbite-react';
 import Swal from 'sweetalert2';
 
-
+/* 내정보 페이지 각종 정보 변경 가능 */
 const MyInfo = () => {
 
   const dispatch = useDispatch();
