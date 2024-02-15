@@ -122,6 +122,20 @@
               <b>김중광👨🏻</b>
             </a> 
         </td>
+         <td style="min-width: 250px;">
+            <a href="https://github.com/hyunsoo10">
+              <img src="https://avatars.githubusercontent.com/u/139304756?v=4" width="100">
+              <br />
+              <b>조현수👨🏻</b>
+            </a> 
+        </td>
+        <td style="min-width: 250px;">
+            <a href="https://github.com/jaeyun1723">
+              <img src="https://avatars.githubusercontent.com/u/84389492?v=4" width="100">
+              <br />
+              <b>김재윤👨🏻</b>
+            </a>
+        </td>
     </tr>
     <tr>
         <td>
@@ -142,32 +156,7 @@
         2️⃣ 메인 페이지 구현 <br>
         <br/>
         </td>
-    </tr>
-</div>
-</table>
-</div>
-
-<div align="center">
-<table align="center">
-<div align="center"> 
-    <tr align="center">
-          <td style="min-width: 250px;">
-            <a href="https://github.com/hyunsoo10">
-              <img src="https://avatars.githubusercontent.com/u/139304756?v=4" width="100">
-              <br />
-              <b>조현수👨🏻</b>
-            </a> 
-        </td>
-        <td style="min-width: 250px;">
-            <a href="https://github.com/jaeyun1723">
-              <img src="https://avatars.githubusercontent.com/u/84389492?v=4" width="100">
-              <br />
-              <b>김재윤👨🏻</b>
-            </a>
-        </td>
-    </tr>
-    <tr>
-          <td>
+               <td>
         0️⃣ Back-end <br> 
         1️⃣ 인프라 담당<br>
         2️⃣ 게임 Ranking API 개발, QA <br>
