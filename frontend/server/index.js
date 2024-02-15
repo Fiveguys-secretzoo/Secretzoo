@@ -40,9 +40,10 @@ async function main() {
     checkLoser,
   } = playMethods;
 
-  const handleException = (socket) => {};
+  const handleException = (socket) => { };
   //리액트 서버
   // const serverURL = "http://localhost:3000";
+  // const serverURL = 'http://react-app:3000'
   const serverURL = 'https://secretzoo.site'
   // cors 설정
   app.use(
