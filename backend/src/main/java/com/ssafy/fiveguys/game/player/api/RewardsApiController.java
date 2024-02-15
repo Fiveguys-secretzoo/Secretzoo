@@ -41,22 +41,10 @@ public class RewardsApiController {
     private final PlayerService playerService;
 
 
-    /**
-     * 플레이어의 게임 결과에서 리워드(업적) 정보를 저장
-     * gameResult로 받았을 때 처리할 수 있는지 검토 필요하기 때문에 주석 남겨놨음
-     */
-//    @PostMapping("/save")
-//    public ResponseEntity<String> saveRewards(@RequestBody GameResult gameResult) {
-//        log.info("gameResult = {}", gameResult);
-//        rewardsService.saveRewardsTest(gameResult);
-//        return ResponseEntity.ok(" 성공적으로 저장되었습니다.");
-//    }
-
     @Operation(summary = "플레이어 업적 정보 저장 API")
     @PostMapping("/save")
     public ResponseEntity<String> saveRewards(@RequestBody AnimalDto animalDto) {
         log.debug("animalDto = {}", animalDto);
-//        rewardsService.saveRewards(animalDto);
         rewardsService.saveRewards(animalDto);
         return ResponseEntity.status(HttpStatus.OK)
             .header(HttpHeaders.CONTENT_TYPE, "text/plain; charset=utf-8")

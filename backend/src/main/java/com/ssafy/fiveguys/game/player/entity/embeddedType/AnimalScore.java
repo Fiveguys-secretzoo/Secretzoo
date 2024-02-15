@@ -22,10 +22,4 @@ public class AnimalScore {
     private long truth = 0L;
     private long lie = 0L;
 
-    /**
-     * AnimalScore sum 메서드
-     */
-    private static void sum(AnimalScore animalScore) {
-//        animalScore.getAttackSuccess()
-    }
 }

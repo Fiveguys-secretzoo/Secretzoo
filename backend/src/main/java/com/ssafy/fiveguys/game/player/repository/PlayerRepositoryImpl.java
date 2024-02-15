@@ -11,9 +11,7 @@ import com.ssafy.fiveguys.game.player.entity.QPlayer;
 import com.ssafy.fiveguys.game.user.entity.QUser;
 import jakarta.persistence.EntityManager;
 import java.util.List;
-import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 

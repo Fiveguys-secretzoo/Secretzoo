@@ -29,12 +29,10 @@ public class PlayerAnimal extends BaseTimeEntity {
     private Long playerAnimalSequence;
 
     @ManyToOne(fetch = FetchType.LAZY)
-//    @JsonIgnore
     @JoinColumn(name = "player_sequence")
     private Player player;
 
     @ManyToOne(fetch = FetchType.LAZY)
-//    @JsonIgnore
     @JoinColumn(name = "animal_id")
     private Animal animal;
 
@@ -47,14 +45,6 @@ public class PlayerAnimal extends BaseTimeEntity {
         this.animalScore = animalScore;
     }
 
-//    private Long attackSuccess = 0L;
-//    private Long attackFail = 0L;
-//    private Long defenseSuccess = 0L;
-//    private Long defenseFail = 0L;
-//    private Long trust = 0L;
-//    private Long distrust = 0L;
-//    private Long truth = 0L;
-//    private Long lie = 0L;
 
     /**
      * 생성 메서드

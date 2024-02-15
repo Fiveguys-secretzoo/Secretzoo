@@ -30,24 +30,6 @@ public class RankRequestDto {
     private long defenseSuccess;
     private long passCount;
 
-//    private Animal cat = new Cat();
-//    private Animal dog = new Dog();
-//    private Animal tiger = new Tiger();
-//    private Animal whale = new Whale();
-//    private Animal sheep = new Sheep();
-//    private Animal fox = new Fox();
-//    private Animal pig = new Pig();
-//    private Animal deer = new Deer();
-
-    //동물 업적 관련 지표
-//    private Long catAttackSuccess;
-//    private Long catAttackFail;
-//    private Long catDefenseSuccess;
-//    private Long catDefenseFail;
-//    private Long catTrust;
-//    private Long catDistrust;
-//    private Long catLie;
-//    private Long catTrue;
 
 
 }

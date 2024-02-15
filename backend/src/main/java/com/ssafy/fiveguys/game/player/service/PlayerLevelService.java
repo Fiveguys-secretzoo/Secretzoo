@@ -31,7 +31,6 @@ public class PlayerLevelService {
         Player player = playerRepository.findByUser_UserSequence(userSequence);
         //레벨 업데이트
         PlayerLevel currentLevel = playerLevelRepository.findFirstByExpGreaterThanOrderByExpAsc(exp);
-//        PlayerLevel prevLevel = playerLevelRepository.findExpByLevel(currentLevel.getLevel() - 1);
         player.setPlayerLevel(currentLevel);
         log.debug("user seq = {}", userSequence);
         log.debug("player exp = {}", player.getExp());

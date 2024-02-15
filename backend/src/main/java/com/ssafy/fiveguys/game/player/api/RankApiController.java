@@ -70,7 +70,7 @@ public class RankApiController {
             rankRequestDto.getPassCount());
         RankingScore rankingScore = new RankingScore(attackScore, defenseScore, passScore);
 
-        //redis 에 랭킹 정보 점수 저장
+        //랭킹 정보 점수 저장
         rankService.saveRank(rankRequestDto.getUserSequence(), rankingScore);
         //player 기타 정보 저장
         playerService.savePlayer(rankRequestDto.getUserSequence(), rankRequestDto);

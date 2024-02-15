@@ -175,9 +175,6 @@ public class PlayerService {
         playerRepository.save(player);
         log.debug("player 생성 성공");
         List<Rewards> allRewards = rewardsRepository.findAll();
-//        List<PlayerRewards> playerRewards = allRewards.stream()
-//            .map(rewards -> new PlayerRewards(player, rewards, false))
-//            .collect(Collectors.toList());
         List<PlayerRewards> playerRewards = rewardsRepository.findAll().stream()
             .map(rewards -> {
                 PlayerRewards playerReward = new PlayerRewards(player, rewards, false);

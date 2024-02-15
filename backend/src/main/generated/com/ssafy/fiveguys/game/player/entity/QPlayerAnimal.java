@@ -29,10 +29,10 @@ public class QPlayerAnimal extends EntityPathBase<PlayerAnimal> {
     public final com.ssafy.fiveguys.game.player.entity.embeddedType.QAnimalScore animalScore;
 
     //inherited
-    public final DateTimePath<java.sql.Timestamp> createdDate = _super.createdDate;
+    public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
     //inherited
-    public final DateTimePath<java.sql.Timestamp> lastModifiedDate = _super.lastModifiedDate;
+    public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
 
     public final QPlayer player;
 
