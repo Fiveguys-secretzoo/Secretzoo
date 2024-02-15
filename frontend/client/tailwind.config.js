@@ -24,6 +24,7 @@ module.exports = {
       "login-bg" : 'url(./assets/img/bg.png)',
       "lobby-bg" : 'url(./assets/img/bg.png)',
       "play-bg" : 'url(./assets/img/3.png)',
+      "signup-bg" : 'url(./assets/img/bg.png)',
     },
   },
   plugins: [require("flowbite/plugin")],
