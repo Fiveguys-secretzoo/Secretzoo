@@ -123,8 +123,8 @@
   <div align="center"><img src="/uploads/c2ca6f535556ff97e353bbfd1e557ec2/게임진행화면.gif" alt="게임진행화면" width="70%" height="70%"></div>
 
 - <strong>게임 결과 화면
-  <div align="center">
-<img src="/uploads/7e0616a392a114fd29436c3881c70b00/패배.gif" alt="패배" width="70%" height="70%"></div>
+  <div align="center"><img src="/uploads/7e0616a392a114fd29436c3881c70b00/패배.gif" alt="패배" width="70%" height="70%"></div>
+
 
 #### 회원 정보
 - 회원 정보, 랭킹, 업적을 확인할 수 있습니다.
