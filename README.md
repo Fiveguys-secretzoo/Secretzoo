@@ -326,7 +326,7 @@
 
 # V. 활용 기술 🧰
 ## 1. WebRTC(OpenVidu)
-web rtc 부분 WebRTC 에서 제공해주는 것이 가장 많은 openvidu 를 선택하여 n:m 통신을 진행했습니다. 
+WebRTC 에서 제공해주는 것이 가장 많은 openvidu 를 선택하여 n:m 통신을 진행했습니다. 
 openvidu에서 client server(React)를 저희 코드에 맞게 바꾸어 사용하였고 
 signaling server(백엔드 session 생성 및 token 생성 요청)를 사용해 Media-server로 요청을 보냈습니다.
 저희 서비스에서 방 생성을 할때 입력한 방 제목을 sessionid 로 요청을 보냈는데 한글로 sessionid를 보내면 오류가 나기에
