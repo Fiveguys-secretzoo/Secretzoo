@@ -91,22 +91,24 @@
 </div>
 
 #### 게임플레이
-- 방 대기 화면
+- <strong>방 대기 화면
 ![image](/uploads/5cd3bb10d424b6bcacb301d5f58b39a6/image.png)
 
-- 게임 시작
+- <strong>게임 시작
 <div align="center">
 <img src="/uploads/1521477e917093852bc8575b34f21cb3/게임시작.gif" alt="게임시작" width="70%" height="70%">
 </div>
 
-- 공격
+- <strong>공격
 
   - 공격 성공
-<div align="center">
-<img src="/uploads/27b9adf2ff3a947a200bc1c0a7eb3f4a/공격성공.gif" alt="공격성공" width="70%" height="70%">
-</div>
+  <div align="center"><img src="/uploads/27b9adf2ff3a947a200bc1c0a7eb3f4a/공격성공.gif" alt="공격성공" width="70%" height="70%"></div>
 
-- 수비
+  - 공격 실패
+  <div align="center"><img src="/uploads/48a1e4e5417fbc6d095153d361766ad4/공격실패.gif" alt="공격실패" width="70%" height="70%"></div>
+
+
+- <strong>수비
 
   - 수비 성공
   <div align="center"><img src="/uploads/57f6cc47e352599f3a6225ed93a26aa9/수비성공.gif" alt="수비성공" width="70%" height="70%"></div>
@@ -114,14 +116,15 @@
   - 수비 실패
   <div align="center"><img src="/uploads/0bfdb06f1192d0d48f366a3112bc9e40/수비실패.gif" alt="수비실패" width="70%" height="70%"></div>
 
-- 패스
-<div align="center"><img src="/uploads/8e5274272bb89da29102fefd5ceabfde/패스.gif" alt="패스" width="70%" height="70%"></div>
+- <strong>패스
+  <div align="center"><img src="/uploads/a7542bfc8cc3947b8c8e5ec1f41a550c/패스.gif" alt="패스" width="70%" height="70%"></div>
 
-- 게임 진행 중 다른 유저들에게 보이는 화면
+- <strong>게임 진행 중 다른 유저들에게 보이는 화면
   <div align="center"><img src="/uploads/c2ca6f535556ff97e353bbfd1e557ec2/게임진행화면.gif" alt="게임진행화면" width="70%" height="70%"></div>
 
-- 패배(게임 종료, 결과) 
-<div align="center"><img src="/uploads/2ab15353491cf37493ec95099b0d4c13/패배.gif" alt="패배" width="70%" height="70%"></div>
+- <strong>게임 결과 화면
+  <div align="center">
+<img src="/uploads/7e0616a392a114fd29436c3881c70b00/패배.gif" alt="패배" width="70%" height="70%"></div>
 
 #### 회원 정보
 - 회원 정보, 랭킹, 업적을 확인할 수 있습니다.
@@ -431,8 +434,7 @@ SSL 인증서 적용, Nginx 리버스 프록시, Jenkins와 Gitlab을 이용한 
 이번에 구현하지 못한 기능들이 아쉽지만, 이런 아쉬움들을 잘 새겨서 다음에 더 완성도 있는 프로젝트를 만드는 밑거름으로 활용하고 싶습니다.
 
 ### **👤 김재윤** <br>
-- Spring Security, Redis등 전에 써보지 못한 기술을 써보며 한 걸음 성장할 수 있는 기회였습니다. 인증, 인가 과정에 대해 많이 배우게 되었고, 웹 서비스가 어떻게 배포가 되는지 아키텍쳐에 대해 알게 되어 개발 경험치를 많이 쌓을 수 있었습니다. 또한, git과 jira를 통해 효율적인 일정 관리와 원활한 협업을 할 수 있어서 좋았습니다.<br> 
-프로젝트 기간동안 팀원들과 힘든 것보다 매일 매일 웃으며 즐겁게 코딩했던 것 같습니다. 팀원들 모두 너무 고생했고 감사하다는 말을 전하고 싶습니다.
+- 처음 쓰는 기술 스택들을 이것 저것 써보며 많이 성장할 수 있는 기회였습니다. 팀원들과 힘든 것보다 매일 매일 웃으며 즐겁게 코딩했던 것 같습니다. 또한, git과 jira를 통해 효율적인 일정 관리와 협업을 할 수 있어서 좋았습니다. 개발자로서 한 명의 팀원으로서 배울 점이 많았던 프로젝트 경험이었습니다. 팀원들 모두 너무 고생했고 감사하다는 말을 전하고 싶습니다.
 
 ### **👤 김관우**<br>
 - socket.io 를 이용한 서버와 클라이언트를 동시에 개발하면서 많은 지식과 성장을 얻을 수 있었습니다. 복잡한 로직을 개발하며 계획적이고 체계적인 구조가 먼저 잡혀있어야 반복하여 코딩하는 일 없이 순탄하게 개발을 할 수 있다라는 점을 절실히 알게 되는 프로젝트였습니다. 상태유지를 위해 redux를 사용하며 상태를 저장하고 가져오는 과정에서의 동기화 문제가 많이 발생하여 이에 많은 어려움을 겪기도 하였습니다. 이를 해결하기 위해 상태유지변수를 사용하는 페이지에서는 한번 더 변수를 저장하여 많은 오류를 없앨 수 있었습니다. 이번 프로젝트는 JIRA와 Gitlab을 이용하여 더 체계적인 협업을 통해 가치 있는 경험을 얻을 수 있었습니다. 또 좋은 팀원들을 만나 제대로된 협업의 장점을 몸소 느낄 수 있었습니다. 다른 팀원 분들에게도 여러모로 배울 점이 많았기에 제 자신의 실력 향상 뿐만 아니라 가치관에도 크나큰 발전을 가져다 준 프로젝트였습니다.
