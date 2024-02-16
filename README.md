@@ -282,7 +282,7 @@
     spring security 6.2.1
     lombok 1.18.30
     azul-17
-    mysql 5.7.43
+    mysql 8.2
     redis 7.0.4
     swagger3
     gradle
