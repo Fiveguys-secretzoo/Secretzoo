@@ -1,7 +1,7 @@
 # SECRET ZOO (온라인 화상 블러핑 카드 게임🎮)
 
 ### 💙 SSAFY 10기 공통 프로젝트 서울 4반 🍔FIVE GUYS🍔 (2024.01.08 ~ 2024.02.16)
-![secretzoo](/uploads/14475d21eaccf0ae00911153872495fc/secretzoo.jpg)
+<img src = README_IMG/secretzoo.jpg>
 
 # 📓 목차
 
@@ -71,28 +71,28 @@
 
 #### 회원가입
 <div align="center">
-<img src="/uploads/a94fe901b04cb99ef068c16c43a22441/회원가입.gif" alt="회원가입" width="70%" height="70%">
+<img src="README_IMG/회원가입.gif" alt="회원가입" width="70%" height="70%">
 </div>
 
 #### 로그인 / 로그아웃
 <div align="center">
-<img src="/uploads/4e8e0e8278b77290ff089f56676d89cd/로그인_로그아웃.gif" alt="로그인" width="70%" height="70%">
+<img src="README_IMG/로그인_로그아웃.gif" alt="로그인" width="70%" height="70%">
 </div>
 
 #### 소셜 로그인
 - 구글, 네이버, 카카오 계정으로 회원가입, 로그인을 할 수 있습니다.
 <div align="center">
-<img src="/uploads/4bb726934215b393b420a0cfda8cce6d/소셜로그인.gif" alt="소셜로그인" width="70%" height="70%">
+<img src="README_IMG/소셜로그인.gif" alt="소셜로그인" width="70%" height="70%">
 </div>
 
 #### 비회원 로그인
 <div align="center">
-<img src="/uploads/192d735e187b8d3670f34f7d65964002/비회원로그인.gif" alt="비회원로그인" width="70%" height="70%">
+<img src="README_IMG/비회원로그인.gif" alt="비회원로그인" width="70%" height="70%">
 </div>
 
 #### 게임플레이
 - <strong>방 대기 화면
-![image](/uploads/5cd3bb10d424b6bcacb301d5f58b39a6/image.png)
+<img src = "README_IMG/image.png">
 
 - <strong>게임 시작
 <div align="center">
@@ -102,52 +102,52 @@
 - <strong>공격
 
   - 공격 성공
-  <div align="center"><img src="/uploads/27b9adf2ff3a947a200bc1c0a7eb3f4a/공격성공.gif" alt="공격성공" width="70%" height="70%"></div>
+  <div align="center"><img src="README_IMG/공격성공.gif" alt="공격성공" width="70%" height="70%"></div>
 
   - 공격 실패
-  <div align="center"><img src="/uploads/48a1e4e5417fbc6d095153d361766ad4/공격실패.gif" alt="공격실패" width="70%" height="70%"></div>
+  <div align="center"><img src="README_IMG/공격실패.gif" alt="공격실패" width="70%" height="70%"></div>
 
 
 - <strong>수비
 
   - 수비 성공
-  <div align="center"><img src="/uploads/57f6cc47e352599f3a6225ed93a26aa9/수비성공.gif" alt="수비성공" width="70%" height="70%"></div>
+  <div align="center"><img src="README_IMG/수비성공.gif" alt="수비성공" width="70%" height="70%"></div>
 
   - 수비 실패
-  <div align="center"><img src="/uploads/0bfdb06f1192d0d48f366a3112bc9e40/수비실패.gif" alt="수비실패" width="70%" height="70%"></div>
+  <div align="center"><img src="README_IMG/수비실패.gif" alt="수비실패" width="70%" height="70%"></div>
 
 - <strong>패스
-  <div align="center"><img src="/uploads/a7542bfc8cc3947b8c8e5ec1f41a550c/패스.gif" alt="패스" width="70%" height="70%"></div>
+  <div align="center"><img src="README_IMG/패스.gif" alt="패스" width="70%" height="70%"></div>
 
 - <strong>게임 진행 중 다른 유저들에게 보이는 화면
-  <div align="center"><img src="/uploads/c2ca6f535556ff97e353bbfd1e557ec2/게임진행화면.gif" alt="게임진행화면" width="70%" height="70%"></div>
+  <div align="center"><img src="README_IMG/게임진행화면.gif" alt="게임진행화면" width="70%" height="70%"></div>
 
 - <strong>게임 결과 화면
-  <div align="center"><img src="/uploads/7e0616a392a114fd29436c3881c70b00/패배.gif" alt="패배" width="70%" height="70%"></div>
+  <div align="center"><img src="README_IMG/패배.gif" alt="패배" width="70%" height="70%"></div>
 
 
 #### 회원 정보
 - 회원 정보, 랭킹, 업적을 확인할 수 있습니다.
 <div align="center">
-<img src="/uploads/beb2898118c64b0ce56ab2f14ecdf310/내정보.gif" alt="내정보" width="70%" height="70%">
+<img src="README_IMG/내정보.gif" alt="내정보" width="70%" height="70%">
 </div>
 
 #### 실시간 랭킹
 - 공격, 수비, 패스별로 실시간 랭킹을 확인할 수 있습니다.
 <div align="center">
-<img src="/uploads/5675f0b90adb9783ed6c2e8ea940b36a/랭킹.gif" alt="랭킹" width="70%" height="70%">
+<img src="README_IMG/랭킹.gif" alt="랭킹" width="70%" height="70%">
 </div>
 
 #### 유저 검색 및 조회
 - 유저 닉네임, 아이디로 전적 검색을 할 수 있습니다.
 <div align="center">
-<img src="/uploads/18b7aede7c7b340c23da122ae2887616/전적검색.gif" alt="전적검색" width="70%" height="70%">
+<img src="README_IMG/전적검색.gif" alt="전적검색" width="70%" height="70%">
 </div>
 
 #### 서버 점검 페이지
 - 서버 점검시 미니 게임을 할 수 있습니다.
 <div align="center">
-<img src="/uploads/8bf7490c149bef4adedfdb23bd9779b6/서버점검페이지.gif" alt="서버점검페이지" width="70%" height="70%">
+<img src="README_IMG/서버점검페이지.gif" alt="서버점검페이지" width="70%" height="70%">
 </div>
 
 <br>
@@ -241,8 +241,8 @@
 
 # Ⅳ. 개발 환경 🖥 
 ## 🖱 Frontend
-<img src="https://img.shields.io/badge/JavaScript(es6)-F7DF1E.svg?style=for-the-badge&logo=javascript&logoColor=black">
-![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-007ACC.svg?&style=for-the-badge&logo=Visual%20Studio%20Code&logoColor=white) <br/>
+<img src="https://img.shields.io/badge/JavaScript(es6)-F7DF1E.svg?style=for-the-badge&logo=javascript&logoColor=black"> ![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-007ACC.svg?&style=for-the-badge&logo=Visual%20Studio%20Code&logoColor=white) 
+<br/>
 <img src="https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB">
 <img src="https://img.shields.io/badge/openvidu-624f00?style=for-the-badge">
 <img src="https://img.shields.io/badge/Socket.io-black?style=for-the-badge&logo=socket.io&badgeColor=010101">
@@ -266,8 +266,7 @@
 <br>
 
 ## 🖱 Backend
-<img src="https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white"> 
-![Intellij IDEA](https://img.shields.io/badge/Intellij%20IDEA-000000.svg?&style=for-the-badge&logo=IntelliJ%20IDEA&logoColor=white) <br/>
+<img src="https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white"> ![Intellij IDEA](https://img.shields.io/badge/Intellij%20IDEA-000000.svg?&style=for-the-badge&logo=IntelliJ%20IDEA&logoColor=white) <br/>
 <img src="https://img.shields.io/badge/spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> 
 <img src="https://img.shields.io/badge/Node.js-%2343853D.svg?style=for-the-badge&logo=node.js&logoColor=white"> 
 <img src="https://img.shields.io/badge/Spring Security-6DB33F.svg?style=for-the-badge&logo=Spring Security&logoColor=white">
@@ -291,8 +290,8 @@
 ## 🖱 CI/CD
 <img src="https://img.shields.io/badge/jenkins-%232C5263.svg?style=for-the-badge&logo=jenkins&logoColor=white">
 <img src="https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white">
-<img src="https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white">
-![EC2](https://img.shields.io/badge/EC2-232F3E?style=for-the-badge&logo=Amazon-ec2&logoColor=white)
+
+<img src="https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white">![EC2](https://img.shields.io/badge/EC2-232F3E?style=for-the-badge&logo=Amazon-ec2&logoColor=white)
 
 #### 상세 스택
     docker 25.0.1
