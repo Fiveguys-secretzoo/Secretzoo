@@ -351,19 +351,20 @@ Redis의 경우 Log(N)의 속도로 데이터를 삽입하면서 바로 정렬�
 # VI. 프로젝트 산출물 📁
 
 ## 🏛 서비스 아키택처
-![image](/uploads/ee576768f31c04b65d1cbacebb100f41/image.png)
+<img src = "README_IMG/architecture.png">
 
 ## 🛢︎ ERD
-![image](/uploads/5f49919c14d5cef40949c7ed37334cae/image.png)
+<img src = "README_IMG/erd.png">
 
 ## 📄 요구사항 정의서
-![1](/uploads/947c0a3ef77b0b06fbba7cbaecf07cc0/1.PNG)
-![2](/uploads/c20752e880975cb43a55e34f2c4214f8/2.PNG)
+<img src = "README_IMG/doc1.PNG">
+<img src = "README_IMG/doc1_2.PNG">
+
 ## 📄 API 명세서
-![image](/uploads/d5ab45172ef5b9cf5411291f0bebb251/image.png)
+<img src = "README_IMG/doc2.PNG">
 
 ## 🎨 화면 설계서
-![image](/uploads/0c3b956fa23a6f5c2c48e2d294d4d32a/image.png)
+<img src = "README_IMG/doc3.PNG">
 
 
 <br>
