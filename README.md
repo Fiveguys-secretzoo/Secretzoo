@@ -361,10 +361,10 @@ Redis의 경우 Log(N)의 속도로 데이터를 삽입하면서 바로 정렬�
 <img src = "README_IMG/doc1_2.PNG">
 
 ## 📄 API 명세서
-<img src = "README_IMG/doc2.PNG">
+<img src = "README_IMG/doc2.png">
 
 ## 🎨 화면 설계서
-<img src = "README_IMG/doc3.PNG">
+<img src = "README_IMG/doc3.png">
 
 
 <br>
